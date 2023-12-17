@@ -1,11 +1,17 @@
-name: Actions 😎
+name: Windows-Build
 
 on: [push, pull_request]
 
 jobs:
-  build:
-    name: Build my project ✨
+  testJob:
+    name: 🧪Test
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        testMode:
+          - EditMode
+          - PlayMode
     steps:
       # Checkout
       - name: Checkout repository
@@ -24,16 +30,42 @@ jobs:
       # Test
       - name: Run tests
         uses: game-ci/unity-test-runner@v4
+        id: testJob
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+          testMode: ${{ matrix.testMode }}
+          checkName: 📝Test Report (${{ matrix.testMode }})
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Test Report (${{ matrix.testMode }})
+          path: ${{ steps.testJob.outputs.artifactsPath }}
+          
+  buildWindows:
+    needs: testJob
+    name: 💻Windows
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
 
-      # Build
-      - name: Build project
-        uses: game-ci/unity-builder@v4
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+            
+      - uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
@@ -41,8 +73,132 @@ jobs:
         with:
           targetPlatform: StandaloneWindows64
 
+      # Check for dirty branch
+      - name: Check diff if dirty-branch error caused
+        if: failure()
+        run: |
+          git diff --name-only > modified_files.txt
+          echo "List of modified files:"
+          cat modified_files.txt
+          while read -r line; do
+            echo "Changes in $line:"
+            git diff "$line"
+          done < modified_files.txt
+
       # Output
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
-          name: Build
+          name: build-StandaloneWindows64
+          path: build/StandaloneWindows64
+  buildMacOS:
+    needs: testJob
+    name: 💻macOS
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+            
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: StandaloneOSX
+
+      # Check for dirty branch
+      - name: Check diff if dirty-branch error caused
+        if: failure()
+        run: |
+          git diff --name-only > modified_files.txt
+          echo "List of modified files:"
+          cat modified_files.txt
+          while read -r line; do
+            echo "Changes in $line:"
+            git diff "$line"
+          done < modified_files.txt
+
+      # Output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-StandaloneOSX
+          path: build/StandaloneOSX
+          
+  buildWebGL:
+    needs: testJob
+    name: 🌐WebGL
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+            
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: WebGL
+
+      # Check for dirty branch
+      - name: Check diff if dirty-branch error caused
+        if: failure()
+        run: |
+          git diff --name-only > modified_files.txt
+          echo "List of modified files:"
+          cat modified_files.txt
+          while read -r line; do
+            echo "Changes in $line:"
+            git diff "$line"
+          done < modified_files.txt
+
+      # Output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-WebGL
+          path: build/WebGL
+          
+  deployPages:
+    needs: buildWebGL
+    name: 🚀Deploy(Web)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-WebGL
           path: build
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          branch: deploy-pages
+          folder: build/WebGL
