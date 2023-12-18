@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public abstract class SceneControllerBase : MonoBehaviour
+public abstract class SceneManagerBase<T> : Singleton<T> where T : MonoBehaviour
 {
     private SceneFadeManager _fadeManager;
     protected bool IsFading { get; private set; }

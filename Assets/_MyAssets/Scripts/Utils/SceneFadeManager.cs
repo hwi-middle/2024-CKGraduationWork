@@ -37,14 +37,13 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
         _isPlaying = true;
         Color color = _imgSrc.color;
 
-        int defaultValue = (int) ESettingsValue.VeryHigh;
-        float targetBgmVolume = SettingsValueManager.ConvertSettingsValueToFloat((ESettingsValue) PlayerPrefs.GetInt(PlayerPrefsKeyNames.BGM_VOLUME, defaultValue));
-        float targetSeVolume = SettingsValueManager.ConvertSettingsValueToFloat((ESettingsValue) PlayerPrefs.GetInt(PlayerPrefsKeyNames.SE_VOLUME, defaultValue));
+        int defaultValue = (int)ESettingsValue.VeryHigh;
+        float targetBgmVolume = SettingsValueManager.ConvertSettingsValueToFloat((ESettingsValue)PlayerPrefs.GetInt(PlayerPrefsKeyNames.BGM_VOLUME, defaultValue));
+        float targetSeVolume = SettingsValueManager.ConvertSettingsValueToFloat((ESettingsValue)PlayerPrefs.GetInt(PlayerPrefsKeyNames.SE_VOLUME, defaultValue));
 
         float time = 0f;
         while (_imgSrc.color.a > 0f)
         {
-            time += Time.deltaTime;
             color.a = Mathf.Lerp(1f, 0f, time / t);
             _imgSrc.color = color;
             if (bgm != null)
@@ -56,7 +55,7 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
             {
                 se.volume = Mathf.Lerp(0f, targetSeVolume, time / t);
             }
-
+            time += Time.deltaTime;
             yield return null;
         }
 
@@ -89,7 +88,6 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
         float time = 0f;
         while (_imgSrc.color.a < 1f)
         {
-            time += Time.deltaTime;
             color.a = Mathf.Lerp(0f, 1f, time / t);
             _imgSrc.color = color;
             if (bgm != null)
@@ -102,8 +100,7 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
                 se.volume = Mathf.Lerp(originalSeVolume, 0f, time / t);
             }
 
-            color.a += Time.deltaTime / t;
-            _imgSrc.color = color;
+            time += Time.deltaTime;
             yield return null;
         }
 
