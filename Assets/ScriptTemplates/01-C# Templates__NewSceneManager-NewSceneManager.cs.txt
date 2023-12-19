@@ -5,9 +5,18 @@ using UnityEngine;
     #ROOTNAMESPACEBEGIN#
 public class #SCRIPTNAME# : SceneManagerBase<#SCRIPTNAME#>
 {
+    private SceneFadeManager _sceneFadeManager;
+
+    private void Awake()
+    {
+        Instantiate(Resources.Load<GameObject>("FadeCanvas"));
+        _sceneFadeManager = SceneFadeManager.Instance;
+    }
+    
     protected override void Start()
     {
         base.Start();
+        _sceneFadeManager.FadeIn();
     }
 
     protected override void Update()
