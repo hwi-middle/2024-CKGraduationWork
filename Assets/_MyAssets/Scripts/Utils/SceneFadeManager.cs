@@ -10,6 +10,7 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
     private bool _isPlaying = false;
 
     public bool IsPlaying => _isPlaying;
+    private const float DEFAULT_FADE_DURATION = 1.0f;
 
     // Start is called before the first frame update
     void Awake()
@@ -17,12 +18,12 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
         _imgSrc = GetComponent<Image>();
     }
 
-    public void FadeIn(float t, AudioSource bgmOrNull, AudioSource seOrNull)
+    public void FadeIn(float t = DEFAULT_FADE_DURATION, AudioSource bgmOrNull = null, AudioSource seOrNull = null)
     {
         StartCoroutine(FadeInCoroutine(t, bgmOrNull, seOrNull));
     }
 
-    public void FadeOut(float t, AudioSource bgmOrNull, AudioSource seOrNull)
+    public void FadeOut(float t = DEFAULT_FADE_DURATION, AudioSource bgmOrNull = null, AudioSource seOrNull = null)
     {
         StartCoroutine(FadeOutCoroutine(t, bgmOrNull, seOrNull));
     }
@@ -55,6 +56,7 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
             {
                 se.volume = Mathf.Lerp(0f, targetSeVolume, time / t);
             }
+
             time += Time.deltaTime;
             yield return null;
         }
