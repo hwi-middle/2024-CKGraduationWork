@@ -13,21 +13,15 @@ public class BuildPreprocessor : IPreprocessBuildWithReport
     public void OnPreprocessBuild(BuildReport report)
     {
         string[] arguments = System.Environment.GetCommandLineArgs();
-        for (int i = 0; i < arguments.Length; i++)
+        foreach (string arg in arguments)
         {
-            if (arguments[i] != "-BuildOnCloud")
+            if (arg != "-BuildOnCloud")
             {
                 continue;
             }
-
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, new string[] { "__BUILD_ON_CLOUD" });
-
-            if (i + 1 < arguments.Length)
-            {
-                PlayerPrefs.SetString(PlayerPrefsKeyName.GIT_COMMIT_HASH, arguments[i + 1]);
-                PlayerPrefs.SetString(PlayerPrefsKeyName.GIT_COMMIT_HASH_SHORT, arguments[i + 1].Substring(0, 7));
-            }
-
+            
+            PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.Standalone, new string[] { "__BUILD_ON_CLOUD"});
+            PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.WebGL, new string[] { "__BUILD_ON_CLOUD"});
             break;
         }
     }

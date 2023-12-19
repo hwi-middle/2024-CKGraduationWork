@@ -71,7 +71,7 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          customParameters: -BuildOnCloud ${{ github.sha }}
+          customParameters: -BuildOnCloud
           targetPlatform: StandaloneWindows64
 
       # Check for dirty branch
@@ -118,7 +118,7 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          customParameters: -BuildOnCloud ${{ github.sha }}
+          customParameters: -BuildOnCloud
           targetPlatform: StandaloneOSX
 
       # Check for dirty branch
@@ -166,7 +166,7 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          customParameters: -BuildOnCloud ${{ github.sha }}
+          customParameters: -BuildOnCloud
           targetPlatform: WebGL
 
       # Check for dirty branch

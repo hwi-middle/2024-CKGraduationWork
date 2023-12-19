@@ -7,17 +7,17 @@ using UnityEngine;
 public class MainLobbySceneManager : SceneManagerBase<MainLobbySceneManager>
 {
     [SerializeField] private TextMeshProUGUI versionText;
+    [SerializeField] private GameObject warningText;
     private SceneFadeManager _sceneFadeManager;
 
     private void Awake()
     {
         Instantiate(Resources.Load<GameObject>("FadeCanvas"));
         _sceneFadeManager = SceneFadeManager.Instance;
-        
+
 #if __BUILD_ON_CLOUD
-        string hash = PlayerPrefs.GetString(PlayerPrefsKeyName.GIT_COMMIT_HASH);
-        string hashShort = PlayerPrefs.GetString(PlayerPrefsKeyName.GIT_COMMIT_HASH_SHORT);
-        versionText.text = $"Automated build ({hashShort})";
+        warningText.SetActive(true);
+        versionText.text = $"Version: {Application.version} (Automated Build)";
 #else
         versionText.text = $"Version: {Application.version}";
 #endif
