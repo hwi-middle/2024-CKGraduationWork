@@ -1,4 +1,4 @@
-name: Windows-Build
+name: ✨Automated Build✨
 
 on: [push, pull_request]
 
@@ -71,6 +71,7 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
+          customParameters: -BuildOnCloud ${{ github.sha }}
           targetPlatform: StandaloneWindows64
 
       # Check for dirty branch
@@ -117,6 +118,7 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
+          customParameters: -BuildOnCloud ${{ github.sha }}
           targetPlatform: StandaloneOSX
 
       # Check for dirty branch
@@ -164,6 +166,7 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
+          customParameters: -BuildOnCloud ${{ github.sha }}
           targetPlatform: WebGL
 
       # Check for dirty branch
