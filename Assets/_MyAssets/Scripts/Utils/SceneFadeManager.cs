@@ -20,15 +20,15 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
 
     public void FadeIn(float t = DEFAULT_FADE_DURATION, AudioSource bgmOrNull = null, AudioSource seOrNull = null)
     {
-        StartCoroutine(FadeInCoroutine(t, bgmOrNull, seOrNull));
+        StartCoroutine(FadeInRoutine(t, bgmOrNull, seOrNull));
     }
 
     public void FadeOut(float t = DEFAULT_FADE_DURATION, AudioSource bgmOrNull = null, AudioSource seOrNull = null)
     {
-        StartCoroutine(FadeOutCoroutine(t, bgmOrNull, seOrNull));
+        StartCoroutine(FadeOutRoutine(t, bgmOrNull, seOrNull));
     }
 
-    private IEnumerator FadeInCoroutine(float t, AudioSource bgm, AudioSource se)
+    private IEnumerator FadeInRoutine(float t, AudioSource bgm, AudioSource se)
     {
         Debug.Assert(t > 0);
 
@@ -65,7 +65,7 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
         _isPlaying = false;
     }
 
-    private IEnumerator FadeOutCoroutine(float t, AudioSource bgm, AudioSource se)
+    private IEnumerator FadeOutRoutine(float t, AudioSource bgm, AudioSource se)
     {
         Debug.Assert(t > 0);
 
