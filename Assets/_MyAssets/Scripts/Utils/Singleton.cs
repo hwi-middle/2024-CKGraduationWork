@@ -19,7 +19,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
     
-    static void Init()
+    private static void Init()
     {
         T instance = FindObjectOfType<T>();
         if (instance == null)
