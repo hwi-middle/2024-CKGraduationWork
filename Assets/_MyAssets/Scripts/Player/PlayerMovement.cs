@@ -5,14 +5,22 @@ namespace _MyAssets.Scripts.Player
 {
     public class PlayerMovement : MonoBehaviour
     {
+        [SerializeField] private float _moveSpeed;
+        [SerializeField] private float _jumpSpeed;
+        
         private Vector3 _moveDirection;
-
-        private static readonly float MOVE_SPEED = 5.0f;
-        private static readonly float JUMP_SPEED = 5.0f;
 
         private Rigidbody _rigidbody;
 
-        private bool _canJump;
+        private static readonly float RAY_DISTANCE = 1f;
+        
+        private bool CanJump
+        {
+            get
+            {
+                return Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, RAY_DISTANCE);
+            }
+        }
 
         private Camera _camera;
 
@@ -21,8 +29,6 @@ namespace _MyAssets.Scripts.Player
             _camera = Camera.main;
             _rigidbody = gameObject.GetComponent<Rigidbody>();
 
-            _canJump = true;
-
             // Cursor invisible
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -30,7 +36,7 @@ namespace _MyAssets.Scripts.Player
 
         private void Update()
         {
-            if (_moveDirection == Vector3.zero)
+            if (_moveDirection == Vector3.zero || !CanJump)
             {
                 return;
             }
@@ -42,7 +48,11 @@ namespace _MyAssets.Scripts.Player
             cameraRotation.z = 0;
             transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 1.0f);
 
-            transform.Translate(_moveDirection.normalized * (MOVE_SPEED * Time.deltaTime));
+            Vector3 worldMoveDirection = new Vector3(_moveDirection.x, 0, _moveDirection.z);
+            Vector3 finalMoveDirection = _camera.transform.TransformDirection(worldMoveDirection);
+
+            _rigidbody.velocity = new Vector3(finalMoveDirection.x * _moveSpeed, _rigidbody.velocity.y,
+                finalMoveDirection.z * _moveSpeed);
         }
 
         public void OnMove(InputAction.CallbackContext context)
@@ -54,21 +64,12 @@ namespace _MyAssets.Scripts.Player
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (!context.performed || !_canJump)
+            if (!context.performed || !CanJump)
             {
                 return;
             }
 
-            _canJump = false;
-            _rigidbody.AddForce(Vector3.up * JUMP_SPEED, ForceMode.Impulse);
-        }
-
-        private void OnCollisionEnter(Collision coll)
-        {
-            if (coll.transform.CompareTag("Ground"))
-            {
-                _canJump = true;
-            }
+            _rigidbody.AddForce(Vector3.up * _jumpSpeed, ForceMode.Impulse);
         }
     }
 }
