@@ -7,5 +7,6 @@ public static class PlayerPrefsKeyNames
     public const string RESOLUTION_HEIGHT = "ResolutionHeight";
     public const string RESOLUTION_REFRESH_RATE = "ResolutionRefreshRate";
     public const string DISPLAY_MODE = "DisplyMode";
+    public const string TEXTURE_QUALITY = "TextureQuality";
     public const string VIGNETTE_STRENGTH = "Vignette";
 }

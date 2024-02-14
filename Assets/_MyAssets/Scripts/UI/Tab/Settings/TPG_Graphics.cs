@@ -52,8 +52,12 @@ public class TPG_Graphics : TabPage
 
     [SerializeField] private TMP_Dropdown _resolutionDropdown;
     private readonly List<ResolutionData> _resolutionOptions = new List<ResolutionData>();
+    
     [SerializeField] private TMP_Dropdown _displayModeDropdown;
     private readonly List<string> _displayModeOptions = new List<string>() { "전체화면", "테두리 없는 창모드", "창모드" };
+
+    [SerializeField] private TMP_Dropdown _textureQualityDropdown;
+    private readonly List<string> _textureQualityOptions = new List<string>() { "높음", "중간", "낮음" };
 
     private void Start()
     {
@@ -85,6 +89,11 @@ public class TPG_Graphics : TabPage
         _displayModeDropdown.ClearOptions();
         _displayModeDropdown.AddOptions(_displayModeOptions);
         _displayModeDropdown.onValueChanged.AddListener(index => { ChangeDisplayMode((EDisplayModeIndex)index); });
+        
+        // 텍스처 품질
+        _textureQualityDropdown.ClearOptions();
+        _textureQualityDropdown.AddOptions(_textureQualityOptions);
+        _textureQualityDropdown.onValueChanged.AddListener(ChangeTextureQuality);
     }
 
     private void ChangeResolution(int index)
@@ -120,5 +129,11 @@ public class TPG_Graphics : TabPage
         }
 
         PlayerPrefs.SetInt(PlayerPrefsKeyNames.DISPLAY_MODE, (int)Screen.fullScreenMode);
+    }
+
+    private void ChangeTextureQuality(int index)
+    {
+        QualitySettings.globalTextureMipmapLimit = index;
+        PlayerPrefs.SetInt(PlayerPrefsKeyNames.TEXTURE_QUALITY, index);
     }
 }
