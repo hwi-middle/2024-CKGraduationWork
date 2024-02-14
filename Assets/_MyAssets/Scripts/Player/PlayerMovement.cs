@@ -7,7 +7,7 @@ namespace _MyAssets.Scripts.Player
     {
         private Vector3 _moveDirection;
 
-        private static readonly float MOVE_SPEED = 4.0f;
+        private static readonly float MOVE_SPEED = 5.0f;
         private static readonly float JUMP_SPEED = 5.0f;
 
         private Rigidbody _rigidbody;
