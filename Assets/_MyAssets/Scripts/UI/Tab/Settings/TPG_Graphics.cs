@@ -52,7 +52,7 @@ public class TPG_Graphics : TabPage
 
     [SerializeField] private TMP_Dropdown _resolutionDropdown;
     private readonly List<ResolutionData> _resolutionOptions = new List<ResolutionData>();
-    
+
     [SerializeField] private TMP_Dropdown _displayModeDropdown;
     private readonly List<string> _displayModeOptions = new List<string>() { "전체화면", "테두리 없는 창모드", "창모드" };
 
@@ -89,11 +89,13 @@ public class TPG_Graphics : TabPage
         _displayModeDropdown.ClearOptions();
         _displayModeDropdown.AddOptions(_displayModeOptions);
         _displayModeDropdown.onValueChanged.AddListener(index => { ChangeDisplayMode((EDisplayModeIndex)index); });
-        
+        _displayModeDropdown.value = (int)FullScreenModeToDisplayModeIndex(Screen.fullScreenMode);
+
         // 텍스처 품질
         _textureQualityDropdown.ClearOptions();
         _textureQualityDropdown.AddOptions(_textureQualityOptions);
         _textureQualityDropdown.onValueChanged.AddListener(ChangeTextureQuality);
+        _textureQualityDropdown.value = QualitySettings.globalTextureMipmapLimit;
     }
 
     private void ChangeResolution(int index)
@@ -112,22 +114,7 @@ public class TPG_Graphics : TabPage
 
     private void ChangeDisplayMode(EDisplayModeIndex displayModeIndex)
     {
-        switch (displayModeIndex)
-        {
-            case EDisplayModeIndex.FullScreen:
-                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-                break;
-            case EDisplayModeIndex.FullScreenWindow:
-                Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-                break;
-            case EDisplayModeIndex.Windowed:
-                Screen.fullScreenMode = FullScreenMode.Windowed;
-                break;
-            default:
-                Debug.Assert(false);
-                return;
-        }
-
+        Screen.fullScreenMode = DisplayModeIndexToFullScreenMode(displayModeIndex);
         PlayerPrefs.SetInt(PlayerPrefsKeyNames.DISPLAY_MODE, (int)Screen.fullScreenMode);
     }
 
@@ -135,5 +122,39 @@ public class TPG_Graphics : TabPage
     {
         QualitySettings.globalTextureMipmapLimit = index;
         PlayerPrefs.SetInt(PlayerPrefsKeyNames.TEXTURE_QUALITY, index);
+    }
+
+    private EDisplayModeIndex FullScreenModeToDisplayModeIndex(FullScreenMode fullScreenMode)
+    {
+        switch (fullScreenMode)
+        {
+            case FullScreenMode.ExclusiveFullScreen:
+                return EDisplayModeIndex.FullScreen;
+            case FullScreenMode.FullScreenWindow:
+                return EDisplayModeIndex.FullScreenWindow;
+            case FullScreenMode.Windowed:
+                return EDisplayModeIndex.Windowed;
+            case FullScreenMode.MaximizedWindow:
+            // intentional fall-through
+            default:
+                Debug.Assert(false);
+                return 0;
+        }
+    }
+
+    private FullScreenMode DisplayModeIndexToFullScreenMode(EDisplayModeIndex fullScreenMode)
+    {
+        switch (fullScreenMode)
+        {
+            case EDisplayModeIndex.FullScreen:
+                return FullScreenMode.ExclusiveFullScreen;
+            case EDisplayModeIndex.FullScreenWindow:
+                return FullScreenMode.FullScreenWindow;
+            case EDisplayModeIndex.Windowed:
+                return FullScreenMode.Windowed;
+            default:
+                Debug.Assert(false);
+                return 0;
+        }
     }
 }
