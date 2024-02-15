@@ -7,18 +7,34 @@ namespace _MyAssets.Scripts.Player
     {
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _jumpSpeed;
+        [SerializeField] private float _rayDistance = 1f;
         
         private Vector3 _moveDirection;
+        private Vector3 _finalMoveDirection;
 
         private Rigidbody _rigidbody;
-
-        private static readonly float RAY_DISTANCE = 1f;
         
-        private bool CanJump
+        private bool IsGround
         {
             get
             {
-                return Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, RAY_DISTANCE);
+                return Physics.Raycast(transform.position, Vector3.down, _rayDistance);
+            }
+        }
+
+        private bool IsWall
+        {
+            get
+            {
+                Vector3 myPos = transform.position;
+                Vector3 firstDirection = new Vector3(_finalMoveDirection.x, 0, 0);
+                Vector3 secondDirection = new Vector3(0, 0, _finalMoveDirection.z);
+
+                bool isWall = Physics.Raycast(myPos, _finalMoveDirection, _rayDistance * 0.55f)
+                              || Physics.Raycast(myPos, firstDirection, _rayDistance * 0.55f)
+                              || Physics.Raycast(myPos, secondDirection, _rayDistance * 0.55f);
+
+                return isWall;
             }
         }
 
@@ -36,7 +52,7 @@ namespace _MyAssets.Scripts.Player
 
         private void Update()
         {
-            if (_moveDirection == Vector3.zero || !CanJump)
+            if (_moveDirection == Vector3.zero)
             {
                 return;
             }
@@ -49,22 +65,29 @@ namespace _MyAssets.Scripts.Player
             transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 1.0f);
 
             Vector3 worldMoveDirection = new Vector3(_moveDirection.x, 0, _moveDirection.z);
-            Vector3 finalMoveDirection = _camera.transform.TransformDirection(worldMoveDirection);
+            _finalMoveDirection = _camera.transform.TransformDirection(worldMoveDirection);
 
-            _rigidbody.velocity = new Vector3(finalMoveDirection.x * _moveSpeed, _rigidbody.velocity.y,
-                finalMoveDirection.z * _moveSpeed);
+            if (IsWall)
+            {
+                _rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, 0);
+                return;
+            }
+            
+            _rigidbody.velocity = new Vector3(_finalMoveDirection.x * _moveSpeed, 
+                _rigidbody.velocity.y,
+                _finalMoveDirection.z * _moveSpeed);
         }
 
         public void OnMove(InputAction.CallbackContext context)
         {
             Vector2 input = context.ReadValue<Vector2>();
 
-            _moveDirection = new Vector3(input.x, 0f, input.y);
+            _moveDirection = new Vector3(input.x, 0, input.y);
         }
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (!context.performed || !CanJump)
+            if (!context.performed || !IsGround)
             {
                 return;
             }
