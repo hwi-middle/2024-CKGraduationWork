@@ -57,7 +57,7 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
                 se.volume = Mathf.Lerp(0f, targetSeVolume, time / t);
             }
 
-            time += Time.unscaledDeltaTime;
+            time += Time.deltaTime;
             yield return null;
         }
 
@@ -102,7 +102,7 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
                 se.volume = Mathf.Lerp(originalSeVolume, 0f, time / t);
             }
 
-            time += Time.unscaledDeltaTime;
+            time += Time.deltaTime;
             yield return null;
         }
 
