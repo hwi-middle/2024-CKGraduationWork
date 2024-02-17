@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class MainLobbySceneManager : SceneManagerBase<MainLobbySceneManager>
+public class MainLobbySceneManager : SceneManagerBase
 {
     [SerializeField] private TextMeshProUGUI _versionText;
     [SerializeField] private GameObject _warningText;
