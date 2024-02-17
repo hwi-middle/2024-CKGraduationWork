@@ -5,19 +5,16 @@ using UnityEngine;
 
 public class IntroSceneManager : SceneManagerBase<IntroSceneManager>
 {
-    private SceneFadeManager _sceneFadeManager;
-
     private void Awake()
     {
         Instantiate(Resources.Load<GameObject>("FadeCanvas"));
-        _sceneFadeManager = SceneFadeManager.Instance;
         GetSettingsValueAndApply();
     }
 
     protected override void Start()
     {
         base.Start();
-        _sceneFadeManager.FadeIn();
+        FadeIn(1.0f, 0f);
     }
 
     protected override void Update()
