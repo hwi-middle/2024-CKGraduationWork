@@ -10,7 +10,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     [SerializeField] private AudioSource _bgmAudioSource;
     [SerializeField] private AudioSource _seAudioSource;
 
-    protected const float DEFAULT_FADE_DURATION = 0.5f;
+    public const float DEFAULT_FADE_DURATION = 0.5f;
     public bool IsFading { get; private set; }
     
     protected virtual void Start()

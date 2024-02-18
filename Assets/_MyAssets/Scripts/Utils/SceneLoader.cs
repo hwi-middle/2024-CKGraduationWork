@@ -38,7 +38,7 @@ public class SceneLoader : Singleton<SceneLoader>
         _progressText.text = "로드 완료!";
 
         SceneManagerBase sceneManager = SceneManagerBase.Instance;
-        sceneManager.FadeOut(0.5f);
+        sceneManager.FadeOut(SceneManagerBase.DEFAULT_FADE_DURATION);
         while (sceneManager.IsFading)
         {
             yield return null;
