@@ -9,11 +9,10 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     private SceneFadeManager _fadeManager;
     [SerializeField] private AudioSource _bgmAudioSource;
     [SerializeField] private AudioSource _seAudioSource;
-    
+
+    protected const float DEFAULT_FADE_DURATION = 0.5f;
     public bool IsFading { get; private set; }
-
-    // protected SceneFadeManager FadeManager => _fadeManager;
-
+    
     protected virtual void Start()
     {
         Instantiate(Resources.Load<GameObject>("FadeCanvas"));
@@ -79,7 +78,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     private IEnumerator LoadSceneWithLoadingUiRoutine(string sceneName)
     {
-        FadeOut(0.5f);
+        FadeOut(DEFAULT_FADE_DURATION);
         while (IsFading)
         {
             yield return null;
@@ -87,12 +86,13 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
         Instantiate(Resources.Load<GameObject>("LoadingCanvas"));
         SceneLoader sceneLoader = SceneLoader.Instance;
-        
-        FadeIn(0.5f);
+
+        FadeIn(DEFAULT_FADE_DURATION);
         while (IsFading)
         {
             yield return null;
         }
+
         sceneLoader.LoadScene(sceneName);
     }
 }

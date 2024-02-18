@@ -23,7 +23,7 @@ public class MainLobbySceneManager : SceneManagerBase
     protected override void Start()
     {
         base.Start(); 
-        FadeIn(0.5f);
+        FadeIn(DEFAULT_FADE_DURATION);
     }
 
     protected override void Update()
