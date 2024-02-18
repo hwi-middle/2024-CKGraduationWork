@@ -4,29 +4,26 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class MainLobbySceneManager : SceneManagerBase<MainLobbySceneManager>
+public class MainLobbySceneManager : SceneManagerBase
 {
-    [SerializeField] private TextMeshProUGUI versionText;
-    [SerializeField] private GameObject warningText;
-    private SceneFadeManager _sceneFadeManager;
+    [SerializeField] private TextMeshProUGUI _versionText;
+    [SerializeField] private GameObject _warningText;
 
     private void Awake()
     {
         Instantiate(Resources.Load<GameObject>("FadeCanvas"));
-        _sceneFadeManager = SceneFadeManager.Instance;
-
 #if __BUILD_ON_CLOUD
-        warningText.SetActive(true);
-        versionText.text = $"Version: {Application.version} (Automated Build)";
+        _warningText.SetActive(true);
+        _versionText.text = $"Version: {Application.version} (Automated Build)";
 #else
-        versionText.text = $"Version: {Application.version}";
+        _versionText.text = $"Version: {Application.version}";
 #endif
     }
 
     protected override void Start()
     {
-        base.Start();
-        _sceneFadeManager.FadeIn();
+        base.Start(); 
+        FadeIn(DEFAULT_FADE_DURATION);
     }
 
     protected override void Update()

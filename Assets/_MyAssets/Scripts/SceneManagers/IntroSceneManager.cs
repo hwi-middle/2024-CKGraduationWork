@@ -3,21 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IntroSceneManager : SceneManagerBase<IntroSceneManager>
+public class IntroSceneManager : SceneManagerBase
 {
-    private SceneFadeManager _sceneFadeManager;
-
     private void Awake()
     {
-        Instantiate(Resources.Load<GameObject>("FadeCanvas"));
-        _sceneFadeManager = SceneFadeManager.Instance;
         GetSettingsValueAndApply();
     }
 
     protected override void Start()
     {
         base.Start();
-        _sceneFadeManager.FadeIn();
+        FadeIn(DEFAULT_FADE_DURATION);
     }
 
     protected override void Update()

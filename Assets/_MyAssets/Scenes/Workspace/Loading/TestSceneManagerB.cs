@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-    #ROOTNAMESPACEBEGIN#
-public class #SCRIPTNAME# : SceneManagerBase<#SCRIPTNAME#>
+public class TestSceneManagerB : SceneManagerBase
 {
     protected override void Start()
     {
-        base.Start();
-        FadeIn(0.5f);
+        base.Start(); 
+        FadeIn(DEFAULT_FADE_DURATION);
     }
 
     protected override void Update()
@@ -16,4 +15,3 @@ public class #SCRIPTNAME# : SceneManagerBase<#SCRIPTNAME#>
         base.Update();
     }
 }
-#ROOTNAMESPACEEND#

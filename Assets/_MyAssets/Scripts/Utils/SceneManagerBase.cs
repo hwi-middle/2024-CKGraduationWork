@@ -4,15 +4,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public abstract class SceneManagerBase<T> : Singleton<T> where T : MonoBehaviour
+public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 {
     private SceneFadeManager _fadeManager;
-    protected bool IsFading { get; private set; }
+    [SerializeField] private AudioSource _bgmAudioSource;
+    [SerializeField] private AudioSource _seAudioSource;
 
-    // protected SceneFadeManager FadeManager => _fadeManager;
-
+    public const float DEFAULT_FADE_DURATION = 0.5f;
+    public bool IsFading { get; private set; }
+    
     protected virtual void Start()
     {
+        Instantiate(Resources.Load<GameObject>("FadeCanvas"));
         _fadeManager = SceneFadeManager.Instance;
         _fadeManager.GetComponent<Image>().enabled = true;
     }
@@ -22,14 +25,14 @@ public abstract class SceneManagerBase<T> : Singleton<T> where T : MonoBehaviour
     }
 
 
-    protected void FadeIn(float duration, float delay = 0f, AudioSource bgmOrNull = null, AudioSource seOrNull = null)
+    public void FadeIn(float duration, float delay = 0f)
     {
-        StartCoroutine(FadeInRoutine(duration, delay, bgmOrNull, seOrNull));
+        StartCoroutine(FadeInRoutine(duration, delay, _bgmAudioSource, _seAudioSource));
     }
 
-    protected void FadeOut(float duration, float delay = 0f, AudioSource bgmOrNull = null, AudioSource seOrNull = null)
+    public void FadeOut(float duration, float delay = 0f)
     {
-        StartCoroutine(FadeOutRoutine(duration, delay, bgmOrNull, seOrNull));
+        StartCoroutine(FadeOutRoutine(duration, delay, _bgmAudioSource, _seAudioSource));
     }
 
 
@@ -66,5 +69,30 @@ public abstract class SceneManagerBase<T> : Singleton<T> where T : MonoBehaviour
         }
 
         IsFading = false;
+    }
+
+    protected void LoadSceneWithLoadingUI(string sceneName)
+    {
+        StartCoroutine(LoadSceneWithLoadingUiRoutine(sceneName));
+    }
+
+    private IEnumerator LoadSceneWithLoadingUiRoutine(string sceneName)
+    {
+        FadeOut(DEFAULT_FADE_DURATION);
+        while (IsFading)
+        {
+            yield return null;
+        }
+
+        Instantiate(Resources.Load<GameObject>("LoadingCanvas"));
+        SceneLoader sceneLoader = SceneLoader.Instance;
+
+        FadeIn(DEFAULT_FADE_DURATION);
+        while (IsFading)
+        {
+            yield return null;
+        }
+
+        sceneLoader.LoadScene(sceneName);
     }
 }
