@@ -25,6 +25,14 @@ namespace _MyAssets.Scripts.Player
             }
         }
 
+        private bool HasInput
+        {
+            get
+            {
+                return _inputDirection != Vector3.zero;
+            }
+        }
+
         private void Start()
         {
             _controller = GetComponent<CharacterController>();
@@ -37,27 +45,34 @@ namespace _MyAssets.Scripts.Player
             Cursor.visible = false;
         }
 
-        private void Update()
-        {
-            
-        }
-
         private void FixedUpdate()
         {
-            MovePlayer();
             RotatePlayer();
+            MovePlayer();
         }
 
         private void MovePlayer()
         {
-            _inputDirection.y += IsGround ? 0 : Physics.gravity.y * Time.fixedDeltaTime;
+            // 입력이 아무것도 없을 때 공중에 있지 않으면 연산하지 않음
+            if (!HasInput && IsGround)
+            {
+                return;
+            }
+
+            _inputDirection.y = _moveDirection.y;
             _moveDirection = transform.TransformDirection(_inputDirection);
             
+            _moveDirection.y += Physics.gravity.y * Time.fixedDeltaTime;
             _controller.Move(_moveDirection * (_moveSpeed * Time.fixedDeltaTime));
         }
 
         private void RotatePlayer()
         {
+            if (!HasInput)
+            {
+                return;
+            }
+            
             Debug.Assert(_camera != null, "_camera != null");
             
             Quaternion cameraRotation = _camera.transform.localRotation;
@@ -80,7 +95,12 @@ namespace _MyAssets.Scripts.Player
                 return;
             }
             
-            _inputDirection.y = _jumpSpeed;
+            _moveDirection.y = _jumpSpeed;
+
+            if (!HasInput)
+            {
+                _controller.Move(_moveDirection * (_moveSpeed * Time.fixedDeltaTime));
+            }
         }
     }
 }
