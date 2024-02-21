@@ -10,9 +10,9 @@ namespace _MyAssets.Scripts.Player
         [SerializeField] private float _jumpPower;
         [SerializeField] private float _slideSpeed;
 
-
         [Header("Gravity Scale")]
         [SerializeField] private float _gravityMultiplier;
+        
         private float _yVelocity;
         
         private Camera _camera;
@@ -23,14 +23,31 @@ namespace _MyAssets.Scripts.Player
         private CharacterController _controller;
         private Vector3 _hitNormal;
 
-        private bool IsGround => _controller.isGrounded;
+        private bool IsGround
+        {
+            get
+            {
+                if (_controller.isGrounded)
+                {
+                    return true;
+                }
+
+                Ray ray = new Ray(transform.position, Vector3.down);
+                return Physics.Raycast(ray, 1.1f);
+            }
+        }
 
         private bool IsLimitSlope
         {
             get
             {
+                if (!IsGround)
+                {
+                    return false;
+                }
+                
                 float angle = Vector3.Angle(Vector3.up, _hitNormal);
-                return angle >= _controller.slopeLimit && angle <= 90 && IsGround;
+                return angle >= _controller.slopeLimit && angle < 90;
             }
         }
 
@@ -42,6 +59,8 @@ namespace _MyAssets.Scripts.Player
 
         private void Start()
         {
+            Debug.Assert(_controller != null, "_controller !=null");
+            
             // Cursor Visible
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -79,6 +98,7 @@ namespace _MyAssets.Scripts.Player
             float yInverse = 1f - _hitNormal.y;
             _velocity.x += yInverse * _hitNormal.x;
             _velocity.z += yInverse * _hitNormal.z;
+            
             _controller.Move(_velocity * (_slideSpeed * Time.deltaTime));
         }
 
