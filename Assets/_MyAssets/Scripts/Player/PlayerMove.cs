@@ -21,35 +21,12 @@ namespace _MyAssets.Scripts.Player
         private Vector3 _velocity;
 
         private CharacterController _controller;
+        
         private Vector3 _hitNormal;
+        private bool _isSliding;
+        private Vector3 _slideVelocity;
 
-        private bool IsGround
-        {
-            get
-            {
-                if (_controller.isGrounded)
-                {
-                    return true;
-                }
-
-                Ray ray = new Ray(transform.position, Vector3.down);
-                return Physics.Raycast(ray, 1.1f);
-            }
-        }
-
-        private bool IsLimitSlope
-        {
-            get
-            {
-                if (!IsGround)
-                {
-                    return false;
-                }
-                
-                float angle = Vector3.Angle(Vector3.up, _hitNormal);
-                return angle >= _controller.slopeLimit && angle < 90;
-            }
-        }
+        private bool IsGrounded => _controller.isGrounded;
 
         private void Awake()
         {
@@ -68,17 +45,7 @@ namespace _MyAssets.Scripts.Player
 
         private void Update()
         {
-            if (IsLimitSlope)
-            {
-                SlidePlayer();
-                return;
-            }
-
-            if (_inputDirection.sqrMagnitude == 0 && IsGround)
-            {
-                return;
-            }
-            
+            SetSlideVelocity();
             RotatePlayer();
             MovePlayer();
         }
@@ -86,34 +53,66 @@ namespace _MyAssets.Scripts.Player
         private void RotatePlayer()
         {
             Debug.Assert(_camera != null, "_camera != null");
+
+            if (_inputDirection.sqrMagnitude == 0)
+            {
+                return;
+            }
             
             Quaternion cameraRotation = _camera.transform.localRotation;
             cameraRotation.x = 0;
             cameraRotation.z = 0;
             transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 1.0f);
         }
-
-        private void SlidePlayer()
+        
+        private void SetSlideVelocity()
         {
-            float yInverse = 1f - _hitNormal.y;
-            _velocity.x += yInverse * _hitNormal.x;
-            _velocity.z += yInverse * _hitNormal.z;
-            
-            _controller.Move(_velocity * (_slideSpeed * Time.deltaTime));
-        }
+            float angle = 0f;
+            Vector3 bottom = transform.position - new Vector3(0, _controller.height / 2, 0);
+            if (Physics.Raycast(bottom, Vector3.down, out RaycastHit hit, 3.0f))
+            {
+                angle = Vector3.Angle(Vector3.up, hit.normal);
 
+                if (angle > _controller.slopeLimit)
+                {
+                    _slideVelocity = Vector3.ProjectOnPlane(new Vector3(0, _velocity.y, 0), hit.normal);
+                    _isSliding = true;
+                    return;
+                }
+            }
+
+            angle = Vector3.Angle(Vector3.up, _hitNormal);
+            if (angle - 0.5f > _controller.slopeLimit)
+            {
+                _slideVelocity = Vector3.ProjectOnPlane(new Vector3(0, _velocity.y, 0), _hitNormal);
+                _isSliding = true;
+                return;
+            }
+            
+            _isSliding = false;
+            _slideVelocity = Vector3.zero;
+        }
+        
         private void MovePlayer()
         {
+            if (_isSliding && IsGrounded)
+            {
+                _velocity = _slideVelocity;
+                _velocity.y += _yVelocity;
+                _controller.Move(_velocity * (_slideSpeed * Time.deltaTime));
+                return;
+            }
+
             _velocity = transform.TransformDirection(_inputDirection);
-            
-            GravityCalculate();
-            
+
+            ApplyGravity();
+
             _controller.Move(_velocity * (_moveSpeed * Time.deltaTime));
         }
 
-        private void GravityCalculate()
+        private void ApplyGravity()
         {
-            if (IsGround && _yVelocity < 0.0f)
+            if (IsGrounded && _yVelocity < 0.0f)
             {
                 _yVelocity = -1.0f;
             }
@@ -134,7 +133,7 @@ namespace _MyAssets.Scripts.Player
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (!context.started || !IsGround || IsLimitSlope)
+            if (!context.started || !IsGrounded || _isSliding)
             {
                 return;
             }
