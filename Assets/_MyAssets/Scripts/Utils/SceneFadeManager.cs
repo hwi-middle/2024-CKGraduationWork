@@ -37,9 +37,9 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
         _isPlaying = true;
         Color color = _imgSrc.color;
 
-        int defaultValue = (int)ESettingsValue.VeryHigh;
-        float targetBgmVolume = SettingsValueManager.ConvertSettingsValueToFloat((ESettingsValue)PlayerPrefs.GetInt(PlayerPrefsKeyNames.BGM_VOLUME, defaultValue));
-        float targetSeVolume = SettingsValueManager.ConvertSettingsValueToFloat((ESettingsValue)PlayerPrefs.GetInt(PlayerPrefsKeyNames.SE_VOLUME, defaultValue));
+        const float DEFAULT_VALUE = 1f;
+        float targetBgmVolume = PlayerPrefs.GetFloat(PlayerPrefsKeyNames.BGM_VOLUME, DEFAULT_VALUE);
+        float targetSeVolume = PlayerPrefs.GetFloat(PlayerPrefsKeyNames.SE_VOLUME, DEFAULT_VALUE);
 
         float time = 0f;
         while (_imgSrc.color.a > 0f)
