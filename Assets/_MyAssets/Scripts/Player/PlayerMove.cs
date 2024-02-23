@@ -5,8 +5,9 @@ namespace _MyAssets.Scripts.Player
 {
     public class PlayerMove : MonoBehaviour
     {
+        [SerializeField] private float _jumpHeight;
+        
         [SerializeField] private float _moveSpeed;
-        [SerializeField] private float _jumpPower;
         [SerializeField] private float _slideSpeed;
 
         [Header("Gravity Scale")]
@@ -106,10 +107,8 @@ namespace _MyAssets.Scripts.Player
             _velocity = transform.TransformDirection(_inputDirection);
 
             ApplyGravity();
-            _velocity.x *= _moveSpeed;
-            _velocity.z *= _moveSpeed;
 
-            _controller.Move(_velocity * Time.deltaTime);
+            _controller.Move(_moveSpeed * Time.deltaTime * _velocity);
         }
 
         private void ApplyGravity()
@@ -140,15 +139,7 @@ namespace _MyAssets.Scripts.Player
                 return;
             }
 
-            if (_inputDirection.sqrMagnitude != 0)
-            {
-                _yVelocity += _jumpPower;
-                return;
-            }
-
-            _yVelocity += _jumpPower;
-            ApplyGravity();
-            _controller.Move(new Vector3(0, _yVelocity, 0) * Time.deltaTime);
+            _yVelocity += _jumpHeight;
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
