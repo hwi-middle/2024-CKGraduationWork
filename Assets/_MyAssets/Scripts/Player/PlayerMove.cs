@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -67,7 +66,7 @@ namespace _MyAssets.Scripts.Player
         
         private void SetSlideVelocity()
         {
-            float angle = 0f;
+            float angle;
             Vector3 bottom = transform.position - new Vector3(0, _controller.height / 2, 0);
             if (Physics.Raycast(bottom, Vector3.down, out RaycastHit hit, 3.0f))
             {
@@ -81,8 +80,9 @@ namespace _MyAssets.Scripts.Player
                 }
             }
 
+            const float TOLERANCE = 0.1f;
             angle = Vector3.Angle(Vector3.up, _hitNormal);
-            if (angle - 0.5f > _controller.slopeLimit)
+            if (angle > _controller.slopeLimit + TOLERANCE)
             {
                 _slideVelocity = Vector3.ProjectOnPlane(new Vector3(0, _velocity.y, 0), _hitNormal);
                 _isSliding = true;
@@ -99,15 +99,17 @@ namespace _MyAssets.Scripts.Player
             {
                 _velocity = _slideVelocity;
                 _velocity.y += _yVelocity;
-                _controller.Move(_velocity * (_slideSpeed * Time.deltaTime));
+                _controller.Move(_slideSpeed * Time.deltaTime * _velocity);
                 return;
             }
 
             _velocity = transform.TransformDirection(_inputDirection);
 
             ApplyGravity();
+            _velocity.x *= _moveSpeed;
+            _velocity.z *= _moveSpeed;
 
-            _controller.Move(_velocity * (_moveSpeed * Time.deltaTime));
+            _controller.Move(_velocity * Time.deltaTime);
         }
 
         private void ApplyGravity()
@@ -138,17 +140,15 @@ namespace _MyAssets.Scripts.Player
                 return;
             }
 
-
             if (_inputDirection.sqrMagnitude != 0)
             {
-
                 _yVelocity += _jumpPower;
                 return;
             }
 
-            _yVelocity = 0;
-            _yVelocity += _jumpPower * 0.8f;
-            MovePlayer();
+            _yVelocity += _jumpPower;
+            ApplyGravity();
+            _controller.Move(new Vector3(0, _yVelocity, 0) * Time.deltaTime);
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
