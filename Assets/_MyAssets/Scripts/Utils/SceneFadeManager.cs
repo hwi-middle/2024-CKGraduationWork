@@ -20,17 +20,17 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
         _audioMixer = Resources.Load<AudioMixer>("AudioMixer/MainMixer");
     }
 
-    public void FadeIn(float t)
+    public void FadeIn(float t, bool ignoreAudio = false)
     {
-        StartCoroutine(FadeInRoutine(t));
+        StartCoroutine(FadeInRoutine(t, ignoreAudio));
     }
 
-    public void FadeOut(float t)
+    public void FadeOut(float t, bool ignoreAudio = false)
     {
-        StartCoroutine(FadeOutRoutine(t));
+        StartCoroutine(FadeOutRoutine(t, ignoreAudio));
     }
 
-    private IEnumerator FadeInRoutine(float t)
+    private IEnumerator FadeInRoutine(float t, bool ignoreAudio = false)
     {
         Debug.Assert(t > 0);
 
@@ -38,7 +38,7 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
         {
             yield break;
         }
-        
+
         _isPlaying = true;
         Color color = _imgSrc.color;
         _imgSrc.enabled = true;
@@ -46,8 +46,7 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
         _imgSrc.color = color;
 
         const float DEFAULT_VOLUME = 0f;
-        float targetBgmVolume = PlayerPrefs.GetFloat(PlayerPrefsKeyNames.BGM_VOLUME, DEFAULT_VOLUME);
-        float targetSeVolume = PlayerPrefs.GetFloat(PlayerPrefsKeyNames.SE_VOLUME, DEFAULT_VOLUME);
+        float targetVolume = PlayerPrefs.GetFloat(PlayerPrefsKeyNames.MASTER_VOLUME, DEFAULT_VOLUME);
 
         float time = 0f;
         while (_imgSrc.color.a > 0f)
@@ -55,8 +54,11 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
             color.a = Mathf.Lerp(1f, 0f, time / t);
             _imgSrc.color = color;
 
-            const float MIN_VOLUME = -80f;
-            _audioMixer.SetFloat("MasterVolume", Mathf.Lerp(MIN_VOLUME, targetBgmVolume, time / t));
+            if (!ignoreAudio)
+            {
+                const float MIN_VOLUME = -80f;
+                _audioMixer.SetFloat("MasterVolume", Mathf.Lerp(MIN_VOLUME, targetVolume, time / t));
+            }
 
             time += Time.deltaTime;
             yield return null;
@@ -66,7 +68,7 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
         _isPlaying = false;
     }
 
-    private IEnumerator FadeOutRoutine(float t)
+    private IEnumerator FadeOutRoutine(float t, bool ignoreAudio = false)
     {
         Debug.Assert(t > 0);
 
@@ -74,7 +76,7 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
         {
             yield break;
         }
-        
+
         _isPlaying = true;
         Color color = _imgSrc.color;
         _imgSrc.enabled = true;
@@ -88,9 +90,12 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
         {
             color.a = Mathf.Lerp(0f, 1f, time / t);
             _imgSrc.color = color;
-            
-            const float MIN_VOLUME = -80f;
-            _audioMixer.SetFloat("MasterVolume", Mathf.Lerp(originalVolume, MIN_VOLUME, time / t));
+
+            if (!ignoreAudio)
+            {
+                const float MIN_VOLUME = -80f;
+                _audioMixer.SetFloat("MasterVolume", Mathf.Lerp(originalVolume, MIN_VOLUME, time / t));
+            }
 
             time += Time.deltaTime;
             yield return null;

@@ -13,7 +13,7 @@ public class IntroSceneManager : SceneManagerBase
     protected override void Start()
     {
         base.Start();
-        FadeIn(DEFAULT_FADE_DURATION);
+        FadeOut(3f);
     }
 
     protected override void Update()

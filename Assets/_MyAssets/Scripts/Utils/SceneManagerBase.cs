@@ -23,18 +23,18 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     }
 
 
-    public void FadeIn(float duration, float delay = 0f)
+    public void FadeIn(float duration, float delay = 0f, bool ignoreAudio = false)
     {
-        StartCoroutine(FadeInRoutine(duration, delay));
+        StartCoroutine(FadeInRoutine(duration, delay, ignoreAudio));
     }
 
-    public void FadeOut(float duration, float delay = 0f)
+    public void FadeOut(float duration, float delay = 0f, bool ignoreAudio = false)
     {
-        StartCoroutine(FadeOutRoutine(duration, delay));
+        StartCoroutine(FadeOutRoutine(duration, delay, ignoreAudio));
     }
 
 
-    private IEnumerator FadeInRoutine(float duration, float delay)
+    private IEnumerator FadeInRoutine(float duration, float delay, bool ignoreAudio)
     {
         IsFading = true;
         if (delay != 0f)
@@ -42,7 +42,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
             yield return new WaitForSeconds(delay);
         }
 
-        _fadeManager.FadeIn(duration);
+        _fadeManager.FadeIn(duration, ignoreAudio);
         while (_fadeManager.IsPlaying)
         {
             yield return null;
@@ -51,7 +51,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         IsFading = false;
     }
 
-    private IEnumerator FadeOutRoutine(float duration, float delay)
+    private IEnumerator FadeOutRoutine(float duration, float delay, bool ignoreAudio)
     {
         IsFading = true;
 
@@ -60,7 +60,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
             yield return new WaitForSeconds(delay);
         }
 
-        _fadeManager.FadeOut(duration);
+        _fadeManager.FadeOut(duration, ignoreAudio);
         while (_fadeManager.IsPlaying)
         {
             yield return null;
@@ -76,7 +76,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     private IEnumerator LoadSceneWithLoadingUiRoutine(string sceneName)
     {
-        FadeOut(DEFAULT_FADE_DURATION);
+        FadeOut(DEFAULT_FADE_DURATION, 0f, true);
         while (IsFading)
         {
             yield return null;
@@ -85,7 +85,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         Instantiate(Resources.Load<GameObject>("LoadingCanvas"));
         SceneLoader sceneLoader = SceneLoader.Instance;
 
-        FadeIn(DEFAULT_FADE_DURATION);
+        FadeIn(DEFAULT_FADE_DURATION, 0f, true);
         while (IsFading)
         {
             yield return null;
