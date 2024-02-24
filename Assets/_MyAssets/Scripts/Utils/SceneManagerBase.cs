@@ -7,8 +7,6 @@ using UnityEngine.UI;
 public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 {
     private SceneFadeManager _fadeManager;
-    [SerializeField] private AudioSource _bgmAudioSource;
-    [SerializeField] private AudioSource _seAudioSource;
 
     public const float DEFAULT_FADE_DURATION = 0.5f;
     public bool IsFading { get; private set; }
@@ -27,16 +25,16 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     public void FadeIn(float duration, float delay = 0f)
     {
-        StartCoroutine(FadeInRoutine(duration, delay, _bgmAudioSource, _seAudioSource));
+        StartCoroutine(FadeInRoutine(duration, delay));
     }
 
     public void FadeOut(float duration, float delay = 0f)
     {
-        StartCoroutine(FadeOutRoutine(duration, delay, _bgmAudioSource, _seAudioSource));
+        StartCoroutine(FadeOutRoutine(duration, delay));
     }
 
 
-    private IEnumerator FadeInRoutine(float duration, float delay, AudioSource bgmOrNull, AudioSource seOrNull)
+    private IEnumerator FadeInRoutine(float duration, float delay)
     {
         IsFading = true;
         if (delay != 0f)
@@ -44,7 +42,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
             yield return new WaitForSeconds(delay);
         }
 
-        _fadeManager.FadeIn(duration, bgmOrNull, seOrNull);
+        _fadeManager.FadeIn(duration);
         while (_fadeManager.IsPlaying)
         {
             yield return null;
@@ -53,7 +51,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         IsFading = false;
     }
 
-    private IEnumerator FadeOutRoutine(float duration, float delay, AudioSource bgmOrNull, AudioSource seOrNull)
+    private IEnumerator FadeOutRoutine(float duration, float delay)
     {
         IsFading = true;
 
@@ -62,7 +60,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
             yield return new WaitForSeconds(delay);
         }
 
-        _fadeManager.FadeOut(duration, bgmOrNull, seOrNull);
+        _fadeManager.FadeOut(duration);
         while (_fadeManager.IsPlaying)
         {
             yield return null;
