@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class SceneFadeManager : Singleton<SceneFadeManager>
 {
     private Image _imgSrc;
+    private AudioMixer _audioMixer;
     private bool _isPlaying = false;
 
     public bool IsPlaying => _isPlaying;
@@ -15,45 +17,47 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
     void Awake()
     {
         _imgSrc = GetComponent<Image>();
+        _audioMixer = Resources.Load<AudioMixer>("AudioMixer/MainMixer");
     }
 
-    public void FadeIn(float t, AudioSource bgmOrNull = null, AudioSource seOrNull = null)
+    public void FadeIn(float t, bool ignoreAudio = false)
     {
-        StartCoroutine(FadeInRoutine(t, bgmOrNull, seOrNull));
+        StartCoroutine(FadeInRoutine(t, ignoreAudio));
     }
 
-    public void FadeOut(float t, AudioSource bgmOrNull = null, AudioSource seOrNull = null)
+    public void FadeOut(float t, bool ignoreAudio = false)
     {
-        StartCoroutine(FadeOutRoutine(t, bgmOrNull, seOrNull));
+        StartCoroutine(FadeOutRoutine(t, ignoreAudio));
     }
 
-    private IEnumerator FadeInRoutine(float t, AudioSource bgm, AudioSource se)
+    private IEnumerator FadeInRoutine(float t, bool ignoreAudio = false)
     {
         Debug.Assert(t > 0);
 
-        _imgSrc.enabled = true;
-        if (_isPlaying) yield break;
+        if (_isPlaying)
+        {
+            yield break;
+        }
 
         _isPlaying = true;
         Color color = _imgSrc.color;
+        _imgSrc.enabled = true;
+        color.a = 1f;
+        _imgSrc.color = color;
 
-        const float DEFAULT_VALUE = 1f;
-        float targetBgmVolume = PlayerPrefs.GetFloat(PlayerPrefsKeyNames.BGM_VOLUME, DEFAULT_VALUE);
-        float targetSeVolume = PlayerPrefs.GetFloat(PlayerPrefsKeyNames.SE_VOLUME, DEFAULT_VALUE);
+        const float DEFAULT_VOLUME = 0f;
+        float targetVolume = PlayerPrefs.GetFloat(PlayerPrefsKeyNames.MASTER_VOLUME, DEFAULT_VOLUME);
 
         float time = 0f;
         while (_imgSrc.color.a > 0f)
         {
             color.a = Mathf.Lerp(1f, 0f, time / t);
             _imgSrc.color = color;
-            if (bgm != null)
-            {
-                bgm.volume = Mathf.Lerp(0f, targetBgmVolume, time / t);
-            }
 
-            if (se != null)
+            if (!ignoreAudio)
             {
-                se.volume = Mathf.Lerp(0f, targetSeVolume, time / t);
+                const float MIN_VOLUME = -80f;
+                _audioMixer.SetFloat("MasterVolume", Mathf.Lerp(MIN_VOLUME, targetVolume, time / t));
             }
 
             time += Time.deltaTime;
@@ -64,41 +68,33 @@ public class SceneFadeManager : Singleton<SceneFadeManager>
         _isPlaying = false;
     }
 
-    private IEnumerator FadeOutRoutine(float t, AudioSource bgm, AudioSource se)
+    private IEnumerator FadeOutRoutine(float t, bool ignoreAudio = false)
     {
         Debug.Assert(t > 0);
 
-        _imgSrc.enabled = true;
-        if (_isPlaying) yield break;
+        if (_isPlaying)
+        {
+            yield break;
+        }
 
         _isPlaying = true;
         Color color = _imgSrc.color;
+        _imgSrc.enabled = true;
+        color.a = 0f;
+        _imgSrc.color = color;
 
-        float originalBgmVolume = 0f;
-        if (bgm != null)
-        {
-            originalBgmVolume = bgm.volume;
-        }
-
-        float originalSeVolume = 0f;
-        if (se != null)
-        {
-            originalSeVolume = se.volume;
-        }
+        _audioMixer.GetFloat("MasterVolume", out float originalVolume);
 
         float time = 0f;
         while (_imgSrc.color.a < 1f)
         {
             color.a = Mathf.Lerp(0f, 1f, time / t);
             _imgSrc.color = color;
-            if (bgm != null)
-            {
-                bgm.volume = Mathf.Lerp(originalBgmVolume, 0f, time / t);
-            }
 
-            if (se != null)
+            if (!ignoreAudio)
             {
-                se.volume = Mathf.Lerp(originalSeVolume, 0f, time / t);
+                const float MIN_VOLUME = -80f;
+                _audioMixer.SetFloat("MasterVolume", Mathf.Lerp(originalVolume, MIN_VOLUME, time / t));
             }
 
             time += Time.deltaTime;

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class TPG_AudioSettings : TabPage
@@ -14,7 +15,8 @@ public class TPG_AudioSettings : TabPage
     }
 
     [SerializeField] private List<Slider> _volumeSliders;
-
+    [SerializeField] private AudioMixer _audioMixer;
+    
     private void Awake()
     {
         for (var sliderType = EVolumeSlider.Master; sliderType <= EVolumeSlider.Se; sliderType++)
@@ -27,7 +29,7 @@ public class TPG_AudioSettings : TabPage
 
     private void AdjustVolume(EVolumeSlider sliderType, float value)
     {
-        _volumeSliders[(int)sliderType].value = value;
+        _audioMixer.SetFloat($"{sliderType}Volume", value);
         PlayerPrefs.SetFloat(GetPlayerPrefsKeyNameBySliderEnum(sliderType), value);
     }
 
