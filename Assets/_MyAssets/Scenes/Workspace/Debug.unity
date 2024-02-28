@@ -346,7 +346,7 @@ GameObject:
   - component: {fileID: 188001383}
   - component: {fileID: 188001382}
   m_Layer: 5
-  m_Name: Filter (1)
+  m_Name: FilterByWarning
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1405,7 +1405,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Focus
+  m_text: Scroll To Botttom
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fb993a96c41552f4789cd50ddb1593e2, type: 2}
   m_sharedMaterial: {fileID: -3043692392977860844, guid: fb993a96c41552f4789cd50ddb1593e2,
@@ -1433,8 +1433,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1931,7 +1931,7 @@ GameObject:
   - component: {fileID: 761966080}
   - component: {fileID: 761966079}
   m_Layer: 5
-  m_Name: Filter (2)
+  m_Name: FilterByError
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2181,10 +2181,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 291883682}
-  - {fileID: 728489518}
   - {fileID: 1918385217}
   - {fileID: 188001381}
   - {fileID: 761966078}
+  - {fileID: 728489518}
   - {fileID: 722583385}
   - {fileID: 670352614}
   m_Father: {fileID: 1603579752}
@@ -3064,7 +3064,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _logText: {fileID: 1307932030}
   _opacitySlider: {fileID: 291883683}
-  _logScrollbar: {fileID: 0}
+  _logScrollbar: {fileID: 301410103}
+  _buttons:
+  - {fileID: 1918385218}
+  - {fileID: 188001382}
+  - {fileID: 761966079}
+  - {fileID: 728489519}
+  - {fileID: 722583386}
 --- !u!114 &1603579755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3326,7 +3332,7 @@ GameObject:
   - component: {fileID: 1918385219}
   - component: {fileID: 1918385218}
   m_Layer: 5
-  m_Name: Filter
+  m_Name: FilterByInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3489,11 +3495,11 @@ MonoBehaviour:
   m_Content: {fileID: 848767803}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 15
   m_Viewport: {fileID: 1518553594}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 301410103}
