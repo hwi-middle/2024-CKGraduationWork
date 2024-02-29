@@ -7,7 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DW_IngameConsole : DraggableUI
+public class DW_IngameConsole : DebugWindowBase
 {
     private enum EInGameConsoleButtons
     {
