@@ -51,8 +51,9 @@ public class DW_IngameConsole : DraggableUI
     [SerializeField] private ScrollRect _scrollRect;
     [SerializeField] private List<Button> _buttons;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _canvasGroup = GetComponent<CanvasGroup>();
         Debug.Assert(_canvasGroup != null);
         _opacitySlider.onValueChanged.AddListener(OnOpacitySliderValueChanged);
