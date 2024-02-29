@@ -30,8 +30,8 @@ public class DW_IngameConsole : DebugWindowBase
 
     private struct LogData
     {
-        public string msg;
-        public ELogTypeFlags type;
+        public readonly string msg;
+        public readonly ELogTypeFlags type;
 
         public LogData(string msg, ELogTypeFlags type)
         {
