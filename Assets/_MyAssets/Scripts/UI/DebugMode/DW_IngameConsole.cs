@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,7 +50,6 @@ public class DW_IngameConsole : DraggableUI
     [SerializeField] private Slider _opacitySlider;
     [SerializeField] private ScrollRect _scrollRect;
     [SerializeField] private List<Button> _buttons;
-    private int idx = 0;
 
     private void Awake()
     {
@@ -68,17 +68,17 @@ public class DW_IngameConsole : DraggableUI
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log($"Info {idx++}");
+            Debug.Log("Log for Test ;)");
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            Debug.LogWarning("Warning");
+            Debug.LogWarning("Warning for Test ;)");
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            Debug.LogError("Error");
+            Debug.LogError("Error for Test ;)");
         }
     }
 
@@ -94,7 +94,7 @@ public class DW_IngameConsole : DraggableUI
 
     private void ScrollToBottom()
     {
-        _scrollRect.normalizedPosition = new Vector2(0, 0);
+        _scrollRect.verticalNormalizedPosition = 0f;
     }
 
     private void OnClickClearButton()
@@ -146,42 +146,45 @@ public class DW_IngameConsole : DraggableUI
     private IEnumerator WriteLogMessageRoutine(string msg, string stackTrace, LogType type)
     {
         const float TOLERANCE = 0.2f;
-        bool isAlreadyScrolledToBottom = _scrollRect.normalizedPosition.y <= TOLERANCE;
-        string logMsg;
+        bool isAlreadyScrolledToBottom = _scrollRect.verticalNormalizedPosition <= TOLERANCE;
+        var logMsgBuilder = new StringBuilder();
         ELogTypeFlags simplifiedLogType;
         switch (type)
         {
             case LogType.Assert:
             case LogType.Error:
             case LogType.Exception:
-                logMsg = "<color=red>[ERROR] ";
+                logMsgBuilder.Append("<color=red>[ERROR] ");
                 simplifiedLogType = ELogTypeFlags.Error;
                 break;
             case LogType.Warning:
-                logMsg = "<color=yellow>[WARNING] ";
+                logMsgBuilder.Append("<color=yellow>[WARNING] ");
                 simplifiedLogType = ELogTypeFlags.Warning;
                 break;
             case LogType.Log:
-                logMsg = "<color=white>[INFO] ";
+                logMsgBuilder.Append("<color=white>[INFO] ");
                 simplifiedLogType = ELogTypeFlags.Info;
                 break;
             default:
-                logMsg = string.Empty;
                 simplifiedLogType = 0;
                 Debug.Assert(false);
                 break;
         }
 
-        logMsg += $"{msg}\n";
-        logMsg += "</color>";
+        logMsgBuilder.Append($"{msg}</color>\n");
+        logMsgBuilder.Append($"<size=12>{stackTrace}</size>\n");
 
+        string logMsg = logMsgBuilder.ToString();
         _logText.text += logMsg;
         _logDataList.Add(new LogData(logMsg, stackTrace, simplifiedLogType));
 
-        if (!isAlreadyScrolledToBottom) yield break;
-
         yield return new WaitForEndOfFrame(); // OnGUI 실행 대기
-        ScrollToBottom();
+
+        bool isScrollBegin = _scrollRect.verticalScrollbar.size > 0.95f;
+        if (isAlreadyScrolledToBottom || isScrollBegin)
+        {
+            ScrollToBottom();
+        }
     }
 
     private void OnOpacitySliderValueChanged(float value)
