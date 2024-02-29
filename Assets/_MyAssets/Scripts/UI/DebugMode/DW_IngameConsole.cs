@@ -31,13 +31,11 @@ public class DW_IngameConsole : DraggableUI
     private struct LogData
     {
         public string msg;
-        public string stackTrace;
         public ELogTypeFlags type;
 
-        public LogData(string msg, string stackTrace, ELogTypeFlags type)
+        public LogData(string msg, ELogTypeFlags type)
         {
             this.msg = msg;
-            this.stackTrace = stackTrace;
             this.type = type;
         }
     }
@@ -179,7 +177,7 @@ public class DW_IngameConsole : DraggableUI
         {
             _logText.text += logMsg;
         }
-        _logDataList.Add(new LogData(logMsg, stackTrace, simplifiedLogType));
+        _logDataList.Add(new LogData(logMsg, simplifiedLogType));
 
         yield return new WaitForEndOfFrame(); // OnGUI 실행 대기
 
