@@ -40,21 +40,16 @@ public class DW_IngameConsole : DebugWindowBase
         }
     }
 
-    private CanvasGroup _canvasGroup;
     private readonly List<LogData> _logDataList = new List<LogData>();
     private ELogTypeFlags _currentLogFilter = ELogTypeFlags.AllFlags;
 
     [SerializeField] private TMP_Text _logText;
-    [SerializeField] private Slider _opacitySlider;
     [SerializeField] private ScrollRect _scrollRect;
     [SerializeField] private List<Button> _buttons;
 
     protected override void Awake()
     {
         base.Awake();
-        _canvasGroup = GetComponent<CanvasGroup>();
-        Debug.Assert(_canvasGroup != null);
-        _opacitySlider.onValueChanged.AddListener(OnOpacitySliderValueChanged);
 
         _buttons[(int)EInGameConsoleButtons.FilterByInfo].onClick.AddListener(() => { ToggleLogTypes(ELogTypeFlags.Info); });
         _buttons[(int)EInGameConsoleButtons.FilterByWarning].onClick.AddListener(() => { ToggleLogTypes(ELogTypeFlags.Warning); });
@@ -186,10 +181,5 @@ public class DW_IngameConsole : DebugWindowBase
         {
             ScrollToBottom();
         }
-    }
-
-    private void OnOpacitySliderValueChanged(float value)
-    {
-        _canvasGroup.alpha = value;
     }
 }
