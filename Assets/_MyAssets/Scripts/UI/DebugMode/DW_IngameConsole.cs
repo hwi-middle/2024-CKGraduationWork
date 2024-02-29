@@ -174,7 +174,11 @@ public class DW_IngameConsole : DraggableUI
         logMsgBuilder.Append($"<size=12>{stackTrace}</size>\n");
 
         string logMsg = logMsgBuilder.ToString();
-        _logText.text += logMsg;
+
+        if (_currentLogFilter.HasFlag(simplifiedLogType))
+        {
+            _logText.text += logMsg;
+        }
         _logDataList.Add(new LogData(logMsg, stackTrace, simplifiedLogType));
 
         yield return new WaitForEndOfFrame(); // OnGUI 실행 대기
