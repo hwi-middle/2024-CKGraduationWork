@@ -16,7 +16,6 @@ public class DW_IngameConsole : DebugWindowBase
         FilterByError,
         Focus,
         Clear,
-        Close,
     }
 
     [Flags]
