@@ -131,9 +131,7 @@ public class DW_IngameConsole : DraggableUI
 
     private void FilterLogs()
     {
-        List<LogData> filteredLogs = _logDataList
-            .Where(log => (log.type & _currentLogFilter) != 0)
-            .ToList();
+        var filteredLogs = _logDataList.Where(log => (log.type & _currentLogFilter) != 0);
 
         ClearLogs();
         foreach (LogData logData in filteredLogs)
