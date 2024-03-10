@@ -59,14 +59,18 @@ namespace _MyAssets.Scripts.Player
             Quaternion cameraRotation = _camera.transform.localRotation;
             cameraRotation.x = 0;
             cameraRotation.z = 0;
-            transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 1.0f);
+
+            const float ROTATE_SPEED = 0.1f;
+            transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, ROTATE_SPEED);
         }
         
         private void SetSlideVelocity()
         {
             float angle;
             Vector3 bottom = transform.position - new Vector3(0, _controller.height / 2, 0);
-            if (Physics.Raycast(bottom, Vector3.down, out RaycastHit hit, 3.0f))
+
+            const float RAY_DISTANCE = 3.0f;
+            if (Physics.Raycast(bottom, Vector3.down, out RaycastHit hit, RAY_DISTANCE))
             {
                 angle = Vector3.Angle(Vector3.up, hit.normal);
 
