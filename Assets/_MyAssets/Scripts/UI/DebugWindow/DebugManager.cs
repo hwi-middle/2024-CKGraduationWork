@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class DebugManager : Singleton<DebugManager>
 {
@@ -13,18 +14,15 @@ public class DebugManager : Singleton<DebugManager>
 
     [SerializeField] private List<DebugWindowBase> _debugWindows;
 
-    private void Update()
+    public void OnToggleInGameConsole()
     {
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            GameObject window = _debugWindows[(int)EDebugWindows.InGameConsole].gameObject;
-            window.SetActive(!window.activeInHierarchy);
-        }
+        GameObject window = _debugWindows[(int)EDebugWindows.InGameConsole].gameObject;
+        window.SetActive(!window.activeInHierarchy);
+    }
 
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            GameObject window = _debugWindows[(int)EDebugWindows.KeyVisualizer].gameObject;
-            window.SetActive(!window.activeInHierarchy);
-        }
+    public void OnToggleKeyVisualizer()
+    {
+        GameObject window = _debugWindows[(int)EDebugWindows.KeyVisualizer].gameObject;
+        window.SetActive(!window.activeInHierarchy);
     }
 }

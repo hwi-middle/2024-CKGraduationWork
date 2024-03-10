@@ -8,7 +8,7 @@ public class DebugWindowBase : MonoBehaviour, IDragHandler, IPointerDownHandler
     [SerializeField] private Canvas _canvas;
     [SerializeField] private Slider _opacitySlider;
     [SerializeField] private Button _closeButton;
-    
+
     private RectTransform _rectTransform;
     private CanvasGroup _canvasGroup;
 
@@ -30,7 +30,7 @@ public class DebugWindowBase : MonoBehaviour, IDragHandler, IPointerDownHandler
     {
         transform.SetAsLastSibling();
     }
-    
+
     private void OnOpacitySliderValueChanged(float value)
     {
         _canvasGroup.alpha = value;
@@ -39,5 +39,10 @@ public class DebugWindowBase : MonoBehaviour, IDragHandler, IPointerDownHandler
     private void OnClickCloseButton()
     {
         gameObject.SetActive(false);
+    }
+
+    protected virtual void OnEnable()
+    {
+        transform.SetAsLastSibling();
     }
 }

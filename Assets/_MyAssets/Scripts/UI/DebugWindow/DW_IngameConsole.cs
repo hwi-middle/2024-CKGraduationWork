@@ -75,8 +75,9 @@ public class DW_IngameConsole : DebugWindowBase
         }
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         Application.logMessageReceived += WriteLogMessage;
     }
 
