@@ -1,5 +1,5 @@
 {
-    "name": "InputActions",
+    "name": "IA_Player",
     "maps": [
         {
             "name": "PlayerAction",
@@ -18,6 +18,33 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "30834a8a-5b3d-466c-a882-ff8aeb9c1e81",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "NormalAttack",
+                    "type": "Button",
+                    "id": "f809e102-c70e-45f7-996b-90a0f7a649ff",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Defense",
+                    "type": "Button",
+                    "id": "733054a0-c5dc-4643-b3f3-0fb9e20105f6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ScissorJump",
+                    "type": "Button",
+                    "id": "f263d33b-4b51-4b21-8d66-5bdbc47695aa",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -90,6 +117,39 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "c091f16b-21bf-4fb3-9af8-54b83917dabb",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "NormalAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9a449ced-8ff7-4f54-afa1-7310829eeca6",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Defense",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6c740998-6430-4885-a62c-7c33bb9ddf5f",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "ScissorJump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
