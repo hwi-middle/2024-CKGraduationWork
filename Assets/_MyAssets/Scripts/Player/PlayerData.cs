@@ -13,6 +13,9 @@ namespace _MyAssets.Scripts.Player
         
         [Header("플레이어 경사로 미끄러짐 속도")]
         public float slideSpeed;
+
+        [Header("플레이어 공격 사거리")] 
+        public float attackRange;
         
         [Header("플레이어 공격 대미지")]
         public float attackDamage;

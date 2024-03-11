@@ -1,9 +1,10 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace _MyAssets.Scripts.Player
 {
-    public class PlayerMove : MonoBehaviour
+    public class PlayerMove : Singleton<PlayerMove>
     {
         [SerializeField] private PlayerData _myData;
         
@@ -22,6 +23,11 @@ namespace _MyAssets.Scripts.Player
         private Vector3 _hitNormal;
         private bool _isSliding;
         private Vector3 _slideVelocity;
+        
+        public bool IsRopeAction { get; private set; }
+        private Vector3 _ropeTargetPosition;
+        private float _ropeRange;
+        private IEnumerator _ropeActionWait;
 
         private bool IsGrounded => _controller.isGrounded;
 
@@ -33,7 +39,7 @@ namespace _MyAssets.Scripts.Player
 
         private void Start()
         {
-            Debug.Assert(_controller != null, "_controller !=null");
+            Debug.Assert(_controller != null, "_controller != null");
             
             // Cursor Visible
             Cursor.lockState = CursorLockMode.Locked;
@@ -42,9 +48,55 @@ namespace _MyAssets.Scripts.Player
 
         private void Update()
         {
+            if (IsRopeAction)
+            {
+                MovePlayerRopeAction();
+                return;
+            }
+            
             SetSlideVelocity();
             RotatePlayer();
             MovePlayer();
+        }
+
+        public void ApplyRopeAction(Vector3 ropePosition, float range)
+        {
+            const float Y_ADDITIVE_VALUE = 1.0f;
+            IsRopeAction = true;
+            ropePosition.y += Y_ADDITIVE_VALUE;
+            _ropeTargetPosition = ropePosition;
+            _ropeRange = range;
+        }
+
+        private void MovePlayerRopeAction()
+        {
+            if (_ropeActionWait != null)
+            {
+                return;
+            }
+
+            LineDraw.Instance.TurnOnLine();
+            _ropeActionWait = RopeActionRoutine();
+            StartCoroutine(_ropeActionWait);
+        }
+
+        private IEnumerator RopeActionRoutine()
+        {
+            const float TOLERANCE = 0.1f;
+            const float MOVE_SPEED = 0.5f;
+            float moveTime = 0;
+            
+            while ((transform.position - _ropeTargetPosition).magnitude >= TOLERANCE)
+            {
+                moveTime += Time.deltaTime;
+                float t = Mathf.Clamp01(moveTime / (MOVE_SPEED * _ropeRange));
+                transform.position = Vector3.Lerp(transform.position, _ropeTargetPosition, t);
+                yield return null;
+            }
+
+            LineDraw.Instance.TurnOffLine();
+            IsRopeAction = false;
+            _ropeActionWait = null;
         }
 
         private void RotatePlayer()

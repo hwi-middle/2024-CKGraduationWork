@@ -8,7 +8,8 @@ namespace _MyAssets.Scripts.Player
     {
         Idle,
         Ready,
-        Attacking
+        Attacking,
+        Defense
     }
 
     public class PlayerManager : Singleton<PlayerManager>
@@ -16,6 +17,10 @@ namespace _MyAssets.Scripts.Player
         private IEnumerator _returnToIdleState;
 
         public EPlayerState CurrentState { get; private set; }
+
+        private void Start()
+        {
+        }
 
         private void Update()
         {
@@ -32,38 +37,33 @@ namespace _MyAssets.Scripts.Player
             const float IMMEDIATE_ROTATE_SPEED = 1.0f;
             transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, IMMEDIATE_ROTATE_SPEED);
         }
-
+        
         private void ReturnToIdleState()
         {
-            switch (CurrentState)
+            if (CurrentState != EPlayerState.Ready)
             {
-                case EPlayerState.Idle:
+                if (_returnToIdleState == null)
+                {
                     return;
+                }
                 
-                case EPlayerState.Ready when _returnToIdleState == null:
-                    _returnToIdleState = ReturnToIdleStateRoutine();
-                    StartCoroutine(_returnToIdleState);
-                    return;
-                
-                case EPlayerState.Ready when _returnToIdleState != null:
-                    return;
-                
-                case EPlayerState.Attacking when _returnToIdleState != null:
-                    StopCoroutine(_returnToIdleState);
-                    _returnToIdleState = null;
-                    return;
-                case EPlayerState.Attacking when _returnToIdleState == null:
-                    return;
-                
-                default:
-                    Debug.Assert(false);
-                    return;
+                StopCoroutine(_returnToIdleState);
+                _returnToIdleState = null;
+                return;
             }
+
+            if (_returnToIdleState != null)
+            {
+                return;
+            }
+
+            _returnToIdleState = ReturnToIdleStateRoutine();
+            StartCoroutine(_returnToIdleState);
         }
 
         private IEnumerator ReturnToIdleStateRoutine()
         {
-            const float RETURN_TIME = 3.0f;
+            const float RETURN_TIME = 10.0f;
             yield return new WaitForSeconds(RETURN_TIME);
             
             CurrentState = EPlayerState.Idle;

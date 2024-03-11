@@ -15,4 +15,5 @@ MonoBehaviour:
   moveSpeed: 5
   jumpHeight: 5
   slideSpeed: 6
+  attackRange: 2
   attackDamage: 10

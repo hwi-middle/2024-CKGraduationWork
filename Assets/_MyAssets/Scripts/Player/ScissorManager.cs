@@ -8,11 +8,54 @@ namespace _MyAssets.Scripts.Player
 {
     public class ScissorManager : Singleton<ScissorManager>
     {
-        private const float TOLERANCE = 0.1f;
-        private const float LERP_SPEED = 0.1f;
+        [SerializeField] private PlayerData _myData;
+
         private Camera _mainCamera;
+        
         private IEnumerator _normalAttackWait;
         private IEnumerator _readyToAttackWait;
+        private IEnumerator _defenseWait;
+
+        private const float TOLERANCE = 0.1f;
+        private const float LERP_SPEED = 0.2f;
+        
+        private static readonly Vector3 IDLE_POS = new(0.0f, 0.0f, -1.0f);
+        private static readonly Quaternion IDLE_ROT = Quaternion.identity;
+
+        private static readonly Vector3 READY_POS = new(0.5f, 0.0f, 1.0f);
+        private static readonly Quaternion READY_ROT = Quaternion.Euler(90.0f, 0.0f, 0.0f);
+
+        private static readonly Vector3 DEFENSE_POS = new(0.0f, 0.0f, 1.0f);
+        private static readonly Quaternion DEFENSE_ROT = Quaternion.Euler(0.0f, 0.0f, 45.0f);
+
+        private float _ropeRange;
+        private Vector3 _hitPosition;
+
+        private bool CanHangRope
+        {
+            get
+            {
+                Debug.Assert(_mainCamera != null, "_mainCamera != null");
+                Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+
+                bool isHit = Physics.Raycast(ray, out RaycastHit hit);
+                Debug.DrawRay(ray.origin, hit.point, Color.blue);
+
+                if (!isHit)
+                {
+                    return false;
+                }
+
+                if (!hit.transform.CompareTag("RopePoint"))
+                {
+                    return false;
+                }
+
+                _ropeRange = (hit.point - ray.origin).magnitude;
+                _hitPosition = hit.transform.position;
+                return true;
+            }
+        }
 
         private void Awake()
         {
@@ -23,48 +66,43 @@ namespace _MyAssets.Scripts.Player
         {
             
         }
-        
+
         #region About Attack
 
         public void ReturnToIdle()
         {
-            Vector3 endPosition = new Vector3(0, 0, -1);
-            Quaternion endRotation = Quaternion.identity;
-
-            StartCoroutine(ReturnToIdleRoutine(endPosition, endRotation));
+            StartCoroutine(ReturnToIdleRoutine());
         }
 
-        private IEnumerator ReturnToIdleRoutine(Vector3 endPosition, Quaternion endRotation)
+        private IEnumerator ReturnToIdleRoutine()
         {
-            while ((transform.localPosition - endPosition).magnitude >= TOLERANCE
-                   || Quaternion.Angle(transform.localRotation, endRotation) >= TOLERANCE)
+            while ((transform.localPosition - IDLE_POS).magnitude >= TOLERANCE
+                   || Quaternion.Angle(transform.localRotation, IDLE_ROT) >= TOLERANCE)
             {
-                transform.localPosition = Vector3.Lerp(transform.localPosition, endPosition, LERP_SPEED);
-                transform.localRotation = Quaternion.Slerp(transform.localRotation, endRotation, LERP_SPEED);
+                transform.localPosition = Vector3.Lerp(transform.localPosition, IDLE_POS, LERP_SPEED);
+                transform.localRotation = Quaternion.Slerp(transform.localRotation, IDLE_ROT, LERP_SPEED);
                 yield return null;
             }
         }
-        
+
         private void ReadyToAttack()
         {
             if (_readyToAttackWait != null)
             {
                 return;
             }
-            
-            Vector3 targetPosition = new Vector3(0.5f, 0, 1);
-            Quaternion targetRotation = Quaternion.Euler(90, 0, 0);
-            _readyToAttackWait = ReadyToAttackWait(targetPosition, targetRotation, LERP_SPEED);
+
+            _readyToAttackWait = ReadyToAttackWaitRoutine();
             StartCoroutine(_readyToAttackWait);
         }
 
-        private IEnumerator ReadyToAttackWait(Vector3 targetPosition, Quaternion targetRotation,float speed)
+        private IEnumerator ReadyToAttackWaitRoutine()
         {
-            while ((transform.localPosition - targetPosition).magnitude >= TOLERANCE
-                   || Quaternion.Angle(transform.localRotation, targetRotation) >= TOLERANCE)
+            while ((transform.localPosition - READY_POS).magnitude >= TOLERANCE
+                   || Quaternion.Angle(transform.localRotation, READY_ROT) >= TOLERANCE)
             {
-                transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition, speed);
-                transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, speed);
+                transform.localPosition = Vector3.Lerp(transform.localPosition, READY_POS, LERP_SPEED);
+                transform.localRotation = Quaternion.Slerp(transform.localRotation, READY_ROT, LERP_SPEED);
                 yield return null;
             }
 
@@ -96,17 +134,13 @@ namespace _MyAssets.Scripts.Player
                 return;
             }
 
-            // 임시 공격 거리
-            const float TMP_RANGE = 2.0f;
-            Vector3 startPosition = new Vector3(0.5f, 0, 1);
-            Vector3 endPosition = new Vector3(startPosition.x, 0, startPosition.z + TMP_RANGE);
-            
-            _normalAttackWait = WaitAttackRoutine(startPosition, endPosition);
+            _normalAttackWait = WaitAttackRoutine();
             StartCoroutine(_normalAttackWait);
         }
 
-        private IEnumerator WaitAttackRoutine(Vector3 startPosition, Vector3 endPosition)
+        private IEnumerator WaitAttackRoutine()
         {
+            Vector3 endPosition = new Vector3(READY_POS.x, 0.0f, READY_POS.z + _myData.attackRange);
             while ((transform.localPosition - endPosition).magnitude >= TOLERANCE)
             {
                 transform.localPosition = Vector3.Lerp(transform.localPosition, endPosition, LERP_SPEED);
@@ -118,16 +152,16 @@ namespace _MyAssets.Scripts.Player
             Vector3 checkPosition = new Vector3(transform.localPosition.x, transform.localPosition.y,
                 transform.localPosition.z + COLLIDER_RANGE);
             checkPosition = transform.TransformPoint(checkPosition);
-            
+
             Collider[] colliders = Physics.OverlapSphere(checkPosition, COLLIDER_RADIUS);
             // colliders 에 Enemy가 있으면 Attack Call 하는 느낌으로
-            
-            while ((startPosition - transform.localPosition).magnitude >= TOLERANCE)
+
+            while ((READY_POS - transform.localPosition).magnitude >= TOLERANCE)
             {
-                transform.localPosition = Vector3.Lerp(transform.localPosition, startPosition, LERP_SPEED);
+                transform.localPosition = Vector3.Lerp(transform.localPosition, READY_POS, LERP_SPEED);
                 yield return null;
             }
-            
+
             _normalAttackWait = null;
             PlayerManager.Instance.ChangePlayerState(EPlayerState.Ready);
         }
@@ -140,13 +174,117 @@ namespace _MyAssets.Scripts.Player
                 return;
             }
 
-            if (!ctx.started || _normalAttackWait != null)
+            if (!ctx.started || _normalAttackWait != null || PlayerManager.Instance.CurrentState == EPlayerState.Defense)
             {
                 return;
             }
 
             ActivateNormalAttack();
             PlayerManager.Instance.ChangePlayerState(EPlayerState.Attacking);
+        }
+
+        #endregion
+
+        #region Defense & CounterAttack
+
+        private void ActivateDefense()
+        {
+            if (_defenseWait != null)
+            {
+                return;
+            }
+
+            _defenseWait = DefenseWaitRoutine();
+            StartCoroutine(_defenseWait);
+        }
+
+        private IEnumerator DefenseWaitRoutine()
+        {
+            while ((transform.localPosition - DEFENSE_POS).magnitude >= TOLERANCE
+                   || Quaternion.Angle(transform.localRotation, DEFENSE_ROT) >= TOLERANCE)
+            {
+                transform.localPosition = Vector3.Lerp(transform.localPosition, DEFENSE_POS, LERP_SPEED);
+                transform.localRotation = Quaternion.Slerp(transform.localRotation, DEFENSE_ROT, LERP_SPEED);
+                yield return null;
+            }
+        }
+
+        private void ActivateCounterAttack()
+        {
+            
+        }
+
+        public void OnDefenseButtonClick(InputAction.CallbackContext ctx)
+        {
+            if (PlayerManager.Instance.CurrentState == EPlayerState.Attacking)
+            {
+                return;
+            }
+            
+            if (ctx.canceled)
+            {
+                if (_defenseWait != null)
+                {
+                    StopCoroutine(_defenseWait);
+                }
+
+                _defenseWait = null;
+                ReadyToAttack();
+                return;
+            }
+
+            PlayerManager.Instance.ChangePlayerState(EPlayerState.Defense);
+            ActivateDefense();
+        }
+
+        #endregion
+
+        #region ScissorJump
+
+        private void ActivateScissorJump()
+        {
+            // 가위를 타고 넘어가는 이동
+        }
+
+        public void OnScissorJumpButtonClick(InputAction.CallbackContext ctx)
+        {
+            if (!ctx.started)
+            {
+                return;
+            }
+
+            ActivateScissorJump();
+        }
+
+        #endregion
+        
+        #region Rope
+
+        public void OnRopeButtonClick(InputAction.CallbackContext ctx)
+        {
+            if (PlayerMove.Instance.IsRopeAction || !ctx.started)
+            {
+                return;
+            }
+
+            if (!CanHangRope)
+            {
+                return;
+            }
+            
+            RotatePlayer();
+            PlayerMove.Instance.ApplyRopeAction(_hitPosition, _ropeRange);
+            StartCoroutine(HangRopeRoutine());
+        }
+
+        private IEnumerator HangRopeRoutine()
+        {
+            const float DRAW_TOLERANCE = 0.2f;
+            while ((transform.position - _hitPosition).magnitude >= DRAW_TOLERANCE)
+            {
+                LineDraw.Instance.Draw(transform.position, _hitPosition);
+                yield return null;
+            }
         }
         
         #endregion
@@ -162,43 +300,6 @@ namespace _MyAssets.Scripts.Player
 
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(checkPosition, COLLIDER_RADIUS);
-        }
-
-        private void ActivateScissorJump()
-        {
-            // 가위를 타고 넘어가는 이동
-        }
-
-        private bool ActivateDefense()
-        {
-            return false;
-        }
-
-        private void ActivateCounterAttack()
-        {
-            
-        }
-    
-        
-
-        public void OnDefenseButtonClick(InputAction.CallbackContext ctx)
-        {
-            if (!ctx.started)
-            {
-                return;
-            }
-
-            ActivateDefense();
-        }
-
-        public void OnScissorJumpButtonClick(InputAction.CallbackContext ctx)
-        {
-            if (!ctx.started)
-            {
-                return;
-            }
-
-            ActivateScissorJump();
         }
     }
 }
