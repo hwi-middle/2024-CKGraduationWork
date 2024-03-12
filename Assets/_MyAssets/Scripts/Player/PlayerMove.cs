@@ -12,6 +12,7 @@ public class PlayerMove : MonoBehaviour
     private float _gravityMultiplier;
 
     private float _yVelocity;
+    public float YVelocity => _yVelocity;
 
     private Camera _camera;
 
@@ -41,7 +42,7 @@ public class PlayerMove : MonoBehaviour
         Cursor.visible = false;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         SetSlideVelocity();
         RotatePlayer();
@@ -137,6 +138,11 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
+        PerformJump();
+    }
+
+    protected void PerformJump()
+    {
         _yVelocity += _jumpHeight;
     }
 
