@@ -81,7 +81,7 @@ namespace _MyAssets.Scripts.Player
             {
                 transform.localPosition = Vector3.Lerp(transform.localPosition, IDLE_POS, LERP_SPEED);
                 transform.localRotation = Quaternion.Slerp(transform.localRotation, IDLE_ROT, LERP_SPEED);
-                yield return null;
+                yield return new WaitForEndOfFrame();
             }
         }
 
