@@ -12,8 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2817285bf546941c593f0483f77baa46, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  hp: 100
+  walkSpeed: 7
+  runSpeed: 11
+  crouchSpeed: 5
   jumpHeight: 5
-  slideSpeed: 6
   attackRange: 2
   attackDamage: 10
+  maxWireRange: 50
+  wireMoveTime: 2
+  wallMoveSpeed: 0
+  pMoveRange: 0
+  pMoveSpeed: 0
+  scissor: {fileID: 8188941826933305573, guid: 68a77c1da43994a3e87b7387e2e66373, type: 3}
+  slideSpeed: 6

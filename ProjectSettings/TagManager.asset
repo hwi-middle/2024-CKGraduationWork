@@ -5,7 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
-  - RopePoint
+  - WirePoint
+  - EnemyAttack
   layers:
   - Default
   - TransparentFX

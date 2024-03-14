@@ -1,203 +1,148 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace _MyAssets.Scripts.Player
+public class PlayerMove : MonoBehaviour
 {
-    public class PlayerMove : Singleton<PlayerMove>
+    [SerializeField] private float _jumpHeight;
+
+    [SerializeField] private float _moveSpeed;
+    [SerializeField] private float _slideSpeed;
+
+    [Header("Gravity Scale")] 
+    [SerializeField] private float _gravityMultiplier;
+
+    private float _yVelocity;
+    public float YVelocity => _yVelocity;
+
+    private Camera _camera;
+
+    private Vector3 _inputDirection;
+    private Vector3 _velocity;
+
+    private CharacterController _controller;
+
+    private Vector3 _hitNormal;
+    private bool _isSliding;
+    private Vector3 _slideVelocity;
+
+    private bool IsGrounded => _controller.isGrounded;
+
+    private void Awake()
     {
-        [SerializeField] private PlayerData _myData;
-        
-        [Header("Gravity Scale")]
-        [SerializeField] private float _gravityMultiplier;
-        
-        private float _yVelocity;
-        
-        private Camera _camera;
-        
-        private Vector3 _inputDirection;
-        private Vector3 _velocity;
+        _controller = GetComponent<CharacterController>();
+        _camera = Camera.main;
+    }
 
-        private CharacterController _controller;
-        
-        private Vector3 _hitNormal;
-        private bool _isSliding;
-        private Vector3 _slideVelocity;
-        
-        public bool IsRopeAction { get; private set; }
-        private Vector3 _ropeTargetPosition;
-        private float _ropeRange;
-        private IEnumerator _ropeActionWait;
+    private void Start()
+    {
+        Debug.Assert(_controller != null, "_controller !=null");
 
-        private bool IsGrounded => _controller.isGrounded;
+        // Cursor Visible
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
 
-        private void Awake()
+    protected virtual void Update()
+    {
+        SetSlideVelocity();
+        RotatePlayer();
+        MovePlayer();
+    }
+
+    private void RotatePlayer()
+    {
+        Debug.Assert(_camera != null, "_camera != null");
+
+        if (_inputDirection.sqrMagnitude == 0)
         {
-            _controller = GetComponent<CharacterController>();
-            _camera = Camera.main;
+            return;
         }
 
-        private void Start()
-        {
-            Debug.Assert(_controller != null, "_controller != null");
-            
-            // Cursor Visible
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+        Quaternion cameraRotation = _camera.transform.localRotation;
+        cameraRotation.x = 0;
+        cameraRotation.z = 0;
+        transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 1.0f);
+    }
 
-        private void Update()
+    private void SetSlideVelocity()
+    {
+        float angle;
+        Vector3 bottom = transform.position - new Vector3(0, _controller.height / 2, 0);
+        if (Physics.Raycast(bottom, Vector3.down, out RaycastHit hit, 3.0f))
         {
-            if (IsRopeAction)
+            angle = Vector3.Angle(Vector3.up, hit.normal);
+
+            if (angle > _controller.slopeLimit)
             {
-                MovePlayerRopeAction();
-                return;
-            }
-            
-            SetSlideVelocity();
-            RotatePlayer();
-            MovePlayer();
-        }
-
-        public void ApplyRopeAction(Vector3 ropePosition, float range)
-        {
-            const float Y_ADDITIVE_VALUE = 1.0f;
-            IsRopeAction = true;
-            ropePosition.y += Y_ADDITIVE_VALUE;
-            _ropeTargetPosition = ropePosition;
-            _ropeRange = range;
-        }
-
-        private void MovePlayerRopeAction()
-        {
-            if (_ropeActionWait != null)
-            {
-                return;
-            }
-
-            LineDraw.Instance.TurnOnLine();
-            _ropeActionWait = RopeActionRoutine();
-            StartCoroutine(_ropeActionWait);
-        }
-
-        private IEnumerator RopeActionRoutine()
-        {
-            const float TOLERANCE = 0.1f;
-            const float MOVE_SPEED = 0.5f;
-            float moveTime = 0;
-            
-            while ((transform.position - _ropeTargetPosition).magnitude >= TOLERANCE)
-            {
-                moveTime += Time.deltaTime;
-                float t = Mathf.Clamp01(moveTime / (MOVE_SPEED * _ropeRange));
-                transform.position = Vector3.Lerp(transform.position, _ropeTargetPosition, t);
-                yield return null;
-            }
-
-            LineDraw.Instance.TurnOffLine();
-            IsRopeAction = false;
-            _ropeActionWait = null;
-        }
-
-        private void RotatePlayer()
-        {
-            Debug.Assert(_camera != null, "_camera != null");
-
-            if (_inputDirection.sqrMagnitude == 0)
-            {
-                return;
-            }
-            
-            Quaternion cameraRotation = _camera.transform.localRotation;
-            cameraRotation.x = 0;
-            cameraRotation.z = 0;
-
-            const float ROTATE_SPEED = 0.1f;
-            transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, ROTATE_SPEED);
-        }
-        
-        private void SetSlideVelocity()
-        {
-            float angle;
-            Vector3 bottom = transform.position - new Vector3(0, _controller.height / 2, 0);
-
-            const float RAY_DISTANCE = 3.0f;
-            if (Physics.Raycast(bottom, Vector3.down, out RaycastHit hit, RAY_DISTANCE))
-            {
-                angle = Vector3.Angle(Vector3.up, hit.normal);
-
-                if (angle > _controller.slopeLimit)
-                {
-                    _slideVelocity = Vector3.ProjectOnPlane(new Vector3(0, _velocity.y, 0), hit.normal);
-                    _isSliding = true;
-                    return;
-                }
-            }
-
-            const float TOLERANCE = 0.1f;
-            angle = Vector3.Angle(Vector3.up, _hitNormal);
-            if (angle > _controller.slopeLimit + TOLERANCE)
-            {
-                _slideVelocity = Vector3.ProjectOnPlane(new Vector3(0, _velocity.y, 0), _hitNormal);
+                _slideVelocity = Vector3.ProjectOnPlane(new Vector3(0, _velocity.y, 0), hit.normal);
                 _isSliding = true;
                 return;
             }
-            
-            _isSliding = false;
-            _slideVelocity = Vector3.zero;
         }
-        
-        private void MovePlayer()
+
+        const float TOLERANCE = 0.1f;
+        angle = Vector3.Angle(Vector3.up, _hitNormal);
+        if (angle > _controller.slopeLimit + TOLERANCE)
         {
-            if (_isSliding && IsGrounded)
-            {
-                _velocity = _slideVelocity;
-                _velocity.y += _yVelocity;
-                _controller.Move(_myData.slideSpeed * Time.deltaTime * _velocity);
-                return;
-            }
-
-            _velocity = transform.TransformDirection(_inputDirection);
-
-            ApplyGravity();
-
-            _controller.Move(_myData.moveSpeed * Time.deltaTime * _velocity);
+            _slideVelocity = Vector3.ProjectOnPlane(new Vector3(0, _velocity.y, 0), _hitNormal);
+            _isSliding = true;
+            return;
         }
 
-        private void ApplyGravity()
+        _isSliding = false;
+        _slideVelocity = Vector3.zero;
+    }
+
+    private void MovePlayer()
+    {
+        if (_isSliding && IsGrounded)
         {
-            if (IsGrounded && _yVelocity < 0.0f)
-            {
-                _yVelocity = -1.0f;
-            }
-            else
-            {
-                _yVelocity += Physics.gravity.y * _gravityMultiplier * Time.deltaTime;
-            }
-            
-            _velocity.y = _yVelocity;
+            _velocity = _slideVelocity;
+            _velocity.y += _yVelocity;
+            _controller.Move(_slideSpeed * Time.deltaTime * _velocity);
+            return;
         }
 
-        public void OnMove(InputAction.CallbackContext context)
+        _velocity = transform.TransformDirection(_inputDirection);
+
+        ApplyGravity();
+
+        _controller.Move(_moveSpeed * Time.deltaTime * _velocity);
+    }
+
+    private void ApplyGravity()
+    {
+        if (IsGrounded && _yVelocity < 0.0f)
         {
-            Vector2 input = context.ReadValue<Vector2>();
-
-            _inputDirection = new Vector3(input.x, 0, input.y);
+            _yVelocity = -1.0f;
         }
-
-        public void OnJump(InputAction.CallbackContext context)
+        else
         {
-            if (!context.started || !IsGrounded || _isSliding)
-            {
-                return;
-            }
-
-            _yVelocity += _myData.jumpHeight;
+            _yVelocity += Physics.gravity.y * _gravityMultiplier * Time.deltaTime;
         }
 
-        private void OnControllerColliderHit(ControllerColliderHit hit)
+        _velocity.y = _yVelocity;
+    }
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        Vector2 input = context.ReadValue<Vector2>();
+
+        _inputDirection = new Vector3(input.x, 0, input.y);
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if (!context.started || !IsGrounded || _isSliding)
         {
-            _hitNormal = hit.normal;
+            return;
         }
+
+        _yVelocity += _jumpHeight;
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        _hitNormal = hit.normal;
     }
 }

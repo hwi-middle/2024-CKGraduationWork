@@ -15,9 +15,36 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Jump",
+                    "name": "Jump&Parkour",
                     "type": "Button",
                     "id": "30834a8a-5b3d-466c-a882-ff8aeb9c1e81",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Run",
+                    "type": "Button",
+                    "id": "d2385791-959e-4eb5-88c4-39ba5eb3643f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Crouch",
+                    "type": "Button",
+                    "id": "f0672ce8-d039-46c7-8766-06f2f682c1d3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Wire",
+                    "type": "Button",
+                    "id": "2debc2a3-7fe5-407c-900e-dabcadd75f0f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -33,7 +60,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Defense",
+                    "name": "Guard&Parry",
                     "type": "Button",
                     "id": "733054a0-c5dc-4643-b3f3-0fb9e20105f6",
                     "expectedControlType": "Button",
@@ -42,18 +69,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ScissorJump",
+                    "name": "Interaction",
                     "type": "Button",
-                    "id": "f263d33b-4b51-4b21-8d66-5bdbc47695aa",
+                    "id": "19af1257-3d2e-45c0-bb0a-746885a75b23",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Rope",
+                    "name": "PositionMove",
                     "type": "Button",
-                    "id": "2debc2a3-7fe5-407c-900e-dabcadd75f0f",
+                    "id": "f263d33b-4b51-4b21-8d66-5bdbc47695aa",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -68,7 +95,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "Jump",
+                    "action": "Jump&Parkour",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -129,6 +156,61 @@
                 },
                 {
                     "name": "",
+                    "id": "9a449ced-8ff7-4f54-afa1-7310829eeca6",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Guard&Parry",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "24b59dfb-4e05-4367-9c67-9de9f2c4abf2",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8ca6783a-255e-49d8-9bad-11c7be0b7d92",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d0a19209-21b0-4a01-a708-c8e10a8eb5bd",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6dcde51a-47c5-492f-a8b9-52501755aac4",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Wire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "c091f16b-21bf-4fb3-9af8-54b83917dabb",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
@@ -140,34 +222,12 @@
                 },
                 {
                     "name": "",
-                    "id": "9a449ced-8ff7-4f54-afa1-7310829eeca6",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "Defense",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "6c740998-6430-4885-a62c-7c33bb9ddf5f",
                     "path": "<Keyboard>/ctrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "ScissorJump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6dcde51a-47c5-492f-a8b9-52501755aac4",
-                    "path": "<Mouse>/middleButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "Rope",
+                    "action": "PositionMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
