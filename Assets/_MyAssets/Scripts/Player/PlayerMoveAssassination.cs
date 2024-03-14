@@ -17,7 +17,6 @@ public class PlayerMoveAssassination : PlayerMove
 
     [SerializeField] private TMP_Text _noteTextForDebug;
     private bool _isAssassinating = false;
-
     private Transform _assassinationTarget;
     
     protected override void Update()
@@ -41,17 +40,17 @@ public class PlayerMoveAssassination : PlayerMove
         Camera mainCamera = Camera.main;
         Debug.Assert(mainCamera != null);
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-        int layerMask = LayerMask.GetMask("AssassinationTarget");
         Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * 50f, Color.green, 0f, false);
         
-        if (!Physics.Raycast(ray, out RaycastHit hit, 50f, layerMask))
+        if (Physics.Raycast(ray, out RaycastHit hit, 50f) && hit.transform.CompareTag("AssassinationTarget"))
         {
-            _noteTextForDebug.text = "Note: Press Q to assassinate\nCurrent Target: None";
-            return null;
+            _noteTextForDebug.text = $"Current Target: {hit.transform.name}";
+            return hit.transform;
+
         }
         
-        _noteTextForDebug.text = $"Note: Press Q to assassinate\nCurrent Target: {hit.transform.name}";
-        return hit.transform;
+        _noteTextForDebug.text = "Current Target: None";
+        return null;
     }
 
     private void Assassinate()
