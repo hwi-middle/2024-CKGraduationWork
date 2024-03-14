@@ -12,7 +12,7 @@ public class PlayerMove : MonoBehaviour
     private float _gravityMultiplier;
 
     private float _yVelocity;
-    public float YVelocity => _yVelocity;
+    protected float YVelocity => _yVelocity;
 
     private Camera _camera;
 
@@ -27,7 +27,7 @@ public class PlayerMove : MonoBehaviour
 
     private bool IsGrounded => _controller.isGrounded;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _controller = GetComponent<CharacterController>();
         _camera = Camera.main;

@@ -6,8 +6,15 @@ using UnityEngine.Serialization;
 
 public class PlayerMoveAssassination : PlayerMove
 {
-    [SerializeField] private float _assassinationDuration;
+    [SerializeField] private PlayerAssassinationData _assassinationData;
+    private float _assassinationDuration;
     [SerializeField] private Transform _assassinationTarget;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _assassinationDuration = _assassinationData.jumpAssassinationDuration;
+    }
 
     protected override void Update()
     {
@@ -42,5 +49,7 @@ public class PlayerMoveAssassination : PlayerMove
             yield return null;
             t += Time.deltaTime;
         }
+        
+        // TODO: 실제 적에게 데미지를 입혀야함
     }
 }
