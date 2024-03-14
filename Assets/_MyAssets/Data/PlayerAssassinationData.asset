@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpAssassinationDuration: 0.4
   groundAssassinationDuration: 0.2
-  jumpAssassinationHeightThreshold: 0
+  jumpAssassinationHeightThreshold: 1

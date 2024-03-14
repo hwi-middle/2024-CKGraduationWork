@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -13,33 +14,19 @@ public class PlayerMoveAssassination : PlayerMove
     }
 
     [SerializeField] private PlayerAssassinationData _assassinationData;
-    private float _jumpAssassinationDuration;
-    private float _groundAssassinationDuration;
-    private float _jumpAssassinationHeightThreshold;
 
-    [SerializeField] private Transform _assassinationTarget;
+    [SerializeField] private TMP_Text _noteTextForDebug;
+    private bool _isAssassinating = false;
 
-    protected override void Awake()
-    {
-        base.Awake();
-
-        _jumpAssassinationDuration = _assassinationData.jumpAssassinationDuration;
-        _groundAssassinationDuration = _assassinationData.groundAssassinationDuration;
-        _jumpAssassinationHeightThreshold = _assassinationData.jumpAssassinationHeightThreshold;
-    }
-
+    private Transform _assassinationTarget;
+    
     protected override void Update()
     {
         base.Update();
 
-        Camera mainCamera = Camera.main;
-        Debug.Assert(mainCamera != null);
-        Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-        int layerMask = LayerMask.GetMask("AssassinationTarget");
-        Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * 50f, Color.green, 0f, false);
-        if (Physics.Raycast(ray, out RaycastHit hit, 50f, layerMask))
+        if (!_isAssassinating)
         {
-            Debug.Log(hit.transform.name);
+            _assassinationTarget = GetAimingEnemy();
         }
         
         // TODO: NIS 적용
@@ -49,27 +36,71 @@ public class PlayerMoveAssassination : PlayerMove
         }
     }
 
-    private void Assassinate()
+    private Transform GetAimingEnemy()
     {
-        // if(transform.position.y)
-
-        PerformJump();
-        StartCoroutine(AssassinateRoutine());
+        Camera mainCamera = Camera.main;
+        Debug.Assert(mainCamera != null);
+        Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        int layerMask = LayerMask.GetMask("AssassinationTarget");
+        Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * 50f, Color.green, 0f, false);
+        
+        if (!Physics.Raycast(ray, out RaycastHit hit, 50f, layerMask))
+        {
+            _noteTextForDebug.text = "Note: Press Q to assassinate\nCurrent Target: None";
+            return null;
+        }
+        
+        _noteTextForDebug.text = $"Note: Press Q to assassinate\nCurrent Target: {hit.transform.name}";
+        return hit.transform;
     }
 
-    private IEnumerator AssassinateRoutine()
+    private void Assassinate()
     {
-        while (YVelocity > 0f)
-        {
-            yield return null;
-        }
+        Debug.Assert(_assassinationTarget != null);
 
+        EAssassinationType assassinationType;
+        if (transform.position.y - _assassinationTarget.position.y >= _assassinationData.jumpAssassinationHeightThreshold)
+        {
+            assassinationType = EAssassinationType.Jump;
+        }
+        else
+        {
+            assassinationType = EAssassinationType.Ground;
+        }
+        
+        StartCoroutine(AssassinateRoutine(assassinationType));
+    }
+    
+    private IEnumerator AssassinateRoutine(EAssassinationType assassinationType)
+    {
+        _isAssassinating = true;
+        
+        float assassinationDuration = 0f;
+        switch (assassinationType)
+        {
+            case EAssassinationType.Ground:
+                assassinationDuration = _assassinationData.groundAssassinationDuration;
+                break;
+            case EAssassinationType.Jump:
+                assassinationDuration = _assassinationData.jumpAssassinationDuration;
+                PerformJump();
+        
+                while (YVelocity > 0f)
+                {
+                    yield return null;
+                }
+                break;
+            default:
+                Debug.Assert(false);
+                break;
+        }
+        
         float t = 0f;
         Vector3 initialPos = transform.position;
-
-        while (t <= _jumpAssassinationDuration)
+        
+        while (t <= assassinationDuration)
         {
-            float alpha = t / _jumpAssassinationDuration;
+            float alpha = t / assassinationDuration;
             transform.position = Vector3.Lerp(initialPos, _assassinationTarget.position, alpha * alpha * alpha);
 
             yield return null;
@@ -77,5 +108,7 @@ public class PlayerMoveAssassination : PlayerMove
         }
 
         // TODO: 실제 적에게 데미지를 입혀야함
+
+        _isAssassinating = false;
     }
 }
