@@ -1,5 +1,5 @@
 {
-    "name": "InputActions",
+    "name": "IA_PlayerMove",
     "maps": [
         {
             "name": "PlayerAction",
@@ -18,6 +18,15 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "30834a8a-5b3d-466c-a882-ff8aeb9c1e81",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Wire",
+                    "type": "Button",
+                    "id": "a8213568-675a-4e6f-9131-535bee700080",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -90,6 +99,17 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "6bb6b0dd-0548-42cb-bbbd-ed203beb2a2a",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Wire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
