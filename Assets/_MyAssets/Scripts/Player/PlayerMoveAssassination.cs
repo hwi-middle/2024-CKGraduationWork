@@ -9,8 +9,9 @@ public class PlayerMoveAssassination : PlayerMove
 {
     private enum EAssassinationType
     {
-        Ground,
-        Jump,
+        Ground, // 평지에서 암살
+        Fall, // 위에서 아래로 떨어지며 암살
+        Jump, // 아래에서 위로 점프하며 암살
     }
 
     [SerializeField] private PlayerAssassinationData _assassinationData;
@@ -18,7 +19,7 @@ public class PlayerMoveAssassination : PlayerMove
     [SerializeField] private TMP_Text _noteTextForDebug;
     private bool _isAssassinating = false;
     private Transform _assassinationTarget;
-    
+
     protected override void Update()
     {
         base.Update();
@@ -27,7 +28,7 @@ public class PlayerMoveAssassination : PlayerMove
         {
             _assassinationTarget = GetAimingEnemy();
         }
-        
+
         // TODO: NIS 적용
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -42,14 +43,14 @@ public class PlayerMoveAssassination : PlayerMove
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         float assassinateDistance = _assassinationData.assassinateDistance;
         Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * assassinateDistance, Color.green, 0f, false);
-        
+
         if (Physics.Raycast(ray, out RaycastHit hit, assassinateDistance) && hit.transform.CompareTag("AssassinationTarget"))
         {
             _noteTextForDebug.text = $"Current Target: {hit.transform.name}";
             return hit.transform;
 
         }
-        
+
         _noteTextForDebug.text = "Current Target: None";
         return null;
     }
@@ -59,7 +60,12 @@ public class PlayerMoveAssassination : PlayerMove
         Debug.Assert(_assassinationTarget != null);
 
         EAssassinationType assassinationType;
-        if (transform.position.y - _assassinationTarget.position.y >= _assassinationData.jumpAssassinationHeightThreshold)
+        float yPositionDiff = Mathf.Abs(transform.position.y - _assassinationTarget.position.y);
+        if (transform.position.y > _assassinationTarget.position.y && yPositionDiff >= _assassinationData.fallAssassinationHeightThreshold)
+        {
+            assassinationType = EAssassinationType.Fall;
+        }
+        else if (transform.position.y < _assassinationTarget.position.y && yPositionDiff >= _assassinationData.jumpAssassinationHeightThreshold)
         {
             assassinationType = EAssassinationType.Jump;
         }
@@ -67,14 +73,14 @@ public class PlayerMoveAssassination : PlayerMove
         {
             assassinationType = EAssassinationType.Ground;
         }
-        
+
         StartCoroutine(AssassinateRoutine(assassinationType));
     }
-    
+
     private IEnumerator AssassinateRoutine(EAssassinationType assassinationType)
     {
         _isAssassinating = true;
-        
+
         float assassinationDuration = 0f;
         switch (assassinationType)
         {
@@ -83,21 +89,25 @@ public class PlayerMoveAssassination : PlayerMove
                 break;
             case EAssassinationType.Jump:
                 assassinationDuration = _assassinationData.jumpAssassinationDuration;
+                break;
+            case EAssassinationType.Fall:
+                assassinationDuration = _assassinationData.fallAssassinationDuration;
                 PerformJump();
-        
+
                 while (YVelocity > 0f)
                 {
                     yield return null;
                 }
+
                 break;
             default:
                 Debug.Assert(false);
                 break;
         }
-        
+
         float t = 0f;
         Vector3 initialPos = transform.position;
-        
+
         while (t <= assassinationDuration)
         {
             float alpha = t / assassinationDuration;

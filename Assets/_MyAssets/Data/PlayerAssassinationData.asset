@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c21f4383c78a26646ae783213d37b95f, type: 3}
   m_Name: PlayerAssassinationData
   m_EditorClassIdentifier: 
-  jumpAssassinationDuration: 0.4
+  fallAssassinationDuration: 0.4
+  jumpAssassinationDuration: 0.6
   groundAssassinationDuration: 0.2
+  fallAssassinationHeightThreshold: 1
   jumpAssassinationHeightThreshold: 1
   assassinateDistance: 50
