@@ -8,6 +8,7 @@ public class PlayerAssassinationData : ScriptableObject
     [Tooltip("공중 암살 시간")] public float jumpAssassinationDuration;
     [Tooltip("평지 암살 시간")] public float groundAssassinationDuration;
     
-    [Header("암살 구분 기준")]
+    [Header("암살 판정 관련 값")]
     [Tooltip("공중 암살 판정 임계값")] public float jumpAssassinationHeightThreshold;
+    [Tooltip("암살 가능 거리")] public float assassinateDistance;
 }

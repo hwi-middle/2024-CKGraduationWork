@@ -15,3 +15,4 @@ MonoBehaviour:
   jumpAssassinationDuration: 0.4
   groundAssassinationDuration: 0.2
   jumpAssassinationHeightThreshold: 1
+  assassinateDistance: 50

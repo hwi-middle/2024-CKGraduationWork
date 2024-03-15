@@ -40,9 +40,10 @@ public class PlayerMoveAssassination : PlayerMove
         Camera mainCamera = Camera.main;
         Debug.Assert(mainCamera != null);
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-        Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * 50f, Color.green, 0f, false);
+        float assassinateDistance = _assassinationData.assassinateDistance;
+        Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * assassinateDistance, Color.green, 0f, false);
         
-        if (Physics.Raycast(ray, out RaycastHit hit, 50f) && hit.transform.CompareTag("AssassinationTarget"))
+        if (Physics.Raycast(ray, out RaycastHit hit, assassinateDistance) && hit.transform.CompareTag("AssassinationTarget"))
         {
             _noteTextForDebug.text = $"Current Target: {hit.transform.name}";
             return hit.transform;
