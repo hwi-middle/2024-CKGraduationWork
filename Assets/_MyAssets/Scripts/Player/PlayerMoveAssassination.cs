@@ -28,12 +28,16 @@ public class PlayerMoveAssassination : PlayerMove
         {
             _assassinationTarget = GetAimingEnemy();
         }
+    }
 
-        // TODO: NIS 적용
-        if (Input.GetKeyDown(KeyCode.Q))
+    public void OnAssassinateKeyDown(InputAction.CallbackContext context)
+    {
+        if (!context.started || _assassinationTarget == null)
         {
-            Assassinate();
+            return;
         }
+        
+        Assassinate();
     }
 
     private Transform GetAimingEnemy()
