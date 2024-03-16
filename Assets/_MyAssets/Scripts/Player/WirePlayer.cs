@@ -1,12 +1,17 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class WirePlayer : PlayerMove
 {
+    [Header("Player Data (ScriptableObject)")]
     [SerializeField] private PlayerWireData _myData;
+    
+    [Header("WirePoint Variable")]
     [SerializeField] private GameObject _wireAvailableUI;
+    [SerializeField] private RectTransform _wireAvilableUITransform;
 
     private IEnumerator _wireAction;
 
@@ -62,11 +67,10 @@ public class WirePlayer : PlayerMove
         }
     }
 
-
     private void Start()
     {
         _mainCamera = Camera.main;
-        
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -75,12 +79,76 @@ public class WirePlayer : PlayerMove
     {
         if (_isOnWire)
         {
+            _wireAvailableUI.SetActive(false);
             return;
         }
-
-        _wireAvailableUI.SetActive(CanHangWire);
+        
+        ShowWirePointUI();
         
         base.Update();
+    }
+
+    private GameObject FindWirePoint()
+    {
+        List<GameObject> wirePointInScreen = new();
+        GameObject[] allWireObjects = GameObject.FindGameObjectsWithTag("WirePoint");
+
+        foreach (var wirePoint in allWireObjects)
+        {
+            Vector3 myScreenPosition = _mainCamera.WorldToViewportPoint(wirePoint.transform.position);
+
+            if (myScreenPosition.x < 0 || myScreenPosition.x > 1
+                                       || myScreenPosition.y < 0 || myScreenPosition.y > 1
+                                       || myScreenPosition.z < 0)
+            {
+                continue;
+            }
+            
+            wirePointInScreen.Add(wirePoint);
+        }
+
+        float nearDistance = _myData.maxWireDistance;
+
+        GameObject nearWirePoint = null;
+        
+        foreach(var wirePoint in wirePointInScreen)
+        {
+            float distance = (transform.position - wirePoint.transform.position).magnitude;
+
+            if (distance > nearDistance || distance < _myData.minWireDistance)
+            {
+                continue;
+            }
+
+            nearDistance = distance;
+            nearWirePoint = wirePoint;
+        }
+
+        return nearWirePoint;
+    }
+
+    private void ShowWirePointUI()
+    {
+        Debug.Assert(_wireAvilableUITransform != null);
+
+        GameObject wirePoint = FindWirePoint();
+
+        if (wirePoint == null)
+        {
+            _wireAvailableUI.SetActive(false);
+            return;
+        }
+        
+        
+        _wireAvailableUI.SetActive(true);
+
+        Vector3 myScreenPoint = _mainCamera.WorldToScreenPoint(wirePoint.transform.position);
+
+        const float OFFSET = 50.0f;
+
+        myScreenPoint.x += OFFSET;
+
+        _wireAvilableUITransform.position = myScreenPoint;
     }
 
     public void OnWireButtonClick(InputAction.CallbackContext ctx)
@@ -89,7 +157,12 @@ public class WirePlayer : PlayerMove
         {
             return;
         }
-        
+
+        if (!CanHangWire)
+        {
+            return;
+        }
+
         ApplyWireAction();
     }
 
@@ -132,32 +205,12 @@ public class WirePlayer : PlayerMove
         _isOnWire = true;
         Vector3 initPos = transform.position;
         float t = 0;
-        const float TOLERANCE = 0.1f;
         
         LineDraw.Instance.TurnOnLine();
         
         while (t <= _myData.wireActionDuration && !IsCollideWhenWireAction)
         {
             float alpha = t / _myData.wireActionDuration;
- //            transform.position = Vector3.Lerp(initPos, _targetPosition,
- //                alpha < 0.5f ? 4.0f * alpha * alpha * alpha : 1.0f - Mathf.Pow(-2.0f * alpha + 2.0f, 3.0f) / 2.0f);
- 
- //            if (alpha == 0.0f)
- //            {
- //                alpha = 0;
- //            }
- //            else if(Math.Abs(alpha - 1.0f) < TOLERANCE)
- //            {
- //                alpha = 1;
- //            }
- //            else
- //            {
- //                alpha = alpha < 0.5f
- //                    ? Mathf.Pow(2.0f, 20.0f * alpha - 10.0f) / 2.0f
- //                    : (2.0f - Mathf.Pow(2.0f, -20.0f * alpha + 10.0f)) / 2.0f;
- //            }
- //
- //            transform.position = Vector3.Lerp(initPos, _targetPosition, alpha);
 
             transform.position = Vector3.Lerp(initPos, _targetPosition, alpha * alpha * alpha);
  
