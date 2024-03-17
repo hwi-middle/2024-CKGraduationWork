@@ -13,6 +13,12 @@ public class WirePlayer : PlayerMove
     [SerializeField] private GameObject _wireAvailableUI;
     [SerializeField] private RectTransform _wireAvilableUITransform;
 
+    private enum ECalculateType
+    {
+        V2,
+        V3
+    }
+
     private IEnumerator _wireAction;
 
     private Camera _mainCamera;
@@ -31,10 +37,14 @@ public class WirePlayer : PlayerMove
             Debug.Assert(_mainCamera != null, "_mainCamera != null");
             Ray ray = _mainCamera.ViewportPointToRay(CAMERA_CENTER_POINT);
             bool isHit = Physics.Raycast(ray, out RaycastHit hit);
-
-            if (!isHit || !hit.transform.CompareTag("WirePoint") ||
-                (hit.point - ray.origin).magnitude > _myData.maxWireDistance ||
-                (hit.point - ray.origin).magnitude < _myData.minWireDistance)
+            if (!isHit || !hit.transform.CompareTag("WirePoint"))
+            {
+                return false;
+            }
+            
+            float distance = CalculateDistance(hit.transform.position, transform.position, ECalculateType.V3);
+            
+            if (distance > _myData.maxWireDistance || distance < _myData.minWireDistance)
             {
                 return false;
             }
@@ -79,7 +89,6 @@ public class WirePlayer : PlayerMove
     {
         if (_isOnWire)
         {
-            _wireAvailableUI.SetActive(false);
             return;
         }
         
@@ -88,39 +97,54 @@ public class WirePlayer : PlayerMove
         base.Update();
     }
 
+    private float CalculateDistance(Vector3 origin, Vector3 target, ECalculateType type)
+    {
+        return type == ECalculateType.V3 ? (origin - target).magnitude : ((Vector2)origin - (Vector2)target).magnitude;
+    }
+
     private GameObject FindWirePoint()
     {
         List<GameObject> wirePointInScreen = new();
         GameObject[] allWireObjects = GameObject.FindGameObjectsWithTag("WirePoint");
+        
+        Debug.Assert(allWireObjects.Length != 0, "allWireObjects.Length != 0");
 
         foreach (var wirePoint in allWireObjects)
         {
-            Vector3 myScreenPosition = _mainCamera.WorldToViewportPoint(wirePoint.transform.position);
-
-            if (myScreenPosition.x < 0 || myScreenPosition.x > 1
-                                       || myScreenPosition.y < 0 || myScreenPosition.y > 1
-                                       || myScreenPosition.z < 0)
+            Vector3 myViewportPosition = _mainCamera.WorldToViewportPoint(wirePoint.transform.position);
+            float distance = CalculateDistance(myViewportPosition, CAMERA_CENTER_POINT, ECalculateType.V2);
+            
+            const float TOLERANCE_RANGE = 0.2f;
+            if (distance > TOLERANCE_RANGE)
             {
-                continue;
+                continue;   
             }
             
             wirePointInScreen.Add(wirePoint);
         }
 
-        float nearDistance = _myData.maxWireDistance;
-
-        GameObject nearWirePoint = null;
+        Vector2 aimPoint = CAMERA_CENTER_POINT;
         
-        foreach(var wirePoint in wirePointInScreen)
-        {
-            float distance = (transform.position - wirePoint.transform.position).magnitude;
+        float nearDistanceFromCenter = 2.0f;
+        GameObject nearWirePoint = null;
 
-            if (distance > nearDistance || distance < _myData.minWireDistance)
+        foreach (var wirePoint in wirePointInScreen)
+        {
+            float distanceFromPlayer = CalculateDistance(transform.position, wirePoint.transform.position, ECalculateType.V3);
+            float distanceFromCenter = CalculateDistance(aimPoint,
+                _mainCamera.WorldToViewportPoint(wirePoint.transform.position), ECalculateType.V2);
+
+            if (distanceFromPlayer > _myData.maxWireDistance || distanceFromPlayer < _myData.minWireDistance)
             {
                 continue;
             }
 
-            nearDistance = distance;
+            if (nearDistanceFromCenter < distanceFromCenter)
+            {
+                continue;
+            }
+
+            nearDistanceFromCenter = distanceFromCenter;
             nearWirePoint = wirePoint;
         }
 
@@ -129,6 +153,12 @@ public class WirePlayer : PlayerMove
 
     private void ShowWirePointUI()
     {
+        if (_wireAction != null)
+        {
+            _wireAvailableUI.SetActive(false);
+            return;
+        }
+        
         Debug.Assert(_wireAvilableUITransform != null);
 
         GameObject wirePoint = FindWirePoint();
@@ -142,13 +172,13 @@ public class WirePlayer : PlayerMove
         
         _wireAvailableUI.SetActive(true);
 
-        Vector3 myScreenPoint = _mainCamera.WorldToScreenPoint(wirePoint.transform.position);
+        Vector3 wireScreenPoint = _mainCamera.WorldToScreenPoint(wirePoint.transform.position);
 
         const float OFFSET = 50.0f;
 
-        myScreenPoint.x += OFFSET;
+        wireScreenPoint.x += OFFSET;
 
-        _wireAvilableUITransform.position = myScreenPoint;
+        _wireAvilableUITransform.position = wireScreenPoint;
     }
 
     public void OnWireButtonClick(InputAction.CallbackContext ctx)
@@ -177,7 +207,7 @@ public class WirePlayer : PlayerMove
         {
             return;
         }
-        
+
         PerformJump();
         RotatePlayer();
         _wireAction = WireActionRoutine();
@@ -200,7 +230,6 @@ public class WirePlayer : PlayerMove
         {
             yield return null;
         }
-
 
         _isOnWire = true;
         Vector3 initPos = transform.position;
