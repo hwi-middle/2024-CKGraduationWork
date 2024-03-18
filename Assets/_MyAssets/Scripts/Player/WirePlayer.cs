@@ -6,19 +6,19 @@ using UnityEngine.InputSystem;
 
 public class WirePlayer : PlayerMove
 {
-    [Header("Player Data (ScriptableObject)")]
-    [SerializeField] private PlayerWireData _myData;
-    
-    [Header("WirePoint Variable")]
-    [SerializeField] private GameObject _wireAvailableUI;
-    [SerializeField] private RectTransform _wireAvilableUITransform;
-
     private enum ECalculateType
     {
         V2,
         V3
     }
 
+    [Header("Player Data (ScriptableObject)")]
+    [SerializeField] private PlayerWireData _myData;
+    
+    [Header("WirePoint Variable")]
+    [SerializeField] private GameObject _wireAvailableUI;
+    [SerializeField] private RectTransform _wireAvilableUITransform;
+    
     private IEnumerator _wireAction;
 
     private Camera _mainCamera;
@@ -30,11 +30,43 @@ public class WirePlayer : PlayerMove
     
     private bool _isOnWire;
 
+    private List<GameObject> WirePoints
+    {
+        get
+        {
+            List<GameObject> detectWirePoint = new();
+            Vector3 playerPos = transform.position;
+            Collider[] objectsInRange = Physics.OverlapSphere(playerPos, _myData.maxWireDistance);
+
+            foreach (var obj in objectsInRange)
+            {
+                if (!obj.CompareTag("WirePoint") ||
+                    CalculateDistance(playerPos, obj.transform.position, ECalculateType.V3) < _myData.minWireDistance)
+                {
+                    continue;
+                }
+
+                Vector3 wirePointPos = obj.transform.position;
+                Vector3 viewportPos = _mainCamera.WorldToViewportPoint(wirePointPos);
+
+                if (viewportPos.z < 0)
+                {
+                    continue;
+                }
+
+                detectWirePoint.Add(obj.gameObject);
+            }
+
+            return detectWirePoint;
+        }
+    }
+
     private bool CanHangWire
     {
         get
         {
             Debug.Assert(_mainCamera != null, "_mainCamera != null");
+            
             Ray ray = _mainCamera.ViewportPointToRay(CAMERA_CENTER_POINT);
             bool isHit = Physics.Raycast(ray, out RaycastHit hit);
             if (!isHit || !hit.transform.CompareTag("WirePoint"))
@@ -105,50 +137,55 @@ public class WirePlayer : PlayerMove
     private GameObject FindWirePoint()
     {
         List<GameObject> wirePointInScreen = new();
-        GameObject[] allWireObjects = GameObject.FindGameObjectsWithTag("WirePoint");
-        
-        Debug.Assert(allWireObjects.Length != 0, "allWireObjects.Length != 0");
+        wirePointInScreen = WirePoints;
 
-        foreach (var wirePoint in allWireObjects)
+        if (wirePointInScreen.Count == 0)
         {
-            Vector3 myViewportPosition = _mainCamera.WorldToViewportPoint(wirePoint.transform.position);
-            float distance = CalculateDistance(myViewportPosition, CAMERA_CENTER_POINT, ECalculateType.V2);
-            
-            const float TOLERANCE_RANGE = 0.2f;
-            if (distance > TOLERANCE_RANGE)
-            {
-                continue;   
-            }
-            
-            wirePointInScreen.Add(wirePoint);
+            return null;
         }
-
-        Vector2 aimPoint = CAMERA_CENTER_POINT;
         
-        float nearDistanceFromCenter = 2.0f;
+        float minDistanceFromCenter = 2.0f;
         GameObject nearWirePoint = null;
 
         foreach (var wirePoint in wirePointInScreen)
         {
-            float distanceFromPlayer = CalculateDistance(transform.position, wirePoint.transform.position, ECalculateType.V3);
-            float distanceFromCenter = CalculateDistance(aimPoint,
-                _mainCamera.WorldToViewportPoint(wirePoint.transform.position), ECalculateType.V2);
+            Vector3 wirePointPos = wirePoint.transform.position;
+            Vector3 viewportPos = _mainCamera.WorldToViewportPoint(wirePointPos);
+            
+            if (viewportPos.z < 0)
+            {
+                continue;
+            }
+            
+            float distanceFromCenter = CalculateDistance(CAMERA_CENTER_POINT, viewportPos, ECalculateType.V2);
+            const float RESTRICT_RANGE_FROM_CENTER = 0.15f;
 
-            if (distanceFromPlayer > _myData.maxWireDistance || distanceFromPlayer < _myData.minWireDistance)
+            if (distanceFromCenter > minDistanceFromCenter || distanceFromCenter > RESTRICT_RANGE_FROM_CENTER)
             {
                 continue;
             }
 
-            if (nearDistanceFromCenter < distanceFromCenter)
-            {
-                continue;
-            }
-
-            nearDistanceFromCenter = distanceFromCenter;
+            minDistanceFromCenter = distanceFromCenter;
             nearWirePoint = wirePoint;
         }
 
-        return nearWirePoint;
+        // nearWirePoint 가 있다면 플레이어 사이의 장매물이 있는지 확인 후 Return
+        return nearWirePoint == null ? null : CheckObstacle(nearWirePoint, transform.position);
+    }
+
+    private GameObject CheckObstacle(GameObject nearWirePoint, Vector3 playerPos)
+    {
+        const float RAY_POSITION_Y_TOLERANCE = 0.5f;
+        playerPos.y += RAY_POSITION_Y_TOLERANCE;
+
+        Vector3 nearWirePointPos = nearWirePoint.transform.position;
+        Vector3 rayDirection = (nearWirePointPos - playerPos).normalized;
+        float rayDistance = CalculateDistance(playerPos, nearWirePointPos, ECalculateType.V3);
+
+        Ray ray = new Ray(playerPos, rayDirection * rayDistance);
+        Physics.Raycast(ray, out RaycastHit hit);
+
+        return !hit.transform.CompareTag("WirePoint") ? null : nearWirePoint;
     }
 
     private void ShowWirePointUI()
