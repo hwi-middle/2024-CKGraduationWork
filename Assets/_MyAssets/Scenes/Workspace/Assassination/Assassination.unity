@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2498,7 +2498,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 978809677}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15057115, y: 0.15830767, z: -0.02443434, w: 0.97553575}
+  m_LocalRotation: {x: 0.15057114, y: 0.15830766, z: -0.024434332, w: 0.97553575}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3300,7 +3300,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729681865}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.11638788, y: 0.15906483, z: -0.018887151, w: 0.9802018}
+  m_LocalRotation: {x: 0.11638788, y: 0.15906481, z: -0.01888715, w: 0.9802018}
   m_LocalPosition: {x: 0, y: 0.089999676, z: 13.839999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3456,7 +3456,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1764949706}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.11638789, y: 0.15906483, z: -0.018887153, w: 0.9802018}
+  m_LocalRotation: {x: 0.11638789, y: 0.15906481, z: -0.01888715, w: 0.9802018}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3835,7 +3835,7 @@ GameObject:
   - component: {fileID: 2071703472}
   - component: {fileID: 2071703474}
   - component: {fileID: 2071703476}
-  - component: {fileID: 2071703475}
+  - component: {fileID: 2071703477}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3937,7 +3937,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2071703475}
+      - m_Target: {fileID: 2071703477}
         m_TargetAssemblyTypeName: PlayerMove, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
@@ -3953,7 +3953,7 @@ MonoBehaviour:
     m_ActionName: PlayerAction/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2071703475}
+      - m_Target: {fileID: 2071703477}
         m_TargetAssemblyTypeName: PlayerMove, Assembly-CSharp
         m_MethodName: OnJump
         m_Mode: 0
@@ -3969,8 +3969,8 @@ MonoBehaviour:
     m_ActionName: PlayerAction/Jump[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2071703475}
-        m_TargetAssemblyTypeName: PlayerMoveAssassination, Assembly-CSharp
+      - m_Target: {fileID: 2071703477}
+        m_TargetAssemblyTypeName: PlayerMove, Assembly-CSharp
         m_MethodName: OnAssassinateKeyDown
         m_Mode: 0
         m_Arguments:
@@ -4014,24 +4014,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2071703475
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2071703466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74706fb51b084837ac34a627af9037b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _jumpHeight: 6
-  _moveSpeed: 5
-  _slideSpeed: 6
-  _gravityMultiplier: 1
-  _assassinationData: {fileID: 11400000, guid: c3d73802406926c4eb7883edbc33bd52, type: 2}
-  _noteTextForDebug: {fileID: 664967040}
 --- !u!54 &2071703476
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4059,6 +4041,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2071703477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071703466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd6f0742bb8d4658a39bff07e218320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _assassinationData: {fileID: 11400000, guid: c3d73802406926c4eb7883edbc33bd52, type: 2}
+  _jumpHeight: 6
+  _moveSpeed: 5
+  _slideSpeed: 6
+  _gravityMultiplier: 1
 --- !u!1 &2127937871
 GameObject:
   m_ObjectHideFlags: 0
