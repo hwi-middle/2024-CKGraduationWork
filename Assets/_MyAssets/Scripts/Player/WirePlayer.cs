@@ -12,7 +12,7 @@ public class WirePlayer : PlayerMove
         V3
     }
 
-    [Header("Player Data (ScriptableObject)")]
+    [Header("Player Data")]
     [SerializeField] private PlayerWireData _myData;
     
     [Header("WirePoint Variable")]
@@ -119,13 +119,8 @@ public class WirePlayer : PlayerMove
 
     protected override void Update()
     {
-        if (_isOnWire)
-        {
-            return;
-        }
-        
         ShowWirePointUI();
-        
+
         base.Update();
     }
 
@@ -136,8 +131,7 @@ public class WirePlayer : PlayerMove
 
     private GameObject FindWirePoint()
     {
-        List<GameObject> wirePointInScreen = new();
-        wirePointInScreen = WirePoints;
+        List<GameObject> wirePointInScreen = WirePoints;
 
         if (wirePointInScreen.Count == 0)
         {
@@ -218,20 +212,20 @@ public class WirePlayer : PlayerMove
         _wireAvilableUITransform.position = wireScreenPoint;
     }
 
-    public void OnWireButtonClick(InputAction.CallbackContext ctx)
-    {
-        if (!ctx.started)
-        {
-            return;
-        }
-
-        if (!CanHangWire)
-        {
-            return;
-        }
-
-        ApplyWireAction();
-    }
+//    public void OnWireButtonClick(InputAction.CallbackContext ctx)
+//    {
+//        if (!ctx.started)
+//        {
+//            return;
+//        }
+//
+//        if (!CanHangWire)
+//        {
+//            return;
+//        }
+//
+//        ApplyWireAction();
+//    }
 
     private void ApplyWireAction()
     {
@@ -273,19 +267,19 @@ public class WirePlayer : PlayerMove
         float t = 0;
         
         LineDraw.Instance.TurnOnLine();
-        
+
         while (t <= _myData.wireActionDuration && !IsCollideWhenWireAction)
         {
             float alpha = t / _myData.wireActionDuration;
 
             transform.position = Vector3.Lerp(initPos, _targetPosition, alpha * alpha * alpha);
- 
+
             LineDraw.Instance.Draw(transform.position, _wireHangPosition);
-            
+
             yield return null;
             t += Time.deltaTime;
         }
-        
+
         LineDraw.Instance.TurnOffLine();
         _wireAction = null;
         _isOnWire = false;
