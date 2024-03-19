@@ -5,9 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - AssassinationTarget
   - WirePoint
   - Wall
-  - AssassinationTarget
   layers:
   - Default
   - TransparentFX
