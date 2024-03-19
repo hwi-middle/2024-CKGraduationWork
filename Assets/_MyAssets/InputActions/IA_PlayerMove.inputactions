@@ -1,5 +1,5 @@
 {
-    "name": "InputActions",
+    "name": "IA_PlayerMove",
     "maps": [
         {
             "name": "PlayerAction",
@@ -18,6 +18,15 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "30834a8a-5b3d-466c-a882-ff8aeb9c1e81",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Assassinate",
+                    "type": "Button",
+                    "id": "c806ddfd-84d4-4e85-a89f-bef7e0450b60",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -90,6 +99,17 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "1c61f962-9c27-473a-87d5-c3e9006e355a",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Assassinate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
