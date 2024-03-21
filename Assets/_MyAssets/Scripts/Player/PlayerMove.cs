@@ -16,7 +16,7 @@ public class PlayerMove : MonoBehaviour
     [Header("WirePoint Offset")]
     [SerializeField] private float _wirePointOffset;
 
-private RectTransform _wireAvailableUiRectTransform;
+    private RectTransform _wireAvailableUiRectTransform;
     private IEnumerator _wireActionRoutine;
 
     private Vector3 _targetPosition;
