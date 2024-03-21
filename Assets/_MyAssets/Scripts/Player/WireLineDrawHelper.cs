@@ -18,11 +18,16 @@ public class WireLineDrawHelper : Singleton<WireLineDrawHelper>
         _line.positionCount = 1;
     }
 
-    public void ChangeLineEnable(bool state)
+    public void EnableLine()
     {
-        _line.enabled = state;
+        _line.enabled = true;
     }
 
+    public void DisableLine()
+    {
+        _line.enabled = false;
+    }
+    
     public void Draw(Vector3 startPosition, Vector3 targetPosition)
     {
         _line.positionCount = 2;

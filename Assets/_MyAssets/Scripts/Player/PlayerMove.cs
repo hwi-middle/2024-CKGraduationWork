@@ -13,7 +13,10 @@ public class PlayerMove : MonoBehaviour
     [Header("WirePoint Variable")]
     [SerializeField] private GameObject _wireAvailableUI;
 
-    private RectTransform _wireAvailableUiRectTransform;
+    [Header("WirePoint Offset")]
+    [SerializeField] private float _wirePointOffset;
+
+private RectTransform _wireAvailableUiRectTransform;
     private IEnumerator _wireActionRoutine;
 
     private Vector3 _targetPosition;
@@ -248,8 +251,7 @@ public class PlayerMove : MonoBehaviour
         _targetPosition = hit.transform.position;
         _wireHangPosition = hit.point;
 
-        const float ADDITIVE_VALUE = 2.0f;
-        _targetPosition.y += ADDITIVE_VALUE;
+        _targetPosition.y += _wirePointOffset;
 
         return true;
     }
@@ -257,6 +259,8 @@ public class PlayerMove : MonoBehaviour
     private bool IsCollideWhenWireAction()
     {
         int detectLayer = LayerMask.GetMask("Ground") + LayerMask.GetMask("Wall");
+        
+        // 매 프레임 호출 시 문제 발생 가능성 높음 -> 교체 방안 연구
         Collider[] overlappedColliders = Physics.OverlapSphere(transform.position, _controller.radius, detectLayer);
 
         return overlappedColliders.Length != 0;
@@ -372,7 +376,7 @@ public class PlayerMove : MonoBehaviour
         Vector3 initPos = transform.position;
         float t = 0;
 
-        WireLineDrawHelper.Instance.ChangeLineEnable(true);
+        WireLineDrawHelper.Instance.EnableLine();
 
         while (t <= _myData.wireActionDuration && !IsCollideWhenWireAction())
         {
@@ -386,7 +390,7 @@ public class PlayerMove : MonoBehaviour
             t += Time.deltaTime;
         }
 
-        WireLineDrawHelper.Instance.ChangeLineEnable(false);
+        WireLineDrawHelper.Instance.DisableLine();
         _wireActionRoutine = null;
     }
 
