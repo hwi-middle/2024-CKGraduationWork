@@ -2512,7 +2512,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 978809677}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15057114, y: 0.15830766, z: -0.024434332, w: 0.97553575}
+  m_LocalRotation: {x: 0.15057115, y: 0.15830767, z: -0.02443434, w: 0.97553575}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2793,8 +2793,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC554\uC0B4\uB300\uC0C1 \uC870\uC900 (\uD1B5\uACFC \uAC00\uB2A5\uD55C
-    \uBCBD) \uD14C\uC2A4\uD2B8"
+  m_text: "\uC801 AI \uC778\uC9C0\uBC94\uC704 \uD14C\uC2A4\uD2B8"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fb993a96c41552f4789cd50ddb1593e2, type: 2}
   m_sharedMaterial: {fileID: -3043692392977860844, guid: fb993a96c41552f4789cd50ddb1593e2,
@@ -3314,7 +3313,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729681865}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.11638788, y: 0.15906489, z: -0.01888716, w: 0.9802018}
+  m_LocalRotation: {x: 0.11638788, y: 0.15906483, z: -0.018887151, w: 0.9802018}
   m_LocalPosition: {x: 0, y: 0.089999676, z: 13.839999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3470,7 +3469,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1764949706}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.11638789, y: 0.15906486, z: -0.018887157, w: 0.9802018}
+  m_LocalRotation: {x: 0.11638789, y: 0.15906483, z: -0.018887153, w: 0.9802018}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3848,9 +3847,8 @@ GameObject:
   - component: {fileID: 2071703468}
   - component: {fileID: 2071703472}
   - component: {fileID: 2071703474}
-  - component: {fileID: 2071703476}
   - component: {fileID: 2071703477}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -4028,33 +4026,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &2071703476
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2071703466}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &2071703477
 MonoBehaviour:
   m_ObjectHideFlags: 0
