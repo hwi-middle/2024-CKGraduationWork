@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1160,7 +1160,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 617084259}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.41785684, y: -9.6769934e-17, z: 3.4975507e-16, w: 0.90851295}
+  m_LocalRotation: {x: 0.41785678, y: 0.000000011215161, z: -0.000000005158246, w: 0.90851295}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2198,7 +2198,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 978809677}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.34042525, y: -0.0000000228801, z: 0.000000008283737, w: 0.9402716}
+  m_LocalRotation: {x: 0.34042525, y: 0.00000002288009, z: -0.000000008283735, w: 0.9402716}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3731,7 +3731,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729681865}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.41785684, y: 0.00000003829096, z: -0.00000001761135, w: 0.90851295}
+  m_LocalRotation: {x: 0.41785684, y: 0.000000039899597, z: -0.00000001835122, w: 0.90851295}
   m_LocalPosition: {x: -0.15, y: 6, z: -2.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3887,7 +3887,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1764949706}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.3858226, y: -0.011481471, z: 0.00480202, w: 0.92248905}
+  m_LocalRotation: {x: 0.38581643, y: -0.0126134595, z: 0.0052754637, w: 0.92247427}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4582,7 +4582,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bd6f0742bb8d4658a39bff07e218320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _assassinationData: {fileID: 11400000, guid: 420cb312086ae4efcb55733454f41515, type: 2}
+  _myData: {fileID: 11400000, guid: 514498b1264fa4ad9a0a5976151dab49, type: 2}
+  _wireAvailableUI: {fileID: 1036290863}
+  _wireAvilableUITransform: {fileID: 1036290864}
+  _assassinationData: {fileID: 11400000, guid: 3c3155adae7bf1d4bbe181f36bdef582, type: 2}
   _jumpHeight: 6
   _moveSpeed: 5
   _slideSpeed: 6
