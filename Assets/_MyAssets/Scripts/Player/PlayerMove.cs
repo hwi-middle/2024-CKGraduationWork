@@ -7,109 +7,22 @@ using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
 {
-    // Wire Variable
-    private enum ECalculateType
-    {
-        V2,
-        V3
-    }
+    [Header("Player Data")]
+    [SerializeField] private PlayerWireData _myData;
 
-    [Header("Player Data")] [SerializeField]
-    private PlayerWireData _myData;
+    [Header("WirePoint Variable")]
+    [SerializeField] private GameObject _wireAvailableUI;
 
-    [Header("WirePoint Variable")] [SerializeField]
-    private GameObject _wireAvailableUI;
-
-    [SerializeField] private RectTransform _wireAvilableUITransform;
-    private IEnumerator _wireAction;
+    private RectTransform _wireAvailableUiRectTransform;
+    private IEnumerator _wireActionRoutine;
 
     private Vector3 _targetPosition;
     private Vector3 _wireHangPosition;
 
     private static readonly Vector3 CAMERA_CENTER_POINT = new(0.5f, 0.5f, 0.0f);
 
-    private bool _isOnWire;
+    private bool IsOnWire => _wireActionRoutine != null;
 
-    private List<GameObject> WirePoints
-    {
-        get
-        {
-            List<GameObject> detectWirePoint = new();
-            Vector3 playerPos = transform.position;
-            Collider[] objectsInRange = Physics.OverlapSphere(playerPos, _myData.maxWireDistance);
-
-            foreach (var obj in objectsInRange)
-            {
-                if (!obj.CompareTag("WirePoint") ||
-                    CalculateDistance(playerPos, obj.transform.position, ECalculateType.V3) < _myData.minWireDistance)
-                {
-                    continue;
-                }
-
-                Vector3 wirePointPos = obj.transform.position;
-                Vector3 viewportPos = _camera.WorldToViewportPoint(wirePointPos);
-
-                if (viewportPos.z < 0)
-                {
-                    continue;
-                }
-
-                detectWirePoint.Add(obj.gameObject);
-            }
-
-            return detectWirePoint;
-        }
-    }
-
-    private bool CanHangWire
-    {
-        get
-        {
-            Debug.Assert(_camera != null, "_mainCamera != null");
-
-            Ray ray = _camera.ViewportPointToRay(CAMERA_CENTER_POINT);
-            bool isHit = Physics.Raycast(ray, out RaycastHit hit);
-            if (!isHit || !hit.transform.CompareTag("WirePoint"))
-            {
-                return false;
-            }
-
-            float distance = CalculateDistance(hit.transform.position, transform.position, ECalculateType.V3);
-
-            if (distance > _myData.maxWireDistance || distance < _myData.minWireDistance)
-            {
-                return false;
-            }
-
-            _targetPosition = hit.transform.position;
-            _wireHangPosition = hit.point;
-
-            const float TARGET_POSITION_Y_ADDITIVE = 2.0f;
-            _targetPosition.y += TARGET_POSITION_Y_ADDITIVE;
-
-            return true;
-        }
-    }
-
-    private bool IsCollideWhenWireAction
-    {
-        get
-        {
-            Collider[] colliders = Physics.OverlapSphere(transform.position, _controller.radius);
-
-            foreach (var coll in colliders)
-            {
-                if (coll.transform.CompareTag("Ground") || coll.CompareTag("Wall"))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
-
-    // Assassinate Variable
     private enum EAssassinationType
     {
         Ground, // 평지에서 암살
@@ -129,8 +42,8 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _slideSpeed;
 
-    [Header("Gravity Scale")] [SerializeField]
-    private float _gravityMultiplier;
+    [Header("Gravity Scale")]
+    [SerializeField] private float _gravityMultiplier;
 
     private float _yVelocity;
     protected float YVelocity => _yVelocity;
@@ -151,6 +64,7 @@ public class PlayerMove : MonoBehaviour
     protected virtual void Awake()
     {
         _controller = GetComponent<CharacterController>();
+        _wireAvailableUiRectTransform = _wireAvailableUI.GetComponent<RectTransform>();
         _camera = Camera.main;
     }
 
@@ -180,7 +94,7 @@ public class PlayerMove : MonoBehaviour
     {
         Debug.Assert(_camera != null, "_camera != null");
 
-        if (_inputDirection.sqrMagnitude == 0 || _isOnWire)
+        if (_inputDirection.sqrMagnitude == 0 || IsOnWire)
         {
             return;
         }
@@ -248,7 +162,7 @@ public class PlayerMove : MonoBehaviour
             _yVelocity += Physics.gravity.y * _gravityMultiplier * Time.deltaTime;
         }
 
-        if (_isOnWire && _yVelocity < 0)
+        if (IsOnWire && _yVelocity < 0)
         {
             _yVelocity = 0;
         }
@@ -283,83 +197,121 @@ public class PlayerMove : MonoBehaviour
         _hitNormal = hit.normal;
     }
 
-    // Wire Methods
-    private float CalculateDistance(Vector3 origin, Vector3 target, ECalculateType type)
+    private List<GameObject> GetWirePoints()
     {
-        return type == ECalculateType.V3 ? (origin - target).magnitude : ((Vector2)origin - (Vector2)target).magnitude;
+        List<GameObject> detectedWirePoints = new();
+        Vector3 playerPos = transform.position;
+
+        Collider[] wirePointsInRange =
+            Physics.OverlapSphere(playerPos, _myData.maxWireDistance, LayerMask.GetMask("WirePoint"));
+
+        foreach (Collider wirePoint in wirePointsInRange)
+        {
+            Vector3 wirePointPos = wirePoint.transform.position;
+            float distance = (wirePointPos - playerPos).magnitude;
+            if (distance < _myData.minWireDistance || _camera.WorldToViewportPoint(wirePointPos).z < 0)
+            {
+                continue;
+            }
+
+            detectedWirePoints.Add(wirePoint.gameObject);
+        }
+
+        return detectedWirePoints;
     }
 
-    private GameObject FindWirePoint()
+    private bool CanHangWireToWirePoint()
     {
-        List<GameObject> wirePointInScreen = WirePoints;
+        if (IsOnWire)
+        {
+            return false;
+        }
+
+        Debug.Assert(_camera != null, "_camera != null");
+
+        Ray ray = _camera.ViewportPointToRay(CAMERA_CENTER_POINT);
+
+        bool isHit = Physics.Raycast(ray, out RaycastHit hit, _myData.maxWireDistance, LayerMask.GetMask("WirePoint"));
+
+        if (!isHit)
+        {
+            return false;
+        }
+
+        float distance = (hit.transform.position - transform.position).magnitude;
+
+        if (distance < _myData.minWireDistance || distance > _myData.maxWireDistance)
+        {
+            return false;
+        }
+
+        _targetPosition = hit.transform.position;
+        _wireHangPosition = hit.point;
+
+        const float ADDITIVE_VALUE = 2.0f;
+        _targetPosition.y += ADDITIVE_VALUE;
+
+        return true;
+    }
+
+    private bool IsCollideWhenWireAction()
+    {
+        int detectLayer = LayerMask.GetMask("Ground") + LayerMask.GetMask("Wall");
+        Collider[] overlappedColliders = Physics.OverlapSphere(transform.position, _controller.radius, detectLayer);
+
+        return overlappedColliders.Length != 0;
+    }
+
+    private GameObject FindNearestWirePointFromAim()
+    {
+        List<GameObject> wirePointInScreen = GetWirePoints();
 
         if (wirePointInScreen.Count == 0)
         {
             return null;
         }
 
-        float minDistanceFromCenter = 2.0f;
+        const float INFINITY = 2.0f;
+        float minDistanceFromCenter = INFINITY;
         GameObject nearWirePoint = null;
 
-        foreach (var wirePoint in wirePointInScreen)
+        foreach (GameObject wirePoint in wirePointInScreen)
         {
             Vector3 wirePointPos = wirePoint.transform.position;
             Vector3 viewportPos = _camera.WorldToViewportPoint(wirePointPos);
-
-            if (viewportPos.z < 0)
-            {
-                continue;
-            }
-
-            float distanceFromCenter = CalculateDistance(CAMERA_CENTER_POINT, viewportPos, ECalculateType.V2);
+            
+            float distanceFromAim = ((Vector2)CAMERA_CENTER_POINT - (Vector2)viewportPos).magnitude;
             const float RESTRICT_RANGE_FROM_CENTER = 0.15f;
 
-            if (distanceFromCenter > minDistanceFromCenter || distanceFromCenter > RESTRICT_RANGE_FROM_CENTER)
+            if (distanceFromAim > minDistanceFromCenter || distanceFromAim > RESTRICT_RANGE_FROM_CENTER)
             {
                 continue;
             }
 
-            minDistanceFromCenter = distanceFromCenter;
+            minDistanceFromCenter = distanceFromAim;
             nearWirePoint = wirePoint;
         }
 
-        // nearWirePoint 가 있다면 플레이어 사이의 장매물이 있는지 확인 후 Return
-        return nearWirePoint == null ? null : CheckObstacle(nearWirePoint, transform.position);
-    }
-
-    private GameObject CheckObstacle(GameObject nearWirePoint, Vector3 playerPos)
-    {
-        const float RAY_POSITION_Y_TOLERANCE = 0.5f;
-        playerPos.y += RAY_POSITION_Y_TOLERANCE;
-
-        Vector3 nearWirePointPos = nearWirePoint.transform.position;
-        Vector3 rayDirection = (nearWirePointPos - playerPos).normalized;
-        float rayDistance = CalculateDistance(playerPos, nearWirePointPos, ECalculateType.V3);
-
-        Ray ray = new Ray(playerPos, rayDirection * rayDistance);
-        Physics.Raycast(ray, out RaycastHit hit);
-
-        return !hit.transform.CompareTag("WirePoint") ? null : nearWirePoint;
+        return nearWirePoint;
     }
 
     private void ShowWirePointUI()
     {
-        if (_wireAction != null)
+        if (_wireActionRoutine != null)
         {
             _wireAvailableUI.SetActive(false);
             return;
         }
 
-        Debug.Assert(_wireAvilableUITransform != null);
+        Debug.Assert(_wireAvailableUI != null);
 
-        GameObject wirePoint = FindWirePoint();
+        GameObject wirePoint = FindNearestWirePointFromAim();
 
         if (wirePoint == null)
         {
             _wireAvailableUI.SetActive(false);
             return;
         }
-
 
         _wireAvailableUI.SetActive(true);
 
@@ -369,7 +321,7 @@ public class PlayerMove : MonoBehaviour
 
         wireScreenPoint.x += OFFSET;
 
-        _wireAvilableUITransform.position = wireScreenPoint;
+        _wireAvailableUiRectTransform.position = wireScreenPoint;
     }
 
     public void OnWireButtonClick(InputAction.CallbackContext ctx)
@@ -379,7 +331,7 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        if (!CanHangWire)
+        if (!CanHangWireToWirePoint())
         {
             return;
         }
@@ -389,7 +341,7 @@ public class PlayerMove : MonoBehaviour
 
     private void ApplyWireAction()
     {
-        if (_wireAction != null)
+        if (_wireActionRoutine != null)
         {
             return;
         }
@@ -400,14 +352,14 @@ public class PlayerMove : MonoBehaviour
         }
 
         PerformJump();
-        
+
         Quaternion cameraRotation = _camera.transform.localRotation;
         cameraRotation.x = 0;
         cameraRotation.z = 0;
         transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 1.0f);
-        
-        _wireAction = WireActionRoutine();
-        StartCoroutine(_wireAction);
+
+        _wireActionRoutine = WireActionRoutine();
+        StartCoroutine(_wireActionRoutine);
     }
 
     private IEnumerator WireActionRoutine()
@@ -417,30 +369,27 @@ public class PlayerMove : MonoBehaviour
             yield return null;
         }
 
-        _isOnWire = true;
         Vector3 initPos = transform.position;
         float t = 0;
 
-        LineDraw.Instance.TurnOnLine();
+        WireLineDrawHelper.Instance.ChangeLineEnable(true);
 
-        while (t <= _myData.wireActionDuration && !IsCollideWhenWireAction)
+        while (t <= _myData.wireActionDuration && !IsCollideWhenWireAction())
         {
             float alpha = t / _myData.wireActionDuration;
 
             transform.position = Vector3.Lerp(initPos, _targetPosition, alpha * alpha * alpha);
 
-            LineDraw.Instance.Draw(transform.position, _wireHangPosition);
+            WireLineDrawHelper.Instance.Draw(transform.position, _wireHangPosition);
 
             yield return null;
             t += Time.deltaTime;
         }
 
-        LineDraw.Instance.TurnOffLine();
-        _wireAction = null;
-        _isOnWire = false;
+        WireLineDrawHelper.Instance.ChangeLineEnable(false);
+        _wireActionRoutine = null;
     }
 
-    // Assassinate Methods
     public void OnAssassinateKeyDown(InputAction.CallbackContext context)
     {
         if (!context.started || _assassinationTarget == null)

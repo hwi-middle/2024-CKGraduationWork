@@ -365,7 +365,7 @@ GameObject:
   - component: {fileID: 219793014}
   - component: {fileID: 219793013}
   - component: {fileID: 219793012}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WirePoint (6)
   m_TagString: WirePoint
   m_Icon: {fileID: 0}
@@ -470,7 +470,7 @@ GameObject:
   - component: {fileID: 300954908}
   - component: {fileID: 300954907}
   - component: {fileID: 300954906}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WirePoint (1)
   m_TagString: WirePoint
   m_Icon: {fileID: 0}
@@ -576,7 +576,7 @@ GameObject:
   - component: {fileID: 341473615}
   - component: {fileID: 341473614}
   - component: {fileID: 341473618}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -836,7 +836,7 @@ GameObject:
   - component: {fileID: 540917052}
   - component: {fileID: 540917051}
   - component: {fileID: 540917050}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slope (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -969,7 +969,7 @@ GameObject:
   - component: {fileID: 566938354}
   - component: {fileID: 566938353}
   - component: {fileID: 566938352}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slope (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1160,7 +1160,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 617084259}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.41785678, y: 0.000000011215161, z: -0.000000005158246, w: 0.90851295}
+  m_LocalRotation: {x: 0.4178568, y: -0.0000000270758, z: 0.000000012453105, w: 0.90851295}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1308,7 +1308,7 @@ GameObject:
   - component: {fileID: 741592933}
   - component: {fileID: 741592932}
   - component: {fileID: 741592936}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Floor
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1441,7 +1441,7 @@ GameObject:
   - component: {fileID: 850377965}
   - component: {fileID: 850377964}
   - component: {fileID: 850377963}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slope (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1573,7 +1573,7 @@ GameObject:
   - component: {fileID: 891461996}
   - component: {fileID: 891461995}
   - component: {fileID: 891461994}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WirePoint (2)
   m_TagString: WirePoint
   m_Icon: {fileID: 0}
@@ -1814,7 +1814,7 @@ GameObject:
   - component: {fileID: 915822064}
   - component: {fileID: 915822063}
   - component: {fileID: 915822062}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slope (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2219,7 +2219,7 @@ GameObject:
   - component: {fileID: 997423369}
   - component: {fileID: 997423368}
   - component: {fileID: 997423367}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slope
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2472,7 +2472,7 @@ GameObject:
   - component: {fileID: 1210510923}
   - component: {fileID: 1210510922}
   - component: {fileID: 1210510921}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WirePoint (4)
   m_TagString: WirePoint
   m_Icon: {fileID: 0}
@@ -2578,7 +2578,7 @@ GameObject:
   - component: {fileID: 1254731392}
   - component: {fileID: 1254731391}
   - component: {fileID: 1254731390}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slope (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2710,7 +2710,7 @@ GameObject:
   - component: {fileID: 1290277683}
   - component: {fileID: 1290277682}
   - component: {fileID: 1290277681}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WirePoint
   m_TagString: WirePoint
   m_Icon: {fileID: 0}
@@ -2816,7 +2816,7 @@ GameObject:
   - component: {fileID: 1400532622}
   - component: {fileID: 1400532621}
   - component: {fileID: 1400532620}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Floor (3)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -3153,7 +3153,7 @@ GameObject:
   - component: {fileID: 1610407240}
   - component: {fileID: 1610407239}
   - component: {fileID: 1610407238}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slope (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3286,7 +3286,7 @@ GameObject:
   - component: {fileID: 1634451658}
   - component: {fileID: 1634451657}
   - component: {fileID: 1634451656}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Floor (1)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -3418,7 +3418,7 @@ GameObject:
   - component: {fileID: 1646286881}
   - component: {fileID: 1646286880}
   - component: {fileID: 1646286879}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WirePoint (3)
   m_TagString: WirePoint
   m_Icon: {fileID: 0}
@@ -3524,7 +3524,7 @@ GameObject:
   - component: {fileID: 1655395425}
   - component: {fileID: 1655395424}
   - component: {fileID: 1655395423}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slope (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3731,7 +3731,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729681865}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.41785684, y: 0.000000039899597, z: -0.00000001835122, w: 0.90851295}
+  m_LocalRotation: {x: 0.41785687, y: -0.000000038290956, z: 0.00000001761135, w: 0.9085129}
   m_LocalPosition: {x: -0.15, y: 6, z: -2.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3887,7 +3887,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1764949706}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38581643, y: -0.0126134595, z: 0.0052754637, w: 0.92247427}
+  m_LocalRotation: {x: 0.3858226, y: -0.011481471, z: 0.00480202, w: 0.92248905}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4125,7 +4125,7 @@ GameObject:
   - component: {fileID: 2006015578}
   - component: {fileID: 2006015577}
   - component: {fileID: 2006015576}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slope (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4258,7 +4258,7 @@ GameObject:
   - component: {fileID: 2006994852}
   - component: {fileID: 2006994851}
   - component: {fileID: 2006994850}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Floor (2)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -4584,7 +4584,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _myData: {fileID: 11400000, guid: 514498b1264fa4ad9a0a5976151dab49, type: 2}
   _wireAvailableUI: {fileID: 1036290863}
-  _wireAvilableUITransform: {fileID: 1036290864}
   _assassinationData: {fileID: 11400000, guid: 3c3155adae7bf1d4bbe181f36bdef582, type: 2}
   _jumpHeight: 6
   _moveSpeed: 5
@@ -4602,7 +4601,7 @@ GameObject:
   - component: {fileID: 2123609879}
   - component: {fileID: 2123609878}
   - component: {fileID: 2123609877}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WirePoint (5)
   m_TagString: WirePoint
   m_Icon: {fileID: 0}
