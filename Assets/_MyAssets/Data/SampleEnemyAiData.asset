@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SampleEnemyAiData
   m_EditorClassIdentifier: 
   perceptionDistance: 5.2
-  perceptionAngle: 45
+  perceptionAngle: 65
