@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccfb3b0dcd218467c942c6e05326d52e, type: 3}
   m_Name: SampleEnemyAiData
   m_EditorClassIdentifier: 
-  perceptionDistance: 5.2
+  perceptionDistance: 9.7
   perceptionAngle: 65

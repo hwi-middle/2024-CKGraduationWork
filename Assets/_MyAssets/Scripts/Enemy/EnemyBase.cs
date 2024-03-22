@@ -89,17 +89,17 @@ public class EnemyBase : MonoBehaviour
 
     private IEnumerator PatrolRoutine()
     {
-        // while (true)
+        while (true)
         {
             for (int i = 0; i < _patrolPointsRoot.childCount; i++)
             {
-                Vector3 _targetPos = _patrolPointsRoot.GetChild(i).position;
-                _navMeshAgent.SetDestination(_targetPos);
+                Vector3 targetPos = _patrolPointsRoot.GetChild(i).position;
+                _navMeshAgent.SetDestination(targetPos);
             
-                float remainingDistance = Vector3.Distance(transform.position, _targetPos);
+                float remainingDistance = Vector3.Distance(transform.position, targetPos);
                 while (remainingDistance > _navMeshAgent.stoppingDistance)
                 {
-                    remainingDistance = _navMeshAgent.pathPending ? Vector3.Distance(transform.position, _targetPos) : _navMeshAgent.remainingDistance;
+                    remainingDistance = _navMeshAgent.pathPending ? Vector3.Distance(transform.position, targetPos) : _navMeshAgent.remainingDistance;
                     yield return null;
                 }
             }
