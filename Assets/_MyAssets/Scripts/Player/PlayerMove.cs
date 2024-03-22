@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,6 +7,25 @@ using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
 {
+    [Header("Player Data")]
+    [SerializeField] private PlayerWireData _myData;
+
+    [Header("WirePoint Variable")]
+    [SerializeField] private GameObject _wireAvailableUI;
+
+    [Header("WirePoint Offset")]
+    [SerializeField] private float _wirePointOffset;
+
+    private RectTransform _wireAvailableUiRectTransform;
+    private IEnumerator _wireActionRoutine;
+
+    private Vector3 _targetPosition;
+    private Vector3 _wireHangPosition;
+
+    private static readonly Vector3 CAMERA_CENTER_POINT = new(0.5f, 0.5f, 0.0f);
+
+    private bool IsOnWire => _wireActionRoutine != null;
+
     private enum EAssassinationType
     {
         Ground, // 평지에서 암살
@@ -19,13 +39,14 @@ public class PlayerMove : MonoBehaviour
     private bool _isAssassinating = false;
     private Transform _assassinationTarget;
 
+    // Player Move Variable
     [SerializeField] private float _jumpHeight;
 
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _slideSpeed;
 
-    [Header("Gravity Scale")] [SerializeField]
-    private float _gravityMultiplier;
+    [Header("Gravity Scale")]
+    [SerializeField] private float _gravityMultiplier;
 
     private float _yVelocity;
     protected float YVelocity => _yVelocity;
@@ -46,6 +67,7 @@ public class PlayerMove : MonoBehaviour
     protected virtual void Awake()
     {
         _controller = GetComponent<CharacterController>();
+        _wireAvailableUiRectTransform = _wireAvailableUI.GetComponent<RectTransform>();
         _camera = Camera.main;
     }
 
@@ -61,6 +83,7 @@ public class PlayerMove : MonoBehaviour
     protected virtual void Update()
     {
         SetSlideVelocity();
+        ShowWirePointUI();
         RotatePlayer();
         MovePlayer();
 
@@ -74,7 +97,7 @@ public class PlayerMove : MonoBehaviour
     {
         Debug.Assert(_camera != null, "_camera != null");
 
-        if (_inputDirection.sqrMagnitude == 0)
+        if (_inputDirection.sqrMagnitude == 0 || IsOnWire)
         {
             return;
         }
@@ -142,6 +165,11 @@ public class PlayerMove : MonoBehaviour
             _yVelocity += Physics.gravity.y * _gravityMultiplier * Time.deltaTime;
         }
 
+        if (IsOnWire && _yVelocity < 0)
+        {
+            _yVelocity = 0;
+        }
+
         _velocity.y = _yVelocity;
     }
 
@@ -172,6 +200,199 @@ public class PlayerMove : MonoBehaviour
         _hitNormal = hit.normal;
     }
 
+    private List<GameObject> GetWirePoints()
+    {
+        List<GameObject> detectedWirePoints = new();
+        Vector3 playerPos = transform.position;
+
+        Collider[] wirePointsInRange =
+            Physics.OverlapSphere(playerPos, _myData.maxWireDistance, LayerMask.GetMask("WirePoint"));
+
+        foreach (Collider wirePoint in wirePointsInRange)
+        {
+            Vector3 wirePointPos = wirePoint.transform.position;
+            float distance = (wirePointPos - playerPos).magnitude;
+            if (distance < _myData.minWireDistance || _camera.WorldToViewportPoint(wirePointPos).z < 0)
+            {
+                continue;
+            }
+
+            detectedWirePoints.Add(wirePoint.gameObject);
+        }
+
+        return detectedWirePoints;
+    }
+
+    private bool CanHangWireToWirePoint()
+    {
+        if (IsOnWire)
+        {
+            return false;
+        }
+
+        Debug.Assert(_camera != null, "_camera != null");
+
+        Ray ray = _camera.ViewportPointToRay(CAMERA_CENTER_POINT);
+
+        bool isHit = Physics.Raycast(ray, out RaycastHit hit, _myData.maxWireDistance, LayerMask.GetMask("WirePoint"));
+
+        if (!isHit)
+        {
+            return false;
+        }
+
+        float distance = (hit.transform.position - transform.position).magnitude;
+
+        if (distance < _myData.minWireDistance || distance > _myData.maxWireDistance)
+        {
+            return false;
+        }
+
+        _targetPosition = hit.transform.position;
+        _wireHangPosition = hit.point;
+
+        _targetPosition.y += _wirePointOffset;
+
+        return true;
+    }
+
+    private bool IsCollideWhenWireAction()
+    {
+        int detectLayer = LayerMask.GetMask("Ground") + LayerMask.GetMask("Wall");
+        
+        // 매 프레임 호출 시 문제 발생 가능성 높음 -> 교체 방안 연구
+        Collider[] overlappedColliders = Physics.OverlapSphere(transform.position, _controller.radius, detectLayer);
+
+        return overlappedColliders.Length != 0;
+    }
+
+    private GameObject FindNearestWirePointFromAim()
+    {
+        List<GameObject> wirePointInScreen = GetWirePoints();
+
+        if (wirePointInScreen.Count == 0)
+        {
+            return null;
+        }
+
+        const float INFINITY = 2.0f;
+        float minDistanceFromCenter = INFINITY;
+        GameObject nearWirePoint = null;
+
+        foreach (GameObject wirePoint in wirePointInScreen)
+        {
+            Vector3 wirePointPos = wirePoint.transform.position;
+            Vector3 viewportPos = _camera.WorldToViewportPoint(wirePointPos);
+            
+            float distanceFromAim = ((Vector2)CAMERA_CENTER_POINT - (Vector2)viewportPos).magnitude;
+            const float RESTRICT_RANGE_FROM_CENTER = 0.15f;
+
+            if (distanceFromAim > minDistanceFromCenter || distanceFromAim > RESTRICT_RANGE_FROM_CENTER)
+            {
+                continue;
+            }
+
+            minDistanceFromCenter = distanceFromAim;
+            nearWirePoint = wirePoint;
+        }
+
+        return nearWirePoint;
+    }
+
+    private void ShowWirePointUI()
+    {
+        if (_wireActionRoutine != null)
+        {
+            _wireAvailableUI.SetActive(false);
+            return;
+        }
+
+        Debug.Assert(_wireAvailableUI != null);
+
+        GameObject wirePoint = FindNearestWirePointFromAim();
+
+        if (wirePoint == null)
+        {
+            _wireAvailableUI.SetActive(false);
+            return;
+        }
+
+        _wireAvailableUI.SetActive(true);
+
+        Vector3 wireScreenPoint = _camera.WorldToScreenPoint(wirePoint.transform.position);
+
+        const float OFFSET = 50.0f;
+
+        wireScreenPoint.x += OFFSET;
+
+        _wireAvailableUiRectTransform.position = wireScreenPoint;
+    }
+
+    public void OnWireButtonClick(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.started)
+        {
+            return;
+        }
+
+        if (!CanHangWireToWirePoint())
+        {
+            return;
+        }
+
+        ApplyWireAction();
+    }
+
+    private void ApplyWireAction()
+    {
+        if (_wireActionRoutine != null)
+        {
+            return;
+        }
+
+        if (!_wireAvailableUI.activeSelf)
+        {
+            return;
+        }
+
+        PerformJump();
+
+        Quaternion cameraRotation = _camera.transform.localRotation;
+        cameraRotation.x = 0;
+        cameraRotation.z = 0;
+        transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 1.0f);
+
+        _wireActionRoutine = WireActionRoutine();
+        StartCoroutine(_wireActionRoutine);
+    }
+
+    private IEnumerator WireActionRoutine()
+    {
+        while (YVelocity > 0)
+        {
+            yield return null;
+        }
+
+        Vector3 initPos = transform.position;
+        float t = 0;
+
+        WireLineDrawHelper.Instance.EnableLine();
+
+        while (t <= _myData.wireActionDuration && !IsCollideWhenWireAction())
+        {
+            float alpha = t / _myData.wireActionDuration;
+
+            transform.position = Vector3.Lerp(initPos, _targetPosition, alpha * alpha * alpha);
+
+            WireLineDrawHelper.Instance.Draw(transform.position, _wireHangPosition);
+
+            yield return null;
+            t += Time.deltaTime;
+        }
+
+        WireLineDrawHelper.Instance.DisableLine();
+        _wireActionRoutine = null;
+    }
 
     public void OnAssassinateKeyDown(InputAction.CallbackContext context)
     {
