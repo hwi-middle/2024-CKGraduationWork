@@ -55,15 +55,15 @@ public class EnemyBase : MonoBehaviour
         Handles.DrawWireArc(
             transform.position,
             Vector3.up,
-            CalculateDirectionVector(_aiData.perceptionAngle / 2),
+            transform.rotation * CalculateDirectionVector(_aiData.perceptionAngle / 2),
             360 - _aiData.perceptionAngle,
             _aiData.perceptionDistance);
 
         Handles.color = Color.white;
         Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, -_aiData.perceptionAngle / 2, _aiData.perceptionDistance, 2.0f);
         Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, _aiData.perceptionAngle / 2, _aiData.perceptionDistance, 2.0f);
-        Handles.DrawLine(transform.position, transform.position + CalculateDirectionVector(-_aiData.perceptionAngle / 2) * _aiData.perceptionDistance, 2.0f);
-        Handles.DrawLine(transform.position, transform.position + CalculateDirectionVector(_aiData.perceptionAngle / 2) * _aiData.perceptionDistance, 2.0f);
+        Handles.DrawLine(transform.position, transform.position + transform.rotation * CalculateDirectionVector(-_aiData.perceptionAngle / 2) * _aiData.perceptionDistance, 2.0f);
+        Handles.DrawLine(transform.position, transform.position + transform.rotation * CalculateDirectionVector(_aiData.perceptionAngle / 2) * _aiData.perceptionDistance, 2.0f);
 
         if (_foundPlayer != null)
         {
