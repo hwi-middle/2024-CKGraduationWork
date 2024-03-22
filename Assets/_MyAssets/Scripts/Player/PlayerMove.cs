@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[Flags]
 public enum EPlayerState
 {
     Idle = 0,
@@ -21,11 +22,11 @@ public enum EPlayerState
 
 public class PlayerMove : MonoBehaviour
 {
-    private int _currentState = (int)EPlayerState.Idle;
-    
+    private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
+
     [Header("Player Wire Data")]
     [SerializeField] private PlayerWireData _myWireData;
-    
+
     [Header("Player Base Data")]
     [SerializeField] private PlayerBaseData _myBaseData;
 
@@ -35,11 +36,17 @@ public class PlayerMove : MonoBehaviour
     [Header("WirePoint Offset")]
     [SerializeField] private float _wirePointOffset;
 
+    [SerializeField] private TMP_Text _stateText;
+
+    private int _playerHp;
+    
     private RectTransform _wireAvailableUiRectTransform;
     private IEnumerator _wireActionRoutine;
 
     private Vector3 _targetPosition;
     private Vector3 _wireHangPosition;
+
+    private float _playerApplySpeed;
 
     private static readonly Vector3 CAMERA_CENTER_POINT = new(0.5f, 0.5f, 0.0f);
 
@@ -92,28 +99,52 @@ public class PlayerMove : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        _currentState ^= (int)EPlayerState.Walk;
-        TempPrintState();
+        _playerHp = _myBaseData.playerHp;
     }
 
     protected virtual void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            _playerHp = 0;
+        }
+        
+        CheckAndSwitchLifeState();
+
+        if (IsOnPlayerState(EPlayerState.Dead))
+        {
+            Destroy(gameObject);   
+        }
+        
         SetSlideVelocity();
         ShowWirePointUI();
         RotatePlayer();
         MovePlayer();
 
+        if (IsGrounded)
+        {
+            TurnOffPlayerState(EPlayerState.Jump);
+        }
+
         if (!_isAssassinating)
         {
             _assassinationTarget = GetAimingEnemy();
         }
+
+        ShowPlayerState();
     }
 
-    private void TempPrintState()
+    private void CheckAndSwitchLifeState()
     {
-        Debug.Log(_currentState);
+        if (_playerHp > 0)
+        {
+            return;
+        }
+        
+        TurnOffPlayerState(EPlayerState.Alive);
+        TurnOnPlayerState(EPlayerState.Dead);
     }
-
+    
     private void RotatePlayer()
     {
         Debug.Assert(_camera != null, "_camera != null");
@@ -172,19 +203,21 @@ public class PlayerMove : MonoBehaviour
 
         ApplyGravity();
         ApplyPlayerMoveSpeed();
-
+        
         _controller.Move(_velocity * Time.deltaTime);
+        //_controller.Move(_myBaseData.walkSpeed * Time.deltaTime * _velocity);
     }
 
     private void ApplyPlayerMoveSpeed()
     {
-        if ((_currentState & (int)EPlayerState.Walk) == (int)EPlayerState.Walk)
-        {
-            _velocity *= _myBaseData.walkSpeed;
-            return;
-        }
+        _playerApplySpeed = _myBaseData.walkSpeed;
 
-        _velocity *= _myBaseData.runSpeed;
+        _playerApplySpeed = !IsOnPlayerState(EPlayerState.Run) && !IsOnPlayerState(EPlayerState.Crouch) 
+            ? _playerApplySpeed : IsOnPlayerState(EPlayerState.Run) ? _myBaseData.runSpeed : _myBaseData.crouchSpeed;
+        
+        _velocity.x *= _playerApplySpeed;
+        _velocity.z *= _playerApplySpeed;
+        _velocity.y *= _myBaseData.yMultiplier;
     }
 
     private void ApplyGravity()
@@ -206,11 +239,64 @@ public class PlayerMove : MonoBehaviour
         _velocity.y = _yVelocity;
     }
 
+    private void ShowPlayerState()
+    {
+        _stateText.text = "Cur State : ";
+        EPlayerState state = EPlayerState.Idle;
+
+        for (int i = 0; i < 10; i++)
+        {
+            if (((1 << i) & _currentState) != 0)
+            {
+                _stateText.text += $"{state + (1 << i)} ";
+            }
+        }
+    }
+
+    private bool IsOnPlayerState(EPlayerState state)
+    {
+        return (_currentState & (int)state) != 0;
+    }
+
+    private void TurnOnPlayerState(EPlayerState state)
+    {
+        if ((_currentState & (int)state) != 0)
+        {
+            return;
+        }
+
+        _currentState ^= (int)state;
+    }
+
+    private void TurnOffPlayerState(EPlayerState state)
+    {
+        if((_currentState & (int)state) == 0)
+        {
+            return;
+        }
+
+        _currentState ^= (int)state;
+    }
+
     public void OnMoveButtonClick(InputAction.CallbackContext context)
     {
+        if (IsOnWire)
+        {
+            return;
+        }
+        
         Vector2 input = context.ReadValue<Vector2>();
 
         _inputDirection = new Vector3(input.x, 0, input.y);
+
+        if (_inputDirection.sqrMagnitude == 0)
+        {
+            TurnOffPlayerState(EPlayerState.Walk);
+            TurnOffPlayerState(EPlayerState.Run);
+            return;
+        }
+        
+        TurnOnPlayerState(EPlayerState.Walk);
     }
 
     public void OnJumpButtonClick(InputAction.CallbackContext context)
@@ -225,6 +311,7 @@ public class PlayerMove : MonoBehaviour
 
     protected void PerformJump()
     {
+        TurnOnPlayerState(EPlayerState.Jump);
         _yVelocity += _myBaseData.jumpHeight;
     }
 
@@ -389,6 +476,8 @@ public class PlayerMove : MonoBehaviour
         }
 
         PerformJump();
+        
+        _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
 
         Quaternion cameraRotation = _camera.transform.localRotation;
         cameraRotation.x = 0;
@@ -401,8 +490,7 @@ public class PlayerMove : MonoBehaviour
 
     private IEnumerator WireActionRoutine()
     {
-        _currentState ^= (int)EPlayerState.WireAction;
-        
+        TurnOnPlayerState(EPlayerState.WireAction);
         while (YVelocity > 0)
         {
             yield return null;
@@ -426,7 +514,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         WireLineDrawHelper.Instance.DisableLine();
-        
+        TurnOffPlayerState(EPlayerState.WireAction);
         _wireActionRoutine = null;
     }
 
@@ -532,20 +620,33 @@ public class PlayerMove : MonoBehaviour
 
     public void OnRunButtonClick(InputAction.CallbackContext context)
     {
+        if (context.canceled || !IsOnPlayerState(EPlayerState.Walk))
+        {
+            TurnOffPlayerState(EPlayerState.Run);
+            return;
+        }
+
         if (!context.performed)
         {
             return;
         }
-
-        if (context.canceled)
-        {
-            return;
-        }
         
+        TurnOnPlayerState(EPlayerState.Run);
     }
 
     public void OnCrouchButtonClick(InputAction.CallbackContext context)
     {
+        if (context.canceled)
+        {
+            TurnOffPlayerState(EPlayerState.Crouch); 
+            return;
+        }
+
+        if (!context.performed)
+        {
+            return;
+        }
         
+        TurnOnPlayerState(EPlayerState.Crouch);
     }
 }

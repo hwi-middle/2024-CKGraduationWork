@@ -16,6 +16,7 @@ MonoBehaviour:
   walkSpeed: 7
   runSpeed: 11
   jumpHeight: 5
-  jumpSpeed: 5
+  yMultiplier: 5
   crouchSpeed: 5
+  wallMoveSpeed: 0
   slopeSlideSpeed: 7
