@@ -5,10 +5,29 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum EPlayerState
+{
+    Idle = 0,
+    Walk = 1 << 1,
+    Run = 1 << 2,
+    Crouch = 1 << 3,
+    Jump = 1 << 4,
+    Stealth = 1 << 5,
+    WallMove = 1 << 6,
+    Alive = 1 << 7,
+    Dead = 1 << 8,
+    WireAction = 1 << 9
+}
+
 public class PlayerMove : MonoBehaviour
 {
-    [Header("Player Data")]
-    [SerializeField] private PlayerWireData _myData;
+    private int _currentState = (int)EPlayerState.Idle;
+    
+    [Header("Player Wire Data")]
+    [SerializeField] private PlayerWireData _myWireData;
+    
+    [Header("Player Base Data")]
+    [SerializeField] private PlayerBaseData _myBaseData;
 
     [Header("WirePoint Variable")]
     [SerializeField] private GameObject _wireAvailableUI;
@@ -38,12 +57,6 @@ public class PlayerMove : MonoBehaviour
     // [SerializeField] private TMP_Text _noteTextForDebug;
     private bool _isAssassinating = false;
     private Transform _assassinationTarget;
-
-    // Player Move Variable
-    [SerializeField] private float _jumpHeight;
-
-    [SerializeField] private float _moveSpeed;
-    [SerializeField] private float _slideSpeed;
 
     [Header("Gravity Scale")]
     [SerializeField] private float _gravityMultiplier;
@@ -78,6 +91,9 @@ public class PlayerMove : MonoBehaviour
         // Cursor Visible
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        _currentState ^= (int)EPlayerState.Walk;
+        TempPrintState();
     }
 
     protected virtual void Update()
@@ -93,6 +109,11 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    private void TempPrintState()
+    {
+        Debug.Log(_currentState);
+    }
+
     private void RotatePlayer()
     {
         Debug.Assert(_camera != null, "_camera != null");
@@ -105,7 +126,7 @@ public class PlayerMove : MonoBehaviour
         Quaternion cameraRotation = _camera.transform.localRotation;
         cameraRotation.x = 0;
         cameraRotation.z = 0;
-        transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 1.0f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 0.2f);
     }
 
     private void SetSlideVelocity()
@@ -143,15 +164,27 @@ public class PlayerMove : MonoBehaviour
         {
             _velocity = _slideVelocity;
             _velocity.y += _yVelocity;
-            _controller.Move(_slideSpeed * Time.deltaTime * _velocity);
+            _controller.Move(_myBaseData.slopeSlideSpeed * Time.deltaTime * _velocity);
             return;
         }
 
         _velocity = transform.TransformDirection(_inputDirection);
 
         ApplyGravity();
+        ApplyPlayerMoveSpeed();
 
-        _controller.Move(_moveSpeed * Time.deltaTime * _velocity);
+        _controller.Move(_velocity * Time.deltaTime);
+    }
+
+    private void ApplyPlayerMoveSpeed()
+    {
+        if ((_currentState & (int)EPlayerState.Walk) == (int)EPlayerState.Walk)
+        {
+            _velocity *= _myBaseData.walkSpeed;
+            return;
+        }
+
+        _velocity *= _myBaseData.runSpeed;
     }
 
     private void ApplyGravity()
@@ -173,14 +206,14 @@ public class PlayerMove : MonoBehaviour
         _velocity.y = _yVelocity;
     }
 
-    public void OnMove(InputAction.CallbackContext context)
+    public void OnMoveButtonClick(InputAction.CallbackContext context)
     {
         Vector2 input = context.ReadValue<Vector2>();
 
         _inputDirection = new Vector3(input.x, 0, input.y);
     }
 
-    public void OnJump(InputAction.CallbackContext context)
+    public void OnJumpButtonClick(InputAction.CallbackContext context)
     {
         if (!context.started || !IsGrounded || _isSliding)
         {
@@ -192,7 +225,7 @@ public class PlayerMove : MonoBehaviour
 
     protected void PerformJump()
     {
-        _yVelocity += _jumpHeight;
+        _yVelocity += _myBaseData.jumpHeight;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -206,13 +239,13 @@ public class PlayerMove : MonoBehaviour
         Vector3 playerPos = transform.position;
 
         Collider[] wirePointsInRange =
-            Physics.OverlapSphere(playerPos, _myData.maxWireDistance, LayerMask.GetMask("WirePoint"));
+            Physics.OverlapSphere(playerPos, _myWireData.maxWireDistance, LayerMask.GetMask("WirePoint"));
 
         foreach (Collider wirePoint in wirePointsInRange)
         {
             Vector3 wirePointPos = wirePoint.transform.position;
             float distance = (wirePointPos - playerPos).magnitude;
-            if (distance < _myData.minWireDistance || _camera.WorldToViewportPoint(wirePointPos).z < 0)
+            if (distance < _myWireData.minWireDistance || _camera.WorldToViewportPoint(wirePointPos).z < 0)
             {
                 continue;
             }
@@ -234,7 +267,7 @@ public class PlayerMove : MonoBehaviour
 
         Ray ray = _camera.ViewportPointToRay(CAMERA_CENTER_POINT);
 
-        bool isHit = Physics.Raycast(ray, out RaycastHit hit, _myData.maxWireDistance, LayerMask.GetMask("WirePoint"));
+        bool isHit = Physics.Raycast(ray, out RaycastHit hit, _myWireData.maxWireDistance, LayerMask.GetMask("WirePoint"));
 
         if (!isHit)
         {
@@ -243,7 +276,7 @@ public class PlayerMove : MonoBehaviour
 
         float distance = (hit.transform.position - transform.position).magnitude;
 
-        if (distance < _myData.minWireDistance || distance > _myData.maxWireDistance)
+        if (distance < _myWireData.minWireDistance || distance > _myWireData.maxWireDistance)
         {
             return false;
         }
@@ -328,9 +361,9 @@ public class PlayerMove : MonoBehaviour
         _wireAvailableUiRectTransform.position = wireScreenPoint;
     }
 
-    public void OnWireButtonClick(InputAction.CallbackContext ctx)
+    public void OnWireButtonClick(InputAction.CallbackContext context)
     {
-        if (!ctx.started)
+        if (!context.started)
         {
             return;
         }
@@ -339,7 +372,7 @@ public class PlayerMove : MonoBehaviour
         {
             return;
         }
-
+        
         ApplyWireAction();
     }
 
@@ -368,6 +401,8 @@ public class PlayerMove : MonoBehaviour
 
     private IEnumerator WireActionRoutine()
     {
+        _currentState ^= (int)EPlayerState.WireAction;
+        
         while (YVelocity > 0)
         {
             yield return null;
@@ -378,9 +413,9 @@ public class PlayerMove : MonoBehaviour
 
         WireLineDrawHelper.Instance.EnableLine();
 
-        while (t <= _myData.wireActionDuration && !IsCollideWhenWireAction())
+        while (t <= _myWireData.wireActionDuration && !IsCollideWhenWireAction())
         {
-            float alpha = t / _myData.wireActionDuration;
+            float alpha = t / _myWireData.wireActionDuration;
 
             transform.position = Vector3.Lerp(initPos, _targetPosition, alpha * alpha * alpha);
 
@@ -391,6 +426,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         WireLineDrawHelper.Instance.DisableLine();
+        
         _wireActionRoutine = null;
     }
 
@@ -492,5 +528,24 @@ public class PlayerMove : MonoBehaviour
         // TODO: 실제 적에게 데미지를 입혀야함
 
         _isAssassinating = false;
+    }
+
+    public void OnRunButtonClick(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+        {
+            return;
+        }
+
+        if (context.canceled)
+        {
+            return;
+        }
+        
+    }
+
+    public void OnCrouchButtonClick(InputAction.CallbackContext context)
+    {
+        
     }
 }

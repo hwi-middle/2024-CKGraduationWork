@@ -1160,7 +1160,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 617084259}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.41785684, y: -9.6769934e-17, z: 3.4975507e-16, w: 0.90851295}
+  m_LocalRotation: {x: 0.4178568, y: -0.0000000270758, z: 0.000000012453105, w: 0.90851295}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3731,7 +3731,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729681865}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.41785684, y: 0.00000003829096, z: -0.00000001761135, w: 0.90851295}
+  m_LocalRotation: {x: 0.41785687, y: -0.000000038290956, z: 0.00000001761135, w: 0.9085129}
   m_LocalPosition: {x: -0.15, y: 6, z: -2.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3887,7 +3887,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1764949706}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38582262, y: -0.011481473, z: 0.004802021, w: 0.92248905}
+  m_LocalRotation: {x: 0.3858226, y: -0.011481471, z: 0.00480202, w: 0.92248905}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4539,6 +4539,18 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: a8213568-675a-4e6f-9131-535bee700080
     m_ActionName: PlayerAction/Wire[/Mouse/middleButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c806ddfd-84d4-4e85-a89f-bef7e0450b60
+    m_ActionName: PlayerAction/Assassinate[/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c9fafe89-4a67-4523-b9da-2c84f891dbb7
+    m_ActionName: PlayerAction/Run[/Keyboard/leftShift]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9c0a6b18-ce2b-45b3-b0ff-aa956f6fb92b
+    m_ActionName: PlayerAction/Crouch[/Keyboard/c]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: PlayerAction
@@ -4582,10 +4594,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bd6f0742bb8d4658a39bff07e218320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myData: {fileID: 11400000, guid: 514498b1264fa4ad9a0a5976151dab49, type: 2}
+  _myWireData: {fileID: 11400000, guid: 514498b1264fa4ad9a0a5976151dab49, type: 2}
+  _myBaseData: {fileID: 11400000, guid: be439c1712086cc4eb47a854b63c7824, type: 2}
   _wireAvailableUI: {fileID: 1036290863}
   _wirePointOffset: 2
-  _assassinationData: {fileID: 11400000, guid: 3c3155adae7bf1d4bbe181f36bdef582, type: 2}
+  _assassinationData: {fileID: 11400000, guid: c3d73802406926c4eb7883edbc33bd52, type: 2}
   _jumpHeight: 6
   _moveSpeed: 5
   _slideSpeed: 6
