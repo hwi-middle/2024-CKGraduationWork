@@ -35,7 +35,7 @@ public class EnemyBase : MonoBehaviour
         Debug.Assert(overlappedPlayer != null);
 
         Vector3 direction = (overlappedPlayer.position - transform.position).normalized;
-        if (Vector3.Dot(direction, transform.forward) < Mathf.Cos(_aiData.perceptionAngle / 2))
+        if (Vector3.Dot(direction, transform.forward) < Mathf.Cos( _aiData.perceptionAngle * 0.5f * Mathf.Deg2Rad))
         {
             _foundPlayer = null;
             return;
