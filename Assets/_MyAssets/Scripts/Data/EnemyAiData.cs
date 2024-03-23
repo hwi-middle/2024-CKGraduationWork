@@ -13,6 +13,7 @@ public class EnemyAiData : ScriptableObject
     
     [Header("능력치")]
     [Tooltip("이동 속도")] public float moveSpeed;
+    [Tooltip("활동 범위(반경)")] public float moveRange;
 }
 
 [Serializable]

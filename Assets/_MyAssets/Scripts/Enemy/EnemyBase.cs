@@ -12,6 +12,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] private Transform _patrolPointsRoot;
 
     private float _perceptionGauge = 0f;
+    private Vector3 _moveRangeCenterPos;
     public float PerceptionGauge => _perceptionGauge;
     private readonly Collider[] _overlappedPlayerBuffer = new Collider[1];
     private Transform _foundPlayer;
@@ -23,6 +24,7 @@ public class EnemyBase : MonoBehaviour
         _navMeshAgent = GetComponent<NavMeshAgent>();
         var perceptionNote = Instantiate(Resources.Load("PerceptionNote/PerceptionNote"), FindObjectOfType<Canvas>().transform).GetComponent<PerceptionNote>();
         perceptionNote.owner = this;
+        _moveRangeCenterPos = transform.position;
     }
 
     private void Start()
@@ -34,7 +36,14 @@ public class EnemyBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DetectPlayer();
+        if (Vector3.Distance(transform.position, _moveRangeCenterPos) > _aiData.moveRange)
+        {
+            _navMeshAgent.SetDestination(_moveRangeCenterPos);
+        }
+        else
+        {
+            DetectPlayer();
+        }
     }
 
     private void DetectPlayer()
@@ -80,7 +89,6 @@ public class EnemyBase : MonoBehaviour
             }
         }
 
-        Debug.Log(distanceRatio);
         Debug.Assert(false);
         return -1f;
     }
@@ -117,6 +125,9 @@ public class EnemyBase : MonoBehaviour
         {
             Handles.DrawLine(transform.position, _foundPlayer.position, 2.0f);
         }
+
+        Handles.color = Color.green;
+        Handles.DrawWireArc(Application.isPlaying ? _moveRangeCenterPos : transform.position, Vector3.up, transform.forward, 360, _aiData.moveRange);
     }
 
     private void Patrol()
