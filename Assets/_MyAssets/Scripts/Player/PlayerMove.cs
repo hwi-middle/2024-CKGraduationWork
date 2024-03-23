@@ -17,7 +17,8 @@ public enum EPlayerState
     WallMove = 1 << 6,
     Alive = 1 << 7,
     Dead = 1 << 8,
-    WireAction = 1 << 9
+    WireAction = 1 << 9,
+    OnSlope = 1 << 10
 }
 
 public class PlayerMove : MonoBehaviour
@@ -46,9 +47,13 @@ public class PlayerMove : MonoBehaviour
     private Vector3 _targetPosition;
     private Vector3 _wireHangPosition;
 
+    private float _distanceOfWirePointFromCamera;
+
     private float _playerApplySpeed;
 
     private static readonly Vector3 CAMERA_CENTER_POINT = new(0.5f, 0.5f, 0.0f);
+
+    private int _playerStateCount = Enum.GetValues(typeof(EPlayerState)).Length;
 
     private bool IsOnWire => _wireActionRoutine != null;
 
@@ -110,12 +115,6 @@ public class PlayerMove : MonoBehaviour
         }
         
         CheckAndSwitchLifeState();
-
-        if (IsOnPlayerState(EPlayerState.Dead))
-        {
-            Destroy(gameObject);   
-        }
-        
         SetSlideVelocity();
         ShowWirePointUI();
         RotatePlayer();
@@ -143,6 +142,8 @@ public class PlayerMove : MonoBehaviour
         
         TurnOffPlayerState(EPlayerState.Alive);
         TurnOnPlayerState(EPlayerState.Dead);
+
+        Destroy(gameObject);
     }
     
     private void RotatePlayer()
@@ -193,12 +194,18 @@ public class PlayerMove : MonoBehaviour
     {
         if (_isSliding && IsGrounded)
         {
+            _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive | (int)EPlayerState.OnSlope;
             _velocity = _slideVelocity;
             _velocity.y += _yVelocity;
             _controller.Move(_myBaseData.slopeSlideSpeed * Time.deltaTime * _velocity);
             return;
         }
 
+        if (IsOnPlayerState(EPlayerState.OnSlope))
+        {
+            TurnOffPlayerState(EPlayerState.OnSlope);
+        }
+        
         _velocity = transform.TransformDirection(_inputDirection);
 
         ApplyGravity();
@@ -244,7 +251,7 @@ public class PlayerMove : MonoBehaviour
         _stateText.text = "Cur State : ";
         EPlayerState state = EPlayerState.Idle;
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < _playerStateCount; i++)
         {
             if (((1 << i) & _currentState) != 0)
             {
@@ -306,6 +313,12 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
+        if (IsOnPlayerState(EPlayerState.Crouch))
+        {
+            TurnOffPlayerState(EPlayerState.Crouch);
+            return;
+        }
+
         PerformJump();
     }
 
@@ -353,8 +366,9 @@ public class PlayerMove : MonoBehaviour
         Debug.Assert(_camera != null, "_camera != null");
 
         Ray ray = _camera.ViewportPointToRay(CAMERA_CENTER_POINT);
-
-        bool isHit = Physics.Raycast(ray, out RaycastHit hit, _myWireData.maxWireDistance, LayerMask.GetMask("WirePoint"));
+        float distanceOfCameraFromPlayer = (_camera.transform.position - transform.position).magnitude;
+        bool isHit = Physics.Raycast(ray, out RaycastHit hit, _myWireData.maxWireDistance + distanceOfCameraFromPlayer,
+            LayerMask.GetMask("WirePoint"));
 
         if (!isHit)
         {
@@ -362,8 +376,9 @@ public class PlayerMove : MonoBehaviour
         }
 
         float distance = (hit.transform.position - transform.position).magnitude;
+        
 
-        if (distance < _myWireData.minWireDistance || distance > _myWireData.maxWireDistance)
+        if (distance < _myWireData.minWireDistance)
         {
             return false;
         }
@@ -397,13 +412,13 @@ public class PlayerMove : MonoBehaviour
 
         const float INFINITY = 2.0f;
         float minDistanceFromCenter = INFINITY;
-        GameObject nearWirePoint = null;
+        GameObject nearestWirePoint = null;
 
         foreach (GameObject wirePoint in wirePointInScreen)
         {
             Vector3 wirePointPos = wirePoint.transform.position;
             Vector3 viewportPos = _camera.WorldToViewportPoint(wirePointPos);
-            
+
             float distanceFromAim = ((Vector2)CAMERA_CENTER_POINT - (Vector2)viewportPos).magnitude;
             const float RESTRICT_RANGE_FROM_CENTER = 0.15f;
 
@@ -413,10 +428,10 @@ public class PlayerMove : MonoBehaviour
             }
 
             minDistanceFromCenter = distanceFromAim;
-            nearWirePoint = wirePoint;
+            nearestWirePoint = wirePoint;
         }
 
-        return nearWirePoint;
+        return nearestWirePoint;
     }
 
     private void ShowWirePointUI()
@@ -436,16 +451,34 @@ public class PlayerMove : MonoBehaviour
             _wireAvailableUI.SetActive(false);
             return;
         }
+        
+        Vector3 wirePointPosition = wirePoint.transform.position;
+        Vector3 playerPosition = transform.position;
+        
+        Vector3 rayDirection = (wirePointPosition - playerPosition).normalized;
+        float distanceOfRay = (wirePointPosition - playerPosition).magnitude;
+        
+        Ray ray = new Ray(playerPosition, rayDirection);
+        
+        Physics.Raycast(ray, out RaycastHit hit, distanceOfRay);
+        
+        Debug.Assert(hit.transform != null,"hit != null");
+        
+        if(!hit.transform.CompareTag("WirePoint"))
+        {
+            return;
+        }
 
         _wireAvailableUI.SetActive(true);
 
-        Vector3 wireScreenPoint = _camera.WorldToScreenPoint(wirePoint.transform.position);
+        Vector3 wireScreenPoint = _camera.WorldToScreenPoint(wirePointPosition);
 
         const float OFFSET = 50.0f;
 
         wireScreenPoint.x += OFFSET;
 
         _wireAvailableUiRectTransform.position = wireScreenPoint;
+        _distanceOfWirePointFromCamera = (wirePointPosition - _camera.transform.position).magnitude;
     }
 
     public void OnWireButtonClick(InputAction.CallbackContext context)
@@ -630,20 +663,26 @@ public class PlayerMove : MonoBehaviour
         {
             return;
         }
+
+        // Run과 Crouch 상태 중 우선 순위는 Run
+        if (IsOnPlayerState(EPlayerState.Crouch))
+        {
+            TurnOffPlayerState(EPlayerState.Crouch);
+        }
         
         TurnOnPlayerState(EPlayerState.Run);
     }
 
     public void OnCrouchButtonClick(InputAction.CallbackContext context)
     {
-        if (context.canceled)
+        if (!context.started || !IsGrounded || IsOnPlayerState(EPlayerState.Run))
         {
-            TurnOffPlayerState(EPlayerState.Crouch); 
             return;
         }
 
-        if (!context.performed)
+        if (IsOnPlayerState(EPlayerState.Crouch))
         {
+            TurnOffPlayerState(EPlayerState.Crouch);
             return;
         }
         
