@@ -37,7 +37,7 @@ public class PlayerMove : MonoBehaviour
     [Header("WirePoint Offset")]
     [SerializeField] private float _wirePointOffset;
 
-    [SerializeField] private TMP_Text _stateText;
+    [SerializeField] private TMP_Text _playerStateText;
 
     private int _playerHp;
     
@@ -109,6 +109,7 @@ public class PlayerMove : MonoBehaviour
 
     protected virtual void Update()
     {
+        // 사망 상태 테스트 용 임시 입력
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             _playerHp = 0;
@@ -130,7 +131,7 @@ public class PlayerMove : MonoBehaviour
             _assassinationTarget = GetAimingEnemy();
         }
 
-        ShowPlayerState();
+        UpdatePlayerStateText();
     }
 
     private void CheckAndSwitchLifeState()
@@ -212,7 +213,6 @@ public class PlayerMove : MonoBehaviour
         ApplyPlayerMoveSpeed();
         
         _controller.Move(_velocity * Time.deltaTime);
-        //_controller.Move(_myBaseData.walkSpeed * Time.deltaTime * _velocity);
     }
 
     private void ApplyPlayerMoveSpeed()
@@ -246,16 +246,16 @@ public class PlayerMove : MonoBehaviour
         _velocity.y = _yVelocity;
     }
 
-    private void ShowPlayerState()
+    private void UpdatePlayerStateText()
     {
-        _stateText.text = "Cur State : ";
+        _playerStateText.text = "Cur State : ";
         EPlayerState state = EPlayerState.Idle;
 
         for (int i = 0; i < _playerStateCount; i++)
         {
             if (((1 << i) & _currentState) != 0)
             {
-                _stateText.text += $"{state + (1 << i)} ";
+                _playerStateText.text += $"{state + (1 << i)} ";
             }
         }
     }
