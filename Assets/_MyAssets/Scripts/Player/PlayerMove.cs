@@ -466,6 +466,7 @@ public class PlayerMove : MonoBehaviour
         
         if(!hit.transform.CompareTag("WirePoint"))
         {
+            _wireAvailableUI.SetActive(false);
             return;
         }
 
