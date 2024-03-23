@@ -12,5 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccfb3b0dcd218467c942c6e05326d52e, type: 3}
   m_Name: SampleEnemyAiData
   m_EditorClassIdentifier: 
-  perceptionDistance: 9.7
-  perceptionAngle: 65
+  perceptionDistance: 18.3
+  perceptionAngle: 67
+  perceptionRanges:
+  - rangeRatio: 10
+    gaugeIncrementPerSecond: 25
+  - rangeRatio: 30
+    gaugeIncrementPerSecond: 10
+  - rangeRatio: 60
+    gaugeIncrementPerSecond: 10
+  - rangeRatio: 90
+    gaugeIncrementPerSecond: 10
+  - rangeRatio: 100
+    gaugeIncrementPerSecond: 10
+  moveSpeed: 1

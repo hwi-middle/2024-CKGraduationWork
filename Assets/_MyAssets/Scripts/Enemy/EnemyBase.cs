@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,17 +11,23 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] private EnemyAiData _aiData;
     [SerializeField] private Transform _patrolPointsRoot;
 
+    private float _perceptionGauge = 0f;
+    public float PerceptionGauge => _perceptionGauge;
     private readonly Collider[] _overlappedPlayerBuffer = new Collider[1];
     private Transform _foundPlayer;
     private NavMeshAgent _navMeshAgent;
+    private IEnumerator _patrolRoutine;
 
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        var perceptionNote = Instantiate(Resources.Load("PerceptionNote/PerceptionNote"), FindObjectOfType<Canvas>().transform).GetComponent<PerceptionNote>();
+        perceptionNote.owner = this;
     }
 
     private void Start()
     {
+        _navMeshAgent.speed = _aiData.moveSpeed;
         Patrol();
     }
 
@@ -49,7 +56,11 @@ public class EnemyBase : MonoBehaviour
             return;
         }
 
+        // 시야에 플레이어가 들어옴
         _foundPlayer = overlappedPlayer;
+        float distance = Vector3.Distance(transform.position, overlappedPlayer.position);
+        _perceptionGauge += _aiData.perceptionRanges[0].gaugeIncrementPerSecond * Time.deltaTime;
+        _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
     }
 
     private Vector3 CalculateDirectionVector(float angle)
@@ -84,7 +95,8 @@ public class EnemyBase : MonoBehaviour
 
     private void Patrol()
     {
-        StartCoroutine(PatrolRoutine());
+        _patrolRoutine = PatrolRoutine();
+        StartCoroutine(_patrolRoutine);
     }
 
     private IEnumerator PatrolRoutine()
@@ -95,7 +107,7 @@ public class EnemyBase : MonoBehaviour
             {
                 Vector3 targetPos = _patrolPointsRoot.GetChild(i).position;
                 _navMeshAgent.SetDestination(targetPos);
-            
+
                 float remainingDistance = Vector3.Distance(transform.position, targetPos);
                 while (remainingDistance > _navMeshAgent.stoppingDistance)
                 {
