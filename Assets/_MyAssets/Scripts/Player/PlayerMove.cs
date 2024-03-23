@@ -659,7 +659,12 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        if (!context.performed)
+        if (context.performed)
+        {
+            return;
+        }
+
+        if (!IsGrounded)
         {
             return;
         }
