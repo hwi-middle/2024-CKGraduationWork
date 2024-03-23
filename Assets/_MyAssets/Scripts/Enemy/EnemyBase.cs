@@ -97,7 +97,7 @@ public class EnemyBase : MonoBehaviour
     {
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
-
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Handles.color = Color.gray;
@@ -129,6 +129,7 @@ public class EnemyBase : MonoBehaviour
         Handles.color = Color.green;
         Handles.DrawWireArc(Application.isPlaying ? _moveRangeCenterPos : transform.position, Vector3.up, transform.forward, 360, _aiData.moveRange);
     }
+#endif
 
     private void Patrol()
     {
