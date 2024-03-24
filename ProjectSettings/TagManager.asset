@@ -16,6 +16,7 @@ TagManager:
   - Water
   - UI
   - BypassAiming
+  - Player
   - WirePoint
   - Ground
   - Wall

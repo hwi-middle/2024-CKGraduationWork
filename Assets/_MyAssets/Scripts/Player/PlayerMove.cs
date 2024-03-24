@@ -410,8 +410,7 @@ public class PlayerMove : MonoBehaviour
         Debug.Assert(mainCamera != null);
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         float assassinateDistance = _assassinationData.assassinateDistance;
-        Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * assassinateDistance, Color.green,
-            0f, false);
+        // Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * assassinateDistance, Color.green, 0f, false);
         int layerMask = (-1) - (1 << LayerMask.NameToLayer("BypassAiming"));
 
         if (Physics.Raycast(ray, out RaycastHit hit, assassinateDistance, layerMask) &&
