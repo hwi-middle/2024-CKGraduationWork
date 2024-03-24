@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PerceptionNote : MonoBehaviour
 {
     public EnemyBase owner;
+    private Camera _mainCamera;
     private readonly Color _startColor = Color.yellow;
     private readonly Color _endColor = Color.red;
     private Image _bgImage;
@@ -16,6 +17,7 @@ public class PerceptionNote : MonoBehaviour
 
     private void Awake()
     {
+        _mainCamera = Camera.main;
         _bgImage = GetComponent<Image>();
         _fillImage = transform.GetChild(0).GetComponent<Image>();
         _questionMarkSprite = Resources.Load<Sprite>("PerceptionNote/help-sign");
@@ -57,6 +59,6 @@ public class PerceptionNote : MonoBehaviour
 
     private void UpdatePerceptionGaugePosition()
     {
-        _bgImage.transform.position = Camera.main.WorldToScreenPoint(owner.transform.position + Vector3.up * 2f);
+        _bgImage.transform.position = _mainCamera.WorldToScreenPoint(owner.transform.position + Vector3.up * 2f);
     }
 }
