@@ -1161,7 +1161,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 617084259}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4178568, y: -0.0000000270758, z: 0.000000012453105, w: 0.90851295}
+  m_LocalRotation: {x: 0.41785678, y: 0.000000011215161, z: -0.000000005158246, w: 0.90851295}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3732,7 +3732,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729681865}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.41785687, y: -0.000000038290956, z: 0.00000001761135, w: 0.9085129}
+  m_LocalRotation: {x: 0.41785684, y: 0.000000039899597, z: -0.00000001835122, w: 0.90851295}
   m_LocalPosition: {x: -0.15, y: 6, z: -2.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3888,7 +3888,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1764949706}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38582262, y: -0.011481473, z: 0.004802021, w: 0.92248905}
+  m_LocalRotation: {x: 0.3858226, y: -0.011481471, z: 0.00480202, w: 0.92248905}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4632,7 +4632,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2071703475}
         m_TargetAssemblyTypeName: PlayerMove, Assembly-CSharp
-        m_MethodName: OnMoveButtonClick
+        m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4648,7 +4648,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2071703475}
         m_TargetAssemblyTypeName: PlayerMove, Assembly-CSharp
-        m_MethodName: OnJumpButtonClick
+        m_MethodName: OnJump
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4696,7 +4696,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2071703475}
         m_TargetAssemblyTypeName: PlayerMove, Assembly-CSharp
-        m_MethodName: OnRunButtonClick
+        m_MethodName: OnRun
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4712,7 +4712,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2071703475}
         m_TargetAssemblyTypeName: PlayerMove, Assembly-CSharp
-        m_MethodName: OnCrouchButtonClick
+        m_MethodName: OnCrouch
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4767,11 +4767,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bd6f0742bb8d4658a39bff07e218320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myWireData: {fileID: 11400000, guid: 514498b1264fa4ad9a0a5976151dab49, type: 2}
-  _myBaseData: {fileID: 11400000, guid: be439c1712086cc4eb47a854b63c7824, type: 2}
+  _wireData: {fileID: 11400000, guid: 514498b1264fa4ad9a0a5976151dab49, type: 2}
+  _baseData: {fileID: 11400000, guid: be439c1712086cc4eb47a854b63c7824, type: 2}
   _wireAvailableUI: {fileID: 1036290863}
   _wirePointOffset: 2
-  _playerStateText: {fileID: 1967635701}
+  _stateText: {fileID: 1967635701}
   _assassinationData: {fileID: 11400000, guid: c3d73802406926c4eb7883edbc33bd52, type: 2}
   _gravityMultiplier: 1
 --- !u!1 &2123609876
