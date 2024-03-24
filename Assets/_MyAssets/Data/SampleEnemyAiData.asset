@@ -15,15 +15,15 @@ MonoBehaviour:
   perceptionDistance: 15
   perceptionAngle: 67
   perceptionRanges:
-  - rangeRatio: 10
+  - rangePercent: 10
     gaugeIncrementPerSecond: 1000
-  - rangeRatio: 30
+  - rangePercent: 30
     gaugeIncrementPerSecond: 300
-  - rangeRatio: 60
+  - rangePercent: 60
     gaugeIncrementPerSecond: 100
-  - rangeRatio: 90
+  - rangePercent: 90
     gaugeIncrementPerSecond: 80
-  - rangeRatio: 100
+  - rangePercent: 100
     gaugeIncrementPerSecond: 50
   moveSpeed: 1
   moveRange: 17

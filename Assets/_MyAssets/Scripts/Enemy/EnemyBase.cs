@@ -83,7 +83,7 @@ public class EnemyBase : MonoBehaviour
 
         for (int i = 0; i < _aiData.perceptionRanges.Count; i++)
         {
-            if (distanceRatio <= _aiData.perceptionRanges[i].rangeRatio / 100)
+            if (distanceRatio <= _aiData.perceptionRanges[i].rangePercent / 100)
             {
                 return _aiData.perceptionRanges[i].gaugeIncrementPerSecond * Time.deltaTime;
             }
@@ -103,7 +103,7 @@ public class EnemyBase : MonoBehaviour
         Handles.color = Color.gray;
         for (int i = 0; i < _aiData.perceptionRanges.Count - 1; i++) // 마지막 와이어는 따로 그림
         {
-            Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, 360, _aiData.perceptionRanges[i].rangeRatio * _aiData.perceptionDistance / 100);
+            Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, 360, _aiData.perceptionRanges[i].rangePercent * _aiData.perceptionDistance / 100);
         }
 
         Handles.DrawWireArc(
