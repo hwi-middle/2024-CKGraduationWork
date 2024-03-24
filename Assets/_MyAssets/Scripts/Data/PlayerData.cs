@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewPlayerBaseData", menuName = "Scriptable Object Asset/Player Base Data")]
-public class PlayerBaseData : ScriptableObject
+[CreateAssetMenu(fileName = "NewPlayerData", menuName = "Scriptable Object Asset/Player Data")]
+public class PlayerData : ScriptableObject
 {
     [Header("플레이어 체력")]
     [Tooltip("정수형 플레이어 체력")] public int playerHp;
-    
+
     [Header("플레이어 이동")]
     [Tooltip("걷기 속도")] public float walkSpeed;
 
     [Tooltip("달리기 속도")] public float runSpeed;
-    
+
     [Tooltip("점프 높이")] public float jumpHeight;
     [Tooltip("y 이동 속도 (일반 이동 속도와 분리하기 위함)")] public float yMultiplier;
-    
+
     [Tooltip("앉기 속도")] public float crouchSpeed;
 
     [Tooltip("벽 이동 속도")] public float wallMoveSpeed;

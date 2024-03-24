@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 [Flags]
 public enum EPlayerState
@@ -29,7 +30,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private PlayerWireData _wireData;
 
     [Header("Player Base Data")]
-    [SerializeField] private PlayerBaseData _baseData;
+    [SerializeField] private PlayerData _playerData;
 
     [Header("WirePoint Variable")]
     [SerializeField] private GameObject _wireAvailableUI;
@@ -102,7 +103,7 @@ public class PlayerMove : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        _hp = _baseData.playerHp;
+        _hp = _playerData.playerHp;
     }
 
     protected virtual void Update()
@@ -196,7 +197,7 @@ public class PlayerMove : MonoBehaviour
             _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive | (int)EPlayerState.Sliding;
             _velocity = _slideVelocity;
             _velocity.y += _yVelocity;
-            _controller.Move(_baseData.slopeSlideSpeed * Time.deltaTime * _velocity);
+            _controller.Move(_playerData.slopeSlideSpeed * Time.deltaTime * _velocity);
             return;
         }
 
@@ -217,20 +218,20 @@ public class PlayerMove : MonoBehaviour
     {
         if (CheckPlayerState(EPlayerState.Run))
         {
-            _playerApplySpeed = _baseData.runSpeed;
+            _playerApplySpeed = _playerData.runSpeed;
         }
         else if (CheckPlayerState(EPlayerState.Crouch))
         {
-            _playerApplySpeed = _baseData.crouchSpeed;
+            _playerApplySpeed = _playerData.crouchSpeed;
         }
         else
         {
-            _playerApplySpeed = _baseData.walkSpeed;
+            _playerApplySpeed = _playerData.walkSpeed;
         }
         
         _velocity.x *= _playerApplySpeed;
         _velocity.z *= _playerApplySpeed;
-        _velocity.y *= _baseData.yMultiplier;
+        _velocity.y *= _playerData.yMultiplier;
     }
 
     private void ApplyGravity()
@@ -321,7 +322,7 @@ public class PlayerMove : MonoBehaviour
     protected void PerformJump()
     {
         AddPlayerState(EPlayerState.Jump);
-        _yVelocity += _baseData.jumpHeight;
+        _yVelocity += _playerData.jumpHeight;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
