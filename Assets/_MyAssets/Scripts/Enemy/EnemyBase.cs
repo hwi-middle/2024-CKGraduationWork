@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -51,8 +52,16 @@ public class EnemyBase : MonoBehaviour
 
     private void OnDestroy()
     {
-        StopCoroutine(_patrolRoutine);
-        Destroy(_perceptionNote.gameObject);
+        if (_patrolRoutine != null)
+        {
+            StopCoroutine(_patrolRoutine);
+            _patrolRoutine = null;
+        }
+
+        if (_perceptionNote != null)
+        {
+            Destroy(_perceptionNote.gameObject);
+        }
     }
 
     private void DetectPlayer()
@@ -66,7 +75,11 @@ public class EnemyBase : MonoBehaviour
             _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
             if (Mathf.Approximately(_perceptionGauge, 100f))
             {
-                StopCoroutine(_patrolRoutine);
+                if (_patrolRoutine != null)
+                {
+                    StopCoroutine(_patrolRoutine);
+                    _patrolRoutine = null;
+                }
                 _navMeshAgent.SetDestination(_foundPlayer.position);
             }
         }
@@ -77,7 +90,11 @@ public class EnemyBase : MonoBehaviour
             {
                 _perceptionGauge -= _aiData.gaugeDecrementPerSecond * Time.deltaTime;
                 _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
-
+            }
+            
+            if (_patrolRoutine == null && Mathf.Approximately(_perceptionGauge, 0f))
+            {
+                Patrol();
             }
         }
     }
@@ -91,6 +108,7 @@ public class EnemyBase : MonoBehaviour
             result = null;
             return false;
         }
+        
         Transform overlappedPlayer = _overlappedPlayerBuffer[0].transform;
         Debug.Assert(overlappedPlayer != null);
 
