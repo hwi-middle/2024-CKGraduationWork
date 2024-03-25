@@ -31,6 +31,7 @@ public class WireLineDrawHelper : Singleton<WireLineDrawHelper>
     public void Draw(Vector3 startPosition, Vector3 targetPosition)
     {
         _line.positionCount = 2;
+        startPosition.y += 0.5f;
         _line.SetPosition(0, startPosition);
         _line.SetPosition(1, targetPosition);
     }
