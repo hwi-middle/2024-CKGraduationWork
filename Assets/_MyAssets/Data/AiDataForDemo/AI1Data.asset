@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccfb3b0dcd218467c942c6e05326d52e, type: 3}
+  m_Name: AI1Data
+  m_EditorClassIdentifier: 
+  perceptionDistance: 8.8
+  perceptionAngle: 88
+  perceptionRanges:
+  - rangePercent: 10
+    gaugeIncrementPerSecond: 1000
+  - rangePercent: 30
+    gaugeIncrementPerSecond: 300
+  - rangePercent: 60
+    gaugeIncrementPerSecond: 100
+  - rangePercent: 90
+    gaugeIncrementPerSecond: 80
+  - rangePercent: 100
+    gaugeIncrementPerSecond: 50
+  gaugeDecreaseStartTime: 2
+  gaugeDecrementPerSecond: 50
+  moveSpeed: 2
+  moveRange: 17
