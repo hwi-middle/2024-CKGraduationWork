@@ -10,6 +10,7 @@ public class EnemyBase : MonoBehaviour
 {
     [SerializeField] private EnemyAiData _aiData;
     [SerializeField] private Transform _patrolPointsRoot;
+    [SerializeField] private Canvas _canvas;
 
     private float _perceptionGauge = 0f;
     private Vector3 _moveRangeCenterPos;
@@ -18,12 +19,13 @@ public class EnemyBase : MonoBehaviour
     private Transform _foundPlayer;
     private NavMeshAgent _navMeshAgent;
     private IEnumerator _patrolRoutine;
-
+    private PerceptionNote _perceptionNote;
+    
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
-        var perceptionNote = Instantiate(Resources.Load("PerceptionNote/PerceptionNote"), FindObjectOfType<Canvas>().transform).GetComponent<PerceptionNote>();
-        perceptionNote.owner = this;
+        _perceptionNote = Instantiate(Resources.Load("PerceptionNote/PerceptionNote"), _canvas.transform).GetComponent<PerceptionNote>();
+        _perceptionNote.owner = this;
         _moveRangeCenterPos = transform.position;
     }
 
@@ -46,6 +48,12 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        StopCoroutine(_patrolRoutine);
+        Destroy(_perceptionNote.gameObject);
+    }
+
     private void DetectPlayer()
     {
         int bufferCount = Physics.OverlapSphereNonAlloc(transform.position, _aiData.perceptionDistance, _overlappedPlayerBuffer, LayerMask.GetMask("Player"));
@@ -60,6 +68,17 @@ public class EnemyBase : MonoBehaviour
 
         Vector3 direction = (overlappedPlayer.position - transform.position).normalized;
         if (Vector3.Dot(direction, transform.forward) < Mathf.Cos(_aiData.perceptionAngle * 0.5f * Mathf.Deg2Rad))
+        {
+            _foundPlayer = null;
+            return;
+        }
+        
+        // 나(AI)와 플레이어 사이에 장애물이 있는지 확인
+        Vector3 rayDirection = (overlappedPlayer.position - transform.position).normalized;
+        Ray ray = new Ray(transform.position, rayDirection);
+
+        Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity);
+        if (!hit.transform.CompareTag("Player"))
         {
             _foundPlayer = null;
             return;
@@ -150,7 +169,7 @@ public class EnemyBase : MonoBehaviour
                 while (remainingDistance > _navMeshAgent.stoppingDistance)
                 {
                     remainingDistance = _navMeshAgent.pathPending ? Vector3.Distance(transform.position, targetPos) : _navMeshAgent.remainingDistance;
-                    yield return null;
+                    yield return new WaitForEndOfFrame();
                 }
             }
         }

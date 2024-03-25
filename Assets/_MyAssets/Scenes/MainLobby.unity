@@ -657,8 +657,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d3ba6e7388432044bb0e8a164053f61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bgmAudioSource: {fileID: 0}
-  _seAudioSource: {fileID: 0}
   _versionText: {fileID: 1070075342}
   _warningText: {fileID: 1073744082}
 --- !u!4 &1281405470

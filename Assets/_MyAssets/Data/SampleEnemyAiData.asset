@@ -25,5 +25,5 @@ MonoBehaviour:
     gaugeIncrementPerSecond: 80
   - rangePercent: 100
     gaugeIncrementPerSecond: 50
-  moveSpeed: 1
+  moveSpeed: 5
   moveRange: 17

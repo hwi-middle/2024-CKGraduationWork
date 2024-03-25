@@ -641,6 +641,9 @@ public class PlayerMove : MonoBehaviour
             yield return null;
             t += Time.deltaTime;
         }
+        
+        // 임시 암살 처리
+        Destroy(_assassinationTarget.gameObject);
 
         // TODO: 실제 적에게 데미지를 입혀야함
 

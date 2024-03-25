@@ -59,6 +59,9 @@ public class PerceptionNote : MonoBehaviour
 
     private void UpdatePerceptionGaugePosition()
     {
-        _bgImage.transform.position = _mainCamera.WorldToScreenPoint(owner.transform.position + Vector3.up * 2f);
+        Vector3 screenPoint = _mainCamera.WorldToScreenPoint(owner.transform.position + Vector3.up * 2f);
+        _bgImage.enabled = screenPoint.z > 0 && _bgImage.enabled;
+        _fillImage.enabled = screenPoint.z > 0 && _fillImage.enabled;
+        _bgImage.transform.position = screenPoint;
     }
 }
