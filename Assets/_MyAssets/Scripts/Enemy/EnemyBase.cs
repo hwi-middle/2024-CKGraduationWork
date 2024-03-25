@@ -20,7 +20,8 @@ public class EnemyBase : MonoBehaviour
     private NavMeshAgent _navMeshAgent;
     private IEnumerator _patrolRoutine;
     private PerceptionNote _perceptionNote;
-    
+    private float _timeAfterPlayerOutOfSight = 0f;
+
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -56,12 +57,39 @@ public class EnemyBase : MonoBehaviour
 
     private void DetectPlayer()
     {
+        if (IsPlayerOnSight(out _foundPlayer))
+        {
+            Debug.Assert(_foundPlayer != null);
+            _timeAfterPlayerOutOfSight = 0f;
+            float distance = Vector3.Distance(transform.position, _foundPlayer.position);
+            _perceptionGauge += GetPerceptionGaugeIncrement(distance);
+            _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
+            if (Mathf.Approximately(_perceptionGauge, 100f))
+            {
+                StopCoroutine(_patrolRoutine);
+                _navMeshAgent.SetDestination(_foundPlayer.position);
+            }
+        }
+        else if (_perceptionGauge > 0f)
+        {
+            _timeAfterPlayerOutOfSight += Time.deltaTime;
+            if (_timeAfterPlayerOutOfSight >= _aiData.gaugeDecreaseStartTime)
+            {
+                _perceptionGauge -= _aiData.gaugeDecrementPerSecond * Time.deltaTime;
+                _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
+
+            }
+        }
+    }
+
+    private bool IsPlayerOnSight(out Transform result)
+    {
         int bufferCount = Physics.OverlapSphereNonAlloc(transform.position, _aiData.perceptionDistance, _overlappedPlayerBuffer, LayerMask.GetMask("Player"));
         Debug.Assert(bufferCount is 0 or 1);
         if (bufferCount == 0)
         {
-            _foundPlayer = null;
-            return;
+            result = null;
+            return false;
         }
         Transform overlappedPlayer = _overlappedPlayerBuffer[0].transform;
         Debug.Assert(overlappedPlayer != null);
@@ -69,10 +97,10 @@ public class EnemyBase : MonoBehaviour
         Vector3 direction = (overlappedPlayer.position - transform.position).normalized;
         if (Vector3.Dot(direction, transform.forward) < Mathf.Cos(_aiData.perceptionAngle * 0.5f * Mathf.Deg2Rad))
         {
-            _foundPlayer = null;
-            return;
+            result = null;
+            return false;
         }
-        
+
         // 나(AI)와 플레이어 사이에 장애물이 있는지 확인
         Vector3 rayDirection = (overlappedPlayer.position - transform.position).normalized;
         Ray ray = new Ray(transform.position, rayDirection);
@@ -80,20 +108,13 @@ public class EnemyBase : MonoBehaviour
         Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity);
         if (!hit.transform.CompareTag("Player"))
         {
-            _foundPlayer = null;
-            return;
+            result = null;
+            return false;
         }
 
         // 시야에 플레이어가 들어옴
-        _foundPlayer = overlappedPlayer;
-        float distance = Vector3.Distance(transform.position, overlappedPlayer.position);
-        _perceptionGauge += GetPerceptionGaugeIncrement(distance);
-        _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
-        if (Mathf.Approximately(_perceptionGauge, 100f))
-        {
-            StopCoroutine(_patrolRoutine);
-            _navMeshAgent.SetDestination(overlappedPlayer.position);
-        }
+        result = overlappedPlayer;
+        return true;
     }
 
     private float GetPerceptionGaugeIncrement(float distanceToPlayer)
@@ -122,7 +143,8 @@ public class EnemyBase : MonoBehaviour
         Handles.color = Color.gray;
         for (int i = 0; i < _aiData.perceptionRanges.Count - 1; i++) // 마지막 와이어는 따로 그림
         {
-            Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, 360, _aiData.perceptionRanges[i].rangePercent * _aiData.perceptionDistance / 100);
+            Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, 360,
+                _aiData.perceptionRanges[i].rangePercent * _aiData.perceptionDistance / 100);
         }
 
         Handles.DrawWireArc(
