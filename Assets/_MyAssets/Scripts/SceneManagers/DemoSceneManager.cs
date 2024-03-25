@@ -34,11 +34,20 @@ public class DemoSceneManager : SceneManagerBase
         if (_isPaused)
         {
             _settingCanvas = Instantiate(Resources.Load<GameObject>("SettingCanvas"));
-            _settingCanvas.GetComponent<Canvas>().sortingOrder = 10;
+
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            
             Time.timeScale = 0.0f;
             return;
         }
 
+        if (SceneManager.GetActiveScene().name != "MainMenu")
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        
         Destroy(_settingCanvas);
         Time.timeScale = 1.0f;
     }
