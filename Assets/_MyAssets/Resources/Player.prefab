@@ -149,7 +149,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6758291253464975337}
         m_TargetAssemblyTypeName: PlayerMove, Assembly-CSharp
-        m_MethodName: OnWireButtonClick
+        m_MethodName: OnWireAction
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

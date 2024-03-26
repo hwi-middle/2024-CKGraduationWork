@@ -478,7 +478,7 @@ public class PlayerMove : MonoBehaviour
         _wireAvailableUiRectTransform.position = wireScreenPoint;
     }
 
-    public void OnWireButtonClick(InputAction.CallbackContext context)
+    public void OnWireAction(InputAction.CallbackContext context)
     {
         if (!context.started)
         {
@@ -505,7 +505,10 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        PerformJump();
+        if (IsGrounded)
+        {
+            PerformJump();
+        }
         
         _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
 
