@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,12 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     public const float DEFAULT_FADE_DURATION = 0.5f;
     public bool IsFading { get; private set; }
-    
+
+    protected virtual void Awake()
+    {
+        GetSettingsValueAndApply();
+    }
+
     protected virtual void Start()
     {
         Instantiate(Resources.Load<GameObject>("FadeCanvas"));
@@ -24,6 +30,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         _settingCanvas = Instantiate(Resources.Load<GameObject>("SettingCanvas"));
         _settingCanvas.SetActive(false);
         _isPaused = false;
+        
     }
 
     protected virtual void Update()
@@ -39,6 +46,27 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     public void FadeOut(float duration, float delay = 0f, bool ignoreAudio = false)
     {
         StartCoroutine(FadeOutRoutine(duration, delay, ignoreAudio));
+    }
+
+    private void GetSettingsValueAndApply()
+    {
+        // 해상도
+        int width = PlayerPrefs.GetInt(PlayerPrefsKeyNames.RESOLUTION_WIDTH, Screen.width);
+        int height = PlayerPrefs.GetInt(PlayerPrefsKeyNames.RESOLUTION_HEIGHT, Screen.height);
+        var fullScreenMode = (FullScreenMode)PlayerPrefs.GetInt(PlayerPrefsKeyNames.DISPLAY_MODE,
+            (int)FullScreenMode.ExclusiveFullScreen);
+        
+        int refreshRate = PlayerPrefs.GetInt(PlayerPrefsKeyNames.RESOLUTION_REFRESH_RATE,
+            Mathf.RoundToInt((float)Screen.currentResolution.refreshRateRatio.value));
+        Screen.SetResolution(width, height, fullScreenMode, new RefreshRate()
+        {
+            numerator = (uint)refreshRate,
+            denominator = 1U,
+        });
+        
+        // 텍스처 품질
+        QualitySettings.globalTextureMipmapLimit = PlayerPrefs.GetInt(PlayerPrefsKeyNames.TEXTURE_QUALITY, 0);
+        
     }
 
     public void OnPause(InputAction.CallbackContext context)
@@ -68,9 +96,19 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
             Cursor.lockState = CursorLockMode.None;
             return;
         }
+
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            return;
+        }
         
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void OnGUI()
+    {
+        GUI.Box(new Rect(0, 0, 100, 50), Screen.fullScreenMode.ToString());
     }
 
 
