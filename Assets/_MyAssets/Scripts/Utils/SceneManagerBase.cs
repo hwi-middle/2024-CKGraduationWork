@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 {
+    protected GameObject _settingCanvas;
+    private bool _isPaused;
+    
     private SceneFadeManager _fadeManager;
 
     public const float DEFAULT_FADE_DURATION = 0.5f;
@@ -16,6 +20,10 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         Instantiate(Resources.Load<GameObject>("FadeCanvas"));
         _fadeManager = SceneFadeManager.Instance;
         _fadeManager.GetComponent<Image>().enabled = true;
+
+        _settingCanvas = Instantiate(Resources.Load<GameObject>("SettingCanvas"));
+        _settingCanvas.SetActive(false);
+        _isPaused = false;
     }
 
     protected virtual void Update()
@@ -31,6 +39,38 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     public void FadeOut(float duration, float delay = 0f, bool ignoreAudio = false)
     {
         StartCoroutine(FadeOutRoutine(duration, delay, ignoreAudio));
+    }
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (!context.started || IsFading)
+        {
+            return;
+        }
+        
+        UpdateSettingSceneEnable();
+    }
+
+    private void UpdateSettingSceneEnable()
+    {
+        _isPaused = !_isPaused;
+        
+        _settingCanvas.SetActive(_isPaused);
+        UpdateCursorVisible();
+        Time.timeScale = _isPaused ? 0.0f : 1.0f;
+    }
+
+    private void UpdateCursorVisible()
+    {
+        if (_settingCanvas.activeSelf)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            return;
+        }
+        
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
 

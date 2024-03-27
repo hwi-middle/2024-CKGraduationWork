@@ -255,19 +255,7 @@ MonoBehaviour:
     m_ActionId: 9c0a6b18-ce2b-45b3-b0ff-aa956f6fb92b
     m_ActionName: PlayerAction/Crouch[/Keyboard/c]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DemoSceneManager, Assembly-CSharp
-        m_MethodName: OnPause
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: e890f7ba-64cc-410b-9e09-488a0d2492e4
     m_ActionName: PlayerAction/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
