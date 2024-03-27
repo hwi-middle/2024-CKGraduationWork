@@ -24,6 +24,7 @@ public enum EPlayerState
 
 public class PlayerMove : MonoBehaviour
 {
+    [SerializeField] private PlayerInputData _inputData;
     private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
 
     [Header("Player Wire Data")]
@@ -95,6 +96,17 @@ public class PlayerMove : MonoBehaviour
         _camera = Camera.main;
     }
 
+    private void OnEnable()
+    {
+        _inputData.moveEvent += MoveAction;
+        _inputData.jumpEvent += JumpAction;
+        _inputData.runEvent += RunAction;
+        _inputData.runQuitEvent += QuitRunAction;
+        _inputData.assassinateEvent += AssassinateAction;
+        _inputData.wireEvent += WireAction;
+        _inputData.crouchEvent += CrouchAction;
+    }
+
     private void Start()
     {
         Debug.Assert(_controller != null, "_controller !=null");
@@ -105,6 +117,8 @@ public class PlayerMove : MonoBehaviour
 
         _hp = _playerData.playerHp;
     }
+
+    
 
     protected virtual void Update()
     {
@@ -282,30 +296,27 @@ public class PlayerMove : MonoBehaviour
         _currentState &= ~(int)state;
     }
 
-    public void OnMove(InputAction.CallbackContext context)
+    private void MoveAction(Vector2 pos)
     {
         if (IsOnWire)
         {
             return;
         }
-        
-        Vector2 input = context.ReadValue<Vector2>();
 
-        _inputDirection = new Vector3(input.x, 0, input.y);
+        _inputDirection = new Vector3(pos.x, 0, pos.y);
 
         if (_inputDirection.sqrMagnitude == 0)
         {
             RemovePlayerState(EPlayerState.Walk);
-            RemovePlayerState(EPlayerState.Run);
             return;
         }
         
         AddPlayerState(EPlayerState.Walk);
     }
 
-    public void OnJump(InputAction.CallbackContext context)
+    private void JumpAction()
     {
-        if (!context.started || !IsGrounded || _isSliding)
+        if (!IsGrounded || _isSliding)
         {
             return;
         }
@@ -478,13 +489,8 @@ public class PlayerMove : MonoBehaviour
         _wireAvailableUiRectTransform.position = wireScreenPoint;
     }
 
-    public void OnWireAction(InputAction.CallbackContext context)
+    private void WireAction()
     {
-        if (!context.started)
-        {
-            return;
-        }
-
         if (!CanHangWireToWirePoint())
         {
             return;
@@ -551,9 +557,9 @@ public class PlayerMove : MonoBehaviour
         _wireActionRoutine = null;
     }
 
-    public void OnAssassinateKeyDown(InputAction.CallbackContext context)
+    private void AssassinateAction()
     {
-        if (!context.started || _assassinationTarget == null)
+        if (_assassinationTarget == null)
         {
             return;
         }
@@ -653,21 +659,11 @@ public class PlayerMove : MonoBehaviour
         _isAssassinating = false;
     }
 
-    public void OnRun(InputAction.CallbackContext context)
+    private void RunAction()
     {
-        if (context.canceled || !CheckPlayerState(EPlayerState.Walk))
+        if (CheckPlayerState(EPlayerState.Jump))
         {
             RemovePlayerState(EPlayerState.Run);
-            return;
-        }
-
-        if (context.performed)
-        {
-            return;
-        }
-
-        if (!IsGrounded)
-        {
             return;
         }
 
@@ -676,9 +672,14 @@ public class PlayerMove : MonoBehaviour
         AddPlayerState(EPlayerState.Run);
     }
 
-    public void OnCrouch(InputAction.CallbackContext context)
+    private void QuitRunAction()
     {
-        if (!context.started || !IsGrounded || CheckPlayerState(EPlayerState.Run))
+        RemovePlayerState(EPlayerState.Run);
+    }
+
+    private void CrouchAction()
+    {
+        if (!IsGrounded || CheckPlayerState(EPlayerState.Run))
         {
             return;
         }

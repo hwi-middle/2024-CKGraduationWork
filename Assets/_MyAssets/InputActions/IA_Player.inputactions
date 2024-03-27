@@ -1,5 +1,5 @@
 {
-    "name": "IA_PlayerMove",
+    "name": "IA_Player",
     "maps": [
         {
             "name": "PlayerAction",
@@ -54,6 +54,15 @@
                     "name": "Crouch",
                     "type": "Button",
                     "id": "9c0a6b18-ce2b-45b3-b0ff-aa956f6fb92b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "a6dd7ce0-5411-40e0-bc20-5bfdf10c3dca",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -168,6 +177,17 @@
                     "processors": "",
                     "groups": "PC",
                     "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7b1ca869-bee7-4328-a0d5-f08feeecd14f",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

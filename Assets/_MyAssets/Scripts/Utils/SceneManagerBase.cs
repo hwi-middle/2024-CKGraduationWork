@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,11 +7,17 @@ using UnityEngine.UI;
 
 public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 {
+    [SerializeField] private PlayerInputData _inputData;
     private SceneFadeManager _fadeManager;
 
     public const float DEFAULT_FADE_DURATION = 0.5f;
     public bool IsFading { get; private set; }
-    
+
+    protected virtual void OnEnable()
+    {
+        _inputData.pauseEvent += PauseAction;
+    }
+
     protected virtual void Start()
     {
         Instantiate(Resources.Load<GameObject>("FadeCanvas"));
@@ -20,6 +27,12 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     protected virtual void Update()
     {
+    }
+
+    private void PauseAction()
+    {
+        // Floating Setting Canvas
+        Debug.Log("Canvas Floating");
     }
 
 

@@ -209,6 +209,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 9c0a6b18-ce2b-45b3-b0ff-aa956f6fb92b
     m_ActionName: PlayerAction/Crouch[/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a6dd7ce0-5411-40e0-bc20-5bfdf10c3dca
+    m_ActionName: PlayerAction/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: PlayerAction
@@ -252,6 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bd6f0742bb8d4658a39bff07e218320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
   _wireData: {fileID: 11400000, guid: 514498b1264fa4ad9a0a5976151dab49, type: 2}
   _playerData: {fileID: 11400000, guid: be439c1712086cc4eb47a854b63c7824, type: 2}
   _wireAvailableUI: {fileID: 0}

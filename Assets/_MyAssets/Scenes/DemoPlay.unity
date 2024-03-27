@@ -4895,12 +4895,12 @@ PrefabInstance:
     - target: {fileID: 2565479048514638535, guid: 8e19267338431d941b626d4717bee39f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.077648155
+      value: 0.077648126
       objectReference: {fileID: 0}
     - target: {fileID: 2565479048514638535, guid: 8e19267338431d941b626d4717bee39f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.027817376
+      value: -0.027817365
       objectReference: {fileID: 0}
     - target: {fileID: 2601342945410787353, guid: 8e19267338431d941b626d4717bee39f,
         type: 3}
@@ -5294,6 +5294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f52f8883f554ef44a62a152d16e468a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
 --- !u!1 &1251614125
 GameObject:
   m_ObjectHideFlags: 0
@@ -5574,6 +5575,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6758291253464975337, guid: c15fb3bacbc3eeb4faf735346822b598,
         type: 3}
+      propertyPath: _inputData
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3,
+        type: 2}
+    - target: {fileID: 6758291253464975337, guid: c15fb3bacbc3eeb4faf735346822b598,
+        type: 3}
       propertyPath: _stateText
       value: 
       objectReference: {fileID: 834287048}
@@ -5587,7 +5594,8 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8921940348029189816, guid: c15fb3bacbc3eeb4faf735346822b598, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 952807635923001292, guid: c15fb3bacbc3eeb4faf735346822b598,
