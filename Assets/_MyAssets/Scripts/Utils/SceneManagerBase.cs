@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Cursor = UnityEngine.Cursor;
+using Image = UnityEngine.UI.Image;
 
 public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 {
@@ -105,12 +107,6 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
-
-    private void OnGUI()
-    {
-        GUI.Box(new Rect(0, 0, 100, 50), Screen.fullScreenMode.ToString());
-    }
-
 
     private IEnumerator FadeInRoutine(float duration, float delay, bool ignoreAudio)
     {
