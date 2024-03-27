@@ -98,13 +98,13 @@ public class PlayerMove : MonoBehaviour
 
     private void OnEnable()
     {
-        _inputData.moveEvent += MoveAction;
-        _inputData.jumpEvent += JumpAction;
-        _inputData.runEvent += RunAction;
-        _inputData.runQuitEvent += QuitRunAction;
-        _inputData.assassinateEvent += AssassinateAction;
-        _inputData.wireEvent += WireAction;
-        _inputData.crouchEvent += CrouchAction;
+        _inputData.moveEvent += HandleMoveAction;
+        _inputData.jumpEvent += HandleJumpAction;
+        _inputData.runEvent += HandleRunAction;
+        _inputData.runQuitEvent += HandleQuitRunAction;
+        _inputData.assassinateEvent += HandleAssassinateAction;
+        _inputData.wireEvent += HandleWireAction;
+        _inputData.crouchEvent += HandleCrouchAction;
     }
 
     private void Start()
@@ -296,7 +296,7 @@ public class PlayerMove : MonoBehaviour
         _currentState &= ~(int)state;
     }
 
-    private void MoveAction(Vector2 pos)
+    private void HandleMoveAction(Vector2 pos)
     {
         if (IsOnWire)
         {
@@ -314,7 +314,7 @@ public class PlayerMove : MonoBehaviour
         AddPlayerState(EPlayerState.Walk);
     }
 
-    private void JumpAction()
+    private void HandleJumpAction()
     {
         if (!IsGrounded || _isSliding)
         {
@@ -489,7 +489,7 @@ public class PlayerMove : MonoBehaviour
         _wireAvailableUiRectTransform.position = wireScreenPoint;
     }
 
-    private void WireAction()
+    private void HandleWireAction()
     {
         if (!CanHangWireToWirePoint())
         {
@@ -557,7 +557,7 @@ public class PlayerMove : MonoBehaviour
         _wireActionRoutine = null;
     }
 
-    private void AssassinateAction()
+    private void HandleAssassinateAction()
     {
         if (_assassinationTarget == null)
         {
@@ -659,7 +659,7 @@ public class PlayerMove : MonoBehaviour
         _isAssassinating = false;
     }
 
-    private void RunAction()
+    private void HandleRunAction()
     {
         if (CheckPlayerState(EPlayerState.Jump))
         {
@@ -672,12 +672,12 @@ public class PlayerMove : MonoBehaviour
         AddPlayerState(EPlayerState.Run);
     }
 
-    private void QuitRunAction()
+    private void HandleQuitRunAction()
     {
         RemovePlayerState(EPlayerState.Run);
     }
 
-    private void CrouchAction()
+    private void HandleCrouchAction()
     {
         if (!IsGrounded || CheckPlayerState(EPlayerState.Run))
         {
