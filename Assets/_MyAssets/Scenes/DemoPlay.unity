@@ -2498,17 +2498,17 @@ PrefabInstance:
     - target: {fileID: 2565479048514638535, guid: 8e19267338431d941b626d4717bee39f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.33611068
+      value: 0.33611065
       objectReference: {fileID: 0}
     - target: {fileID: 2565479048514638535, guid: 8e19267338431d941b626d4717bee39f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.07764815
+      value: 0.077648155
       objectReference: {fileID: 0}
     - target: {fileID: 2565479048514638535, guid: 8e19267338431d941b626d4717bee39f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.027817378
+      value: -0.027817376
       objectReference: {fileID: 0}
     - target: {fileID: 2601342945410787353, guid: 8e19267338431d941b626d4717bee39f,
         type: 3}
@@ -2758,7 +2758,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1198418156}
   - component: {fileID: 1198418157}
-  - component: {fileID: 1198418158}
   m_Layer: 0
   m_Name: '@SceneManager'
   m_TagString: Untagged
@@ -2793,77 +2792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f52f8883f554ef44a62a152d16e468a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1198418158
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1198418155}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: fc5fe568ab7bf0347a4dbdf0db6b99c5,
-    type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 7eff2f9d-daf2-46af-b36b-655cfab95cbe
-    m_ActionName: PlayerAction/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: c9fafe89-4a67-4523-b9da-2c84f891dbb7
-    m_ActionName: PlayerAction/Run[/Keyboard/leftShift]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 30834a8a-5b3d-466c-a882-ff8aeb9c1e81
-    m_ActionName: PlayerAction/Jump[/Keyboard/space]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: a8213568-675a-4e6f-9131-535bee700080
-    m_ActionName: PlayerAction/Wire[/Mouse/middleButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: c806ddfd-84d4-4e85-a89f-bef7e0450b60
-    m_ActionName: PlayerAction/Assassinate[/Keyboard/q]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 9c0a6b18-ce2b-45b3-b0ff-aa956f6fb92b
-    m_ActionName: PlayerAction/Crouch[/Keyboard/c]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1198418157}
-        m_TargetAssemblyTypeName: SceneManagerBase, Assembly-CSharp
-        m_MethodName: OnPause
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: e890f7ba-64cc-410b-9e09-488a0d2492e4
-    m_ActionName: PlayerAction/Pause[/Keyboard/escape]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: PC
-  m_DefaultActionMap: PlayerAction
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
+  _cursorLock: 1
 --- !u!1001 &1285081770
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2921,6 +2850,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057610488458436599, guid: c15fb3bacbc3eeb4faf735346822b598,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057610488458436599, guid: c15fb3bacbc3eeb4faf735346822b598,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057610488458436599, guid: c15fb3bacbc3eeb4faf735346822b598,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1198418157}
+    - target: {fileID: 2057610488458436599, guid: c15fb3bacbc3eeb4faf735346822b598,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057610488458436599, guid: c15fb3bacbc3eeb4faf735346822b598,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnPause
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057610488458436599, guid: c15fb3bacbc3eeb4faf735346822b598,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SceneManagerBase, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057610488458436599, guid: c15fb3bacbc3eeb4faf735346822b598,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 4038294084710725459, guid: c15fb3bacbc3eeb4faf735346822b598,
         type: 3}

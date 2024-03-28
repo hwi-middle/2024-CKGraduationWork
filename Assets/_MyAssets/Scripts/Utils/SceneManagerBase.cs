@@ -10,6 +10,7 @@ using Image = UnityEngine.UI.Image;
 
 public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 {
+    [SerializeField] private bool _cursorLock;
     protected GameObject _settingCanvas;
     private bool _isPaused;
     
@@ -32,7 +33,6 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         _settingCanvas = Instantiate(Resources.Load<GameObject>("SettingCanvas"));
         _settingCanvas.SetActive(false);
         _isPaused = false;
-        
     }
 
     protected virtual void Update()
@@ -78,19 +78,19 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
             return;
         }
         
-        UpdateSettingSceneEnable();
+        ToggleSettingCanvas();
     }
 
-    private void UpdateSettingSceneEnable()
+    private void ToggleSettingCanvas()
     {
         _isPaused = !_isPaused;
         
         _settingCanvas.SetActive(_isPaused);
-        UpdateCursorVisible();
+        ToggleCursorVisible();
         Time.timeScale = _isPaused ? 0.0f : 1.0f;
     }
 
-    private void UpdateCursorVisible()
+    private void ToggleCursorVisible()
     {
         if (_settingCanvas.activeSelf)
         {
@@ -99,7 +99,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
             return;
         }
 
-        if (SceneManager.GetActiveScene().name == "MainMenu")
+        if (!_cursorLock)
         {
             return;
         }
