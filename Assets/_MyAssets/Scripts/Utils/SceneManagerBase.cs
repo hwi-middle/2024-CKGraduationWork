@@ -15,6 +15,9 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     private bool _isPaused;
     
     private SceneFadeManager _fadeManager;
+    private GameObject _settingCanvas;
+
+    private bool _isPaused;
 
     public const float DEFAULT_FADE_DURATION = 0.5f;
     public bool IsFading { get; private set; }
@@ -22,6 +25,16 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     protected virtual void Awake()
     {
         GetSettingsValueAndApply();
+    }
+    
+    protected virtual void OnEnable()
+    {
+        _inputData.pauseEvent += HandlePauseAction;
+    }
+
+    protected void OnDisable()
+    {
+        _inputData.pauseEvent -= HandlePauseAction;
     }
 
     protected virtual void Start()
@@ -37,6 +50,46 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     protected virtual void Update()
     {
+    }
+
+    private void HandlePauseAction()
+    {
+        Debug.Assert(_settingCanvas != null, "_settingCanvas != null");
+        
+        if (IsFading)
+        {
+            return;
+        }
+        
+        ToggleSettingCanvas();
+    }
+    
+    
+    private void ToggleSettingCanvas()
+    {
+        _isPaused = !_isPaused;
+        
+        _settingCanvas.SetActive(_isPaused);
+        ToggleCursorVisible();
+        Time.timeScale = _isPaused ? 0.0f : 1.0f;
+    }
+
+    private void ToggleCursorVisible()
+    {
+        if (_settingCanvas.activeSelf)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            return;
+        }
+
+        if (!_cursorLock)
+        {
+            return;
+        }
+        
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
 
