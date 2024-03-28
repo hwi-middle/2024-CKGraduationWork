@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 952807635923001292}
   - component: {fileID: 5270643608055444727}
   - component: {fileID: 9098471946636948028}
-  - component: {fileID: 8921940348029189816}
   - component: {fileID: 268312942840350826}
   - component: {fileID: 6758291253464975337}
+  - component: {fileID: 2057610488458436599}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -87,7 +87,52 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8921940348029189816
+--- !u!143 &268312942840350826
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4038294084710725459}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6758291253464975337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4038294084710725459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd6f0742bb8d4658a39bff07e218320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wireData: {fileID: 11400000, guid: 514498b1264fa4ad9a0a5976151dab49, type: 2}
+  _playerData: {fileID: 11400000, guid: be439c1712086cc4eb47a854b63c7824, type: 2}
+  _wireAvailableUI: {fileID: 0}
+  _wirePointOffset: 2
+  _stateText: {fileID: 0}
+  _assassinationData: {fileID: 11400000, guid: c3d73802406926c4eb7883edbc33bd52, type: 2}
+  _gravityMultiplier: 1
+--- !u!114 &2057610488458436599
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,6 +174,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 7eff2f9d-daf2-46af-b36b-655cfab95cbe
     m_ActionName: PlayerAction/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6758291253464975337}
+        m_TargetAssemblyTypeName: PlayerMove, Assembly-CSharp
+        m_MethodName: OnRun
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c9fafe89-4a67-4523-b9da-2c84f891dbb7
+    m_ActionName: PlayerAction/Run[/Keyboard/leftShift]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6758291253464975337}
@@ -181,22 +242,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6758291253464975337}
         m_TargetAssemblyTypeName: PlayerMove, Assembly-CSharp
-        m_MethodName: OnRun
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: c9fafe89-4a67-4523-b9da-2c84f891dbb7
-    m_ActionName: PlayerAction/Run[/Keyboard/leftShift]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6758291253464975337}
-        m_TargetAssemblyTypeName: PlayerMove, Assembly-CSharp
         m_MethodName: OnCrouch
         m_Mode: 0
         m_Arguments:
@@ -209,56 +254,15 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 9c0a6b18-ce2b-45b3-b0ff-aa956f6fb92b
     m_ActionName: PlayerAction/Crouch[/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e890f7ba-64cc-410b-9e09-488a0d2492e4
+    m_ActionName: PlayerAction/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: PlayerAction
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!143 &268312942840350826
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4038294084710725459}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6758291253464975337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4038294084710725459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bd6f0742bb8d4658a39bff07e218320, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _wireData: {fileID: 11400000, guid: 514498b1264fa4ad9a0a5976151dab49, type: 2}
-  _playerData: {fileID: 11400000, guid: be439c1712086cc4eb47a854b63c7824, type: 2}
-  _wireAvailableUI: {fileID: 0}
-  _wirePointOffset: 2
-  _stateText: {fileID: 0}
-  _assassinationData: {fileID: 11400000, guid: c3d73802406926c4eb7883edbc33bd52, type: 2}
-  _gravityMultiplier: 1
 --- !u!1 &4715870324114064270
 GameObject:
   m_ObjectHideFlags: 0

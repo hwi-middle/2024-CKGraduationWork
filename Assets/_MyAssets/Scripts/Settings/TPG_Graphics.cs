@@ -115,7 +115,7 @@ public class TPG_Graphics : TabPage
     private void ChangeDisplayMode(EDisplayModeIndex displayModeIndex)
     {
         Screen.fullScreenMode = DisplayModeIndexToFullScreenMode(displayModeIndex);
-        PlayerPrefs.SetInt(PlayerPrefsKeyNames.DISPLAY_MODE, (int)Screen.fullScreenMode);
+        PlayerPrefs.SetInt(PlayerPrefsKeyNames.DISPLAY_MODE, (int)DisplayModeIndexToFullScreenMode(displayModeIndex));
     }
 
     private void ChangeTextureQuality(int index)

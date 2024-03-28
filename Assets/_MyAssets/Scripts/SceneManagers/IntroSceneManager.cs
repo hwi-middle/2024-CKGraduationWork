@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class IntroSceneManager : SceneManagerBase
 {
-    private void Awake()
-    {
-        GetSettingsValueAndApply();
-    }
-
     protected override void Start()
     {
         base.Start();

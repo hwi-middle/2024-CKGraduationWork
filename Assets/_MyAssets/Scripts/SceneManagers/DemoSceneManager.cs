@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class DemoSceneManager : SceneManagerBase
@@ -11,7 +13,7 @@ public class DemoSceneManager : SceneManagerBase
         base.Start();
         FadeIn(0.5f);
     }
-
+    
     protected override void Update()
     {
         base.Update();
