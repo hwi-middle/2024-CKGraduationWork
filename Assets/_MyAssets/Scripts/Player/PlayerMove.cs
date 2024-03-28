@@ -107,6 +107,17 @@ public class PlayerMove : MonoBehaviour
         _inputData.crouchEvent += HandleCrouchAction;
     }
 
+    private void OnDisable()
+    {
+        _inputData.moveEvent -= HandleMoveAction;
+        _inputData.jumpEvent -= HandleJumpAction;
+        _inputData.runEvent -= HandleRunAction;
+        _inputData.runQuitEvent -= HandleQuitRunAction;
+        _inputData.assassinateEvent -= HandleAssassinateAction;
+        _inputData.wireEvent -= HandleWireAction;
+        _inputData.crouchEvent -= HandleCrouchAction;
+    }
+
     private void Start()
     {
         Debug.Assert(_controller != null, "_controller !=null");

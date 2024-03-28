@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
-public class DemoSceneManager : SceneManagerBase
+public class MainMenuSceneManager : SceneManagerBase
 {
     protected override void Start()
     {
