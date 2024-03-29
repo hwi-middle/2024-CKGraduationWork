@@ -10,10 +10,8 @@ using Image = UnityEngine.UI.Image;
 
 public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 {
+    [SerializeField] private PlayerInputData _inputData;
     [SerializeField] private bool _cursorLock;
-    protected GameObject _settingCanvas;
-    private bool _isPaused;
-    
     private SceneFadeManager _fadeManager;
     private GameObject _settingCanvas;
 
@@ -64,7 +62,6 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         ToggleSettingCanvas();
     }
     
-    
     private void ToggleSettingCanvas()
     {
         _isPaused = !_isPaused;
@@ -91,7 +88,6 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
-
 
     public void FadeIn(float duration, float delay = 0f, bool ignoreAudio = false)
     {
@@ -108,6 +104,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         // 해상도
         int width = PlayerPrefs.GetInt(PlayerPrefsKeyNames.RESOLUTION_WIDTH, Screen.width);
         int height = PlayerPrefs.GetInt(PlayerPrefsKeyNames.RESOLUTION_HEIGHT, Screen.height);
+        
         var fullScreenMode = (FullScreenMode)PlayerPrefs.GetInt(PlayerPrefsKeyNames.DISPLAY_MODE,
             (int)FullScreenMode.ExclusiveFullScreen);
         
@@ -121,46 +118,8 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         
         // 텍스처 품질
         QualitySettings.globalTextureMipmapLimit = PlayerPrefs.GetInt(PlayerPrefsKeyNames.TEXTURE_QUALITY, 0);
-        
     }
-
-    public void OnPause(InputAction.CallbackContext context)
-    {
-        if (!context.started || IsFading)
-        {
-            return;
-        }
-        
-        ToggleSettingCanvas();
-    }
-
-    private void ToggleSettingCanvas()
-    {
-        _isPaused = !_isPaused;
-        
-        _settingCanvas.SetActive(_isPaused);
-        ToggleCursorVisible();
-        Time.timeScale = _isPaused ? 0.0f : 1.0f;
-    }
-
-    private void ToggleCursorVisible()
-    {
-        if (_settingCanvas.activeSelf)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            return;
-        }
-
-        if (!_cursorLock)
-        {
-            return;
-        }
-        
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-
+    
     private IEnumerator FadeInRoutine(float duration, float delay, bool ignoreAudio)
     {
         IsFading = true;
