@@ -296,6 +296,7 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    // Animation 관리를 위해 Public
     public bool CheckPlayerState(EPlayerState state)
     {
         return (_currentState & (int)state) != 0;
