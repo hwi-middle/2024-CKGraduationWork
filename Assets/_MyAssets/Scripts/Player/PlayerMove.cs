@@ -9,17 +9,17 @@ using UnityEngine.Serialization;
 [Flags]
 public enum EPlayerState
 {
-    Idle = 0,
-    Walk = 1 << 1,
-    Run = 1 << 2,
-    Crouch = 1 << 3,
-    Jump = 1 << 4,
-    Stealth = 1 << 5,
-    WallMove = 1 << 6,
-    Alive = 1 << 7,
-    Dead = 1 << 8,
-    WireAction = 1 << 9,
-    Sliding = 1 << 10
+    Idle = 1 << 1,
+    Walk = 1 << 2,
+    Run = 1 << 3,
+    Crouch = 1 << 4,
+    Jump = 1 << 5,
+    Stealth = 1 << 6,
+    WallMove = 1 << 7,
+    Alive = 1 << 8,
+    Dead = 1 << 9,
+    WireAction = 1 << 10,
+    Sliding = 1 << 11
 }
 
 public class PlayerMove : MonoBehaviour
@@ -144,18 +144,20 @@ public class PlayerMove : MonoBehaviour
         ShowWirePointUI();
         RotatePlayer();
         MovePlayer();
+        
 
         if (IsGrounded)
         {
             RemovePlayerState(EPlayerState.Jump);
         }
+        
+        UpdatePlayerStateText();
 
         if (!_isAssassinating)
         {
             _assassinationTarget = GetAimingEnemy();
         }
 
-        UpdatePlayerStateText();
     }
 
     private void CheckAndSwitchLifeState()
@@ -221,7 +223,9 @@ public class PlayerMove : MonoBehaviour
         {
             _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive | (int)EPlayerState.Sliding;
             _velocity = _slideVelocity;
-            _velocity.y += _yVelocity;
+            
+            ApplyGravity();
+            
             _controller.Move(_playerData.slopeSlideSpeed * Time.deltaTime * _velocity);
             return;
         }
@@ -261,7 +265,7 @@ public class PlayerMove : MonoBehaviour
 
     private void ApplyGravity()
     {
-        if (IsGrounded && _yVelocity < 0.0f)
+        if (IsGrounded && _yVelocity < 0.0f && !_isSliding)
         {
             _yVelocity = -1.0f;
         }
@@ -281,9 +285,9 @@ public class PlayerMove : MonoBehaviour
     private void UpdatePlayerStateText()
     {
         _stateText.text = "Cur State : ";
-        EPlayerState state = EPlayerState.Idle;
+        EPlayerState state = 0;
 
-        for (int i = 0; i < _stateCount; i++)
+        for (int i = 1; i <= _stateCount; i++)
         {
             if (((1 << i) & _currentState) != 0)
             {
@@ -292,7 +296,7 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    private bool CheckPlayerState(EPlayerState state)
+    public bool CheckPlayerState(EPlayerState state)
     {
         return (_currentState & (int)state) != 0;
     }
@@ -545,6 +549,7 @@ public class PlayerMove : MonoBehaviour
         {
             yield return null;
         }
+        
 
         Vector3 initPos = transform.position;
         float t = 0;
