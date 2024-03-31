@@ -9,6 +9,7 @@ using UnityEngine.Serialization;
 [Flags]
 public enum EPlayerState
 {
+    None = 0,
     Idle = 1 << 1,
     Walk = 1 << 2,
     Run = 1 << 3,
@@ -285,7 +286,7 @@ public class PlayerMove : MonoBehaviour
     private void UpdatePlayerStateText()
     {
         _stateText.text = "Cur State : ";
-        EPlayerState state = 0;
+        EPlayerState state = EPlayerState.None;
 
         for (int i = 1; i <= _stateCount; i++)
         {

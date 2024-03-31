@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimationStates : MonoBehaviour
+public class PlayerAnimationStates : MonoBehaviour
 {
     public static readonly int IDLE = Animator.StringToHash("IsIdle");
     public static readonly int WALK = Animator.StringToHash("IsWalk");
