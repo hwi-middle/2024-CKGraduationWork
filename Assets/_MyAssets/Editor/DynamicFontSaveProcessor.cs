@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class DynamicFontSaveProcessor : AssetModificationProcessor
 {
-    private const string MENU_NAME_ALLOW_SAVING_DYNAMIC_FONTS = "GND Tools/Utils/Allow saving dynamic fonts";
+    private const string MENU_NAME_ALLOW_SAVING_DYNAMIC_FONTS = "DMW Tools/Utils/Allow saving dynamic fonts";
     private const string ALLOW_SAVING_DYNAMIC_FONTS_PREF = "AllowSavingDynamicFonts";
  
     private static string[] OnWillSaveAssets(string[] paths)
