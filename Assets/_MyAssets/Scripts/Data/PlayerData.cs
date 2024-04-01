@@ -22,4 +22,7 @@ public class PlayerData : ScriptableObject
 
     [Header("경사로 미끄러짐 속도")]
     [Tooltip("올라기지 못하는 경사로에서 미끄러질 때 속도")] public float slopeSlideSpeed;
+
+    [Header("와이어 및 플레이어 Canvas")]
+    [Tooltip("Player Canvas Prefab")] public GameObject playerCanvas;
 }

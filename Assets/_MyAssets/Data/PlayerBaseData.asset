@@ -19,4 +19,6 @@ MonoBehaviour:
   yMultiplier: 5
   crouchSpeed: 5
   wallMoveSpeed: 0
-  slopeSlideSpeed: 7
+  slopeSlideSpeed: 4
+  playerCanvas: {fileID: 6670551468554774952, guid: d145af9e61baa8f4b86278040d640948,
+    type: 3}

@@ -34,13 +34,16 @@ public class PlayerMove : MonoBehaviour
     [Header("Player Base Data")]
     [SerializeField] private PlayerData _playerData;
 
-    [Header("WirePoint Variable")]
-    [SerializeField] private GameObject _wireAvailableUI;
+    //[Header("WirePoint Variable")]
+    //[SerializeField] private GameObject _wireAvailableUI;
+    private GameObject _playerCanvas;
+    private GameObject _wireAvailableUI;
 
     [Header("WirePoint Offset")]
     [SerializeField] private float _wirePointOffset;
 
-    [SerializeField] private TMP_Text _stateText;
+    //[SerializeField] private TMP_Text _stateText;
+    private TMP_Text _stateText;
 
     private int _hp;
     
@@ -84,6 +87,7 @@ public class PlayerMove : MonoBehaviour
 
     private CharacterController _controller;
 
+    private GameObject _hitObject;
     private Vector3 _hitNormal;
     private bool _isSliding;
     private Vector3 _slideVelocity;
@@ -93,6 +97,9 @@ public class PlayerMove : MonoBehaviour
     protected virtual void Awake()
     {
         _controller = GetComponent<CharacterController>();
+        _playerCanvas = Instantiate(_playerData.playerCanvas);
+        _wireAvailableUI = _playerCanvas.transform.Find("WireAvailable").gameObject;
+        _stateText = _playerCanvas.transform.Find("PlayerStateText").transform.GetComponent<TMP_Text>();
         _wireAvailableUiRectTransform = _wireAvailableUI.GetComponent<RectTransform>();
         _camera = Camera.main;
     }
@@ -129,7 +136,6 @@ public class PlayerMove : MonoBehaviour
 
         _hp = _playerData.playerHp;
     }
-
     
 
     protected virtual void Update()
@@ -191,36 +197,78 @@ public class PlayerMove : MonoBehaviour
 
     private void SetSlideVelocity()
     {
-        float angle;
-        Vector3 bottom = transform.position - new Vector3(0, _controller.height / 2, 0);
-        if (Physics.Raycast(bottom, Vector3.down, out RaycastHit hit, 3.0f))
+        if (IsOnSlope())
         {
-            angle = Vector3.Angle(Vector3.up, hit.normal);
-
-            if (angle > _controller.slopeLimit)
+            if (IsBetweenSlopeAndGround())
             {
-                _slideVelocity = Vector3.ProjectOnPlane(new Vector3(0, _velocity.y, 0), hit.normal);
-                _isSliding = true;
+                _slideVelocity = Vector3.zero;
+                _isSliding = false;
                 return;
             }
-        }
-
-        const float TOLERANCE = 0.1f;
-        angle = Vector3.Angle(Vector3.up, _hitNormal);
-        if (angle > _controller.slopeLimit + TOLERANCE)
-        {
+            
             _slideVelocity = Vector3.ProjectOnPlane(new Vector3(0, _velocity.y, 0), _hitNormal);
             _isSliding = true;
             return;
         }
 
-        _isSliding = false;
         _slideVelocity = Vector3.zero;
+        _isSliding = false;
+    }
+
+    private bool IsOnSlope()
+    {
+        if (_hitObject == null || _hitObject.CompareTag("Stair"))
+        {
+            return false;
+        }
+
+        if (_isSliding)
+        {
+            return true;
+        }
+        
+        const float TOLERANCE = 0.1f;
+        float angle = Vector3.Angle(Vector3.up, _hitNormal);
+        bool isOnSlope = angle > _controller.slopeLimit + TOLERANCE && angle < 90.0f;
+        
+        return isOnSlope;
+    }
+
+    private bool IsBetweenSlopeAndGround()
+    {
+        // Ground에 Ray가 닿았을 때 Ground와의 거리가 최소 슬라이드 높이 이하면 _isSliding -> false
+        Vector3 bottom = transform.position - new Vector3(0, _controller.height / 2, 0);
+        Ray ray = new Ray(bottom, Vector3.down);
+        const float RAY_DISTANCE = 3.0f;
+        if (Physics.Raycast(ray, out RaycastHit hit, RAY_DISTANCE))
+        {
+            const float TOLERANCE = 0.1f;
+            float angle = Vector3.Angle(Vector3.up, hit.normal);
+            if (angle < _controller.slopeLimit + TOLERANCE)
+            {
+                float heightFromHit = bottom.y - hit.transform.position.y;
+                const float MIN_SLIDE_HEIGHT = 0.6f;
+                if (heightFromHit < MIN_SLIDE_HEIGHT)
+                {
+                    return true;
+                }
+                
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        _hitObject = hit.gameObject;
+        _hitNormal = hit.normal;
     }
 
     private void MovePlayer()
     {
-        if (_isSliding && IsGrounded)
+        if (_isSliding)
         {
             _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive | (int)EPlayerState.Sliding;
             _velocity = _slideVelocity;
@@ -353,10 +401,7 @@ public class PlayerMove : MonoBehaviour
         _yVelocity += _playerData.jumpHeight;
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        _hitNormal = hit.normal;
-    }
+    
 
     private List<GameObject> GetWirePoints()
     {

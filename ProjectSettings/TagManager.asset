@@ -8,6 +8,7 @@ TagManager:
   - AssassinationTarget
   - WirePoint
   - Wall
+  - Stair
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,6 @@ TagManager:
   - WirePoint
   - Ground
   - Wall
-  - 
   - 
   - 
   - 
