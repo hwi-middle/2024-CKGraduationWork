@@ -19,4 +19,4 @@ MonoBehaviour:
   yMultiplier: 5
   crouchSpeed: 5
   wallMoveSpeed: 0
-  slopeSlideSpeed: 7
+  slopeSlideSpeed: 4
