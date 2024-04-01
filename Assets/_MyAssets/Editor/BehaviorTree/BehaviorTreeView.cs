@@ -16,7 +16,7 @@ public class BehaviorTreeView : GraphView
     {
     }
 
-    private BehaviourTree tree;
+    private BehaviorTree tree;
 
     public BehaviorTreeView()
     {
@@ -44,7 +44,7 @@ public class BehaviorTreeView : GraphView
         return GetNodeByGuid(node.guid) as NodeView;
     }
 
-    public void PopulateView(BehaviourTree tree)
+    public void PopulateView(BehaviorTree tree)
     {
         this.tree = tree;
 
@@ -174,6 +174,7 @@ public class BehaviorTreeView : GraphView
         Node node = tree.CreateNode(type);
         
         node.position = pos;
+        node.OnCreate();
         CreateNodeView(node);
     }
 

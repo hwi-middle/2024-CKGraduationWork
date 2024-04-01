@@ -43,6 +43,7 @@ public abstract class Node : ScriptableObject
         return Instantiate(this);
     }
 
+    public abstract void OnCreate();
     protected abstract void OnStart();
     protected abstract void OnStop();
     protected abstract State OnUpdate();

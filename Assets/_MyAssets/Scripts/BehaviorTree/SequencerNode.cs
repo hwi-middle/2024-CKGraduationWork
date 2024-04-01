@@ -7,6 +7,11 @@ using UnityEngine;
 public class SequencerNode : CompositeNode
 {
     private int current;
+
+    public override void OnCreate()
+    {
+        description = "자신의 자식들을 순차적으로 실행합니다.";
+    }
     
     protected override void OnStart()
     {

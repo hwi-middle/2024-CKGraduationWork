@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 
 [CreateAssetMenu()]
-public class BehaviourTree : ScriptableObject
+public class BehaviorTree : ScriptableObject
 {
     public Node rootNode;
     public Node.State treeState = Node.State.Running;
@@ -27,7 +27,8 @@ public class BehaviourTree : ScriptableObject
         Node node = ScriptableObject.CreateInstance(type) as Node;
         node.name = type.Name;
         node.guid = GUID.Generate().ToString();
-
+        node.OnCreate();
+        
         if (!Application.isPlaying)
         {
             AssetDatabase.AddObjectToAsset(node, this);
@@ -142,9 +143,9 @@ public class BehaviourTree : ScriptableObject
         }
     }
 
-    public BehaviourTree Clone()
+    public BehaviorTree Clone()
     {
-        BehaviourTree tree = Instantiate(this);
+        BehaviorTree tree = Instantiate(this);
         tree.rootNode = rootNode.Clone();
         tree.nodes = new List<Node>();
         Traverse(tree.rootNode, n => { tree.nodes.Add(n); });

@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BehaviourTreeRunner : MonoBehaviour
+public class BehaviorTreeRunner : MonoBehaviour
 {
-    public BehaviourTree tree;
+    public BehaviorTree tree;
 
     private void Start()
     {

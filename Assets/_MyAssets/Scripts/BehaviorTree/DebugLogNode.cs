@@ -5,7 +5,12 @@ using UnityEngine;
 public class DebugLogNode : ActionNode
 {
     public string message;
-    
+
+    public override void OnCreate()
+    {
+        description = "디버그용 로그를 출력합니다.";
+    }
+
     protected override void OnStart()
     {
        Debug.Log($"OnStart{message}");

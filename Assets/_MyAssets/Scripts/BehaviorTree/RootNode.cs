@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class RootNode : Node
 {
-    public Node child;
+    [HideInInspector] public Node child;
+
+    public override void OnCreate()
+    {
+        description = "행동트리의 시작지점입니다.";
+    }
     
     protected override void OnStart()
     {

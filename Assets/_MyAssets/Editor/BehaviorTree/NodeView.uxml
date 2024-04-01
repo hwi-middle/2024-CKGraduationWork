@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/_Research/Editor/NodeViewStyle.uss?fileID=7433441132597879392&amp;guid=4078d9d34246b0947b08bb04c0f8d170&amp;type=3#NodeViewStyle" />
+    <Style src="project://database/Assets/_MyAssets/Editor/BehaviorTree/NodeViewStyle.uss?fileID=7433441132597879392&amp;guid=4078d9d34246b0947b08bb04c0f8d170&amp;type=3#NodeViewStyle" />
     <ui:VisualElement name="node-state" style="flex-grow: 1;" />
     <ui:VisualElement name="node-border" style="-unity-background-image-tint-color: rgb(255, 255, 255);">
         <ui:VisualElement name="contents">

@@ -23,7 +23,7 @@ public class BehaviorTreeEditor : EditorWindow
     [OnOpenAsset]
     public static bool OnOpenAsset(int instanceId, int line)
     {
-        if (Selection.activeObject is BehaviourTree)
+        if (Selection.activeObject is BehaviorTree)
         {
             OpenWindow();
             return true;
@@ -94,12 +94,12 @@ public class BehaviorTreeEditor : EditorWindow
 
     private void OnSelectionChange()
     {
-        BehaviourTree tree = Selection.activeObject as BehaviourTree;
+        BehaviorTree tree = Selection.activeObject as BehaviorTree;
         if (!tree)
         {
             if (Selection.activeGameObject)
             {
-                BehaviourTreeRunner runner = Selection.activeGameObject.GetComponent<BehaviourTreeRunner>();
+                BehaviorTreeRunner runner = Selection.activeGameObject.GetComponent<BehaviorTreeRunner>();
                 if (runner)
                 {
                     tree = runner.tree;
