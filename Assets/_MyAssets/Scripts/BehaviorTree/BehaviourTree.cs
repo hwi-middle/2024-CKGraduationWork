@@ -152,12 +152,11 @@ public class BehaviourTree : ScriptableObject
         return tree;
     }
 
-    public void Bind()
+    public void Bind(EnemyBase enemyBase)
     {
         Traverse(rootNode, n =>
         {
-            // TODO: Bind the tree to the agent
-            // n.agent = ;
+            n.agent = enemyBase;
             n.blackboard = blackboard;
         });
     }

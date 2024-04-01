@@ -10,8 +10,7 @@ public class BehaviourTreeRunner : MonoBehaviour
     private void Start()
     {
         tree = tree.Clone();
-        // TODO: Bind the tree to the agent
-        // tree.Bind(GetComponent<AiAgent>());
+        tree.Bind(GetComponent<EnemyBase>());
     }
 
     private void Update()

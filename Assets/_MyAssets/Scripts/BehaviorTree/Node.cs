@@ -14,12 +14,11 @@ public abstract class Node : ScriptableObject
     [HideInInspector] public State state = State.Running;
     [HideInInspector] public bool started = false;
     [HideInInspector] public string guid;
-    [HideInInspector]  public Vector2 position;
-    [HideInInspector]  public Blackboard blackboard;
-    // TODO: Implement this
-    // public AiAgent agent;
+    [HideInInspector] public Vector2 position;
+    [HideInInspector] public Blackboard blackboard;
+    [HideInInspector] public EnemyBase agent;
     [TextArea] public string description;
-    
+
     public State Update()
     {
         if (!started)
