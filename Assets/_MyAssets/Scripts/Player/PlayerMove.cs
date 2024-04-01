@@ -34,13 +34,16 @@ public class PlayerMove : MonoBehaviour
     [Header("Player Base Data")]
     [SerializeField] private PlayerData _playerData;
 
-    [Header("WirePoint Variable")]
-    [SerializeField] private GameObject _wireAvailableUI;
+    //[Header("WirePoint Variable")]
+    //[SerializeField] private GameObject _wireAvailableUI;
+    private GameObject _playerCanvas;
+    private GameObject _wireAvailableUI;
 
     [Header("WirePoint Offset")]
     [SerializeField] private float _wirePointOffset;
 
-    [SerializeField] private TMP_Text _stateText;
+    //[SerializeField] private TMP_Text _stateText;
+    private TMP_Text _stateText;
 
     private int _hp;
     
@@ -94,6 +97,9 @@ public class PlayerMove : MonoBehaviour
     protected virtual void Awake()
     {
         _controller = GetComponent<CharacterController>();
+        _playerCanvas = Instantiate(_playerData.playerCanvas);
+        _wireAvailableUI = _playerCanvas.transform.Find("WireAvailable").gameObject;
+        _stateText = _playerCanvas.transform.Find("PlayerStateText").transform.GetComponent<TMP_Text>();
         _wireAvailableUiRectTransform = _wireAvailableUI.GetComponent<RectTransform>();
         _camera = Camera.main;
     }
