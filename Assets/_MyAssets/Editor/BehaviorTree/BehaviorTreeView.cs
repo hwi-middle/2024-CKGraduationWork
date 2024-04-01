@@ -133,13 +133,16 @@ public class BehaviorTreeView : GraphView
     public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
     {
         // base.BuildContextualMenu(evt);
-        var pos = evt.localMousePosition;
+        VisualElement contentViewContainer = ElementAt(1);
+        Vector3 screenMousePosition = evt.localMousePosition;
+        Vector2 worldMousePosition = screenMousePosition - contentViewContainer.transform.position;
+        worldMousePosition *= 1 / contentViewContainer.transform.scale.x;
         
         {
             var types = TypeCache.GetTypesDerivedFrom<ActionNode>();
             foreach (var type in types)
             {
-                evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", (a) => CreateNode(type, pos));
+                evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", (a) => CreateNode(type, worldMousePosition));
             }
         }
 
@@ -147,7 +150,7 @@ public class BehaviorTreeView : GraphView
             var types = TypeCache.GetTypesDerivedFrom<CompositeNode>();
             foreach (var type in types)
             {
-                evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", (a) => CreateNode(type, pos));
+                evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", (a) => CreateNode(type, worldMousePosition));
             }
         }
 
@@ -155,7 +158,7 @@ public class BehaviorTreeView : GraphView
             var types = TypeCache.GetTypesDerivedFrom<DecoratorNode>();
             foreach (var type in types)
             {
-                evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", (a) => CreateNode(type, pos));
+                evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", (a) => CreateNode(type, worldMousePosition));
             }
         }
     }
@@ -170,8 +173,6 @@ public class BehaviorTreeView : GraphView
         Debug.Log("CreateNode: " + type.Name);
         Node node = tree.CreateNode(type);
         
-        Vector2 worldPosition = contentViewContainer.WorldToLocal(pos);
-        node.position = worldPosition;
         node.position = pos;
         CreateNodeView(node);
     }
