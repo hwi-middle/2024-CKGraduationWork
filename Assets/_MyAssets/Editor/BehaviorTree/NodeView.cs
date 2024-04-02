@@ -34,7 +34,7 @@ public class NodeView : UnityEditor.Experimental.GraphView.Node
 
     private void SetupClasses()
     {
-        if (node is ActionNode)
+        if (node is TaskNode)
         {
             AddToClassList("action");
         }
@@ -54,7 +54,7 @@ public class NodeView : UnityEditor.Experimental.GraphView.Node
 
     private void CreateInputPorts()
     {
-        if (node is ActionNode)
+        if (node is TaskNode)
         {
             input = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Single, typeof(bool));
         }
@@ -80,7 +80,7 @@ public class NodeView : UnityEditor.Experimental.GraphView.Node
 
     private void CreateOutputPorts()
     {
-        if (node is ActionNode)
+        if (node is TaskNode)
         {
         }
         else if (node is CompositeNode)

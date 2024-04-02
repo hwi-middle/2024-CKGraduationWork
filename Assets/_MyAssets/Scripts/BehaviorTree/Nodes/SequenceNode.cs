@@ -45,6 +45,8 @@ public class SequenceNode : CompositeNode
             case ENodeState.Success:
                 current++;
                 break;
+            case ENodeState.Aborted:
+                return ENodeState.Aborted;
             default:
                 Debug.Assert(false);
                 break;

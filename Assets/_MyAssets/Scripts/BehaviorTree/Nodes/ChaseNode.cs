@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaseNode : ActionNode
+public class ChaseNode : TaskNode
 {
     public override void OnCreate()
     {

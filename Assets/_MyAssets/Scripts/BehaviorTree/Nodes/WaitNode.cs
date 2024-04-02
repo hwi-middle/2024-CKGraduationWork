@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaitNode : ActionNode
+public class WaitNode : TaskNode
 {
     public float duration = 1f;
     private float startTime;
