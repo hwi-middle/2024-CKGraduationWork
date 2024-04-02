@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -23,8 +24,13 @@ public enum EPlayerState
     Sliding = 1 << 11
 }
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMove : Singleton<PlayerMove>
 {
+    private GameObject _camerasPrefab;
+    private Camera _camera;
+    public CinemachineFreeLook FreeLookCamera { get; private set; }
+    public CinemachineFreeLook AimingCamera { get; private set; }
+    
     [SerializeField] private PlayerInputData _inputData;
     private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
 
@@ -34,15 +40,12 @@ public class PlayerMove : MonoBehaviour
     [Header("Player Base Data")]
     [SerializeField] private PlayerData _playerData;
 
-    //[Header("WirePoint Variable")]
-    //[SerializeField] private GameObject _wireAvailableUI;
     private GameObject _playerCanvas;
     private GameObject _wireAvailableUI;
 
     [Header("WirePoint Offset")]
     [SerializeField] private float _wirePointOffset;
 
-    //[SerializeField] private TMP_Text _stateText;
     private TMP_Text _stateText;
 
     private int _hp;
@@ -70,7 +73,6 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private PlayerAssassinationData _assassinationData;
 
-    // [SerializeField] private TMP_Text _noteTextForDebug;
     private bool _isAssassinating = false;
     private Transform _assassinationTarget;
 
@@ -79,8 +81,6 @@ public class PlayerMove : MonoBehaviour
 
     private float _yVelocity;
     protected float YVelocity => _yVelocity;
-
-    private Camera _camera;
 
     private Vector3 _inputDirection;
     private Vector3 _velocity;
@@ -101,7 +101,52 @@ public class PlayerMove : MonoBehaviour
         _wireAvailableUI = _playerCanvas.transform.Find("WireAvailable").gameObject;
         _stateText = _playerCanvas.transform.Find("PlayerStateText").transform.GetComponent<TMP_Text>();
         _wireAvailableUiRectTransform = _wireAvailableUI.GetComponent<RectTransform>();
+
+        Instantiate(_playerData.lineRendererPrefab);
+        LineDrawHelper.Instance.DisableLine();
+        
+        InitCamera();
+    }
+    
+    
+    private void InitCamera()
+    {
+        AudioListener existCamera = FindObjectOfType<AudioListener>();
+        if (existCamera != null)
+        {
+            Destroy(existCamera.gameObject);
+        }
+        
+        Debug.Assert(_playerData.camerasPrefab != null, "_playerData.camerasPrefab != null");
+        
+        _camerasPrefab = Instantiate(_playerData.camerasPrefab);
+        
+        Debug.Assert(_camerasPrefab != null, "_camerasPrefab != null");
+
+        FreeLookCamera = _camerasPrefab.transform.Find("FreeLook Camera").GetComponent<CinemachineFreeLook>();
+        AimingCamera = _camerasPrefab.transform.Find("Aiming Camera").GetComponent<CinemachineFreeLook>();
+        
+        Transform tr = gameObject.transform;
+        FreeLookCamera.LookAt = tr;
+        FreeLookCamera.Follow = tr;
+        AimingCamera.LookAt = tr;
+        AimingCamera.Follow = tr;
+        FreeLookCamera.MoveToTopOfPrioritySubqueue();
         _camera = Camera.main;
+        ChangeCameraToFreeLook();
+    }
+
+    public void ChangeCameraToFreeLook()
+    {
+        FreeLookCamera.Priority = 11;
+        AimingCamera.Priority = 10;
+    }
+
+    public void ChangeCameraToAiming()
+    {
+        ApplyRotate();
+        FreeLookCamera.Priority = 10;
+        AimingCamera.Priority = 11;
     }
 
     private void OnEnable()
@@ -188,11 +233,16 @@ public class PlayerMove : MonoBehaviour
         {
             return;
         }
+        
+        ApplyRotate();
+    }
 
+    private void ApplyRotate()
+    {
         Quaternion cameraRotation = _camera.transform.localRotation;
         cameraRotation.x = 0;
         cameraRotation.z = 0;
-        transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 0.2f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 1.0f);
     }
 
     private void SetSlideVelocity()
@@ -601,7 +651,7 @@ public class PlayerMove : MonoBehaviour
         Vector3 initPos = transform.position;
         float t = 0;
 
-        WireLineDrawHelper.Instance.EnableLine();
+        LineDrawHelper.Instance.EnableLine();
 
         while (t <= _wireData.wireActionDuration && !IsCollideWhenWireAction())
         {
@@ -609,13 +659,13 @@ public class PlayerMove : MonoBehaviour
 
             transform.position = Vector3.Lerp(initPos, _targetPosition, alpha * alpha * alpha);
 
-            WireLineDrawHelper.Instance.Draw(transform.position, _wireHangPosition);
+            LineDrawHelper.Instance.WireDraw(transform.position, _wireHangPosition);
 
             yield return null;
             t += Time.deltaTime;
         }
 
-        WireLineDrawHelper.Instance.DisableLine();
+        LineDrawHelper.Instance.DisableLine();
         RemovePlayerState(EPlayerState.WireAction);
         _wireActionRoutine = null;
     }
@@ -636,17 +686,14 @@ public class PlayerMove : MonoBehaviour
         Debug.Assert(mainCamera != null);
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         float assassinateDistance = _assassinationData.assassinateDistance;
-        // Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * assassinateDistance, Color.green, 0f, false);
         int layerMask = (-1) - (1 << LayerMask.NameToLayer("BypassAiming"));
 
         if (Physics.Raycast(ray, out RaycastHit hit, assassinateDistance, layerMask) &&
             hit.transform.CompareTag("AssassinationTarget"))
         {
-            // _noteTextForDebug.text = $"Current Target: {hit.transform.name}";
             return hit.transform;
         }
 
-        // _noteTextForDebug.text = "Current Target: None";
         return null;
     }
 

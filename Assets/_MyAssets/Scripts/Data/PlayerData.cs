@@ -20,9 +20,20 @@ public class PlayerData : ScriptableObject
 
     [Tooltip("벽 이동 속도")] public float wallMoveSpeed;
 
+    [Tooltip("아이템 던지는 힘")] public float throwPower;
+    [Tooltip("아이템 최대 사거리")] public float maxItemRange;
+    
+    [Header("아이템의 던질 위치를 위한 변수")]
+    [Tooltip("아이템 Ray 최대 사거리")] public float throwRayDistance;
+
     [Header("경사로 미끄러짐 속도")]
     [Tooltip("올라기지 못하는 경사로에서 미끄러질 때 속도")] public float slopeSlideSpeed;
 
     [Header("와이어 및 플레이어 Canvas")]
     [Tooltip("Player Canvas Prefab")] public GameObject playerCanvas;
+
+    [Tooltip("Line Renderer")] public GameObject lineRendererPrefab;
+
+    [Header("카메라 오브젝트")]
+    [Tooltip("플레이어를 따라다니는 카메라 프리팹")] public GameObject camerasPrefab;
 }

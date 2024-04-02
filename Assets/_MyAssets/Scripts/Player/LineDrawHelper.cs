@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WireLineDrawHelper : Singleton<WireLineDrawHelper>
+public class LineDrawHelper : Singleton<LineDrawHelper>
 {
     private LineRenderer _line;
+    private List<Vector3> _parabolaPoints;
+    private IEnumerator _parabolaRoutine;
 
     private void Awake()
     {
@@ -27,8 +29,8 @@ public class WireLineDrawHelper : Singleton<WireLineDrawHelper>
     {
         _line.enabled = false;
     }
-    
-    public void Draw(Vector3 startPosition, Vector3 targetPosition)
+
+    public void WireDraw(Vector3 startPosition, Vector3 targetPosition)
     {
         _line.positionCount = 2;
         startPosition.y += 0.5f;

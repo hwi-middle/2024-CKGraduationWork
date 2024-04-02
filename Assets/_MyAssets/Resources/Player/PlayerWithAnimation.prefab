@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4312329920012413826}
   - component: {fileID: 4178294254187365450}
   - component: {fileID: 7713837995355931857}
+  - component: {fileID: 9113156202343665045}
   m_Layer: 7
   m_Name: PlayerWithAnimation
   m_TagString: Player
@@ -75,11 +76,24 @@ MonoBehaviour:
   _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
   _wireData: {fileID: 11400000, guid: 514498b1264fa4ad9a0a5976151dab49, type: 2}
   _playerData: {fileID: 11400000, guid: be439c1712086cc4eb47a854b63c7824, type: 2}
-  _wireAvailableUI: {fileID: 0}
   _wirePointOffset: 2
-  _stateText: {fileID: 0}
   _assassinationData: {fileID: 11400000, guid: c3d73802406926c4eb7883edbc33bd52, type: 2}
   _gravityMultiplier: 1
+--- !u!114 &9113156202343665045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5436934767695870256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a41edf060c4f5c944958241620c31bb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerData: {fileID: 11400000, guid: be439c1712086cc4eb47a854b63c7824, type: 2}
+  _itemData: {fileID: 11400000, guid: 8fb89e52d2517b147be3a5d34e09858e, type: 2}
+  _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
 --- !u!1001 &3899999556126164330
 PrefabInstance:
   m_ObjectHideFlags: 0

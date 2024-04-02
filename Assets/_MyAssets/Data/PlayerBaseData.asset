@@ -19,6 +19,13 @@ MonoBehaviour:
   yMultiplier: 5
   crouchSpeed: 5
   wallMoveSpeed: 0
+  throwPower: 10
+  maxItemRange: 15
+  throwRayDistance: 10
   slopeSlideSpeed: 4
   playerCanvas: {fileID: 6670551468554774952, guid: d145af9e61baa8f4b86278040d640948,
+    type: 3}
+  lineRendererPrefab: {fileID: 1510557977768077414, guid: c13d442cd5a65094faf7ebefc78ec6dd,
+    type: 3}
+  camerasPrefab: {fileID: 6376121465614477072, guid: 8e19267338431d941b626d4717bee39f,
     type: 3}
