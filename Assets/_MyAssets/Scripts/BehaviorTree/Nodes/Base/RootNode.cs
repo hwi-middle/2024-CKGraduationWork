@@ -21,7 +21,12 @@ public class RootNode : Node
         
     }
 
-    protected override State OnUpdate()
+    protected override void OnAbort()
+    {
+        
+    }
+
+    protected override ENodeState OnUpdate()
     {
         return child.Update();
     }

@@ -17,7 +17,7 @@ public class NodeView : UnityEditor.Experimental.GraphView.Node
     public NodeView(Node node) : base("Assets/_MyAssets/Editor/BehaviorTree/NodeView.uxml")
     {
         this.node = node;
-        title = node.name;
+        title = node.name.Replace("Node", "");
         viewDataKey = node.guid;
 
         style.left = node.position.x;
@@ -149,16 +149,16 @@ public class NodeView : UnityEditor.Experimental.GraphView.Node
         
         switch (node.state)
         {
-            case Node.State.Running:
+            case Node.ENodeState.Running:
                 if (node.started)
                 {
                     AddToClassList("running");
                 }
                 break;
-            case Node.State.Failure:
+            case Node.ENodeState.Failure:
                 AddToClassList("failure");
                 break;
-            case Node.State.Success:
+            case Node.ENodeState.Success:
                 AddToClassList("success");
                 break;
         }

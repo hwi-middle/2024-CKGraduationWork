@@ -7,13 +7,13 @@ using UnityEditor;
 public class BehaviorTree : ScriptableObject
 {
     public Node rootNode;
-    public Node.State treeState = Node.State.Running;
+    public Node.ENodeState treeState = Node.ENodeState.Running;
     public List<Node> nodes = new List<Node>();
     public Blackboard blackboard = new Blackboard();
     
-    public Node.State Update()
+    public Node.ENodeState Update()
     {
-        if (rootNode.state == Node.State.Running)
+        if (rootNode.state == Node.ENodeState.Running)
         {
             treeState = rootNode.Update();
         }

@@ -21,9 +21,14 @@ public class DebugLogNode : ActionNode
         Debug.Log($"OnStop{message}");
     }
 
-    protected override State OnUpdate()
+    protected override void OnAbort()
+    {
+        
+    }
+
+    protected override ENodeState OnUpdate()
     {
         Debug.Log($"OnUpdate{message}");
-        return State.Success;
+        return ENodeState.Success;
     }
 }

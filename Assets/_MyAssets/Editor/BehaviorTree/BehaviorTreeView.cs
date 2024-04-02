@@ -163,6 +163,11 @@ public class BehaviorTreeView : GraphView
         }
     }
 
+    private string RemoveNodeSuffix(string node)
+    {
+        return node.Replace("Node", "");
+    }
+
     void CreateNode(System.Type type, Vector2 pos)
     {
         if (tree == null)

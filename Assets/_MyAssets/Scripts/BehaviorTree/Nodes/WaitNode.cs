@@ -22,13 +22,18 @@ public class WaitNode : ActionNode
         
     }
 
-    protected override State OnUpdate()
+    protected override void OnAbort()
+    {
+        
+    }
+
+    protected override ENodeState OnUpdate()
     {
         if (Time.time - startTime > duration)
         {
-            return State.Success;
+            return ENodeState.Success;
         }
 
-        return State.Running;
+        return ENodeState.Running;
     }
 }

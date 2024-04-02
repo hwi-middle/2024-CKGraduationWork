@@ -12,7 +12,8 @@
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
     background-color: rgb(60, 60, 60);
-    min-width: 160px;
+    min-width: auto;
+    width: 160px;
 }
 
 #input {

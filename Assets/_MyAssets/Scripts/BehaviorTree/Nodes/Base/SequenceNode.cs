@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SequencerNode : CompositeNode
+public class SequenceNode : CompositeNode
 {
     private int current;
 
@@ -23,21 +23,26 @@ public class SequencerNode : CompositeNode
         
     }
 
-    protected override State OnUpdate()
+    protected override void OnAbort()
+    {
+        
+    }
+
+    protected override ENodeState OnUpdate()
     {
         if (children.Count == 0)
         {
-            return State.Success;
+            return ENodeState.Success;
         }
         
         var child = children[current];
         switch (child.Update())
         {
-            case State.Running:
-                return State.Running;
-            case State.Failure:
-                return State.Failure;
-            case State.Success:
+            case ENodeState.Running:
+                return ENodeState.Running;
+            case ENodeState.Failure:
+                return ENodeState.Failure;
+            case ENodeState.Success:
                 current++;
                 break;
             default:
@@ -45,6 +50,6 @@ public class SequencerNode : CompositeNode
                 break;
         }
         
-        return current == children.Count ? State.Success : State.Running;
+        return current == children.Count ? ENodeState.Success : ENodeState.Running;
     }
 }
