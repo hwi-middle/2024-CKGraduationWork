@@ -48,6 +48,30 @@ MonoBehaviour:
   - {fileID: -5720877760023039751}
   - {fileID: 3927490007860331343}
   - {fileID: 5019051130475160554}
+--- !u!114 &-1446052283386089597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48db3c905aa32e34da3554396eb0600e, type: 3}
+  m_Name: RandomWaitNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 88ae313c794a8d840ac413c65cd83b9b
+  position: {x: 0, y: 0}
+  blackboard:
+    moveToPosition: {x: 0, y: 0, z: 0}
+    moveToObject: {fileID: 0}
+  agent: {fileID: 0}
+  description: "\uC9C0\uC815\uD55C \uC2DC\uAC04 \uBC94\uC704 \uB0B4\uC5D0\uC11C \uB79C\uB364\uC73C\uB85C
+    \uB300\uAE30\uD569\uB2C8\uB2E4."
+  durationMin: 1
+  durationMax: 2
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,13 +88,14 @@ MonoBehaviour:
   treeState: 0
   nodes:
   - {fileID: 1353668204475537931}
-  - {fileID: 1556139698221896108}
   - {fileID: -5720877760023039751}
   - {fileID: 3927490007860331343}
   - {fileID: 3876527706660562163}
   - {fileID: 7909235605041851802}
   - {fileID: -3162609488396072336}
   - {fileID: 5019051130475160554}
+  - {fileID: 5366069412104643932}
+  - {fileID: -1446052283386089597}
   blackboard:
     moveToPosition: {x: 0, y: 0, z: 0}
     moveToObject: {fileID: 0}
@@ -95,30 +120,7 @@ MonoBehaviour:
     moveToObject: {fileID: 0}
   agent: {fileID: 0}
   description: "\uD589\uB3D9\uD2B8\uB9AC\uC758 \uC2DC\uC791\uC9C0\uC810\uC785\uB2C8\uB2E4."
-  child: {fileID: 1556139698221896108}
---- !u!114 &1556139698221896108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0116dba939485244a7df62ca601843b, type: 3}
-  m_Name: RepeatNode
-  m_EditorClassIdentifier: 
-  state: 0
-  started: 0
-  guid: a8976cc6a780fbf4e9116b1b26e1343e
-  position: {x: 0, y: 121}
-  blackboard:
-    moveToPosition: {x: 0, y: 0, z: 0}
-    moveToObject: {fileID: 0}
-  agent: {fileID: 0}
-  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4\uC744 \uBC18\uBCF5\uD574\uC11C
-    \uC2E4\uD589\uD569\uB2C8\uB2E4."
-  child: {fileID: -3162609488396072336}
+  child: {fileID: 5366069412104643932}
 --- !u!114 &3876527706660562163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +190,28 @@ MonoBehaviour:
   children:
   - {fileID: 3876527706660562163}
   - {fileID: 7909235605041851802}
+--- !u!114 &5366069412104643932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0116dba939485244a7df62ca601843b, type: 3}
+  m_Name: RepeatNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: a6c3b17d8b6d76241875e57799a11399
+  position: {x: -0.0000556617, y: 113.33621}
+  blackboard:
+    moveToPosition: {x: 0, y: 0, z: 0}
+    moveToObject: {fileID: 0}
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uC744 \uBC18\uBCF5\uD574\uC11C \uC2E4\uD589\uD569\uB2C8\uB2E4."
+  child: {fileID: -3162609488396072336}
 --- !u!114 &7909235605041851802
 MonoBehaviour:
   m_ObjectHideFlags: 0
