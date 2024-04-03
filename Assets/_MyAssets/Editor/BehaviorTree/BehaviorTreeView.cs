@@ -142,7 +142,7 @@ public class BehaviorTreeView : GraphView
             var types = TypeCache.GetTypesDerivedFrom<TaskNode>();
             foreach (var type in types)
             {
-                evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", (a) => CreateNode(type, worldMousePosition));
+                evt.menu.AppendAction($"{type.BaseType.Name}/{type.Name}", (a) => CreateNode(type, worldMousePosition));
             }
         }
 
@@ -150,7 +150,7 @@ public class BehaviorTreeView : GraphView
             var types = TypeCache.GetTypesDerivedFrom<CompositeNode>();
             foreach (var type in types)
             {
-                evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", (a) => CreateNode(type, worldMousePosition));
+                evt.menu.AppendAction($"{type.BaseType.Name}/{type.Name}", (a) => CreateNode(type, worldMousePosition));
             }
         }
 
@@ -158,14 +158,9 @@ public class BehaviorTreeView : GraphView
             var types = TypeCache.GetTypesDerivedFrom<DecoratorNode>();
             foreach (var type in types)
             {
-                evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", (a) => CreateNode(type, worldMousePosition));
+                evt.menu.AppendAction($"{type.BaseType.Name}/{type.Name}", (a) => CreateNode(type, worldMousePosition));
             }
         }
-    }
-
-    private string RemoveNodeSuffix(string node)
-    {
-        return node.Replace("Node", "");
     }
 
     void CreateNode(System.Type type, Vector2 pos)

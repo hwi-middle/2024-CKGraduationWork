@@ -214,4 +214,16 @@ public class EnemyBase : MonoBehaviour
             }
         }
     }
+
+    public void IncrementPerceptionGauge(float distance)
+    {
+        _perceptionGauge += GetPerceptionGaugeIncrement(distance);
+        _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
+    }
+
+    public void DecrementPerceptionGauge()
+    {
+        _perceptionGauge -= _aiData.gaugeDecrementPerSecond * Time.deltaTime;
+        _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
+    }
 }

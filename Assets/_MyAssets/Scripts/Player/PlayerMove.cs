@@ -23,7 +23,7 @@ public enum EPlayerState
     Sliding = 1 << 11
 }
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMove : Singleton<PlayerMove>
 {
     [SerializeField] private PlayerInputData _inputData;
     private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
