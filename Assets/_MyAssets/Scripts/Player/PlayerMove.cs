@@ -144,7 +144,6 @@ public class PlayerMove : Singleton<PlayerMove>
 
     public void ChangeCameraToAiming()
     {
-        ApplyRotate();
         FreeLookCamera.Priority = 10;
         AimingCamera.Priority = 11;
     }
@@ -224,6 +223,11 @@ public class PlayerMove : Singleton<PlayerMove>
 
         Destroy(gameObject);
     }
+
+    public void AlignPlayerToCameraForward()
+    {
+        ApplyRotate();   
+    }
     
     private void RotatePlayer()
     {
@@ -277,9 +281,8 @@ public class PlayerMove : Singleton<PlayerMove>
             return true;
         }
         
-        const float TOLERANCE = 0.1f;
         float angle = Vector3.Angle(Vector3.up, _hitNormal);
-        bool isOnSlope = angle > _controller.slopeLimit + TOLERANCE && angle < 90.0f;
+        bool isOnSlope = Mathf.FloorToInt(angle) >= _controller.slopeLimit && Mathf.CeilToInt(angle) < 90.0f;
         
         return isOnSlope;
     }
@@ -292,9 +295,8 @@ public class PlayerMove : Singleton<PlayerMove>
         const float RAY_DISTANCE = 3.0f;
         if (Physics.Raycast(ray, out RaycastHit hit, RAY_DISTANCE))
         {
-            const float TOLERANCE = 0.1f;
             float angle = Vector3.Angle(Vector3.up, hit.normal);
-            if (angle < _controller.slopeLimit + TOLERANCE)
+            if (Mathf.CeilToInt(angle) <= _controller.slopeLimit)
             {
                 float heightFromHit = bottom.y - hit.transform.position.y;
                 const float MIN_SLIDE_HEIGHT = 0.6f;
@@ -659,7 +661,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
             transform.position = Vector3.Lerp(initPos, _targetPosition, alpha * alpha * alpha);
 
-            LineDrawHelper.Instance.WireDraw(transform.position, _wireHangPosition);
+            LineDrawHelper.Instance.DrawWire(transform.position, _wireHangPosition);
 
             yield return null;
             t += Time.deltaTime;

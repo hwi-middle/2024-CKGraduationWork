@@ -30,11 +30,26 @@ public class LineDrawHelper : Singleton<LineDrawHelper>
         _line.enabled = false;
     }
 
-    public void WireDraw(Vector3 startPosition, Vector3 targetPosition)
+    public void DrawWire(Vector3 startPosition, Vector3 targetPosition)
     {
         _line.positionCount = 2;
         startPosition.y += 0.5f;
         _line.SetPosition(0, startPosition);
         _line.SetPosition(1, targetPosition);
+    }
+
+    public void SetPositionCount(int count)
+    {
+        _line.positionCount = count;
+    }
+
+    public Vector3 GetParabolaArrivalVector()
+    {
+        return _line.GetPosition(_line.positionCount - 1);
+    }
+
+    public void DrawParabola(Vector3[] list)
+    {
+        _line.SetPositions(list);
     }
 }

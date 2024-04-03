@@ -22,9 +22,7 @@ public class PlayerData : ScriptableObject
 
     [Tooltip("아이템 던지는 힘")] public float throwPower;
     [Tooltip("아이템 최대 사거리")] public float maxItemRange;
-    
-    [Header("아이템의 던질 위치를 위한 변수")]
-    [Tooltip("아이템 Ray 최대 사거리")] public float throwRayDistance;
+    [Tooltip("아이템 영향 거리 (반지름)")] public float itemImpactRadius;
 
     [Header("경사로 미끄러짐 속도")]
     [Tooltip("올라기지 못하는 경사로에서 미끄러질 때 속도")] public float slopeSlideSpeed;

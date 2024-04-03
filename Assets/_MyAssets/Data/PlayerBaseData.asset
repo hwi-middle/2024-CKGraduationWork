@@ -19,9 +19,9 @@ MonoBehaviour:
   yMultiplier: 5
   crouchSpeed: 5
   wallMoveSpeed: 0
-  throwPower: 10
+  throwPower: 15
   maxItemRange: 15
-  throwRayDistance: 10
+  itemImpactRadius: 15
   slopeSlideSpeed: 4
   playerCanvas: {fileID: 6670551468554774952, guid: d145af9e61baa8f4b86278040d640948,
     type: 3}
