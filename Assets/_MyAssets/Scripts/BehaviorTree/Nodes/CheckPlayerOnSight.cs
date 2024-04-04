@@ -41,7 +41,6 @@ public class CheckPlayerOnSight : DecoratorNode
         Debug.Assert(bufferCount is 0 or 1);
         if (bufferCount == 0)
         {
-            blackboard.outOfSightTime += Time.deltaTime;
             blackboard.target = null;
             return false;
         }
@@ -52,7 +51,6 @@ public class CheckPlayerOnSight : DecoratorNode
         Vector3 direction = (overlappedPlayer.position - agent.transform.position).normalized;
         if (Vector3.Dot(direction, agent.transform.forward) < Mathf.Cos(agent.AiData.perceptionAngle * 0.5f * Mathf.Deg2Rad))
         {
-            blackboard.outOfSightTime += Time.deltaTime;
             blackboard.target = null;
             return false;
         }
@@ -64,14 +62,13 @@ public class CheckPlayerOnSight : DecoratorNode
         Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity);
         if (!hit.transform.CompareTag("Player"))
         {
-            blackboard.outOfSightTime += Time.deltaTime;
             blackboard.target = null;
             return false;
         }
 
         // 시야에 플레이어가 들어옴
         blackboard.target = overlappedPlayer.gameObject;
-        blackboard.outOfSightTime = 0f;
+        blackboard.lastTimePlayerDetected = Time.time;
         return true;
     }
 }

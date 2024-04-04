@@ -18,7 +18,7 @@ MonoBehaviour:
   position: {x: -350, y: 769}
   blackboard:
     target: {fileID: 0}
-    outOfSightTime: 0
+    lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uB97C \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
 --- !u!114 &-7075501065537223723
@@ -39,10 +39,12 @@ MonoBehaviour:
   position: {x: 0.000030517578, y: 287.85004}
   blackboard:
     target: {fileID: 0}
-    outOfSightTime: 0
+    lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4 \uC911 \uD558\uB098\uB97C \uC2E4\uD589\uD569\uB2C8\uB2E4."
-  children: []
+  children:
+  - {fileID: -6627933823913317914}
+  - {fileID: -6137277382804976303}
 --- !u!114 &-6627933823913317914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,7 +63,7 @@ MonoBehaviour:
   position: {x: -157.50002, y: 460.00003}
   blackboard:
     target: {fileID: 0}
-    outOfSightTime: 0
+    lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uD50C\uB808\uC774\uC5B4\uAC00 \uC2DC\uC57C\uC5D0 \uB4E4\uC5B4\uC654\uB294\uC9C0
     \uD655\uC778\uD569\uB2C8\uB2E4."
@@ -81,10 +83,10 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 9c13faa4505ebb448b87a7bb8ba56ffe
-  position: {x: 168.00006, y: 485}
+  position: {x: 168.00006, y: 460.00003}
   blackboard:
     target: {fileID: 0}
-    outOfSightTime: 0
+    lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uC2DC\uC57C\uC5D0\uC11C \uC0AC\uB77C\uC9C4 \uC2DC\uAC04\uC744 \uD655\uC778\uD569\uB2C8\uB2E4."
   child: {fileID: -2492612781893175548}
@@ -107,7 +109,7 @@ MonoBehaviour:
   position: {x: -188, y: 614}
   blackboard:
     target: {fileID: 0}
-    outOfSightTime: 0
+    lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4\uC744 \uC21C\uCC28\uC801\uC73C\uB85C
     \uC2E4\uD589\uD569\uB2C8\uB2E4."
@@ -129,10 +131,10 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: ae70e625a3047574789c74b7545283a4
-  position: {x: 155.00003, y: 627}
+  position: {x: 155.00002, y: 602}
   blackboard:
     target: {fileID: 0}
-    outOfSightTime: 0
+    lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uB97C \uAC10\uC18C\uC2DC\uD0B5\uB2C8\uB2E4."
 --- !u!114 &11400000
@@ -162,7 +164,7 @@ MonoBehaviour:
   - {fileID: -7075501065537223723}
   blackboard:
     target: {fileID: 0}
-    outOfSightTime: 0
+    lastTimePlayerDetected: 0
 --- !u!114 &1353668204475537931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,7 +183,7 @@ MonoBehaviour:
   position: {x: 0, y: -11.5}
   blackboard:
     target: {fileID: 0}
-    outOfSightTime: 0
+    lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uD589\uB3D9\uD2B8\uB9AC\uC758 \uC2DC\uC791\uC9C0\uC810\uC785\uB2C8\uB2E4."
   child: {fileID: 5366069412104643932}
@@ -203,7 +205,7 @@ MonoBehaviour:
   position: {x: -49.999992, y: 924}
   blackboard:
     target: {fileID: 0}
-    outOfSightTime: 0
+    lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uD50C\uB808\uC774\uC5B4\uB97C \uCD94\uC801\uD569\uB2C8\uB2E4."
 --- !u!114 &4305519358515743911
@@ -224,7 +226,7 @@ MonoBehaviour:
   position: {x: -72.99998, y: 769}
   blackboard:
     target: {fileID: 0}
-    outOfSightTime: 0
+    lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uAC00 \uAC00\uB4DD \uCC3C\uB294\uC9C0
     \uD655\uC778\uD569\uB2C8\uB2E4."
@@ -247,7 +249,7 @@ MonoBehaviour:
   position: {x: -0.0000556617, y: 113.33621}
   blackboard:
     target: {fileID: 0}
-    outOfSightTime: 0
+    lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uC744 \uBC18\uBCF5\uD574\uC11C \uC2E4\uD589\uD569\uB2C8\uB2E4."
-  child: {fileID: 0}
+  child: {fileID: -7075501065537223723}

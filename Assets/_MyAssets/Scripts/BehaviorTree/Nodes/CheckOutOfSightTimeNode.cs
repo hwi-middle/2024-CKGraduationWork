@@ -25,7 +25,7 @@ public class CheckOutOfSightTimeNode : DecoratorNode
 
     protected override ENodeState OnUpdate()
     {
-        if (blackboard.outOfSightTime >= threshold)
+        if (Time.time - blackboard.lastTimePlayerDetected >= threshold)
         {
             child.Update();
             return ENodeState.Success;
