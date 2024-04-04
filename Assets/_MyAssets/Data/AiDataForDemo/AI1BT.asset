@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5720877760023039751
+--- !u!114 &-8948107325236719184
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,18 +9,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59ab15960e11a624baf65119dbcfdc27, type: 3}
-  m_Name: WaitNode
+  m_Script: {fileID: 11500000, guid: 7c55e3513486ade40aaab43a896071d1, type: 3}
+  m_Name: IncreasePerceptionGaugeNode
   m_EditorClassIdentifier: 
   state: 0
   started: 0
-  guid: f93bbf631d97f114ba5f29dbeb8f7c65
-  position: {x: -340.75003, y: 458.00006}
+  guid: 66e4f9f6f13b4284d85fec088a04d4f0
+  position: {x: -352, y: 645}
   blackboard:
     target: {fileID: 0}
   agent: {fileID: 0}
-  description: "\uC9C0\uC815\uD55C \uC2DC\uAC04\uB3D9\uC548 \uB300\uAE30\uD569\uB2C8\uB2E4."
-  duration: 1
+  description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uB97C \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
+--- !u!114 &-6627933823913317914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e427255788e78449823d1c00181006e, type: 3}
+  m_Name: CheckPlayerOnSight
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 9d1510fb90e9a504cb85054fd0460324
+  position: {x: -169, y: 466}
+  blackboard:
+    target: {fileID: 0}
+  agent: {fileID: 0}
+  description: "\uD50C\uB808\uC774\uC5B4\uAC00 \uC2DC\uC57C\uC5D0 \uB4E4\uC5B4\uC654\uB294\uC9C0
+    \uD655\uC778\uD569\uB2C8\uB2E4."
+  child: {fileID: -8948107325236719184}
 --- !u!114 &-3162609488396072336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43,54 +64,7 @@ MonoBehaviour:
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4\uC744 \uC21C\uCC28\uC801\uC73C\uB85C
     \uC2E4\uD589\uD569\uB2C8\uB2E4."
   children:
-  - {fileID: -5720877760023039751}
-  - {fileID: -1446052283386089597}
-  - {fileID: 3927490007860331343}
-  - {fileID: 5019051130475160554}
---- !u!114 &-1446052283386089597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48db3c905aa32e34da3554396eb0600e, type: 3}
-  m_Name: RandomWaitNode
-  m_EditorClassIdentifier: 
-  state: 0
-  started: 0
-  guid: 88ae313c794a8d840ac413c65cd83b9b
-  position: {x: -153.00002, y: 462.0001}
-  blackboard:
-    target: {fileID: 0}
-  agent: {fileID: 0}
-  description: "\uC9C0\uC815\uD55C \uC2DC\uAC04 \uBC94\uC704 \uB0B4\uC5D0\uC11C \uB79C\uB364\uC73C\uB85C
-    \uB300\uAE30\uD569\uB2C8\uB2E4."
-  durationMin: 1
-  durationMax: 2
---- !u!114 &-647366919142857425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59ab15960e11a624baf65119dbcfdc27, type: 3}
-  m_Name: WaitNode
-  m_EditorClassIdentifier: 
-  state: 0
-  started: 0
-  guid: 4bb2c458f30031245bdcc083517bd23f
-  position: {x: -304.5825, y: 663.5}
-  blackboard:
-    target: {fileID: 0}
-  agent: {fileID: 0}
-  description: "\uC9C0\uC815\uD55C \uC2DC\uAC04\uB3D9\uC548 \uB300\uAE30\uD569\uB2C8\uB2E4."
-  duration: 1
+  - {fileID: -6627933823913317914}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,17 +81,10 @@ MonoBehaviour:
   treeState: 0
   nodes:
   - {fileID: 1353668204475537931}
-  - {fileID: -5720877760023039751}
-  - {fileID: 3927490007860331343}
-  - {fileID: 3876527706660562163}
-  - {fileID: 7909235605041851802}
   - {fileID: -3162609488396072336}
-  - {fileID: 5019051130475160554}
   - {fileID: 5366069412104643932}
-  - {fileID: -1446052283386089597}
-  - {fileID: -647366919142857425}
-  - {fileID: 3191903475871528769}
-  - {fileID: 4471354294741161487}
+  - {fileID: -6627933823913317914}
+  - {fileID: -8948107325236719184}
   blackboard:
     target: {fileID: 0}
 --- !u!114 &1353668204475537931
@@ -141,115 +108,6 @@ MonoBehaviour:
   agent: {fileID: 0}
   description: "\uD589\uB3D9\uD2B8\uB9AC\uC758 \uC2DC\uC791\uC9C0\uC810\uC785\uB2C8\uB2E4."
   child: {fileID: 5366069412104643932}
---- !u!114 &3191903475871528769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48db3c905aa32e34da3554396eb0600e, type: 3}
-  m_Name: RandomWaitNode
-  m_EditorClassIdentifier: 
-  state: 0
-  started: 0
-  guid: 02ce3b877bf020e4f9c5cbb6b7032223
-  position: {x: -269.90253, y: 580.99994}
-  blackboard:
-    target: {fileID: 0}
-  agent: {fileID: 0}
-  description: "\uC9C0\uC815\uD55C \uC2DC\uAC04 \uBC94\uC704 \uB0B4\uC5D0\uC11C \uB79C\uB364\uC73C\uB85C
-    \uB300\uAE30\uD569\uB2C8\uB2E4."
-  durationMin: 1
-  durationMax: 2
---- !u!114 &3876527706660562163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59ab15960e11a624baf65119dbcfdc27, type: 3}
-  m_Name: WaitNode
-  m_EditorClassIdentifier: 
-  state: 0
-  started: 0
-  guid: 4a879a93c40e397408628831051e517d
-  position: {x: 0, y: 630}
-  blackboard:
-    target: {fileID: 0}
-  agent: {fileID: 0}
-  description: "\uC9C0\uC815\uD55C \uC2DC\uAC04\uB3D9\uC548 \uB300\uAE30\uD569\uB2C8\uB2E4."
-  duration: 1
---- !u!114 &3927490007860331343
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d20b2a2805239646b52c0520bb3ee88, type: 3}
-  m_Name: DebugLogNode
-  m_EditorClassIdentifier: 
-  state: 0
-  started: 0
-  guid: f6f9e9584246ddc4184de829a192750c
-  position: {x: 23.349981, y: 458.00006}
-  blackboard:
-    target: {fileID: 0}
-  agent: {fileID: 0}
-  description: "\uB514\uBC84\uADF8\uC6A9 \uB85C\uADF8\uB97C \uCD9C\uB825\uD569\uB2C8\uB2E4."
-  message: 
---- !u!114 &4471354294741161487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1575e0e0f57669e47adc33d18fd6f672, type: 3}
-  m_Name: DecreasePerceptionGaugeNode
-  m_EditorClassIdentifier: 
-  state: 0
-  started: 0
-  guid: 0f8a47555ea2ead4cb28aa8c74413cec
-  position: {x: -3, y: 731}
-  blackboard:
-    target: {fileID: 0}
-  agent: {fileID: 0}
-  description: 
---- !u!114 &5019051130475160554
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 858bb69cb05774b448541fece4e6eda0, type: 3}
-  m_Name: SequenceNode
-  m_EditorClassIdentifier: 
-  state: 0
-  started: 0
-  guid: 506ae22a8d0873d438f8e0e162beb5a4
-  position: {x: 215.30005, y: 458.00006}
-  blackboard:
-    target: {fileID: 0}
-  agent: {fileID: 0}
-  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4\uC744 \uC21C\uCC28\uC801\uC73C\uB85C
-    \uC2E4\uD589\uD569\uB2C8\uB2E4."
-  children:
-  - {fileID: 3876527706660562163}
-  - {fileID: 7909235605041851802}
 --- !u!114 &5366069412104643932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,24 +129,3 @@ MonoBehaviour:
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uC744 \uBC18\uBCF5\uD574\uC11C \uC2E4\uD589\uD569\uB2C8\uB2E4."
   child: {fileID: -3162609488396072336}
---- !u!114 &7909235605041851802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d20b2a2805239646b52c0520bb3ee88, type: 3}
-  m_Name: DebugLogNode
-  m_EditorClassIdentifier: 
-  state: 0
-  started: 0
-  guid: 9df5f28eacc92e54da27caa357832c90
-  position: {x: 250.95003, y: 630}
-  blackboard:
-    target: {fileID: 0}
-  agent: {fileID: 0}
-  description: "\uB514\uBC84\uADF8\uC6A9 \uB85C\uADF8\uB97C \uCD9C\uB825\uD569\uB2C8\uB2E4."
-  message: 

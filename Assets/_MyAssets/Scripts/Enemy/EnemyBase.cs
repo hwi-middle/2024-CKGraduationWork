@@ -10,6 +10,7 @@ using UnityEngine.AI;
 public class EnemyBase : MonoBehaviour
 {
     [SerializeField] private EnemyAiData _aiData;
+    public EnemyAiData AiData => _aiData;
     [SerializeField] private Transform _patrolPointsRoot;
     [SerializeField] private Canvas _canvas;
 

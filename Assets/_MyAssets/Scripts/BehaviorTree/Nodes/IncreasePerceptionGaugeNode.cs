@@ -6,7 +6,7 @@ public class IncreasePerceptionGaugeNode : TaskNode
 {
     public override void OnCreate()
     {
-        description = "인지 게이지를 감소시킵니다.";
+        description = "인지 게이지를 증가시킵니다.";
     }
 
     protected override void OnStart()

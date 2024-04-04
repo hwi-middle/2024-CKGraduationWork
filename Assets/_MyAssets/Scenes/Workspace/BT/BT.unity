@@ -581,7 +581,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 617084259}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15057115, y: 0.15830767, z: -0.02443434, w: 0.97553575}
+  m_LocalRotation: {x: 0.15057114, y: 0.15830766, z: -0.024434332, w: 0.97553575}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1336,7 +1336,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729681865}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.11638788, y: 0.15906481, z: -0.01888715, w: 0.9802018}
+  m_LocalRotation: {x: 0.11638788, y: 0.15906489, z: -0.01888716, w: 0.9802018}
   m_LocalPosition: {x: 3.63, y: 0.089999676, z: 2.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1492,7 +1492,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1764949706}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.11638789, y: 0.15906481, z: -0.01888715, w: 0.9802018}
+  m_LocalRotation: {x: 0.11638789, y: 0.15906486, z: -0.018887157, w: 0.9802018}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1719,9 +1719,7 @@ MonoBehaviour:
   _inputData: {fileID: 0}
   _wireData: {fileID: 0}
   _playerData: {fileID: 0}
-  _wireAvailableUI: {fileID: 0}
   _wirePointOffset: 0
-  _stateText: {fileID: 0}
   _assassinationData: {fileID: 11400000, guid: c3d73802406926c4eb7883edbc33bd52, type: 2}
   _gravityMultiplier: 1
 --- !u!1 &2127937871
@@ -1999,6 +1997,11 @@ PrefabInstance:
       propertyPath: _canvas
       value: 
       objectReference: {fileID: 6210237800884667792}
+    - target: {fileID: 4485978849695941898, guid: b7061574518fa8148b56330ce932799d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.49
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
