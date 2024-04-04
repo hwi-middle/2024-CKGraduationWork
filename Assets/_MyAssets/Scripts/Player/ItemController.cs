@@ -19,7 +19,7 @@ public class ItemController : MonoBehaviour
     private Transform _shootPoint;
     private Vector3 _throwTargetPoint;
     private Vector3 _shootDirection;
-    private Vector3 _prevPlayerPoint;
+    private Vector3 _prevForward;
     private Vector3 _prevThrowTargetPoint;
 
     private void Awake()
@@ -71,7 +71,7 @@ public class ItemController : MonoBehaviour
             SetThrowTargetPosition();
             PlayerMove.Instance.AlignPlayerToCameraForward();
         }
-        
+
     }
 
     private void HandleAiming()
@@ -104,42 +104,58 @@ public class ItemController : MonoBehaviour
             return;
         }
 
-        _isOverItemRange = (hit.point - playerPosition).magnitude > _playerData.maxItemRange;
+        float playerDistanceFromCamera = (cameraPosition - playerPosition).magnitude;
+        float hitPointDistanceFromCamera = (hit.point - cameraPosition).magnitude;
+        float targetDistance = hitPointDistanceFromCamera - playerDistanceFromCamera;
+
+        _isOverItemRange = targetDistance > _playerData.maxItemRange;
 
         if (!_isOverItemRange)
         {
-            _throwTargetPoint = hit.point;
+            _throwTargetPoint = cameraForward * targetDistance + playerPosition;
+            _throwTargetPoint.y = hit.point.y;
+
+            _throwTargetPoint = Vector3.Lerp(_prevThrowTargetPoint, _throwTargetPoint, 0.2f);
+
             _prevThrowTargetPoint = _throwTargetPoint;
-            _prevPlayerPoint = playerPosition;
+            _prevForward = cameraForward;
 
             DrawParabola();
+
+            _pointObject.transform.position = _throwTargetPoint;
+            Debug.Log($"Hit Normal : {hit.normal}");
+            _pointObject.transform.localRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
             return;
         }
 
         // Ray가 최대 거리를 벗어났을 때 마우스의 이동이 있을 경우를 대비한 Target 조정
-        _throwTargetPoint = AdjustTarget(_prevPlayerPoint, _prevThrowTargetPoint);
+        _throwTargetPoint = Vector3.Lerp(_throwTargetPoint, AdjustTarget(_prevForward, _prevThrowTargetPoint), 0.2f);
         DrawParabola();
+        _pointObject.transform.position = _throwTargetPoint;
     }
 
-    private Vector3 AdjustTarget(Vector3 originPos, Vector3 prevPos)
+    private Vector3 AdjustTarget(Vector3 prevForward, Vector3 prevPos)
     {
-        Debug.Log(prevPos);
-        prevPos.z *= -1f;
-        prevPos.x *= -1f;
         Transform cameraTransform = _mainCamera.transform;
-        Vector3 prevPosForward = (prevPos - originPos).normalized;
         Vector3 cameraForward = cameraTransform.forward;
 
-        float angle = Vector3.Angle(prevPosForward, cameraForward);
+        prevForward.y = 0;
+        cameraForward.y = 0;
+
+        float angle = Vector3.Angle(prevForward, cameraForward);
+
         angle *= Mathf.Deg2Rad;
 
-        Vector3 playerPos = transform.position;
         float targetX = Mathf.Cos(angle);
         float targetZ = Mathf.Sin(angle);
-        Vector3 targetPosition = new Vector3(targetX, 0, targetZ);
-        
-        targetPosition += cameraForward * _playerData.maxItemRange + playerPos;
+
+
+        Vector3 playerPos = transform.position;
+
+        Vector3 targetPosition = cameraForward * _playerData.maxItemRange + playerPos; 
+        targetPosition.x += targetX;
         targetPosition.y = prevPos.y;
+        targetPosition.z += targetZ;
         
         return targetPosition;
     }
@@ -181,8 +197,6 @@ public class ItemController : MonoBehaviour
         }
         
         LineDrawHelper.Instance.DrawParabola(list);
-        _pointObject.transform.position = _throwTargetPoint;
-        return;
     }
 
     private float GetParabolaShootingAngleInRadian(bool greaterAngle)
