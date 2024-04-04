@@ -16,6 +16,7 @@ public class ItemController : MonoBehaviour
 
     private bool _isOnAiming;
     private bool _isOverItemRange;
+    private bool _isNotHit;
 
     private Transform _shootPoint;
     private Vector3 _throwTargetPoint;
@@ -60,6 +61,14 @@ public class ItemController : MonoBehaviour
         if (_isOnAiming)
         {
             SetThrowTargetPosition();
+            
+            if (_isNotHit)
+            {
+                LineDrawHelper.Instance.DisableLine();
+                return;
+            }
+            
+            LineDrawHelper.Instance.EnableLine();
             PlayerMove.Instance.AlignPlayerToCameraForward();
         }
     }
@@ -85,24 +94,31 @@ public class ItemController : MonoBehaviour
         Vector3 cameraPosition = cameraTransform.position;
         Vector3 playerPosition = transform.position;
         Vector3 cameraForward = cameraTransform.forward;
+        _pointObject.transform.position = Vector3.zero - Vector3.down * 10000;
 
         Ray ray = new Ray(cameraPosition, cameraForward);
         LayerMask layerMask = ~(LayerMask.GetMask("Player") | LayerMask.GetMask("Item"));
+        _isNotHit = false;
 
         if (!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, layerMask))
         {
+            _isNotHit = true;
             return;
         }
-
-        float playerDistanceFromCamera = (cameraPosition - playerPosition).magnitude;
-        float hitPointDistanceFromCamera = (hit.point - cameraPosition).magnitude;
-        float targetDistance = hitPointDistanceFromCamera - playerDistanceFromCamera;
-
-        _isOverItemRange = targetDistance > _playerData.maxItemRange;
+        
+        Vector3 cameraPositionOnPlane = Vector3.ProjectOnPlane(cameraPosition, Vector3.up);
+        Vector3 playerPositionOnPlane = Vector3.ProjectOnPlane(playerPosition, Vector3.up);
+        Vector3 hitPositionOnPlane = Vector3.ProjectOnPlane(hit.point, Vector3.up);
+        
+        float playerDistanceFromCamera = (cameraPositionOnPlane - playerPositionOnPlane).magnitude;
+        float hitPointDistanceFromCamera = (hitPositionOnPlane - cameraPositionOnPlane).magnitude;
+        float hitPointDistanceFromPlayer = hitPointDistanceFromCamera - playerDistanceFromCamera;
+        
+        _isOverItemRange = hitPointDistanceFromPlayer > _playerData.maxItemRange;
 
         if (!_isOverItemRange)
         {
-            _throwTargetPoint = cameraForward * targetDistance + playerPosition;
+            _throwTargetPoint = cameraForward * hitPointDistanceFromPlayer + playerPosition;
             _throwTargetPoint.y = hit.point.y;
 
             _throwTargetPoint = Vector3.Lerp(_prevThrowTargetPoint, _throwTargetPoint, 0.2f);
@@ -112,9 +128,20 @@ public class ItemController : MonoBehaviour
 
             DrawParabola();
 
-            _pointObject.transform.position = _throwTargetPoint;
+            _pointObject.transform.position = Vector3.ProjectOnPlane(_throwTargetPoint, hit.normal).normalized * 2.0f;
             _pointObject.transform.localRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
             return;
+        }
+
+        Vector3 playerForward = transform.forward;
+
+        _throwTargetPoint = playerForward * _playerData.maxItemRange + playerPosition;
+        Debug.DrawRay(playerPosition, _throwTargetPoint.normalized, Color.red);
+        Debug.DrawRay(_throwTargetPoint, Vector3.up, Color.green);
+        Ray downRay = new Ray(_throwTargetPoint, Vector3.down);
+        if (Physics.Raycast(downRay, out hit, float.MaxValue))
+        {
+            _throwTargetPoint.y = hit.point.y;
         }
 
         // Ray가 최대 거리를 벗어났을 때 마우스의 이동이 있을 경우를 대비한 Target 조정
@@ -122,14 +149,14 @@ public class ItemController : MonoBehaviour
         _prevForward = Vector3.ProjectOnPlane(_prevForward, Vector3.up);
         cameraForward.Normalize();
         _prevForward.Normalize();
-        
+
         _prevForward = Vector3.Slerp(_prevForward, cameraForward, 0.2f);
-        
+
         _throwTargetPoint = playerPosition + _prevForward.normalized * _playerData.maxItemRange;
         _throwTargetPoint.y = _prevThrowTargetPoint.y;
 
         DrawParabola();
-        _pointObject.transform.position = _throwTargetPoint;
+        _pointObject.transform.position = Vector3.ProjectOnPlane(_throwTargetPoint, hit.normal).normalized;
     }
 
     private void DrawParabola(bool greaterAngle = false)
@@ -148,7 +175,6 @@ public class ItemController : MonoBehaviour
         }
 
         _shootPoint.localRotation = Quaternion.Euler(-angleInRadian * Mathf.Rad2Deg, 0f, 0f);
-        LineDrawHelper.Instance.EnableLine();
         float gravity = Mathf.Abs(Physics.gravity.y);
         float v0x = _playerData.throwPower * Mathf.Cos(angleInRadian);
         float v0y = _playerData.throwPower * Mathf.Sin(angleInRadian);

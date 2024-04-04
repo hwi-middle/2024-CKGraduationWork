@@ -30,6 +30,7 @@ public class PlayerMove : Singleton<PlayerMove>
     private Camera _camera;
     public CinemachineFreeLook FreeLookCamera { get; private set; }
     public CinemachineFreeLook AimingCamera { get; private set; }
+    public CinemachineBrain BrainCamera { get; private set; }
     
     [SerializeField] private PlayerInputData _inputData;
     private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
@@ -125,6 +126,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
         FreeLookCamera = _camerasPrefab.transform.Find("FreeLook Camera").GetComponent<CinemachineFreeLook>();
         AimingCamera = _camerasPrefab.transform.Find("Aiming Camera").GetComponent<CinemachineFreeLook>();
+        BrainCamera = _camerasPrefab.transform.Find("Main Camera").GetComponent<CinemachineBrain>();
         
         Transform tr = gameObject.transform;
         FreeLookCamera.LookAt = tr;
@@ -138,24 +140,28 @@ public class PlayerMove : Singleton<PlayerMove>
 
     public void ChangeCameraToFreeLook()
     {
-        FreeLookCamera.MoveToTopOfPrioritySubqueue();
-        
-        Vector3 forwardDirection = transform.forward;
+        Vector3 forwardDirection = _camera.transform.forward;
+        Debug.Log(forwardDirection);
         forwardDirection.y = 0.5f;
 
         FreeLookCamera.m_XAxis.Value = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
-        AimingCamera.m_YAxis.Value = forwardDirection.y;
+        FreeLookCamera.m_YAxis.Value = forwardDirection.y;
+        
+        FreeLookCamera.MoveToTopOfPrioritySubqueue();
+        Debug.Log(_camera.transform.forward);
     }
 
     public void ChangeCameraToAiming()
     {
-        AimingCamera.MoveToTopOfPrioritySubqueue();
-        
-        Vector3 forwardDirection = transform.forward;
+        Vector3 forwardDirection = _camera.transform.forward;
+        Debug.Log(forwardDirection);
         forwardDirection.y = 0.5f;
 
         AimingCamera.m_XAxis.Value = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
         AimingCamera.m_YAxis.Value = forwardDirection.y;
+        
+        AimingCamera.MoveToTopOfPrioritySubqueue();
+        Debug.Log(_camera.transform.forward);
     }
 
     private void OnEnable()
@@ -236,6 +242,10 @@ public class PlayerMove : Singleton<PlayerMove>
 
     public void AlignPlayerToCameraForward()
     {
+        if (BrainCamera.IsBlending)
+        {
+            return;
+        }
         ApplyRotate();   
     }
     
