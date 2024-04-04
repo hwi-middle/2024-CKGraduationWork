@@ -64,6 +64,11 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
+    public void OnListenStrangeSound(Vector3 origin, float increase)
+    {
+        Debug.Log($"listen Sound From : {origin}, Increase : {increase}");
+    }
+    
     private void DetectPlayer()
     {
         if (IsPlayerOnSight(out _foundPlayer))

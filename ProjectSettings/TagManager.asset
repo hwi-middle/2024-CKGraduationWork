@@ -21,8 +21,8 @@ TagManager:
   - WirePoint
   - Ground
   - Wall
-  - 
-  - 
+  - Item
+  - Enemy
   - 
   - 
   - 

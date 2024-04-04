@@ -6,9 +6,10 @@ using UnityEngine;
 public class ItemController : MonoBehaviour
 {
     [SerializeField] private PlayerData _playerData;
-    [SerializeField] private PlayerItemData _itemData;
     [SerializeField] private PlayerInputData _inputData;
     [SerializeField] private GameObject _pointObject;
+
+    private GameObject _itemPrefab;
 
     private GameObject _itemInHand;
     private Camera _mainCamera;
@@ -25,6 +26,7 @@ public class ItemController : MonoBehaviour
     private void Awake()
     {
         _shootPoint = transform.Find("ShootPoint").GetComponent<Transform>();
+        _itemPrefab = Resources.Load<GameObject>("Items/SoundBomb");
     }
 
     private void OnEnable()
@@ -50,28 +52,16 @@ public class ItemController : MonoBehaviour
 
     private void Update()
     {
-        // Debug용 임시 입력
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            _itemInHand = _itemData.items[0].item;
+            _itemInHand = _itemPrefab;
         }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            _itemInHand = _itemData.items[1].item;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            _itemInHand = _itemData.items[2].item;
-        }
-
+        
         if (_isOnAiming)
         {
             SetThrowTargetPosition();
             PlayerMove.Instance.AlignPlayerToCameraForward();
         }
-
     }
 
     private void HandleAiming()
@@ -97,7 +87,7 @@ public class ItemController : MonoBehaviour
         Vector3 cameraForward = cameraTransform.forward;
 
         Ray ray = new Ray(cameraPosition, cameraForward);
-        LayerMask layerMask = ~LayerMask.GetMask("Player");
+        LayerMask layerMask = ~(LayerMask.GetMask("Player") | LayerMask.GetMask("Item"));
 
         if (!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, layerMask))
         {
@@ -123,41 +113,23 @@ public class ItemController : MonoBehaviour
             DrawParabola();
 
             _pointObject.transform.position = _throwTargetPoint;
-            Debug.Log($"Hit Normal : {hit.normal}");
             _pointObject.transform.localRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
             return;
         }
 
         // Ray가 최대 거리를 벗어났을 때 마우스의 이동이 있을 경우를 대비한 Target 조정
-        _throwTargetPoint = Vector3.Lerp(_throwTargetPoint, AdjustTarget(_prevForward, _prevThrowTargetPoint), 0.2f);
+        cameraForward = Vector3.ProjectOnPlane(cameraForward, Vector3.up);
+        _prevForward = Vector3.ProjectOnPlane(_prevForward, Vector3.up);
+        cameraForward.Normalize();
+        _prevForward.Normalize();
+        
+        _prevForward = Vector3.Slerp(_prevForward, cameraForward, 0.2f);
+        
+        _throwTargetPoint = playerPosition + _prevForward.normalized * _playerData.maxItemRange;
+        _throwTargetPoint.y = _prevThrowTargetPoint.y;
+
         DrawParabola();
         _pointObject.transform.position = _throwTargetPoint;
-    }
-
-    private Vector3 AdjustTarget(Vector3 prevForward, Vector3 prevPos)
-    {
-        Transform cameraTransform = _mainCamera.transform;
-        Vector3 cameraForward = cameraTransform.forward;
-
-        prevForward.y = 0;
-        cameraForward.y = 0;
-
-        float angle = Vector3.Angle(prevForward, cameraForward);
-
-        angle *= Mathf.Deg2Rad;
-
-        float targetX = Mathf.Cos(angle);
-        float targetZ = Mathf.Sin(angle);
-
-
-        Vector3 playerPos = transform.position;
-
-        Vector3 targetPosition = cameraForward * _playerData.maxItemRange + playerPos; 
-        targetPosition.x += targetX;
-        targetPosition.y = prevPos.y;
-        targetPosition.z += targetZ;
-        
-        return targetPosition;
     }
 
     private void DrawParabola(bool greaterAngle = false)
@@ -234,11 +206,14 @@ public class ItemController : MonoBehaviour
         Debug.Assert(_mainCamera != null, "_mainCamera != null");
         Transform cameraTransform = _mainCamera.transform;
         Vector3 playerPosTop = transform.position;
-        playerPosTop.y += 0.5f;
+        playerPosTop.y += 1.0f;
         GameObject itemPrefab =
             Instantiate(_itemInHand, playerPosTop, cameraTransform.localRotation);
         Rigidbody itemRigidbody = itemPrefab.GetComponent<Rigidbody>();
-
+        itemPrefab.GetComponent<ItemHandler>().Init(_playerData.itemGaugeAmount, _playerData.itemImpactRadius);
+        itemRigidbody.AddForce(_shootPoint.forward * _playerData.throwPower, ForceMode.VelocityChange);
+        
         _itemInHand = null;
+        HandleAimingCancel();
     }
 }

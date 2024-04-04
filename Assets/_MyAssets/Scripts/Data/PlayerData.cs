@@ -23,6 +23,7 @@ public class PlayerData : ScriptableObject
     [Tooltip("아이템 던지는 힘")] public float throwPower;
     [Tooltip("아이템 최대 사거리")] public float maxItemRange;
     [Tooltip("아이템 영향 거리 (반지름)")] public float itemImpactRadius;
+    [Tooltip("아이템 적 게이지 증가량")] public float itemGaugeAmount;
 
     [Header("경사로 미끄러짐 속도")]
     [Tooltip("올라기지 못하는 경사로에서 미끄러질 때 속도")] public float slopeSlideSpeed;
