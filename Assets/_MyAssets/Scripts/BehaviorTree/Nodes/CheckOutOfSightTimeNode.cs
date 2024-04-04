@@ -15,7 +15,7 @@ public class CheckOutOfSightTimeNode : DecoratorNode
     {
     }
 
-    protected override void OnStop()
+    protected override void OnStop()        
     {
     }
 
