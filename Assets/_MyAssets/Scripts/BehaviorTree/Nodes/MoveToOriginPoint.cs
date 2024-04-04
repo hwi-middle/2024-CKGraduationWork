@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaseNode : TaskNode
+public class MoveToOriginPoint : TaskNode
 {
     public override void OnCreate()
     {
-        description = "플레이어를 추적합니다.";
+        description = "원점으로 돌아갑니다.";
     }
 
     protected override void OnStart()
@@ -19,18 +19,11 @@ public class ChaseNode : TaskNode
 
     protected override void OnAbort()
     {
-        
     }
 
     protected override ENodeState OnUpdate()
     {
-        if (blackboard.target == null)
-        {
-            return ENodeState.Failure;
-        }
-        
-        agent.SetDestination(blackboard.target.transform.position);
-        
+        agent.SetDestination(agent.MoveRangeCenterPos);
         return ENodeState.Success;
     }
 }

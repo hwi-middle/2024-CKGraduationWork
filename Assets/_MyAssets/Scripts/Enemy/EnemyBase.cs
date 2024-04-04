@@ -18,6 +18,7 @@ public class EnemyBase : MonoBehaviour
 
     private float _perceptionGauge = 0f;
     private Vector3 _moveRangeCenterPos;
+    public Vector3 MoveRangeCenterPos => _moveRangeCenterPos;
     private readonly Collider[] _overlappedPlayerBuffer = new Collider[1];
     private Transform _foundPlayer;
     private NavMeshAgent _navMeshAgent;

@@ -15,7 +15,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: c9b9638f390d40f4d8226cd0c7d45c0e
-  position: {x: -350, y: 769}
+  position: {x: -193.99994, y: 763.251}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -43,6 +43,7 @@ MonoBehaviour:
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4 \uC911 \uD558\uB098\uB97C \uC2E4\uD589\uD569\uB2C8\uB2E4."
   children:
+  - {fileID: -5942775213244615459}
   - {fileID: -6627933823913317914}
   - {fileID: -6137277382804976303}
 --- !u!114 &-6627933823913317914
@@ -60,7 +61,7 @@ MonoBehaviour:
   state: 0
   started: 1
   guid: 9d1510fb90e9a504cb85054fd0460324
-  position: {x: -157.50002, y: 460.00003}
+  position: {x: -0.9999237, y: 454.25098}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -83,7 +84,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 9c13faa4505ebb448b87a7bb8ba56ffe
-  position: {x: 168.00006, y: 460.00003}
+  position: {x: 379.00006, y: 454.25098}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -91,6 +92,29 @@ MonoBehaviour:
   description: "\uC2DC\uC57C\uC5D0\uC11C \uC0AC\uB77C\uC9C4 \uC2DC\uAC04\uC744 \uD655\uC778\uD569\uB2C8\uB2E4."
   child: {fileID: -2492612781893175548}
   threshold: 1
+--- !u!114 &-5942775213244615459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54ff81cbdd197994fa07961ff3b81333, type: 3}
+  m_Name: CheckOutOfRangeNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: fd3a2b508345080499749af787cbfd5c
+  position: {x: -347.99997, y: 454.25098}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uD65C\uB3D9 \uBC94\uC704\uB97C \uBC97\uC5B4\uB0AC\uB294\uC9C0
+    \uD655\uC778\uD569\uB2C8\uB2E4."
+  child: {fileID: -2753155313134257457}
 --- !u!114 &-5226370910300156564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,7 +130,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 1503b52a140568d4a98ad65fd966e8f8
-  position: {x: -188, y: 614}
+  position: {x: -31.999939, y: 608.251}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -116,6 +140,27 @@ MonoBehaviour:
   children:
   - {fileID: -8837909033043748179}
   - {fileID: 4305519358515743911}
+--- !u!114 &-2753155313134257457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5356b7f00256354e94d22f6f17b6460, type: 3}
+  m_Name: MoveToOriginPoint
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 98ba5b5c2efddfd4ab6db839e1866069
+  position: {x: -348, y: 608}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC6D0\uC810\uC73C\uB85C \uB3CC\uC544\uAC11\uB2C8\uB2E4."
 --- !u!114 &-2492612781893175548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,7 +176,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: ae70e625a3047574789c74b7545283a4
-  position: {x: 155.00002, y: 602}
+  position: {x: 366.00006, y: 596.251}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -162,6 +207,8 @@ MonoBehaviour:
   - {fileID: -6137277382804976303}
   - {fileID: -2492612781893175548}
   - {fileID: -7075501065537223723}
+  - {fileID: -5942775213244615459}
+  - {fileID: -2753155313134257457}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -202,7 +249,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: f373526600f85ca48b875b83fe107ae6
-  position: {x: -49.999992, y: 924}
+  position: {x: 106, y: 918.251}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -223,7 +270,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 0072b803110c3574cad51513e237a7a6
-  position: {x: -72.99998, y: 769}
+  position: {x: 83.00009, y: 763.251}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0

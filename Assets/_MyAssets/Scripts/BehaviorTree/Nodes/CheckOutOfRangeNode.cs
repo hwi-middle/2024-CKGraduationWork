@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaseNode : TaskNode
+public class CheckOutOfRangeNode : DecoratorNode
 {
     public override void OnCreate()
     {
-        description = "플레이어를 추적합니다.";
+        description = "자신의 활동 범위를 벗어났는지 확인합니다.";
     }
 
     protected override void OnStart()
@@ -19,18 +19,16 @@ public class ChaseNode : TaskNode
 
     protected override void OnAbort()
     {
-        
     }
 
     protected override ENodeState OnUpdate()
     {
-        if (blackboard.target == null)
+        if (Vector3.Distance(agent.transform.position, agent.MoveRangeCenterPos) > agent.AiData.moveRange)
         {
-            return ENodeState.Failure;
+            child.Update();
+            return ENodeState.Success;
         }
-        
-        agent.SetDestination(blackboard.target.transform.position);
-        
-        return ENodeState.Success;
+
+        return ENodeState.Failure;
     }
 }
