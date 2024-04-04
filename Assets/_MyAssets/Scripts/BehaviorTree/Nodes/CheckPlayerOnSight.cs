@@ -25,12 +25,25 @@ public class CheckPlayerOnSight : DecoratorNode
 
     protected override ENodeState OnUpdate()
     {
-        int bufferCount = Physics.OverlapSphereNonAlloc(agent.transform.position, agent.AiData.perceptionDistance, _overlappedPlayerBuffer, LayerMask.GetMask("Player"));
+        if (!IsPlayerOnSight())
+        {
+            return ENodeState.Failure;
+        }
+
+        child.Update();
+        return ENodeState.Success;
+    }
+
+    private bool IsPlayerOnSight()
+    {
+        int bufferCount = Physics.OverlapSphereNonAlloc(agent.transform.position, agent.AiData.perceptionDistance, _overlappedPlayerBuffer,
+            LayerMask.GetMask("Player"));
         Debug.Assert(bufferCount is 0 or 1);
         if (bufferCount == 0)
         {
+            blackboard.outOfSightTime += Time.deltaTime;
             blackboard.target = null;
-            return ENodeState.Failure;
+            return false;
         }
 
         Transform overlappedPlayer = _overlappedPlayerBuffer[0].transform;
@@ -39,8 +52,9 @@ public class CheckPlayerOnSight : DecoratorNode
         Vector3 direction = (overlappedPlayer.position - agent.transform.position).normalized;
         if (Vector3.Dot(direction, agent.transform.forward) < Mathf.Cos(agent.AiData.perceptionAngle * 0.5f * Mathf.Deg2Rad))
         {
+            blackboard.outOfSightTime += Time.deltaTime;
             blackboard.target = null;
-            return ENodeState.Failure;
+            return false;
         }
 
         // 나(AI)와 플레이어 사이에 장애물이 있는지 확인
@@ -50,12 +64,14 @@ public class CheckPlayerOnSight : DecoratorNode
         Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity);
         if (!hit.transform.CompareTag("Player"))
         {
+            blackboard.outOfSightTime += Time.deltaTime;
             blackboard.target = null;
-            return ENodeState.Failure;
+            return false;
         }
 
         // 시야에 플레이어가 들어옴
         blackboard.target = overlappedPlayer.gameObject;
-        return ENodeState.Success;
+        blackboard.outOfSightTime = 0f;
+        return true;
     }
 }

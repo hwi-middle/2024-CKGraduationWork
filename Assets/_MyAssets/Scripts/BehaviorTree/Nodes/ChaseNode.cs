@@ -27,8 +27,12 @@ public class ChaseNode : TaskNode
     protected override ENodeState OnUpdate()
     {
         Debug.Log("추적 중");
+        if (blackboard.target == null)
+        {
+            return ENodeState.Failure;
+        }
         
-        
+        agent.SetDestination(blackboard.target.transform.position);
         
         return ENodeState.Success;
     }

@@ -11,12 +11,13 @@ public class EnemyBase : MonoBehaviour
 {
     [SerializeField] private EnemyAiData _aiData;
     public EnemyAiData AiData => _aiData;
+    [SerializeField] private BehaviorTree _tree;
+    public BehaviorTree Tree => _tree;
     [SerializeField] private Transform _patrolPointsRoot;
     [SerializeField] private Canvas _canvas;
 
     private float _perceptionGauge = 0f;
     private Vector3 _moveRangeCenterPos;
-    public float PerceptionGauge => _perceptionGauge;
     private readonly Collider[] _overlappedPlayerBuffer = new Collider[1];
     private Transform _foundPlayer;
     private NavMeshAgent _navMeshAgent;
@@ -24,6 +25,9 @@ public class EnemyBase : MonoBehaviour
     private PerceptionNote _perceptionNote;
     private float _timeAfterPlayerOutOfSight = 0f;
 
+    public float PerceptionGauge => _perceptionGauge;
+    public bool IsPerceptionGaugeFull => _perceptionGauge >= 100f;
+    
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -35,20 +39,25 @@ public class EnemyBase : MonoBehaviour
     private void Start()
     {
         _navMeshAgent.speed = _aiData.moveSpeed;
-        Patrol();
+        _tree = _tree.Clone();        
+        _tree.Bind(this);
+
+        // Patrol();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(transform.position, _moveRangeCenterPos) > _aiData.moveRange)
-        {
-            _navMeshAgent.SetDestination(_moveRangeCenterPos);
-        }
-        else
-        {
-            DetectPlayer();
-        }
+        Debug.Log($"[{Time.frameCount}] EnemyBase Update");
+        _tree.Update();
+        // if (Vector3.Distance(transform.position, _moveRangeCenterPos) > _aiData.moveRange)
+        // {
+        //     _navMeshAgent.SetDestination(_moveRangeCenterPos);
+        // }
+        // else
+        // {
+        //     DetectPlayer();
+        // }
     }
 
     private void OnDestroy()
@@ -63,6 +72,11 @@ public class EnemyBase : MonoBehaviour
         {
             Destroy(_perceptionNote.gameObject);
         }
+    }
+    
+    public void SetDestination(Vector3 destination)
+    {
+        _navMeshAgent.SetDestination(destination);
     }
 
     private void DetectPlayer()

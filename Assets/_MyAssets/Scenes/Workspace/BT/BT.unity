@@ -581,7 +581,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 617084259}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15057114, y: 0.15830766, z: -0.024434332, w: 0.97553575}
+  m_LocalRotation: {x: 0.15057115, y: 0.15830767, z: -0.02443434, w: 0.97553575}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1336,7 +1336,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729681865}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.11638788, y: 0.15906489, z: -0.01888716, w: 0.9802018}
+  m_LocalRotation: {x: 0.11638788, y: 0.15906483, z: -0.018887151, w: 0.9802018}
   m_LocalPosition: {x: 3.63, y: 0.089999676, z: 2.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1492,7 +1492,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1764949706}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.11638789, y: 0.15906486, z: -0.018887157, w: 0.9802018}
+  m_LocalRotation: {x: 0.11638789, y: 0.15906483, z: -0.018887153, w: 0.9802018}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1673,6 +1673,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9c0a6b18-ce2b-45b3-b0ff-aa956f6fb92b
     m_ActionName: PlayerAction/Crouch[/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e890f7ba-64cc-410b-9e09-488a0d2492e4
+    m_ActionName: PlayerAction/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: PlayerAction
@@ -1716,9 +1720,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bd6f0742bb8d4658a39bff07e218320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputData: {fileID: 0}
-  _wireData: {fileID: 0}
-  _playerData: {fileID: 0}
+  _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
+  _wireData: {fileID: 11400000, guid: 514498b1264fa4ad9a0a5976151dab49, type: 2}
+  _playerData: {fileID: 11400000, guid: be439c1712086cc4eb47a854b63c7824, type: 2}
   _wirePointOffset: 0
   _assassinationData: {fileID: 11400000, guid: c3d73802406926c4eb7883edbc33bd52, type: 2}
   _gravityMultiplier: 1
@@ -1994,6 +1998,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4239332756983878020, guid: b7061574518fa8148b56330ce932799d,
         type: 3}
+      propertyPath: _tree
+      value: 
+      objectReference: {fileID: 11400000, guid: 7597d064b1573fa4d97dc185a766982f,
+        type: 2}
+    - target: {fileID: 4239332756983878020, guid: b7061574518fa8148b56330ce932799d,
+        type: 3}
       propertyPath: _canvas
       value: 
       objectReference: {fileID: 6210237800884667792}
@@ -2005,31 +2015,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1791676407445237939, guid: b7061574518fa8148b56330ce932799d,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7565787021393770792}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7061574518fa8148b56330ce932799d, type: 3}
---- !u!1 &7565787021393770791 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1791676407445237939, guid: b7061574518fa8148b56330ce932799d,
-    type: 3}
-  m_PrefabInstance: {fileID: 7565787021393770790}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7565787021393770792
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7565787021393770791}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2e65231cef385647a9533e67ee0be89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tree: {fileID: 11400000, guid: 7597d064b1573fa4d97dc185a766982f, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
