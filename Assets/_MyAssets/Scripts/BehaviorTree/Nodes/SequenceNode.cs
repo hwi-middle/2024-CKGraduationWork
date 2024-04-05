@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class SequenceNode : CompositeNode
 {
-    private int current;
-
     public override void OnCreate()
     {
         description = "자신의 자식들을 순차적으로 실행합니다.";
@@ -15,7 +13,6 @@ public class SequenceNode : CompositeNode
     
     protected override void OnStart()
     {
-        current = 0;
     }
 
     protected override void OnStop()
@@ -34,24 +31,20 @@ public class SequenceNode : CompositeNode
         {
             return ENodeState.Success;
         }
-        
-        var child = children[current];
-        switch (child.Update())
+
+        foreach (var child in children)
         {
-            case ENodeState.Running:
-                return ENodeState.Running;
-            case ENodeState.Failure:
-                return ENodeState.Failure;
-            case ENodeState.Success:
-                current++;
-                break;
-            case ENodeState.Aborted:
-                return ENodeState.Aborted;
-            default:
-                Debug.Assert(false);
-                break;
+            switch (child.Update())
+            {
+                case ENodeState.Running:
+                    return ENodeState.Running;
+                case ENodeState.Failure:
+                    return ENodeState.Failure;
+                case ENodeState.Aborted:
+                    return ENodeState.Aborted;
+            }
         }
-        
-        return current == children.Count ? ENodeState.Success : ENodeState.Running;
+
+        return ENodeState.Success;
     }
 }
