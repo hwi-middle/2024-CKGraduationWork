@@ -135,7 +135,6 @@ public class ItemController : MonoBehaviour
         
         // 위에서 나온 _throwTargetPoint로부터 아래방향으로 Ray를 쐈을 때 hit 지점이 TargetPoint
         Ray downRay = new Ray(_throwTargetPoint, Vector3.down);
-        Debug.DrawRay(_throwTargetPoint, Vector3.down * Mathf.Infinity, Color.black);
         if (!Physics.Raycast(downRay, out hit, Mathf.Infinity, layerMask))
         {
             ray = new Ray(playerPosition, cameraForward);
