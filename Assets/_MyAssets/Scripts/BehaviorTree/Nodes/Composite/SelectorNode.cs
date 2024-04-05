@@ -35,8 +35,8 @@ public class SelectorNode : CompositeNode
         {
             switch (child.Update())
             {
-                case ENodeState.Running:
-                    return ENodeState.Running;
+                case ENodeState.InProgress:
+                    return ENodeState.InProgress;
                 case ENodeState.Success:
                     return ENodeState.Success;
             }

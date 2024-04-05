@@ -68,7 +68,8 @@ public class GetNextPatrolPosNode : TaskNode
         }
 
         blackboard.nextPatrolPos = blackboard.patrolPoints[_currentIdx];
-
+        _prevIdx = _currentIdx;
+        
         return ENodeState.Success;
     }
 }

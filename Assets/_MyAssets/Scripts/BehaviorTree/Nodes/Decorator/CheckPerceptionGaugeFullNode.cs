@@ -30,8 +30,8 @@ public class CheckPerceptionGaugeFullNode : DecoratorNode
         
         switch (child.Update())
         {
-            case ENodeState.Running:
-                return ENodeState.Running;
+            case ENodeState.InProgress:
+                return ENodeState.InProgress;
             case ENodeState.Failure:
                 return ENodeState.Failure;
             case ENodeState.Success:

@@ -6,6 +6,7 @@ public class MoveToPatrolPointNode : TaskNode
 {
     public override void OnCreate()
     {
+        description = "순찰 지점을 순회하며 이동합니다.";
     }
 
     protected override void OnStart()
@@ -28,6 +29,6 @@ public class MoveToPatrolPointNode : TaskNode
             return ENodeState.Success;
         }
 
-        return ENodeState.Running;
+        return ENodeState.InProgress;
     }
 }

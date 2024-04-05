@@ -37,6 +37,6 @@ public class RandomWaitNode : TaskNode
             return ENodeState.Success;
         }
 
-        return ENodeState.Running;
+        return ENodeState.InProgress;
     }
 }

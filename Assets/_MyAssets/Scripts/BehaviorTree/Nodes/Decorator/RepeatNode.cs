@@ -27,6 +27,6 @@ public class RepeatNode : DecoratorNode
     protected override ENodeState OnUpdate()
     {
         child.Update();
-        return ENodeState.Running;
+        return ENodeState.InProgress;
     }
 }

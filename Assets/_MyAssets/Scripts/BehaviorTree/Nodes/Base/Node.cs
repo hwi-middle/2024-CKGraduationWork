@@ -6,13 +6,13 @@ public abstract class Node : ScriptableObject
 {
     public enum ENodeState
     {
-        Running,
+        InProgress,
         Failure,
         Success,
         Aborted,
     }
 
-    [HideInInspector] public ENodeState state = ENodeState.Running;
+    [HideInInspector] public ENodeState state = ENodeState.InProgress;
     [HideInInspector] public bool started = false;
     [HideInInspector] public string guid;
     [HideInInspector] public Vector2 position;

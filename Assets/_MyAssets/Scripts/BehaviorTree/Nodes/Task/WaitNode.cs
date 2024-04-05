@@ -34,6 +34,6 @@ public class WaitNode : TaskNode
             return ENodeState.Success;
         }
 
-        return ENodeState.Running;
+        return ENodeState.InProgress;
     }
 }
