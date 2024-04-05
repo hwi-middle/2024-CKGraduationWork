@@ -46,7 +46,9 @@ public abstract class Node : ScriptableObject
 
     public virtual Node Clone()
     {
-        return Instantiate(this);
+        Node node = Instantiate(this);
+        node.name = node.name.Replace("(Clone)", "");
+        return node;
     }
 
     public abstract void OnCreate();

@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveToOriginPoint : TaskNode
+public class MoveToPatrolPointNode : TaskNode
 {
     public override void OnCreate()
     {
-        description = "원점으로 돌아갑니다.";
     }
 
     protected override void OnStart()
     {
+        agent.SetDestination(blackboard.nextPatrolPos);
     }
 
     protected override void OnStop()
@@ -23,7 +23,11 @@ public class MoveToOriginPoint : TaskNode
 
     protected override ENodeState OnUpdate()
     {
-        agent.SetDestination(agent.MoveRangeCenterPos);
-        return ENodeState.Success;
+        if (agent.IsArrivedToTarget(blackboard.nextPatrolPos))
+        {
+            return ENodeState.Success;
+        }
+
+        return ENodeState.Running;
     }
 }
