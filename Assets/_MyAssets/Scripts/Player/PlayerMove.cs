@@ -141,27 +141,23 @@ public class PlayerMove : Singleton<PlayerMove>
     public void ChangeCameraToFreeLook()
     {
         Vector3 forwardDirection = _camera.transform.forward;
-        Debug.Log(forwardDirection);
         forwardDirection.y = 0.5f;
 
         FreeLookCamera.m_XAxis.Value = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
         FreeLookCamera.m_YAxis.Value = forwardDirection.y;
         
         FreeLookCamera.MoveToTopOfPrioritySubqueue();
-        Debug.Log(_camera.transform.forward);
     }
 
     public void ChangeCameraToAiming()
     {
         Vector3 forwardDirection = _camera.transform.forward;
-        Debug.Log(forwardDirection);
         forwardDirection.y = 0.5f;
 
         AimingCamera.m_XAxis.Value = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
         AimingCamera.m_YAxis.Value = forwardDirection.y;
-        
+
         AimingCamera.MoveToTopOfPrioritySubqueue();
-        Debug.Log(_camera.transform.forward);
     }
 
     private void OnEnable()

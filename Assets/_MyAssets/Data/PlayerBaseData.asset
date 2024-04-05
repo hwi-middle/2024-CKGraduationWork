@@ -22,6 +22,7 @@ MonoBehaviour:
   throwPower: 15
   maxItemRange: 15
   itemImpactRadius: 15
+  itemGaugeAmount: 0
   slopeSlideSpeed: 4
   playerCanvas: {fileID: 6670551468554774952, guid: d145af9e61baa8f4b86278040d640948,
     type: 3}

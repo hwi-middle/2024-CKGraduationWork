@@ -6,8 +6,6 @@ using UnityEngine;
 public class LineDrawHelper : Singleton<LineDrawHelper>
 {
     private LineRenderer _line;
-    private List<Vector3> _parabolaPoints;
-    private IEnumerator _parabolaRoutine;
 
     private void Awake()
     {
@@ -41,11 +39,6 @@ public class LineDrawHelper : Singleton<LineDrawHelper>
     public void SetPositionCount(int count)
     {
         _line.positionCount = count;
-    }
-
-    public Vector3 GetParabolaArrivalVector()
-    {
-        return _line.GetPosition(_line.positionCount - 1);
     }
 
     public void DrawParabola(Vector3[] list)
