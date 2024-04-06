@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaitNode : ActionNode
+public class WaitNode : TaskNode
 {
     public float duration = 1f;
     private float startTime;
@@ -22,13 +22,18 @@ public class WaitNode : ActionNode
         
     }
 
-    protected override State OnUpdate()
+    protected override void OnAbort()
+    {
+        
+    }
+
+    protected override ENodeState OnUpdate()
     {
         if (Time.time - startTime > duration)
         {
-            return State.Success;
+            return ENodeState.Success;
         }
 
-        return State.Running;
+        return ENodeState.InProgress;
     }
 }

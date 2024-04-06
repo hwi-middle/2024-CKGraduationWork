@@ -99,10 +99,10 @@ public class BehaviorTreeEditor : EditorWindow
         {
             if (Selection.activeGameObject)
             {
-                BehaviorTreeRunner runner = Selection.activeGameObject.GetComponent<BehaviorTreeRunner>();
+                EnemyBase runner = Selection.activeGameObject.GetComponent<EnemyBase>();
                 if (runner)
                 {
-                    tree = runner.tree;
+                    tree = runner.Tree;
                 }
             }
         }

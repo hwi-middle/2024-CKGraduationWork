@@ -6,7 +6,7 @@ public class RepeatNode : DecoratorNode
 {
     public override void OnCreate()
     {
-        description = "자신의 자식들을 반복해서 실행합니다.";
+        description = "자신의 자식을 반복해서 실행합니다.";
     }
 
     protected override void OnStart()
@@ -19,9 +19,14 @@ public class RepeatNode : DecoratorNode
         
     }
 
-    protected override State OnUpdate()
+    protected override void OnAbort()
+    {
+        
+    }
+
+    protected override ENodeState OnUpdate()
     {
         child.Update();
-        return State.Running;
+        return ENodeState.InProgress;
     }
 }

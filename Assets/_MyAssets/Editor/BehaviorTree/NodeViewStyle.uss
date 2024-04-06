@@ -13,6 +13,7 @@
     border-bottom-left-radius: 5px;
     background-color: rgb(60, 60, 60);
     min-width: 160px;
+    width: auto;
 }
 
 #input {
@@ -67,7 +68,6 @@
 }
 
 .node {
-    width: auto;
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
@@ -75,19 +75,25 @@
     min-width: 160px;
 }
 
-#title {
+#title-label {
     -unity-font-style: bold;
     font-size: 14px;
     -unity-text-align: upper-center;
     white-space: normal;
-    max-width: 160px;
+    max-width: none;
+    min-width: 160px;
+    margin-right: 0;
+    margin-left: 0;
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 #description {
     font-size: 12px;
     white-space: normal;
-    max-width: 160px;
     -unity-text-align: upper-center;
+    max-width: 160px;
+    align-self: center;
 }
 
 #divider {

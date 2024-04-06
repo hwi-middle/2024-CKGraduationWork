@@ -10,19 +10,22 @@ using UnityEngine.AI;
 public class EnemyBase : MonoBehaviour
 {
     [SerializeField] private EnemyAiData _aiData;
-    [SerializeField] private Transform _patrolPointsRoot;
+    public EnemyAiData AiData => _aiData;
+    [SerializeField] private BehaviorTree _tree;
+    public BehaviorTree Tree => _tree;
     [SerializeField] private Canvas _canvas;
 
     private float _perceptionGauge = 0f;
     private Vector3 _moveRangeCenterPos;
-    public float PerceptionGauge => _perceptionGauge;
-    private readonly Collider[] _overlappedPlayerBuffer = new Collider[1];
+    public Vector3 MoveRangeCenterPos => _moveRangeCenterPos;
     private Transform _foundPlayer;
     private NavMeshAgent _navMeshAgent;
     private IEnumerator _patrolRoutine;
     private PerceptionNote _perceptionNote;
-    private float _timeAfterPlayerOutOfSight = 0f;
 
+    public float PerceptionGauge => _perceptionGauge;
+    public bool IsPerceptionGaugeFull => _perceptionGauge >= 100f;
+    
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -34,20 +37,13 @@ public class EnemyBase : MonoBehaviour
     private void Start()
     {
         _navMeshAgent.speed = _aiData.moveSpeed;
-        Patrol();
+        _tree = _tree.Clone();        
+        _tree.Bind(this);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(transform.position, _moveRangeCenterPos) > _aiData.moveRange)
-        {
-            _navMeshAgent.SetDestination(_moveRangeCenterPos);
-        }
-        else
-        {
-            DetectPlayer();
-        }
+        _tree.Update();
     }
 
     private void OnDestroy()
@@ -63,76 +59,10 @@ public class EnemyBase : MonoBehaviour
             Destroy(_perceptionNote.gameObject);
         }
     }
-
-    private void DetectPlayer()
+    
+    public void SetDestination(Vector3 destination)
     {
-        if (IsPlayerOnSight(out _foundPlayer))
-        {
-            Debug.Assert(_foundPlayer != null);
-            _timeAfterPlayerOutOfSight = 0f;
-            float distance = Vector3.Distance(transform.position, _foundPlayer.position);
-            _perceptionGauge += GetPerceptionGaugeIncrement(distance);
-            _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
-            if (Mathf.Approximately(_perceptionGauge, 100f))
-            {
-                if (_patrolRoutine != null)
-                {
-                    StopCoroutine(_patrolRoutine);
-                    _patrolRoutine = null;
-                }
-                _navMeshAgent.SetDestination(_foundPlayer.position);
-            }
-        }
-        else if (_perceptionGauge > 0f)
-        {
-            _timeAfterPlayerOutOfSight += Time.deltaTime;
-            if (_timeAfterPlayerOutOfSight >= _aiData.gaugeDecreaseStartTime)
-            {
-                _perceptionGauge -= _aiData.gaugeDecrementPerSecond * Time.deltaTime;
-                _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
-            }
-            
-            if (_patrolRoutine == null && Mathf.Approximately(_perceptionGauge, 0f))
-            {
-                Patrol();
-            }
-        }
-    }
-
-    private bool IsPlayerOnSight(out Transform result)
-    {
-        int bufferCount = Physics.OverlapSphereNonAlloc(transform.position, _aiData.perceptionDistance, _overlappedPlayerBuffer, LayerMask.GetMask("Player"));
-        Debug.Assert(bufferCount is 0 or 1);
-        if (bufferCount == 0)
-        {
-            result = null;
-            return false;
-        }
-        
-        Transform overlappedPlayer = _overlappedPlayerBuffer[0].transform;
-        Debug.Assert(overlappedPlayer != null);
-
-        Vector3 direction = (overlappedPlayer.position - transform.position).normalized;
-        if (Vector3.Dot(direction, transform.forward) < Mathf.Cos(_aiData.perceptionAngle * 0.5f * Mathf.Deg2Rad))
-        {
-            result = null;
-            return false;
-        }
-
-        // 나(AI)와 플레이어 사이에 장애물이 있는지 확인
-        Vector3 rayDirection = (overlappedPlayer.position - transform.position).normalized;
-        Ray ray = new Ray(transform.position, rayDirection);
-
-        Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity);
-        if (!hit.transform.CompareTag("Player"))
-        {
-            result = null;
-            return false;
-        }
-
-        // 시야에 플레이어가 들어옴
-        result = overlappedPlayer;
-        return true;
+        _navMeshAgent.SetDestination(destination);
     }
 
     private float GetPerceptionGaugeIncrement(float distanceToPlayer)
@@ -155,6 +85,7 @@ public class EnemyBase : MonoBehaviour
     {
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
+    
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
@@ -189,29 +120,22 @@ public class EnemyBase : MonoBehaviour
         Handles.DrawWireArc(Application.isPlaying ? _moveRangeCenterPos : transform.position, Vector3.up, transform.forward, 360, _aiData.moveRange);
     }
 #endif
-
-    private void Patrol()
+    
+    public bool IsArrivedToTarget(Vector3 target)
     {
-        _patrolRoutine = PatrolRoutine();
-        StartCoroutine(_patrolRoutine);
+        float remainingDistance = _navMeshAgent.pathPending ? Vector3.Distance(transform.position, target) : _navMeshAgent.remainingDistance;
+        return remainingDistance <= _navMeshAgent.stoppingDistance;
     }
 
-    private IEnumerator PatrolRoutine()
+    public void IncrementPerceptionGauge(float distance)
     {
-        while (true)
-        {
-            for (int i = 0; i < _patrolPointsRoot.childCount; i++)
-            {
-                Vector3 targetPos = _patrolPointsRoot.GetChild(i).position;
-                _navMeshAgent.SetDestination(targetPos);
+        _perceptionGauge += GetPerceptionGaugeIncrement(distance);
+        _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
+    }
 
-                float remainingDistance = Vector3.Distance(transform.position, targetPos);
-                while (remainingDistance > _navMeshAgent.stoppingDistance)
-                {
-                    remainingDistance = _navMeshAgent.pathPending ? Vector3.Distance(transform.position, targetPos) : _navMeshAgent.remainingDistance;
-                    yield return new WaitForEndOfFrame();
-                }
-            }
-        }
+    public void DecrementPerceptionGauge()
+    {
+        _perceptionGauge -= _aiData.gaugeDecrementPerSecond * Time.deltaTime;
+        _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
     }
 }

@@ -9,6 +9,7 @@ TagManager:
   - WirePoint
   - Wall
   - Stair
+  - PatrolPoint
   layers:
   - Default
   - TransparentFX
