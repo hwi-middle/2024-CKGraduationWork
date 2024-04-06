@@ -15,10 +15,14 @@ MonoBehaviour:
   playerHp: 100
   walkSpeed: 3.5
   runSpeed: 7.5
-  jumpHeight: 5
-  yMultiplier: 4
   crouchSpeed: 2
-  wallMoveSpeed: 0
+  jumpHeight: 4.5
+  yMultiplier: 4
+  minWireDistance: 7
+  maxWireDistance: 12
+  wireActionDuration: 2
+  assassinateDuration: 1.2
+  moveSpeedOnAim: 2
   slopeSlideSpeed: 4
   playerCanvas: {fileID: 6670551468554774952, guid: d145af9e61baa8f4b86278040d640948,
     type: 3}
