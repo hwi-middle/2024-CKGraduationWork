@@ -291,12 +291,21 @@ public class PlayerMove : Singleton<PlayerMove>
 
         if (_isSliding)
         {
+            if (IsBetweenSlopeAndGround())
+            {
+                return false;
+            }
             return true;
         }
-        
+
         float angle = Vector3.Angle(Vector3.up, _hitNormal);
         bool isOnSlope = Mathf.FloorToInt(angle) >= _controller.slopeLimit && Mathf.CeilToInt(angle) < 90.0f;
         
+        if (CheckPlayerState(EPlayerState.Jump))
+        {
+            return false;
+        }
+
         return isOnSlope;
     }
 
@@ -311,7 +320,7 @@ public class PlayerMove : Singleton<PlayerMove>
             float angle = Vector3.Angle(Vector3.up, hit.normal);
             if (Mathf.CeilToInt(angle) <= _controller.slopeLimit)
             {
-                float heightFromHit = bottom.y - hit.transform.position.y;
+                float heightFromHit = bottom.y - hit.point.y;
                 const float MIN_SLIDE_HEIGHT = 0.6f;
                 if (heightFromHit < MIN_SLIDE_HEIGHT)
                 {
@@ -465,8 +474,6 @@ public class PlayerMove : Singleton<PlayerMove>
         AddPlayerState(EPlayerState.Jump);
         _yVelocity += _playerData.jumpHeight;
     }
-
-    
 
     private List<GameObject> GetWirePoints()
     {
@@ -637,6 +644,8 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             return;
         }
+
+        _inputDirection = Vector3.zero;
 
         if (IsGrounded)
         {
