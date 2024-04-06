@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -25,21 +26,24 @@ public enum EPlayerState
 
 public class PlayerMove : Singleton<PlayerMove>
 {
+    private GameObject _camerasPrefab;
+    private Camera _camera;
+    public CinemachineFreeLook FreeLookCamera { get; private set; }
+    public CinemachineFreeLook AimingCamera { get; private set; }
+    public CinemachineBrain BrainCamera { get; private set; }
+    
     [SerializeField] private PlayerInputData _inputData;
     private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
 
     [Header("Player Base Data")]
     [SerializeField] private PlayerData _playerData;
 
-    //[Header("WirePoint Variable")]
-    //[SerializeField] private GameObject _wireAvailableUI;
     private GameObject _playerCanvas;
     private GameObject _wireAvailableUI;
 
     [Header("WirePoint Offset")]
     [SerializeField] private float _wirePointOffset;
 
-    //[SerializeField] private TMP_Text _stateText;
     private TMP_Text _stateText;
 
     private int _hp;
@@ -67,7 +71,6 @@ public class PlayerMove : Singleton<PlayerMove>
 
     [SerializeField] private PlayerAssassinationData _assassinationData;
 
-    // [SerializeField] private TMP_Text _noteTextForDebug;
     private bool _isAssassinating = false;
     private Transform _assassinationTarget;
 
@@ -76,8 +79,6 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private float _yVelocity;
     protected float YVelocity => _yVelocity;
-
-    private Camera _camera;
 
     private Vector3 _inputDirection;
     private Vector3 _velocity;
@@ -98,7 +99,62 @@ public class PlayerMove : Singleton<PlayerMove>
         _wireAvailableUI = _playerCanvas.transform.Find("WireAvailable").gameObject;
         _stateText = _playerCanvas.transform.Find("PlayerStateText").transform.GetComponent<TMP_Text>();
         _wireAvailableUiRectTransform = _wireAvailableUI.GetComponent<RectTransform>();
+
+        Instantiate(_playerData.lineRendererPrefab);
+        LineDrawHelper.Instance.DisableLine();
+        
+        InitCamera();
+    }
+    
+    
+    private void InitCamera()
+    {
+        AudioListener existCamera = FindObjectOfType<AudioListener>();
+        if (existCamera != null)
+        {
+            Destroy(existCamera.gameObject);
+        }
+        
+        Debug.Assert(_playerData.camerasPrefab != null, "_playerData.camerasPrefab != null");
+        
+        _camerasPrefab = Instantiate(_playerData.camerasPrefab);
+        
+        Debug.Assert(_camerasPrefab != null, "_camerasPrefab != null");
+
+        FreeLookCamera = _camerasPrefab.transform.Find("FreeLook Camera").GetComponent<CinemachineFreeLook>();
+        AimingCamera = _camerasPrefab.transform.Find("Aiming Camera").GetComponent<CinemachineFreeLook>();
+        BrainCamera = _camerasPrefab.transform.Find("Main Camera").GetComponent<CinemachineBrain>();
+        
+        Transform tr = gameObject.transform;
+        FreeLookCamera.LookAt = tr;
+        FreeLookCamera.Follow = tr;
+        AimingCamera.LookAt = tr;
+        AimingCamera.Follow = tr;
+        FreeLookCamera.MoveToTopOfPrioritySubqueue();
         _camera = Camera.main;
+        ChangeCameraToFreeLook();
+    }
+
+    public void ChangeCameraToFreeLook()
+    {
+        Vector3 forwardDirection = _camera.transform.forward;
+        forwardDirection.y = 0.5f;
+
+        FreeLookCamera.m_XAxis.Value = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
+        FreeLookCamera.m_YAxis.Value = forwardDirection.y;
+        
+        FreeLookCamera.MoveToTopOfPrioritySubqueue();
+    }
+
+    public void ChangeCameraToAiming()
+    {
+        Vector3 forwardDirection = _camera.transform.forward;
+        forwardDirection.y = 0.5f;
+
+        AimingCamera.m_XAxis.Value = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
+        AimingCamera.m_YAxis.Value = forwardDirection.y;
+
+        AimingCamera.MoveToTopOfPrioritySubqueue();
     }
 
     private void OnEnable()
@@ -176,6 +232,15 @@ public class PlayerMove : Singleton<PlayerMove>
 
         Destroy(gameObject);
     }
+
+    public void AlignPlayerToCameraForward()
+    {
+        if (BrainCamera.IsBlending)
+        {
+            return;
+        }
+        ApplyRotate();   
+    }
     
     private void RotatePlayer()
     {
@@ -185,11 +250,16 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             return;
         }
+        
+        ApplyRotate();
+    }
 
+    private void ApplyRotate()
+    {
         Quaternion cameraRotation = _camera.transform.localRotation;
         cameraRotation.x = 0;
         cameraRotation.z = 0;
-        transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 0.2f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 1.0f);
     }
 
     private void SetSlideVelocity()
@@ -224,9 +294,8 @@ public class PlayerMove : Singleton<PlayerMove>
             return true;
         }
         
-        const float TOLERANCE = 0.1f;
         float angle = Vector3.Angle(Vector3.up, _hitNormal);
-        bool isOnSlope = angle > _controller.slopeLimit + TOLERANCE && angle < 90.0f;
+        bool isOnSlope = Mathf.FloorToInt(angle) >= _controller.slopeLimit && Mathf.CeilToInt(angle) < 90.0f;
         
         return isOnSlope;
     }
@@ -239,9 +308,8 @@ public class PlayerMove : Singleton<PlayerMove>
         const float RAY_DISTANCE = 3.0f;
         if (Physics.Raycast(ray, out RaycastHit hit, RAY_DISTANCE))
         {
-            const float TOLERANCE = 0.1f;
             float angle = Vector3.Angle(Vector3.up, hit.normal);
-            if (angle < _controller.slopeLimit + TOLERANCE)
+            if (Mathf.CeilToInt(angle) <= _controller.slopeLimit)
             {
                 float heightFromHit = bottom.y - hit.transform.position.y;
                 const float MIN_SLIDE_HEIGHT = 0.6f;
@@ -598,7 +666,7 @@ public class PlayerMove : Singleton<PlayerMove>
         Vector3 initPos = transform.position;
         float t = 0;
 
-        WireLineDrawHelper.Instance.EnableLine();
+        LineDrawHelper.Instance.EnableLine();
 
         while (t <= _playerData.wireActionDuration && !IsCollideWhenWireAction())
         {
@@ -606,13 +674,13 @@ public class PlayerMove : Singleton<PlayerMove>
 
             transform.position = Vector3.Lerp(initPos, _targetPosition, alpha * alpha * alpha);
 
-            WireLineDrawHelper.Instance.Draw(transform.position, _wireHangPosition);
+            LineDrawHelper.Instance.DrawWire(transform.position, _wireHangPosition);
 
             yield return null;
             t += Time.deltaTime;
         }
 
-        WireLineDrawHelper.Instance.DisableLine();
+        LineDrawHelper.Instance.DisableLine();
         RemovePlayerState(EPlayerState.WireAction);
         _wireActionRoutine = null;
     }
@@ -633,17 +701,14 @@ public class PlayerMove : Singleton<PlayerMove>
         Debug.Assert(mainCamera != null);
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         float assassinateDistance = _assassinationData.assassinateDistance;
-        // Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * assassinateDistance, Color.green, 0f, false);
         int layerMask = (-1) - (1 << LayerMask.NameToLayer("BypassAiming"));
 
         if (Physics.Raycast(ray, out RaycastHit hit, assassinateDistance, layerMask) &&
             hit.transform.CompareTag("AssassinationTarget"))
         {
-            // _noteTextForDebug.text = $"Current Target: {hit.transform.name}";
             return hit.transform;
         }
 
-        // _noteTextForDebug.text = "Current Target: None";
         return null;
     }
 

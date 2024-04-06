@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WireLineDrawHelper : Singleton<WireLineDrawHelper>
+public class LineDrawHelper : Singleton<LineDrawHelper>
 {
     private LineRenderer _line;
 
@@ -27,12 +27,22 @@ public class WireLineDrawHelper : Singleton<WireLineDrawHelper>
     {
         _line.enabled = false;
     }
-    
-    public void Draw(Vector3 startPosition, Vector3 targetPosition)
+
+    public void DrawWire(Vector3 startPosition, Vector3 targetPosition)
     {
         _line.positionCount = 2;
         startPosition.y += 0.5f;
         _line.SetPosition(0, startPosition);
         _line.SetPosition(1, targetPosition);
+    }
+
+    public void SetPositionCount(int count)
+    {
+        _line.positionCount = count;
+    }
+
+    public void DrawParabola(Vector3[] list)
+    {
+        _line.SetPositions(list);
     }
 }

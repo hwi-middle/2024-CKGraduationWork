@@ -18,6 +18,10 @@ MonoBehaviour:
   crouchSpeed: 2
   jumpHeight: 4.5
   yMultiplier: 4
+  throwPower: 15
+  maxItemRange: 15
+  itemImpactRadius: 15
+  itemGaugeAmount: 0
   minWireDistance: 7
   maxWireDistance: 12
   wireActionDuration: 2
@@ -25,4 +29,8 @@ MonoBehaviour:
   moveSpeedOnAim: 2
   slopeSlideSpeed: 4
   playerCanvas: {fileID: 6670551468554774952, guid: d145af9e61baa8f4b86278040d640948,
+    type: 3}
+  lineRendererPrefab: {fileID: 1510557977768077414, guid: c13d442cd5a65094faf7ebefc78ec6dd,
+    type: 3}
+  camerasPrefab: {fileID: 6376121465614477072, guid: 8e19267338431d941b626d4717bee39f,
     type: 3}

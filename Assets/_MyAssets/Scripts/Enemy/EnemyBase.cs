@@ -59,6 +59,12 @@ public class EnemyBase : MonoBehaviour
             Destroy(_perceptionNote.gameObject);
         }
     }
+
+    public void OnListenStrangeSound(Vector3 origin, float increase)
+    {
+        Debug.Log($"listen Sound From : {origin}, Increase : {increase}");
+    }
+ 
     
     public void SetDestination(Vector3 destination)
     {

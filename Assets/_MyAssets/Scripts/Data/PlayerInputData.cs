@@ -18,6 +18,9 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
     public Action assassinateEvent;
     public Action crouchEvent;
     public Action pauseEvent;
+    public Action aimingEvent;
+    public Action aimingCancelEvent;
+    public Action shootEvent;
 
     private void OnEnable()
     {
@@ -102,5 +105,31 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
         }
         
         pauseEvent?.Invoke();
+    }
+
+    public void OnAiming(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            return;
+        }
+
+        if (context.canceled)
+        {
+            aimingCancelEvent?.Invoke();
+            return;
+        }
+        
+        aimingEvent?.Invoke();
+    }
+
+    public void OnShoot(InputAction.CallbackContext context)
+    {
+        if (!context.started)
+        {
+            return;
+        }
+
+        shootEvent?.Invoke();
     }
 }
