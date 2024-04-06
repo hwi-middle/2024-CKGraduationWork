@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PlayerWireData
   m_EditorClassIdentifier: 
   minWireDistance: 10
-  maxWireDistance: 30
-  wireActionDuration: 2
+  maxWireDistance: 12
+  wireActionDuration: 3

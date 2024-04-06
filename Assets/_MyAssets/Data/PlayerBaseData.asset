@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: PlayerBaseData
   m_EditorClassIdentifier: 
   playerHp: 100
-  walkSpeed: 7
-  runSpeed: 11
+  walkSpeed: 3.5
+  runSpeed: 7.5
   jumpHeight: 5
-  yMultiplier: 5
-  crouchSpeed: 5
+  yMultiplier: 4
+  crouchSpeed: 2
   wallMoveSpeed: 0
   slopeSlideSpeed: 4
   playerCanvas: {fileID: 6670551468554774952, guid: d145af9e61baa8f4b86278040d640948,
