@@ -59,13 +59,12 @@ public class CheckPlayerOnSight : DecoratorNode
         Vector3 rayDirection = (overlappedPlayer.position - agent.transform.position).normalized;
         Ray ray = new Ray(agent.transform.position, rayDirection);
 
-        Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity);
-        if (!hit.transform.CompareTag("Player"))
+        if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity) || !hit.transform.CompareTag("Player"))
         {
             blackboard.target = null;
             return false;
         }
-
+        
         // 시야에 플레이어가 들어옴
         blackboard.target = overlappedPlayer.gameObject;
         blackboard.lastTimePlayerDetected = Time.time;
