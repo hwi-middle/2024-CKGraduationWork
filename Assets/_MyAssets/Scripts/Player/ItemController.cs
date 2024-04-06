@@ -16,7 +16,6 @@ public class ItemController : MonoBehaviour
 
     private bool _isOnAiming;
     private bool _isOverItemRange;
-    private bool _isNotHit;
 
     private Transform _shootPoint;
     private Vector3 _throwTargetPoint;
@@ -59,13 +58,6 @@ public class ItemController : MonoBehaviour
         {
             SetThrowTargetPosition();
             
-            if (_isNotHit)
-            {
-                LineDrawHelper.Instance.DisableLine();
-                RemoveTargetPoint();
-                return;
-            }
-            
             LineDrawHelper.Instance.EnableLine();
             PlayerMove.Instance.AlignPlayerToCameraForward();
         }
@@ -95,15 +87,13 @@ public class ItemController : MonoBehaviour
 
         Ray ray = new Ray(playerPosition, cameraForward);
         
-        LayerMask layerMask = ~(LayerMask.GetMask("Player") 
+        LayerMask layerMask = ~(LayerMask.GetMask("Player")
                                 | LayerMask.GetMask("Item")
                                 | LayerMask.GetMask("Enemy"));
-        _isNotHit = false;
         
-        // Ray가 안닿을 일을 없다고 가정하였지만 예외적인 케이스를 대비한 isNotHit
         if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
         {
-            _isNotHit = true;
+            Debug.Assert(false, "Invalid Situation (ray hit)");
             return;
         }
 
@@ -140,12 +130,11 @@ public class ItemController : MonoBehaviour
             ray = new Ray(playerPosition, cameraForward);
             if (!Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
             {
-                _isNotHit = true;
+                Debug.Assert(false, "Invalid Situation (ray hit)");
                 return;
             }
 
             _throwTargetPoint = Vector3.ProjectOnPlane(_throwTargetPoint, hit.normal);
-            // Ray에 맞지 않는 경우는 없을것으로 예상되지만 맞지 않았다면 isNotHit을 true로 만들고 Return
         }
         
         _throwTargetPoint.y = hit.point.y;
@@ -260,7 +249,7 @@ public class ItemController : MonoBehaviour
 
     private void HandleShoot()
     {
-        if (_itemInHand == null || _isNotHit)
+        if (_itemInHand == null)
         {
             return;
         }
