@@ -28,9 +28,6 @@ public class PlayerMove : Singleton<PlayerMove>
     [SerializeField] private PlayerInputData _inputData;
     private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
 
-    [Header("Player Wire Data")]
-    [SerializeField] private PlayerWireData _wireData;
-
     [Header("Player Base Data")]
     [SerializeField] private PlayerData _playerData;
 
@@ -409,13 +406,13 @@ public class PlayerMove : Singleton<PlayerMove>
         Vector3 playerPos = transform.position;
 
         Collider[] wirePointsInRange =
-            Physics.OverlapSphere(playerPos, _wireData.maxWireDistance, LayerMask.GetMask("WirePoint"));
+            Physics.OverlapSphere(playerPos, _playerData.maxWireDistance, LayerMask.GetMask("WirePoint"));
 
         foreach (Collider wirePoint in wirePointsInRange)
         {
             Vector3 wirePointPos = wirePoint.transform.position;
             float distance = (wirePointPos - playerPos).magnitude;
-            if (distance < _wireData.minWireDistance || _camera.WorldToViewportPoint(wirePointPos).z < 0)
+            if (distance < _playerData.minWireDistance || _camera.WorldToViewportPoint(wirePointPos).z < 0)
             {
                 continue;
             }
@@ -437,7 +434,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
         Ray ray = _camera.ViewportPointToRay(CAMERA_CENTER_POINT);
         float distanceOfCameraFromPlayer = (_camera.transform.position - transform.position).magnitude;
-        bool isHit = Physics.Raycast(ray, out RaycastHit hit, _wireData.maxWireDistance + distanceOfCameraFromPlayer,
+        bool isHit = Physics.Raycast(ray, out RaycastHit hit, _playerData.maxWireDistance + distanceOfCameraFromPlayer,
             LayerMask.GetMask("WirePoint"));
 
         if (!isHit)
@@ -448,7 +445,7 @@ public class PlayerMove : Singleton<PlayerMove>
         float distance = (hit.transform.position - transform.position).magnitude;
         
 
-        if (distance < _wireData.minWireDistance)
+        if (distance < _playerData.minWireDistance)
         {
             return false;
         }
@@ -603,9 +600,9 @@ public class PlayerMove : Singleton<PlayerMove>
 
         WireLineDrawHelper.Instance.EnableLine();
 
-        while (t <= _wireData.wireActionDuration && !IsCollideWhenWireAction())
+        while (t <= _playerData.wireActionDuration && !IsCollideWhenWireAction())
         {
-            float alpha = t / _wireData.wireActionDuration;
+            float alpha = t / _playerData.wireActionDuration;
 
             transform.position = Vector3.Lerp(initPos, _targetPosition, alpha * alpha * alpha);
 
