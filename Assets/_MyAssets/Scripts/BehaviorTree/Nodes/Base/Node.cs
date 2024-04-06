@@ -4,14 +4,15 @@ using UnityEngine;
 
 public abstract class Node : ScriptableObject
 {
-    public enum State
+    public enum ENodeState
     {
-        Running,
+        InProgress,
         Failure,
         Success,
+        Aborted,
     }
 
-    [HideInInspector] public State state = State.Running;
+    [HideInInspector] public ENodeState state = ENodeState.InProgress;
     [HideInInspector] public bool started = false;
     [HideInInspector] public string guid;
     [HideInInspector] public Vector2 position;
@@ -19,7 +20,7 @@ public abstract class Node : ScriptableObject
     [HideInInspector] public EnemyBase agent;
     [TextArea] public string description;
 
-    public State Update()
+    public ENodeState Update()
     {
         if (!started)
         {
@@ -29,9 +30,14 @@ public abstract class Node : ScriptableObject
 
         state = OnUpdate();
 
-        if (state == State.Failure || state == State.Success)
+        if (state == ENodeState.Failure || state == ENodeState.Success)
         {
             OnStop();
+            started = false;
+        }
+        else if (state == ENodeState.Aborted)
+        {
+            OnAbort();
             started = false;
         }
 
@@ -40,11 +46,14 @@ public abstract class Node : ScriptableObject
 
     public virtual Node Clone()
     {
-        return Instantiate(this);
+        Node node = Instantiate(this);
+        node.name = node.name.Replace("(Clone)", "");
+        return node;
     }
 
     public abstract void OnCreate();
     protected abstract void OnStart();
     protected abstract void OnStop();
-    protected abstract State OnUpdate();
+    protected abstract void OnAbort();
+    protected abstract ENodeState OnUpdate();
 }

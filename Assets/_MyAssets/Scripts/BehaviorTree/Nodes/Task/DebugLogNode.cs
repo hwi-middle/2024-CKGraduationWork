@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DebugLogNode : ActionNode
+public class DebugLogNode : TaskNode
 {
     public string message;
 
@@ -13,17 +13,22 @@ public class DebugLogNode : ActionNode
 
     protected override void OnStart()
     {
-       Debug.Log($"OnStart{message}");
+       Debug.Log($"OnStart {message}");
     }
 
     protected override void OnStop()
     {
-        Debug.Log($"OnStop{message}");
+        Debug.Log($"OnStop {message}");
     }
 
-    protected override State OnUpdate()
+    protected override void OnAbort()
     {
-        Debug.Log($"OnUpdate{message}");
-        return State.Success;
+        Debug.Log($"OnAbort {message}");
+    }
+
+    protected override ENodeState OnUpdate()
+    {
+        Debug.Log($"OnUpdate {message}");
+        return ENodeState.Success;
     }
 }

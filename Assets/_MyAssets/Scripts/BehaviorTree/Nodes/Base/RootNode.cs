@@ -21,7 +21,12 @@ public class RootNode : Node
         
     }
 
-    protected override State OnUpdate()
+    protected override void OnAbort()
+    {
+        
+    }
+
+    protected override ENodeState OnUpdate()
     {
         return child.Update();
     }
@@ -30,6 +35,7 @@ public class RootNode : Node
     {
         RootNode node = Instantiate(this);
         node.child = child.Clone();
+        node.name = node.name.Replace("(Clone)", "");
         return node;
     }
 }

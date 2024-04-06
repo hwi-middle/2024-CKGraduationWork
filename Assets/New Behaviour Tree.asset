@@ -1,27 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8065911625027048293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1220393912b674549858e16961ad2bba, type: 3}
-  m_Name: RootNode
-  m_EditorClassIdentifier: 
-  state: 0
-  started: 0
-  guid: 9c1180808d079fc47a951157148d04cc
-  position: {x: 0, y: 0}
-  blackboard:
-    moveToPosition: {x: 0, y: 0, z: 0}
-    moveToObject: {fileID: 0}
-  agent: {fileID: 0}
-  description: 
-  child: {fileID: 0}
 --- !u!114 &-6963474639867853918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,6 +43,28 @@ MonoBehaviour:
     moveToObject: {fileID: 0}
   agent: {fileID: 0}
   description: 
+  duration: 1
+--- !u!114 &-4595052873674431505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ab15960e11a624baf65119dbcfdc27, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 6ddcf072725e3524185c5f83989dac20
+  position: {x: 60.375977, y: 188.57861}
+  blackboard:
+    moveToPosition: {x: 0, y: 0, z: 0}
+    moveToObject: {fileID: 0}
+  agent: {fileID: 0}
+  description: "\uC9C0\uC815\uD55C \uC2DC\uAC04\uB3D9\uC548 \uB300\uAE30\uD569\uB2C8\uB2E4."
   duration: 1
 --- !u!114 &-3126105493175821322
 MonoBehaviour:
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c334522c7831c24ca5db476ef07636f, type: 3}
   m_Name: New Behaviour Tree
   m_EditorClassIdentifier: 
-  rootNode: {fileID: -8065911625027048293}
+  rootNode: {fileID: 8713606669996704090}
   treeState: 0
   nodes:
   - {fileID: 7592724472167196331}
@@ -135,7 +135,8 @@ MonoBehaviour:
   - {fileID: 8059426474525490626}
   - {fileID: 6360809946178181130}
   - {fileID: 3774417345114586344}
-  - {fileID: -8065911625027048293}
+  - {fileID: 8713606669996704090}
+  - {fileID: -4595052873674431505}
   blackboard:
     moveToPosition: {x: 0, y: 0, z: 0}
     moveToObject: {fileID: 0}
@@ -270,4 +271,26 @@ MonoBehaviour:
     moveToObject: {fileID: 0}
   agent: {fileID: 0}
   description: 
+  child: {fileID: 0}
+--- !u!114 &8713606669996704090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1220393912b674549858e16961ad2bba, type: 3}
+  m_Name: RootNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 8a8f7a72818c79e47b8b0cd5d1a1a5db
+  position: {x: 0, y: 0}
+  blackboard:
+    moveToPosition: {x: 0, y: 0, z: 0}
+    moveToObject: {fileID: 0}
+  agent: {fileID: 0}
+  description: "\uD589\uB3D9\uD2B8\uB9AC\uC758 \uC2DC\uC791\uC9C0\uC810\uC785\uB2C8\uB2E4."
   child: {fileID: 0}
