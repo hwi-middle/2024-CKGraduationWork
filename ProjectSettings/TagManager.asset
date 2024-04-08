@@ -9,7 +9,6 @@ TagManager:
   - WirePoint
   - Wall
   - PatrolPoint
-  - Slideable
   layers:
   - Default
   - TransparentFX
@@ -24,7 +23,7 @@ TagManager:
   - Wall
   - Item
   - Enemy
-  - Slideable
+  - 
   - 
   - 
   - 
