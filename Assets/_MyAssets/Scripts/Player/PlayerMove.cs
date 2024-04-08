@@ -30,6 +30,7 @@ public class PlayerMove : Singleton<PlayerMove>
     private Camera _camera;
     public CinemachineFreeLook FreeLookCamera { get; private set; }
     public CinemachineFreeLook AimingCamera { get; private set; }
+    public CinemachineVirtualCamera InCabinetCamera { get; private set; }
     public CinemachineBrain BrainCamera { get; private set; }
     
     [SerializeField] private PlayerInputData _inputData;
@@ -124,12 +125,17 @@ public class PlayerMove : Singleton<PlayerMove>
         FreeLookCamera = _camerasPrefab.transform.Find("FreeLook Camera").GetComponent<CinemachineFreeLook>();
         AimingCamera = _camerasPrefab.transform.Find("Aiming Camera").GetComponent<CinemachineFreeLook>();
         BrainCamera = _camerasPrefab.transform.Find("Main Camera").GetComponent<CinemachineBrain>();
+        InCabinetCamera = _camerasPrefab.transform.Find("InCabinetCamera").GetComponent<CinemachineVirtualCamera>();
         
         Transform tr = gameObject.transform;
         FreeLookCamera.LookAt = tr;
         FreeLookCamera.Follow = tr;
         AimingCamera.LookAt = tr;
         AimingCamera.Follow = tr;
+        
+        Transform hideableObjectAimTransform = transform.Find("InHideableObjectAim").transform;
+        InCabinetCamera.LookAt = hideableObjectAimTransform;
+        InCabinetCamera.Follow = tr;
         FreeLookCamera.MoveToTopOfPrioritySubqueue();
         _camera = Camera.main;
         ChangeCameraToFreeLook();
@@ -155,6 +161,11 @@ public class PlayerMove : Singleton<PlayerMove>
         AimingCamera.m_YAxis.Value = forwardDirection.y;
 
         AimingCamera.MoveToTopOfPrioritySubqueue();
+    }
+    
+    public void ChangeCameraToHideAiming()
+    {
+        InCabinetCamera.MoveToTopOfPrioritySubqueue();
     }
 
     private void OnEnable()
@@ -198,13 +209,16 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             _hp = 0;
         }
-        
+
         CheckAndSwitchLifeState();
-        SetSlideVelocity();
-        ShowWirePointUI();
-        RotatePlayer();
-        MovePlayer();
-        
+
+        if (!HideActionController.Instance.IsHiding)
+        {
+            SetSlideVelocity();
+            ShowWirePointUI();
+            RotatePlayer();
+            MovePlayer();
+        }
 
         if (IsGrounded)
         {
@@ -428,6 +442,16 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void HandleMoveAction(Vector2 pos)
     {
+        if (HideActionController.Instance.IsHiding)
+        {
+            if (!HideActionController.Instance.IsOnAction)
+            {
+                HideActionController.Instance.ExitFromHideableObject();
+            }
+
+            return;
+        }
+        
         if (IsOnWire)
         {
             return;

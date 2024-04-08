@@ -22,6 +22,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
     public Action aimingCancelEvent;
     public Action shootEvent;
     public Action hideEvent;
+    public Action hideCancelEvent;
 
     private void OnEnable()
     {
