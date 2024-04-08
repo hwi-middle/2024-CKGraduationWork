@@ -264,7 +264,6 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void SetSlideVelocity()
     {
-        Debug.DrawRay(transform.position, Vector3.down * 3.0f, Color.red);
         if (IsOnSlope())
         {
             _slideVelocity = Vector3.ProjectOnPlane(new Vector3(0, _velocity.y, 0), _hitNormal);
@@ -283,11 +282,26 @@ public class PlayerMove : Singleton<PlayerMove>
             return !IsBetweenSlopeAndGround();
         }
 
-        if (_hitObject == null || !IsGrounded || !_hitObject.CompareTag("Slideable")) 
+        if (_hitObject == null || !IsGrounded)
         {
             return false;
         }
+
+        // Normal 반대 방향으로 Ray를 쏴서 Slideable 트리거가 감지되면 경사로에 있다고 판단
+        Vector3 bottom = transform.position;
+        bottom.y -= _controller.height / 2;
         
+        Ray normalDirectionRay = new Ray(bottom, -_hitNormal);
+        LayerMask layerMask = LayerMask.GetMask("Slideable");
+        
+        const float RAY_DISTANCE = 1.0f;
+        Debug.DrawRay(bottom, -_hitNormal * RAY_DISTANCE, Color.blue);
+        
+        if (!Physics.Raycast(normalDirectionRay, RAY_DISTANCE, layerMask))
+        {
+            return false;
+        }
+
         float angle = Vector3.Angle(Vector3.up, _hitNormal);
         bool isOnSlope = Mathf.FloorToInt(angle) >= _controller.slopeLimit && Mathf.CeilToInt(angle) < 90.0f;
 

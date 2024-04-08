@@ -10,6 +10,9 @@ using Image = UnityEngine.UI.Image;
 
 public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 {
+    [SerializeField] private bool _isDebugMode;
+    public bool IsDebugMode => _isDebugMode;
+    
     [SerializeField] private PlayerInputData _inputData;
     [SerializeField] private bool _cursorLock;
     private SceneFadeManager _fadeManager;
