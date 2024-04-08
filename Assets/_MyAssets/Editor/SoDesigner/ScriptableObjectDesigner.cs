@@ -33,12 +33,11 @@ public class ScriptableObjectDesigner : EditorWindow
     [SerializeField] private string _dataTableName;
     [SerializeField] private List<ScriptableObjectDesignerData> _scriptableObjectData = new List<ScriptableObjectDesignerData>();
     private ReorderableList _reorderableList;
-    SerializedObject serializedObject;
-
+    private SerializedObject _serializedObject;
     [SerializeField] private Vector2 _scrollPos = Vector2.zero;
-
-
+    
     private const int PADDING = 10;
+    private const int DEFAULT_SPACE = 30;
 
     [MenuItem("DMW Tools/ScriptableObject Designer", false, 30)]
     public static void Init()
@@ -50,9 +49,9 @@ public class ScriptableObjectDesigner : EditorWindow
 
     private void OnEnable()
     {
-        serializedObject = new SerializedObject(this);
+        _serializedObject = new SerializedObject(this);
 
-        _reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("_scriptableObjectData"), true, true, true, true)
+        _reorderableList = new ReorderableList(_serializedObject, _serializedObject.FindProperty("_scriptableObjectData"), true, true, true, true)
         {
             drawHeaderCallback = (Rect rect) => { EditorGUI.LabelField(rect, "DataTable Design"); },
             drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
@@ -99,18 +98,18 @@ public class ScriptableObjectDesigner : EditorWindow
 
     private void OnGUI()
     {
-        serializedObject.Update();
+        _serializedObject.Update();
         _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
-        GUILayout.Space(30);
+        GUILayout.Space(DEFAULT_SPACE);
         _dataTableName = EditorGUILayout.TextField("Data Table Name", _dataTableName);
-        GUILayout.Space(30);
+        GUILayout.Space(DEFAULT_SPACE);
         _reorderableList.DoLayoutList();
-        GUILayout.Space(30);
+        GUILayout.Space(DEFAULT_SPACE);
         if (GUILayout.Button("Create Data Table as ScriptableObject", GUILayout.Height(60)))
         {
             SaveAsScriptableObject();
         }
-        serializedObject.ApplyModifiedProperties();
+        _serializedObject.ApplyModifiedProperties();
         EditorGUILayout.EndScrollView();
     }
 
