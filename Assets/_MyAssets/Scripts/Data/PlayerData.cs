@@ -31,11 +31,13 @@ public class PlayerData : ScriptableObject
     [Header("조준 시")]
     [Tooltip("조준 시 이동 속도")] public float moveSpeedOnAim;
 
-
     [Tooltip("아이템 던지는 힘")] public float throwPower;
     [Tooltip("아이템 최대 사거리")] public float maxItemRange;
     [Tooltip("아이템 영향 거리 (반지름)")] public float itemImpactRadius;
     [Tooltip("아이템 적 게이지 증가량")] public float itemGaugeAmount;
+
+    [Header("숨기")]
+    [Tooltip("숨을 수 있는 오브젝트 최대 거리")] public float maxDistanceHideableObject;
 
     [Header("-----변경 시 주의-----")]
     [Header("경사로 미끄러짐 속도")]

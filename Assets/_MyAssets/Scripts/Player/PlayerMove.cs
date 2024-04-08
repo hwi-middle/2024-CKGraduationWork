@@ -284,7 +284,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private bool IsOnSlope()
     {
-        if (_hitObject == null || _hitObject.CompareTag("Stair"))
+        if (_hitObject == null || _hitObject.CompareTag("Stair") || !IsGrounded)
         {
             return false;
         }
@@ -661,7 +661,6 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             yield return null;
         }
-        
 
         Vector3 initPos = transform.position;
         float t = 0;

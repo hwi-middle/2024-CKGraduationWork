@@ -21,6 +21,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
     public Action aimingEvent;
     public Action aimingCancelEvent;
     public Action shootEvent;
+    public Action hideEvent;
 
     private void OnEnable()
     {
@@ -131,5 +132,15 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
         }
 
         shootEvent?.Invoke();
+    }
+
+    public void OnHide(InputAction.CallbackContext context)
+    {
+        if (!context.started)
+        {
+            return;
+        }
+        
+        hideEvent?.Invoke();
     }
 }
