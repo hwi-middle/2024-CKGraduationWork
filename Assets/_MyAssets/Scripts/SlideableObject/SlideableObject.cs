@@ -17,8 +17,6 @@ public class SlideableObject : MonoBehaviour
     private void Start()
     {
         transform.localPosition = new Vector3(0, 0, 0);
-        transform.rotation = GetComponentInParent<Transform>().rotation;
-        transform.localScale = GetComponentInParent<Transform>().localScale;
     }
 
     private void Update()
