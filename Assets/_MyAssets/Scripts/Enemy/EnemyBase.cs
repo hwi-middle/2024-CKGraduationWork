@@ -36,7 +36,7 @@ public class EnemyBase : MonoBehaviour
 
     private void Start()
     {
-        _navMeshAgent.speed = _aiData.moveSpeed;
+        _navMeshAgent.speed = _aiData.walkSpeed;
         _tree = _tree.Clone();        
         _tree.Bind(this);
     }
@@ -69,6 +69,11 @@ public class EnemyBase : MonoBehaviour
     public void SetDestination(Vector3 destination)
     {
         _navMeshAgent.SetDestination(destination);
+    }
+    
+    public void SetSpeed(float speed)
+    {
+        _navMeshAgent.speed = speed;
     }
 
     private float GetPerceptionGaugeIncrement(float distanceToPlayer)

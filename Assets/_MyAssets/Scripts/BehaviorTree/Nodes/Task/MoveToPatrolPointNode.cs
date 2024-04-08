@@ -11,6 +11,7 @@ public class MoveToPatrolPointNode : TaskNode
 
     protected override void OnStart()
     {
+        agent.SetSpeed(agent.AiData.walkSpeed);
         agent.SetDestination(blackboard.nextPatrolPos);
     }
 
