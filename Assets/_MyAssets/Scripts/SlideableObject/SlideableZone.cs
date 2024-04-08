@@ -1,7 +1,8 @@
 using UnityEngine;
 
-public class SlideableObject : MonoBehaviour
+public class SlideableZone : MonoBehaviour
 {
+    public static int slideableZoneCount;
     private MeshRenderer _meshRenderer;
     
     private void Awake()
@@ -20,8 +21,8 @@ public class SlideableObject : MonoBehaviour
         {
             return;
         }
-        
-        PlayerMove.Instance.CountUpSlideableTriggerZone();
+
+        slideableZoneCount++ ;
     }
 
     private void OnTriggerExit(Collider other)
@@ -30,7 +31,7 @@ public class SlideableObject : MonoBehaviour
         {
             return;
         }
-        
-        PlayerMove.Instance.CountDownSlideableTriggerZone();
+
+        slideableZoneCount--;
     }
 }

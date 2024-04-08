@@ -276,16 +276,6 @@ public class PlayerMove : Singleton<PlayerMove>
         _isSliding = false;
     }
 
-    public void CountUpSlideableTriggerZone()
-    {
-        _slideableTriggerCount++;
-    }
-
-    public void CountDownSlideableTriggerZone()
-    {
-        _slideableTriggerCount--;
-    }
-
     private bool IsOnSlope()
     {
         if (_isSliding)
@@ -293,7 +283,7 @@ public class PlayerMove : Singleton<PlayerMove>
             return !IsBetweenSlopeAndGround();
         }
 
-        if (_hitObject == null || !IsGrounded || _slideableTriggerCount == 0)
+        if (_hitObject == null || !IsGrounded || SlideableZone.slideableZoneCount == 0)
         {
             return false;
         }

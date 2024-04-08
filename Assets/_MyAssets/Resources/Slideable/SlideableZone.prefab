@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7060399060847461422}
   - component: {fileID: 4754565319694124805}
   m_Layer: 0
-  m_Name: SlideableTrigger
+  m_Name: SlideableZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
