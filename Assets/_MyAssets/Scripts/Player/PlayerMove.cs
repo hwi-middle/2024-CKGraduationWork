@@ -85,6 +85,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private CharacterController _controller;
 
+    private static int _slideableTriggerCount = 0;
     private GameObject _hitObject;
     private Vector3 _hitNormal;
     private bool _isSliding;
@@ -275,6 +276,16 @@ public class PlayerMove : Singleton<PlayerMove>
         _isSliding = false;
     }
 
+    public void CountUpSlideableTriggerZone()
+    {
+        _slideableTriggerCount++;
+    }
+
+    public void CountDownSlideableTriggerZone()
+    {
+        _slideableTriggerCount--;
+    }
+
     private bool IsOnSlope()
     {
         if (_isSliding)
@@ -282,22 +293,7 @@ public class PlayerMove : Singleton<PlayerMove>
             return !IsBetweenSlopeAndGround();
         }
 
-        if (_hitObject == null || !IsGrounded)
-        {
-            return false;
-        }
-
-        // Normal 반대 방향으로 Ray를 쏴서 Slideable 트리거가 감지되면 경사로에 있다고 판단
-        Vector3 bottom = transform.position;
-        bottom.y -= _controller.height / 2;
-        
-        Ray normalDirectionRay = new Ray(bottom, -_hitNormal);
-        LayerMask layerMask = LayerMask.GetMask("Slideable");
-        
-        const float RAY_DISTANCE = 1.0f;
-        Debug.DrawRay(bottom, -_hitNormal * RAY_DISTANCE, Color.blue);
-        
-        if (!Physics.Raycast(normalDirectionRay, RAY_DISTANCE, layerMask))
+        if (_hitObject == null || !IsGrounded || _slideableTriggerCount == 0)
         {
             return false;
         }
