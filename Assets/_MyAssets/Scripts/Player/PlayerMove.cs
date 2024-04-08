@@ -283,70 +283,15 @@ public class PlayerMove : Singleton<PlayerMove>
             return !IsBetweenSlopeAndGround();
         }
 
-        // 조건
-        // 계단, 점프 중, 오브젝트가 기울어져있지 않음
-        // 일 때는 경사로에 있다고 간주하지 않음
-        if (_hitObject == null || IsStair() || CheckPlayerState(EPlayerState.Jump) || !IsObjectTilted())
+        if (_hitObject == null || !IsGrounded || !_hitObject.CompareTag("Slideable")) 
         {
             return false;
         }
         
         float angle = Vector3.Angle(Vector3.up, _hitNormal);
         bool isOnSlope = Mathf.FloorToInt(angle) >= _controller.slopeLimit && Mathf.CeilToInt(angle) < 90.0f;
-        
+
         return isOnSlope && !IsBetweenSlopeAndGround();
-    }
-
-    private bool IsObjectTilted()
-    {
-        if (_hitObject == null)
-        {
-            return false;
-        }
-
-        Quaternion hitRotation = _hitObject.transform.rotation;
-        
-        return hitRotation.x != 0 || hitRotation.z != 0;
-    }
-    
-    private bool IsStair()
-    {
-        float angle = Vector3.Angle(Vector3.up, _hitNormal);
-        if (angle == 0)
-        {
-            return false;
-        }
-
-        Vector3 bottom = transform.position;
-        bottom.y -= 0.5f;
-        Ray downRay = new Ray(bottom, Vector3.down);
-        Ray slopeRay = new Ray(bottom, -_hitNormal);
-        LayerMask layerMask = LayerMask.GetMask("Ground");
-        
-        // 경사로라고 판단되는 Normal방향으로 Ray를 쏨
-        if (!Physics.Raycast(slopeRay, out RaycastHit hit, Mathf.Infinity, layerMask))
-        {
-            return false;
-        }
-
-        float hitSlopeY = hit.point.y;
-            
-        // 플레이어 바로 밑으로 Ray를 쏨
-        if (!Physics.Raycast(downRay, out hit, Mathf.Infinity, layerMask))
-        {
-            return false;
-        }
-
-        float hitUnderPlayerY = hit.point.y;
-        
-        // 경사로의 노말 반대 방향으로 쏜 hit Point y 값과 플레이어의 아래쪽으로 쏜 hit Point y의 차가
-        // Character Controller의 step offset 보다 작으면 계단으로 간주
-        if (hitSlopeY - hitUnderPlayerY <= _controller.stepOffset)
-        {
-            return true;
-        }
-
-        return false;
     }
 
     private bool IsBetweenSlopeAndGround()

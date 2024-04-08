@@ -8,8 +8,8 @@ TagManager:
   - AssassinationTarget
   - WirePoint
   - Wall
-  - Stair
   - PatrolPoint
+  - Slideable
   layers:
   - Default
   - TransparentFX
