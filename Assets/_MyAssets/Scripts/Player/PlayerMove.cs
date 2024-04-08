@@ -85,6 +85,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private CharacterController _controller;
 
+    private static int _slideableTriggerCount = 0;
     private GameObject _hitObject;
     private Vector3 _hitNormal;
     private bool _isSliding;
@@ -266,13 +267,6 @@ public class PlayerMove : Singleton<PlayerMove>
     {
         if (IsOnSlope())
         {
-            if (IsBetweenSlopeAndGround())
-            {
-                _slideVelocity = Vector3.zero;
-                _isSliding = false;
-                return;
-            }
-            
             _slideVelocity = Vector3.ProjectOnPlane(new Vector3(0, _velocity.y, 0), _hitNormal);
             _isSliding = true;
             return;
@@ -284,20 +278,20 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private bool IsOnSlope()
     {
-        if (_hitObject == null || _hitObject.CompareTag("Stair"))
+        if (_isSliding)
+        {
+            return !IsBetweenSlopeAndGround();
+        }
+
+        if (_hitObject == null || !IsGrounded || SlideableZone.slideableZoneCount == 0)
         {
             return false;
         }
 
-        if (_isSliding)
-        {
-            return true;
-        }
-        
         float angle = Vector3.Angle(Vector3.up, _hitNormal);
         bool isOnSlope = Mathf.FloorToInt(angle) >= _controller.slopeLimit && Mathf.CeilToInt(angle) < 90.0f;
-        
-        return isOnSlope;
+
+        return isOnSlope && !IsBetweenSlopeAndGround();
     }
 
     private bool IsBetweenSlopeAndGround()
@@ -311,8 +305,10 @@ public class PlayerMove : Singleton<PlayerMove>
             float angle = Vector3.Angle(Vector3.up, hit.normal);
             if (Mathf.CeilToInt(angle) <= _controller.slopeLimit)
             {
-                float heightFromHit = bottom.y - hit.transform.position.y;
-                const float MIN_SLIDE_HEIGHT = 0.6f;
+                float heightFromHit = bottom.y - hit.point.y;
+                
+                // 최소 슬라이딩 높이
+                const float MIN_SLIDE_HEIGHT = 0.1f;
                 if (heightFromHit < MIN_SLIDE_HEIGHT)
                 {
                     return true;
@@ -465,8 +461,6 @@ public class PlayerMove : Singleton<PlayerMove>
         AddPlayerState(EPlayerState.Jump);
         _yVelocity += _playerData.jumpHeight;
     }
-
-    
 
     private List<GameObject> GetWirePoints()
     {
@@ -637,6 +631,8 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             return;
         }
+
+        _inputDirection = Vector3.zero;
 
         if (IsGrounded)
         {
