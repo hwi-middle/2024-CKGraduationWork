@@ -1,35 +1,43 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class HideActionController : Singleton<HideActionController>
 {
-    [SerializeField] private bool _toggleAorB;
     [SerializeField] private PlayerInputData _inputData;
     [SerializeField] private PlayerData _data;
 
     private Vector3 _exitPoint;
     
-    public bool IsOnAction => _hideActionRoutine != null && _hideExitActionRoutine != null;
-    public bool IsHiding { get; private set; }
+    public bool IsOnAction => _hideActionRoutine != null || _hideExitActionRoutine != null;
+
+    public static bool isHiding = false;
 
     private IEnumerator _hideActionRoutine;
     private IEnumerator _hideExitActionRoutine;
     
     private GameObject _currentHideableObject;
 
-    private Camera _mainCamera;
-    
+    private int _prevState;
+
+    private Camera _mainCamera; 
 
     private void OnEnable()
     {
         _inputData.hideEvent += HandleHideAction;
+        _inputData.peekEvent += HandlePeekAction;
+        _inputData.hideExitEvent += HandleHideExitAction;
+        _inputData.peekExitEvent += HandlePeekExitAction;
     }
 
     private void OnDisable()
     {
         _inputData.hideEvent -= HandleHideAction;
+        _inputData.peekEvent -= HandlePeekAction;
+        _inputData.hideExitEvent -= HandleHideExitAction;
+        _inputData.peekExitEvent -= HandlePeekExitAction;
     }
 
     private void Start()
@@ -37,12 +45,18 @@ public class HideActionController : Singleton<HideActionController>
         _mainCamera = Camera.main;
     }
 
-    private void Update()
+    private void HandlePeekAction()
     {
-        
+        CinemachineFreeLook peekCamera = _currentHideableObject.GetComponentInChildren<CinemachineFreeLook>();
+        peekCamera.MoveToTopOfPrioritySubqueue();
     }
 
-    public void ExitFromHideableObject()
+    private void HandlePeekExitAction()
+    {
+        PlayerMove.Instance.InCabinetCamera.MoveToTopOfPrioritySubqueue();
+    }
+
+    private void HandleHideExitAction()
     {
         _hideExitActionRoutine = HideExitRoutine();
         StartCoroutine(_hideExitActionRoutine);
@@ -50,19 +64,7 @@ public class HideActionController : Singleton<HideActionController>
 
     private IEnumerator HideExitRoutine()
     {
-        if (!_toggleAorB)
-        {
-            PlayerMove.Instance.ChangeCameraToFreeLook();
-        }
-        else
-        {
-            StartCoroutine(FOVReduceRoutine());
-        }
-
         Vector3 startPosition = transform.position;
-        Vector3 exitPosition =
-            _currentHideableObject.transform.Find("ExitPoint").transform.position;
-        exitPosition.y = startPosition.y;
 
         float t = 0;
         const float DURATION = 1.0f;
@@ -70,19 +72,26 @@ public class HideActionController : Singleton<HideActionController>
         while (t <= DURATION)
         {
             float alpha = t / DURATION;
-            transform.position = Vector3.Lerp(startPosition, exitPosition, alpha);
+            transform.position = Vector3.Lerp(startPosition, _exitPoint, alpha);
             yield return null;
             t += Time.deltaTime;
         }
 
-        transform.position = exitPosition;
+        transform.position = _exitPoint;
         
         _hideExitActionRoutine = null;
-        IsHiding = false;
+        isHiding = false;
+        PlayerMove.Instance.RestoreState(_prevState);
+        PlayerMove.Instance.ChangeCameraToFreeLook();
     }
 
     private void HandleHideAction()
     {
+        _prevState = PlayerMove.Instance.CurrentState;
+        
+        PlayerMove.Instance.SetInitState();
+        PlayerMove.Instance.AddPlayerState(EPlayerState.Hide);
+        
         Transform cameraTransform = _mainCamera.transform;
         Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
         LayerMask layerMask = LayerMask.GetMask("Hideable");
@@ -114,17 +123,11 @@ public class HideActionController : Singleton<HideActionController>
 
     private IEnumerator HideActionRoutine()
     {
-        IsHiding = true;
-        if (!_toggleAorB)
-        {
-            PlayerMove.Instance.ChangeCameraToHideAiming();
-        }
-        else
-        {
-            StartCoroutine(FOVExpandRoutine());
-        }
+        isHiding = true;
+        PlayerMove.Instance.ChangeCameraToHideAiming();
 
         Vector3 startPosition = transform.position;
+        _exitPoint = startPosition;
         Quaternion startRotation = transform.rotation;
         
         Vector3 targetPosition = _currentHideableObject.transform.position;
@@ -144,34 +147,5 @@ public class HideActionController : Singleton<HideActionController>
 
         transform.position = targetPosition;
         _hideActionRoutine = null;
-    }
-
-    private IEnumerator FOVExpandRoutine()
-    {
-        float t = PlayerMove.Instance.FreeLookCamera.m_Lens.FieldOfView;
-        const float MAX_FOV = 100.0f;
-        while (t <= MAX_FOV)
-        {
-            PlayerMove.Instance.FreeLookCamera.m_Lens.FieldOfView = t;
-            yield return null;
-            t += MAX_FOV * Time.deltaTime;
-        }
-        
-        PlayerMove.Instance.FreeLookCamera.m_Lens.FieldOfView = MAX_FOV;
-    }
-
-    private IEnumerator FOVReduceRoutine()
-    {
-        float t = PlayerMove.Instance.FreeLookCamera.m_Lens.FieldOfView;
-        const float MIN_FOV = 70.0f;
-        float duration = t - MIN_FOV;
-        while (t >= MIN_FOV)
-        {
-            PlayerMove.Instance.FreeLookCamera.m_Lens.FieldOfView = t;
-            yield return null;
-            t -= duration * Time.deltaTime;
-        }
-
-        PlayerMove.Instance.FreeLookCamera.m_Lens.FieldOfView = MIN_FOV;
     }
 }

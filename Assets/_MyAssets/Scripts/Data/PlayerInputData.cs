@@ -6,10 +6,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "New Player Input", menuName = "Scriptable Object Asset/Player Input")]
-public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
+public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions, IA_Player.IHideActionActions
 {
     private IA_Player _input;
     
+    // Player Action
     public Action<Vector2> moveEvent;
     public Action runEvent;
     public Action runQuitEvent;
@@ -21,8 +22,12 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
     public Action aimingEvent;
     public Action aimingCancelEvent;
     public Action shootEvent;
+    
+    // Hide Action
     public Action hideEvent;
-    public Action hideCancelEvent;
+    public Action hideExitEvent;
+    public Action peekEvent;
+    public Action peekExitEvent;
 
     private void OnEnable()
     {
@@ -30,6 +35,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
         {
             _input = new IA_Player();
             _input.PlayerAction.SetCallbacks(this);
+            _input.HideAction.SetCallbacks(this);
         }
 
         _input.PlayerAction.Enable();
@@ -38,6 +44,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
     private void OnDisable()
     {
         _input?.PlayerAction.Disable();
+        _input?.HideAction.Disable();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -135,7 +142,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
         shootEvent?.Invoke();
     }
 
-    public void OnHide(InputAction.CallbackContext context)
+    public void OnInteraction(InputAction.CallbackContext context)
     {
         if (!context.started)
         {
@@ -143,5 +150,35 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
         }
         
         hideEvent?.Invoke();
+        _input.HideAction.Enable();
+        _input.PlayerAction.Disable();
+    }
+
+    public void OnPeek(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            return;
+        }
+
+        if (context.canceled)
+        {
+            peekExitEvent?.Invoke();
+            return;
+        }
+        
+        peekEvent?.Invoke();
+    }
+
+    public void OnExit(InputAction.CallbackContext context)
+    {
+        if (!context.started)
+        {
+            return;
+        }
+
+        hideExitEvent?.Invoke();
+        _input.PlayerAction.Enable();
+        _input.HideAction.Disable();
     }
 }

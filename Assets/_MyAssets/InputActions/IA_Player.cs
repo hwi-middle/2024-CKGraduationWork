@@ -109,7 +109,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Hide"",
+                    ""name"": ""Interaction"",
                     ""type"": ""Button"",
                     ""id"": ""54119653-70fc-4afb-a567-2aa127137507"",
                     ""expectedControlType"": ""Button"",
@@ -269,9 +269,101 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""PC"",
-                    ""action"": ""Hide"",
+                    ""action"": ""Interaction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""HideAction"",
+            ""id"": ""2621908e-f51a-4096-9046-1185fe0701d1"",
+            ""actions"": [
+                {
+                    ""name"": ""Peek"",
+                    ""type"": ""Button"",
+                    ""id"": ""a6666a57-2a62-4ba0-92f6-80f163b5d1f6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Exit"",
+                    ""type"": ""Value"",
+                    ""id"": ""b45a26a2-7f21-48b0-8864-0396895e0660"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""5c112874-54f1-4610-a165-940767c902ed"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""Peek"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Move"",
+                    ""id"": ""e6943423-3ddf-4641-b261-249eae3d6a99"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""c4d0284d-7a9c-4f1b-a9ef-29a5bb079884"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""441d1f8b-40b6-4781-95ba-41e452ae4efa"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ab5443cd-8732-4535-8cd7-3f83ef1ea397"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""5a3db6ef-0e2c-4c8e-98a4-3249d0d7665d"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -317,7 +409,11 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_PlayerAction_Pause = m_PlayerAction.FindAction("Pause", throwIfNotFound: true);
         m_PlayerAction_Aiming = m_PlayerAction.FindAction("Aiming", throwIfNotFound: true);
         m_PlayerAction_Shoot = m_PlayerAction.FindAction("Shoot", throwIfNotFound: true);
-        m_PlayerAction_Hide = m_PlayerAction.FindAction("Hide", throwIfNotFound: true);
+        m_PlayerAction_Interaction = m_PlayerAction.FindAction("Interaction", throwIfNotFound: true);
+        // HideAction
+        m_HideAction = asset.FindActionMap("HideAction", throwIfNotFound: true);
+        m_HideAction_Peek = m_HideAction.FindAction("Peek", throwIfNotFound: true);
+        m_HideAction_Exit = m_HideAction.FindAction("Exit", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -388,7 +484,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerAction_Pause;
     private readonly InputAction m_PlayerAction_Aiming;
     private readonly InputAction m_PlayerAction_Shoot;
-    private readonly InputAction m_PlayerAction_Hide;
+    private readonly InputAction m_PlayerAction_Interaction;
     public struct PlayerActionActions
     {
         private @IA_Player m_Wrapper;
@@ -402,7 +498,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         public InputAction @Pause => m_Wrapper.m_PlayerAction_Pause;
         public InputAction @Aiming => m_Wrapper.m_PlayerAction_Aiming;
         public InputAction @Shoot => m_Wrapper.m_PlayerAction_Shoot;
-        public InputAction @Hide => m_Wrapper.m_PlayerAction_Hide;
+        public InputAction @Interaction => m_Wrapper.m_PlayerAction_Interaction;
         public InputActionMap Get() { return m_Wrapper.m_PlayerAction; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -439,9 +535,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Shoot.started += instance.OnShoot;
             @Shoot.performed += instance.OnShoot;
             @Shoot.canceled += instance.OnShoot;
-            @Hide.started += instance.OnHide;
-            @Hide.performed += instance.OnHide;
-            @Hide.canceled += instance.OnHide;
+            @Interaction.started += instance.OnInteraction;
+            @Interaction.performed += instance.OnInteraction;
+            @Interaction.canceled += instance.OnInteraction;
         }
 
         private void UnregisterCallbacks(IPlayerActionActions instance)
@@ -473,9 +569,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Shoot.started -= instance.OnShoot;
             @Shoot.performed -= instance.OnShoot;
             @Shoot.canceled -= instance.OnShoot;
-            @Hide.started -= instance.OnHide;
-            @Hide.performed -= instance.OnHide;
-            @Hide.canceled -= instance.OnHide;
+            @Interaction.started -= instance.OnInteraction;
+            @Interaction.performed -= instance.OnInteraction;
+            @Interaction.canceled -= instance.OnInteraction;
         }
 
         public void RemoveCallbacks(IPlayerActionActions instance)
@@ -493,6 +589,60 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActionActions @PlayerAction => new PlayerActionActions(this);
+
+    // HideAction
+    private readonly InputActionMap m_HideAction;
+    private List<IHideActionActions> m_HideActionActionsCallbackInterfaces = new List<IHideActionActions>();
+    private readonly InputAction m_HideAction_Peek;
+    private readonly InputAction m_HideAction_Exit;
+    public struct HideActionActions
+    {
+        private @IA_Player m_Wrapper;
+        public HideActionActions(@IA_Player wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Peek => m_Wrapper.m_HideAction_Peek;
+        public InputAction @Exit => m_Wrapper.m_HideAction_Exit;
+        public InputActionMap Get() { return m_Wrapper.m_HideAction; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(HideActionActions set) { return set.Get(); }
+        public void AddCallbacks(IHideActionActions instance)
+        {
+            if (instance == null || m_Wrapper.m_HideActionActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_HideActionActionsCallbackInterfaces.Add(instance);
+            @Peek.started += instance.OnPeek;
+            @Peek.performed += instance.OnPeek;
+            @Peek.canceled += instance.OnPeek;
+            @Exit.started += instance.OnExit;
+            @Exit.performed += instance.OnExit;
+            @Exit.canceled += instance.OnExit;
+        }
+
+        private void UnregisterCallbacks(IHideActionActions instance)
+        {
+            @Peek.started -= instance.OnPeek;
+            @Peek.performed -= instance.OnPeek;
+            @Peek.canceled -= instance.OnPeek;
+            @Exit.started -= instance.OnExit;
+            @Exit.performed -= instance.OnExit;
+            @Exit.canceled -= instance.OnExit;
+        }
+
+        public void RemoveCallbacks(IHideActionActions instance)
+        {
+            if (m_Wrapper.m_HideActionActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IHideActionActions instance)
+        {
+            foreach (var item in m_Wrapper.m_HideActionActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_HideActionActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public HideActionActions @HideAction => new HideActionActions(this);
     private int m_PCSchemeIndex = -1;
     public InputControlScheme PCScheme
     {
@@ -522,6 +672,11 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnAiming(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
-        void OnHide(InputAction.CallbackContext context);
+        void OnInteraction(InputAction.CallbackContext context);
+    }
+    public interface IHideActionActions
+    {
+        void OnPeek(InputAction.CallbackContext context);
+        void OnExit(InputAction.CallbackContext context);
     }
 }

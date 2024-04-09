@@ -16,7 +16,7 @@ public enum EPlayerState
     Run = 1 << 3,
     Crouch = 1 << 4,
     Jump = 1 << 5,
-    Stealth = 1 << 6,
+    Hide = 1 << 6,
     WallMove = 1 << 7,
     Alive = 1 << 8,
     Dead = 1 << 9,
@@ -35,6 +35,7 @@ public class PlayerMove : Singleton<PlayerMove>
     
     [SerializeField] private PlayerInputData _inputData;
     private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
+    public int CurrentState => _currentState;
 
     [Header("Player Base Data")]
     [SerializeField] private PlayerData _playerData;
@@ -212,7 +213,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
         CheckAndSwitchLifeState();
 
-        if (!HideActionController.Instance.IsHiding)
+        if (!HideActionController.isHiding)
         {
             SetSlideVelocity();
             ShowWirePointUI();
@@ -429,29 +430,29 @@ public class PlayerMove : Singleton<PlayerMove>
     {
         return (_currentState & (int)state) != 0;
     }
+
+    public void SetInitState()
+    {
+        _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
+    }
+
+    public void RestoreState(int prevState)
+    {
+        _currentState = prevState;
+    }
     
-    private void AddPlayerState(EPlayerState state)
+    public void AddPlayerState(EPlayerState state)
     {
         _currentState |= (int)state;
     }
 
-    private void RemovePlayerState(EPlayerState state)
+    public void RemovePlayerState(EPlayerState state)
     {
         _currentState &= ~(int)state;
     }
 
     private void HandleMoveAction(Vector2 pos)
     {
-        if (HideActionController.Instance.IsHiding)
-        {
-            if (!HideActionController.Instance.IsOnAction)
-            {
-                HideActionController.Instance.ExitFromHideableObject();
-            }
-
-            return;
-        }
-        
         if (IsOnWire)
         {
             return;
@@ -489,8 +490,6 @@ public class PlayerMove : Singleton<PlayerMove>
         AddPlayerState(EPlayerState.Jump);
         _yVelocity += _playerData.jumpHeight;
     }
-
-    
 
     private List<GameObject> GetWirePoints()
     {
