@@ -10,7 +10,7 @@ public class HideActionController : Singleton<HideActionController>
     [SerializeField] private PlayerData _data;
 
     private Vector3 _exitPoint;
-    
+
     public bool IsOnAction => _hideActionRoutine != null || _hideExitActionRoutine != null;
 
     public static bool isHiding = false;
@@ -49,11 +49,13 @@ public class HideActionController : Singleton<HideActionController>
     {
         CinemachineFreeLook peekCamera = _currentHideableObject.GetComponentInChildren<CinemachineFreeLook>();
         peekCamera.MoveToTopOfPrioritySubqueue();
+        PlayerMove.Instance.AddPlayerState(EPlayerState.Peek);
     }
 
     private void HandlePeekExitAction()
     {
         PlayerMove.Instance.InCabinetCamera.MoveToTopOfPrioritySubqueue();
+        PlayerMove.Instance.RemovePlayerState(EPlayerState.Peek);
     }
 
     private void HandleHideExitAction()

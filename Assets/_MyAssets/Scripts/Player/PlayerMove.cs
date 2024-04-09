@@ -17,10 +17,11 @@ public enum EPlayerState
     Crouch = 1 << 4,
     Jump = 1 << 5,
     Hide = 1 << 6,
-    Alive = 1 << 7,
-    Dead = 1 << 8,
-    WireAction = 1 << 9,
-    Sliding = 1 << 10
+    Peek = 1 << 7,
+    Alive = 1 << 8,
+    Dead = 1 << 9,
+    WireAction = 1 << 10,
+    Sliding = 1 << 11
 }
 
 public class PlayerMove : Singleton<PlayerMove>
