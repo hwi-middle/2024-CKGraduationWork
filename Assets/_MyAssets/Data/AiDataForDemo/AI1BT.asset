@@ -71,6 +71,31 @@ MonoBehaviour:
   children:
   - {fileID: -6627933823913317914}
   - {fileID: 1434210293769021928}
+--- !u!114 &-7732721014914853597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b184d0f7e6ca444afa5c98b570331a, type: 3}
+  m_Name: SelectorNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 317cda9c9d83ff646ba46dff6586caee
+  position: {x: -1.6956635, y: 1032.6086}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+    nextPatrolPos: {x: 0, y: 0, z: 0}
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4 \uC911 \uD558\uB098\uB97C \uC2E4\uD589\uD569\uB2C8\uB2E4."
+  children:
+  - {fileID: -4942686072581443854}
+  - {fileID: 1457199189913668340}
 --- !u!114 &-6627933823913317914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,6 +219,76 @@ MonoBehaviour:
   children:
   - {fileID: -5942775213244615459}
   - {fileID: -7855011472910695757}
+--- !u!114 &-5136241624558442492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b184d0f7e6ca444afa5c98b570331a, type: 3}
+  m_Name: SelectorNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 6d8060baaf6d7b74fb310e1223ee7a29
+  position: {x: -206, y: 1010}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+    nextPatrolPos: {x: 0, y: 0, z: 0}
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4 \uC911 \uD558\uB098\uB97C \uC2E4\uD589\uD569\uB2C8\uB2E4."
+  children:
+  - {fileID: 3605259452588812108}
+  - {fileID: 1457199189913668340}
+--- !u!114 &-4942686072581443854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 000ca179032bdd549889ed60b4144b59, type: 3}
+  m_Name: CheckCanAtackNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: ac640b41dd870bf4490a8ca59de0dbbe
+  position: {x: -188.00002, y: 1209.826}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+    nextPatrolPos: {x: 0, y: 0, z: 0}
+  agent: {fileID: 0}
+  description: "\uACF5\uACA9 \uAC00\uB2A5\uD55C\uC9C0 \uD655\uC778\uD569\uB2C8\uB2E4."
+  child: {fileID: 7286866679669072597}
+--- !u!114 &-3932923699017855139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15834e9a4a3d0ef4dba98b81d05b5398, type: 3}
+  m_Name: AttackPlayer
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: b3a450d386c03af42b6416d36c9cd428
+  position: {x: -328, y: 1323}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+    nextPatrolPos: {x: 0, y: 0, z: 0}
+  agent: {fileID: 0}
+  description: "\uD50C\uB808\uC774\uC5B4\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uB97C \uC785\uD799\uB2C8\uB2E4."
 --- !u!114 &-2753155313134257457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,6 +393,9 @@ MonoBehaviour:
   - {fileID: -7855011472910695757}
   - {fileID: 1434210293769021928}
   - {fileID: -5474908904584072319}
+  - {fileID: -7732721014914853597}
+  - {fileID: 7286866679669072597}
+  - {fileID: -4942686072581443854}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -365,13 +463,36 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: f373526600f85ca48b875b83fe107ae6
-  position: {x: 8, y: 1046}
+  position: {x: 14.999893, y: 1225}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
     nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uD50C\uB808\uC774\uC5B4\uB97C \uCD94\uC801\uD569\uB2C8\uB2E4."
+--- !u!114 &3605259452588812108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 000ca179032bdd549889ed60b4144b59, type: 3}
+  m_Name: CheckCanAtackNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 86e4d441ab75e8d40b80e588f34307ef
+  position: {x: -328, y: 1179}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+    nextPatrolPos: {x: 0, y: 0, z: 0}
+  agent: {fileID: 0}
+  description: "\uACF5\uACA9 \uAC00\uB2A5\uD55C\uC9C0 \uD655\uC778\uD569\uB2C8\uB2E4."
+  child: {fileID: -3932923699017855139}
 --- !u!114 &4305519358515743911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,7 +516,7 @@ MonoBehaviour:
   agent: {fileID: 0}
   description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uAC00 \uAC00\uB4DD \uCC3C\uB294\uC9C0
     \uD655\uC778\uD569\uB2C8\uB2E4."
-  child: {fileID: 1457199189913668340}
+  child: {fileID: -7732721014914853597}
 --- !u!114 &5366069412104643932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,6 +589,28 @@ MonoBehaviour:
   - {fileID: -8540783065237411281}
   - {fileID: 5387619673049607781}
   - {fileID: -6303492509818837393}
+--- !u!114 &7286866679669072597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15834e9a4a3d0ef4dba98b81d05b5398, type: 3}
+  m_Name: AttackPlayer
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 911a4b1c0f4667e4ea87cd65b38486f2
+  position: {x: -188.00002, y: 1334.6086}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+    nextPatrolPos: {x: 0, y: 0, z: 0}
+  agent: {fileID: 0}
+  description: "\uD50C\uB808\uC774\uC5B4\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uB97C \uC785\uD799\uB2C8\uB2E4."
 --- !u!114 &8810219330751051124
 MonoBehaviour:
   m_ObjectHideFlags: 0

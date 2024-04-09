@@ -7,14 +7,14 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyBase : MonoBehaviour
+public class EnemyBase : MonoBehaviour, IDamageable
 {
     [SerializeField] private EnemyAiData _aiData;
     public EnemyAiData AiData => _aiData;
     [SerializeField] private BehaviorTree _tree;
     public BehaviorTree Tree => _tree;
     [SerializeField] private Canvas _canvas;
-
+    
     private float _perceptionGauge = 0f;
     private Vector3 _moveRangeCenterPos;
     public Vector3 MoveRangeCenterPos => _moveRangeCenterPos;
@@ -148,5 +148,16 @@ public class EnemyBase : MonoBehaviour
     {
         _perceptionGauge -= _aiData.gaugeDecrementPerSecond * Time.deltaTime;
         _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
+    }
+
+    public void Attack(Player player)
+    {
+        player.TakeDamage(_aiData.attackDamage, gameObject);
+    }
+
+    public int TakeDamage(int damageAmount, GameObject damageCauser)
+    {
+        Destroy(gameObject);
+        return damageAmount;
     }
 }
