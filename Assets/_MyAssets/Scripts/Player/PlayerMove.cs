@@ -133,7 +133,7 @@ public class PlayerMove : Singleton<PlayerMove>
         _hp = _playerData.playerHp;
         _camera = Camera.main;
     }
-    
+
 
     protected virtual void Update()
     {
@@ -145,26 +145,22 @@ public class PlayerMove : Singleton<PlayerMove>
 
         CheckAndSwitchLifeState();
 
-        if (!HideActionController.isHiding)
-        {
-            SetSlideVelocity();
-            ShowWirePointUI();
-            RotatePlayer();
-            MovePlayer();
-        }
+        SetSlideVelocity();
+        ShowWirePointUI();
+        RotatePlayer();
+        MovePlayer();
 
         if (IsGrounded)
         {
             RemovePlayerState(EPlayerState.Jump);
         }
-        
+
         UpdatePlayerStateText();
 
         if (!_isAssassinating)
         {
             _assassinationTarget = GetAimingEnemy();
         }
-
     }
 
     private void CheckAndSwitchLifeState()

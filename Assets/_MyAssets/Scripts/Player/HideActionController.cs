@@ -9,10 +9,6 @@ public class HideActionController : Singleton<HideActionController>
     [SerializeField] private PlayerInputData _inputData;
     [SerializeField] private PlayerData _data;
     
-    public bool IsOnAction => _hideActionRoutine != null || _hideExitActionRoutine != null;
-
-    public static bool isHiding = false;
-
     private bool _isCrouch;
 
     private GameObject _currentHideableObject;
@@ -83,10 +79,10 @@ public class HideActionController : Singleton<HideActionController>
         transform.position = _exitPoint;
         
         _hideExitActionRoutine = null;
-        isHiding = false;
         
         CameraController.Instance.ChangeCameraToFreeLook();
         PlayerMove.Instance.ExitHideState(_isCrouch);
+        PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.PlayerAction);
     }
 
     private void HandleHideAction()
@@ -126,7 +122,7 @@ public class HideActionController : Singleton<HideActionController>
 
     private IEnumerator HideActionRoutine()
     {
-        isHiding = true;
+        PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.HideAction);
         CameraController.Instance.ChangeCameraToInCabinet();
 
         Vector3 startPosition = transform.position;

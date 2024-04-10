@@ -8,7 +8,13 @@ using UnityEngine.InputSystem;
 [CreateAssetMenu(fileName = "New Player Input", menuName = "Scriptable Object Asset/Player Input")]
 public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions, IA_Player.IHideActionActions
 {
-    private IA_Player _input;
+    public enum EInputMap
+    {
+        PlayerAction,
+        HideAction
+    }
+    
+    private static IA_Player _input;
     
     // Player Action
     public Action<Vector2> moveEvent;
@@ -47,6 +53,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
         _input?.HideAction.Disable();
     }
 
+    // Player Action Map
     public void OnMove(InputAction.CallbackContext context)
     {
         moveEvent?.Invoke(context.ReadValue<Vector2>());
@@ -150,10 +157,9 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
         }
         
         hideEvent?.Invoke();
-        _input.HideAction.Enable();
-        _input.PlayerAction.Disable();
     }
-
+    
+    // Hide Action Map
     public void OnPeek(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -178,7 +184,23 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
         }
 
         hideExitEvent?.Invoke();
-        _input.PlayerAction.Enable();
-        _input.HideAction.Disable();
+    }
+
+    public static void ChangeInputMap(EInputMap map)
+    {
+        switch (map)
+        {
+            case EInputMap.PlayerAction:
+                _input.HideAction.Disable();
+                _input.PlayerAction.Enable();
+                break;
+            case EInputMap.HideAction:
+                _input.PlayerAction.Disable();
+                _input.HideAction.Enable();
+                break;
+            default:
+                Debug.Assert(false);
+                break;
+        }
     }
 }
