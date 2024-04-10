@@ -12,7 +12,7 @@ public class HideActionController : Singleton<HideActionController>
     private bool _isCrouch;
 
     private GameObject _currentHideableObject;
-    private Vector3 _exitPoint;
+    private float _exitDistance;
 
 
     private IEnumerator _hideActionRoutine;
@@ -51,7 +51,7 @@ public class HideActionController : Singleton<HideActionController>
 
     private void HandlePeekExitAction()
     {
-        CameraController.Instance.ChangeCameraToInCabinet();
+        CameraController.Instance.ChangeCameraFromPeekToInCabinet();
         PlayerMove.Instance.RemovePlayerState(EPlayerState.Peek);
     }
 
@@ -64,6 +64,7 @@ public class HideActionController : Singleton<HideActionController>
     private IEnumerator HideExitRoutine()
     {
         Vector3 startPosition = transform.position;
+        Vector3 exitPoint = transform.forward.normalized * _exitDistance + startPosition;
 
         float t = 0;
         const float DURATION = 1.0f;
@@ -71,16 +72,17 @@ public class HideActionController : Singleton<HideActionController>
         while (t <= DURATION)
         {
             float alpha = t / DURATION;
-            transform.position = Vector3.Lerp(startPosition, _exitPoint, alpha);
+            transform.position = Vector3.Lerp(startPosition, exitPoint, alpha);
             yield return null;
             t += Time.deltaTime;
         }
 
-        transform.position = _exitPoint;
+        transform.position = exitPoint;
         
         _hideExitActionRoutine = null;
-        
-        CameraController.Instance.ChangeCameraToFreeLook();
+
+        _currentHideableObject.GetComponent<Collider>().isTrigger = false;
+        CameraController.Instance.ChangeCameraFromCabinetToFreeLook();
         PlayerMove.Instance.ExitHideState(_isCrouch);
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.PlayerAction);
     }
@@ -115,6 +117,7 @@ public class HideActionController : Singleton<HideActionController>
         }
 
         _currentHideableObject = hit.transform.gameObject;
+        _currentHideableObject.GetComponent<Collider>().isTrigger = true;
 
         _hideActionRoutine = HideActionRoutine();
         StartCoroutine(_hideActionRoutine);
@@ -123,15 +126,15 @@ public class HideActionController : Singleton<HideActionController>
     private IEnumerator HideActionRoutine()
     {
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.HideAction);
-        CameraController.Instance.ChangeCameraToInCabinet();
 
         Vector3 startPosition = transform.position;
-        _exitPoint = startPosition;
         Quaternion startRotation = transform.rotation;
         
         Vector3 targetPosition = _currentHideableObject.transform.position;
         targetPosition.y = startPosition.y;
         Quaternion targetRotation = Quaternion.Euler(0, 180, 0);
+
+        _exitDistance = Vector3.Distance(startPosition, targetPosition);
         
         float t = 0;
         const float DURATION = 1.0f;
@@ -146,5 +149,7 @@ public class HideActionController : Singleton<HideActionController>
 
         transform.position = targetPosition;
         _hideActionRoutine = null;
+
+        CameraController.Instance.ChangeCameraFromFreeLookToInCabinet();
     }
 }

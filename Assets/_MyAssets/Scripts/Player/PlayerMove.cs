@@ -178,7 +178,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
     public void AlignPlayerToCameraForward()
     {
-        if (CameraController.Instance.BrainCamera.IsBlending)
+        if (CameraController.Instance.IsBlending)
         {
             return;
         }

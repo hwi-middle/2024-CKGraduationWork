@@ -66,7 +66,7 @@ public class ItemController : MonoBehaviour
 
     private void HandleAiming()
     {
-        CameraController.Instance.ChangeCameraToAiming();
+        CameraController.Instance.ChangeCameraFromFreeLookToAiming();
         PlayerMove.Instance.AlignPlayerToCameraForward();
         if (_cameraBlendingRoutine != null)
         {
@@ -92,7 +92,7 @@ public class ItemController : MonoBehaviour
     private void HandleAimingCancel()
     {
         _isOnAiming = false;
-        CameraController.Instance.ChangeCameraToFreeLook();
+        CameraController.Instance.ChangeCameraFromAimingToFreeLook();
         LineDrawHelper.Instance.DisableLine();
         RemoveTargetPoint();
 

@@ -54,31 +54,46 @@ public class CameraController : Singleton<CameraController>
         FreeLookCamera.MoveToTopOfPrioritySubqueue();
     }
     
-    public void ChangeCameraToFreeLook()
+    public void ChangeCameraFromAimingToFreeLook()
     {
-        Vector3 forwardDirection = _mainCamera.transform.forward;
-        forwardDirection.y = 0.5f;
-
-        FreeLookCamera.m_XAxis.Value = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
-        FreeLookCamera.m_YAxis.Value = forwardDirection.y;
-        
         FreeLookCamera.MoveToTopOfPrioritySubqueue();
+
+        FreeLookCamera.m_XAxis.Value = AimingCamera.m_XAxis.Value;
+        FreeLookCamera.m_YAxis.Value = 0.5f;
     }
 
-    public void ChangeCameraToAiming()
+    public void ChangeCameraFromFreeLookToAiming()
     {
-        Vector3 forwardDirection = _mainCamera.transform.forward;
-        forwardDirection.y = 0.5f;
-
-        FreeLookCamera.m_XAxis.Value = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
-        FreeLookCamera.m_YAxis.Value = forwardDirection.y;
-        
         AimingCamera.MoveToTopOfPrioritySubqueue();
+
+        AimingCamera.m_XAxis.Value = FreeLookCamera.m_XAxis.Value;
+        AimingCamera.m_YAxis.Value = 0.5f;
     }
 
-    public void ChangeCameraToInCabinet()
+    public void ChangeCameraFromFreeLookToInCabinet()
+    {
+        StartCoroutine(BetweenFreeLookAndInCabinetRoutine());
+        InCabinetCamera.MoveToTopOfPrioritySubqueue();
+        BrainCamera.m_DefaultBlend.m_Time = 0.5f;
+    }
+
+    public void ChangeCameraFromPeekToInCabinet()
     {
         InCabinetCamera.MoveToTopOfPrioritySubqueue();
+    }
+
+    public void ChangeCameraFromCabinetToFreeLook()
+    {
+        StartCoroutine(BetweenFreeLookAndInCabinetRoutine());
+        FreeLookCamera.MoveToTopOfPrioritySubqueue();
+        FreeLookCamera.m_YAxis.Value = 0.5f;
+    }
+
+    private IEnumerator BetweenFreeLookAndInCabinetRoutine()
+    {
+        BrainCamera.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
+        yield return new WaitForEndOfFrame();
+        BrainCamera.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.EaseOut;
     }
 
     public void ChangeCameraToPeek(GameObject hideableObject)
