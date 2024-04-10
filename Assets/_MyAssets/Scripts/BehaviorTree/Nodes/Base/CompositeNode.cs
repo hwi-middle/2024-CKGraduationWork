@@ -6,6 +6,9 @@ public abstract class CompositeNode : Node
 {
     [HideInInspector] public List<Node> children = new List<Node>();
     
+    private int lastFrameCount = -1;
+    protected int currentChildIndex = 0;
+    
     public override Node Clone()
     {
         CompositeNode node = Instantiate(this);
@@ -16,5 +19,13 @@ public abstract class CompositeNode : Node
             node.children.Add(child.Clone());
         }
         return node;
+    }
+    
+    protected bool IsCalledLastFrame()
+    {
+        bool result = lastFrameCount == Time.frameCount - 1;
+        lastFrameCount = Time.frameCount;
+        
+        return result;
     }
 }

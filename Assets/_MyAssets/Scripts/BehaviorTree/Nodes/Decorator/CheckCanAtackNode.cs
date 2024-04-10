@@ -23,7 +23,6 @@ public class CheckCanAtackNode : DecoratorNode
 
     protected override ENodeState OnUpdate()
     {
-        Debug.Log("CheckCanAttackNode OnUpdate()");
         if (blackboard.target == null)
         {
             return ENodeState.Failure;

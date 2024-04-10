@@ -29,7 +29,7 @@ MonoBehaviour:
   gaugeDecrementPerSecond: 50
   walkSpeed: 5
   sprintSpeed: 7
-  moveRange: 17
+  moveRange: 27.4
   attackDamage: 10
   attackRange: 5
   attackDelay: 5

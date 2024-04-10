@@ -19,32 +19,8 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uB97C \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
---- !u!114 &-8540783065237411281
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78812ba5c64b6bd4e8aa9ea21f85f2b4, type: 3}
-  m_Name: GetNextPatrolPosNode
-  m_EditorClassIdentifier: 
-  state: 0
-  started: 0
-  guid: ddc3048159efe2a40843a6ab023fb082
-  position: {x: 182.52582, y: 1112}
-  blackboard:
-    target: {fileID: 0}
-    lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
-  agent: {fileID: 0}
-  description: "\uB2E4\uC74C \uC21C\uCC30 \uC9C0\uC810\uC744 \uC5BB\uC2B5\uB2C8\uB2E4."
-  getPositionMethod: 0
 --- !u!114 &-7855011472910695757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,7 +40,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4\uC744 \uBAA8\uB450 \uC21C\uCC28
     \uC2E4\uD589\uD569\uB2C8\uB2E4."
@@ -90,7 +65,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4 \uC911 \uD558\uB098\uB97C \uC2E4\uD589\uD569\uB2C8\uB2E4."
   children:
@@ -115,7 +89,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uD50C\uB808\uC774\uC5B4\uAC00 \uC2DC\uC57C\uC5D0 \uB4E4\uC5B4\uC654\uB294\uC9C0
     \uD655\uC778\uD569\uB2C8\uB2E4."
@@ -135,16 +108,15 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 411b743ebd3df49868d336c3feff9b4a
-  position: {x: 565.5258, y: 1113}
+  position: {x: 375.00006, y: 1074.0002}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC9C0\uC815\uD55C \uC2DC\uAC04 \uBC94\uC704 \uB0B4\uC5D0\uC11C \uB79C\uB364\uC73C\uB85C
     \uB300\uAE30\uD569\uB2C8\uB2E4."
   durationMin: 1
-  durationMax: 2
+  durationMax: 1
 --- !u!114 &-6137277382804976303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,7 +136,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC2DC\uC57C\uC5D0\uC11C \uC0AC\uB77C\uC9C4 \uD6C4 \uC77C\uC815 \uC2DC\uAC04\uC774
     \uC9C0\uB0AC\uB294\uC9C0 \uD655\uC778\uD569\uB2C8\uB2E4."
@@ -189,7 +160,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uD65C\uB3D9 \uBC94\uC704\uB97C \uBC97\uC5B4\uB0AC\uB294\uC9C0
     \uD655\uC778\uD569\uB2C8\uB2E4."
@@ -213,7 +183,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4 \uC911 \uD558\uB098\uB97C \uC2E4\uD589\uD569\uB2C8\uB2E4."
   children:
@@ -238,7 +207,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4 \uC911 \uD558\uB098\uB97C \uC2E4\uD589\uD569\uB2C8\uB2E4."
   children:
@@ -263,7 +231,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uACF5\uACA9 \uAC00\uB2A5\uD55C\uC9C0 \uD655\uC778\uD569\uB2C8\uB2E4."
   child: {fileID: 7286866679669072597}
@@ -286,7 +253,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uD50C\uB808\uC774\uC5B4\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uB97C \uC785\uD799\uB2C8\uB2E4."
 --- !u!114 &-2753155313134257457
@@ -308,7 +274,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC6D0\uC810\uC73C\uB85C \uB3CC\uC544\uAC11\uB2C8\uB2E4."
 --- !u!114 &-2671036396125986586
@@ -330,7 +295,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4\uC744 \uBAA8\uB450 \uC21C\uCC28
     \uC2E4\uD589\uD569\uB2C8\uB2E4."
@@ -356,7 +320,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uB97C \uAC10\uC18C\uC2DC\uD0B5\uB2C8\uB2E4."
 --- !u!114 &11400000
@@ -384,7 +347,6 @@ MonoBehaviour:
   - {fileID: -2492612781893175548}
   - {fileID: -5942775213244615459}
   - {fileID: -2753155313134257457}
-  - {fileID: -8540783065237411281}
   - {fileID: 5387619673049607781}
   - {fileID: 5536038477587996331}
   - {fileID: -6303492509818837393}
@@ -399,7 +361,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
 --- !u!114 &1353668204475537931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,7 +380,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uD589\uB3D9\uD2B8\uB9AC\uC758 \uC2DC\uC791\uC9C0\uC810\uC785\uB2C8\uB2E4."
   child: {fileID: 5366069412104643932}
@@ -442,7 +402,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4 \uC911 \uD558\uB098\uB97C \uC2E4\uD589\uD569\uB2C8\uB2E4."
   children:
@@ -463,11 +422,10 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: f373526600f85ca48b875b83fe107ae6
-  position: {x: 14.999893, y: 1225}
+  position: {x: 26.000042, y: 1210}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uD50C\uB808\uC774\uC5B4\uB97C \uCD94\uC801\uD569\uB2C8\uB2E4."
 --- !u!114 &3605259452588812108
@@ -489,7 +447,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uACF5\uACA9 \uAC00\uB2A5\uD55C\uC9C0 \uD655\uC778\uD569\uB2C8\uB2E4."
   child: {fileID: -3932923699017855139}
@@ -512,7 +469,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uAC00 \uAC00\uB4DD \uCC3C\uB294\uC9C0
     \uD655\uC778\uD569\uB2C8\uB2E4."
@@ -536,7 +492,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uC744 \uBC18\uBCF5\uD574\uC11C \uC2E4\uD589\uD569\uB2C8\uB2E4."
   child: {fileID: -5474908904584072319}
@@ -555,13 +510,13 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 016f74bc19f044527a2fbd1d21abd397
-  position: {x: 374.5258, y: 1113}
+  position: {x: 194, y: 1074}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: 
+  getPositionMethod: 0
 --- !u!114 &5536038477587996331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -577,16 +532,14 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 8eb98b83737784985844a0eb0cb35242
-  position: {x: 206.52586, y: 903}
+  position: {x: 230, y: 903}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4\uC744 \uC21C\uCC28\uC801\uC73C\uB85C
     \uC2E4\uD589\uD569\uB2C8\uB2E4."
   children:
-  - {fileID: -8540783065237411281}
   - {fileID: 5387619673049607781}
   - {fileID: -6303492509818837393}
 --- !u!114 &7286866679669072597
@@ -608,7 +561,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uD50C\uB808\uC774\uC5B4\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uB97C \uC785\uD799\uB2C8\uB2E4."
 --- !u!114 &8810219330751051124
@@ -630,7 +582,6 @@ MonoBehaviour:
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
-    nextPatrolPos: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uAC00 0\uC778\uC9C0 \uD655\uC778\uD569\uB2C8\uB2E4."
   child: {fileID: 5536038477587996331}
