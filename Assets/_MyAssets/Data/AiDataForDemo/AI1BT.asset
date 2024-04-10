@@ -233,7 +233,7 @@ MonoBehaviour:
     lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uACF5\uACA9 \uAC00\uB2A5\uD55C\uC9C0 \uD655\uC778\uD569\uB2C8\uB2E4."
-  child: {fileID: 7286866679669072597}
+  child: {fileID: -3791341588595147033}
 --- !u!114 &-3932923699017855139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,6 +255,31 @@ MonoBehaviour:
     lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uD50C\uB808\uC774\uC5B4\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uB97C \uC785\uD799\uB2C8\uB2E4."
+--- !u!114 &-3791341588595147033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 858bb69cb05774b448541fece4e6eda0, type: 3}
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 06c0dbbfb8b409044a8fe7c6e3edfcd9
+  position: {x: -187.99991, y: 1314.7391}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4\uC744 \uC21C\uCC28\uC801\uC73C\uB85C
+    \uC2E4\uD589\uD569\uB2C8\uB2E4."
+  children:
+  - {fileID: 7286866679669072597}
+  - {fileID: -1334370328887072042}
 --- !u!114 &-2753155313134257457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,6 +347,28 @@ MonoBehaviour:
     lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uB97C \uAC10\uC18C\uC2DC\uD0B5\uB2C8\uB2E4."
+--- !u!114 &-1334370328887072042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ab15960e11a624baf65119dbcfdc27, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 7c8c5bf63815da04b84014fe516a571a
+  position: {x: -114.43475, y: 1475}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC9C0\uC815\uD55C \uC2DC\uAC04\uB3D9\uC548 \uB300\uAE30\uD569\uB2C8\uB2E4."
+  duration: 2
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,6 +405,8 @@ MonoBehaviour:
   - {fileID: -7732721014914853597}
   - {fileID: 7286866679669072597}
   - {fileID: -4942686072581443854}
+  - {fileID: -3791341588595147033}
+  - {fileID: -1334370328887072042}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -422,7 +471,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: f373526600f85ca48b875b83fe107ae6
-  position: {x: 26.000042, y: 1210}
+  position: {x: 54.00001, y: 1210.0001}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -557,7 +606,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 911a4b1c0f4667e4ea87cd65b38486f2
-  position: {x: -188.00002, y: 1334.6086}
+  position: {x: -313.75653, y: 1475.4521}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0

@@ -31,5 +31,5 @@ MonoBehaviour:
   sprintSpeed: 7
   moveRange: 27.4
   attackDamage: 10
-  attackRange: 5
+  attackRange: 3
   attackDelay: 5
