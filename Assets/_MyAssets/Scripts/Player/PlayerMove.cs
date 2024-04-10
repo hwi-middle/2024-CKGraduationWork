@@ -26,17 +26,11 @@ public enum EPlayerState
 
 public class PlayerMove : Singleton<PlayerMove>
 {
-    private GameObject _camerasPrefab;
     private Camera _camera;
-    public CinemachineFreeLook FreeLookCamera { get; private set; }
-    public CinemachineFreeLook AimingCamera { get; private set; }
-    public CinemachineVirtualCamera InCabinetCamera { get; private set; }
-    public CinemachineBrain BrainCamera { get; private set; }
     
     [SerializeField] private PlayerInputData _inputData;
     private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
-    public int CurrentState => _currentState;
-
+    
     [Header("Player Base Data")]
     [SerializeField] private PlayerData _playerData;
 
@@ -104,69 +98,6 @@ public class PlayerMove : Singleton<PlayerMove>
 
         Instantiate(_playerData.lineRendererPrefab);
         LineDrawHelper.Instance.DisableLine();
-        
-        InitCamera();
-    }
-    
-    
-    private void InitCamera()
-    {
-        AudioListener existCamera = FindObjectOfType<AudioListener>();
-        if (existCamera != null)
-        {
-            Destroy(existCamera.gameObject);
-        }
-        
-        Debug.Assert(_playerData.camerasPrefab != null, "_playerData.camerasPrefab != null");
-        
-        _camerasPrefab = Instantiate(_playerData.camerasPrefab);
-        
-        Debug.Assert(_camerasPrefab != null, "_camerasPrefab != null");
-
-        FreeLookCamera = _camerasPrefab.transform.Find("FreeLook Camera").GetComponent<CinemachineFreeLook>();
-        AimingCamera = _camerasPrefab.transform.Find("Aiming Camera").GetComponent<CinemachineFreeLook>();
-        BrainCamera = _camerasPrefab.transform.Find("Main Camera").GetComponent<CinemachineBrain>();
-        InCabinetCamera = _camerasPrefab.transform.Find("InCabinetCamera").GetComponent<CinemachineVirtualCamera>();
-        
-        Transform tr = gameObject.transform;
-        FreeLookCamera.LookAt = tr;
-        FreeLookCamera.Follow = tr;
-        AimingCamera.LookAt = tr;
-        AimingCamera.Follow = tr;
-        
-        Transform hideableObjectAimTransform = transform.Find("InHideableObjectAim").transform;
-        InCabinetCamera.LookAt = hideableObjectAimTransform;
-        InCabinetCamera.Follow = tr;
-        FreeLookCamera.MoveToTopOfPrioritySubqueue();
-        _camera = Camera.main;
-        ChangeCameraToFreeLook();
-    }
-
-    public void ChangeCameraToFreeLook()
-    {
-        Vector3 forwardDirection = _camera.transform.forward;
-        forwardDirection.y = 0.5f;
-
-        FreeLookCamera.m_XAxis.Value = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
-        FreeLookCamera.m_YAxis.Value = forwardDirection.y;
-        
-        FreeLookCamera.MoveToTopOfPrioritySubqueue();
-    }
-
-    public void ChangeCameraToAiming()
-    {
-        Vector3 forwardDirection = _camera.transform.forward;
-        forwardDirection.y = 0.5f;
-
-        AimingCamera.m_XAxis.Value = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
-        AimingCamera.m_YAxis.Value = forwardDirection.y;
-
-        AimingCamera.MoveToTopOfPrioritySubqueue();
-    }
-    
-    public void ChangeCameraToHideAiming()
-    {
-        InCabinetCamera.MoveToTopOfPrioritySubqueue();
     }
 
     private void OnEnable()
@@ -200,6 +131,7 @@ public class PlayerMove : Singleton<PlayerMove>
         Cursor.visible = false;
 
         _hp = _playerData.playerHp;
+        _camera = Camera.main;
     }
     
 
@@ -250,10 +182,11 @@ public class PlayerMove : Singleton<PlayerMove>
 
     public void AlignPlayerToCameraForward()
     {
-        if (BrainCamera.IsBlending)
+        if (CameraController.Instance.BrainCamera.IsBlending)
         {
             return;
         }
+        
         ApplyRotate();   
     }
     
@@ -436,9 +369,15 @@ public class PlayerMove : Singleton<PlayerMove>
         _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
     }
 
-    public void RestoreState(int prevState)
+    public void ExitHideState(bool isCrouch)
     {
-        _currentState = prevState;
+        SetInitState();
+        if (!isCrouch)
+        {
+            return;
+        }
+
+        _currentState |= (int)EPlayerState.Crouch;
     }
     
     public void AddPlayerState(EPlayerState state)

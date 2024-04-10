@@ -8,21 +8,23 @@ public class HideActionController : Singleton<HideActionController>
 {
     [SerializeField] private PlayerInputData _inputData;
     [SerializeField] private PlayerData _data;
-
-    private Vector3 _exitPoint;
-
+    
     public bool IsOnAction => _hideActionRoutine != null || _hideExitActionRoutine != null;
 
     public static bool isHiding = false;
 
+    private bool _isCrouch;
+
+    private GameObject _currentHideableObject;
+    private Vector3 _exitPoint;
+
+
     private IEnumerator _hideActionRoutine;
     private IEnumerator _hideExitActionRoutine;
     
-    private GameObject _currentHideableObject;
-
-    private int _prevState;
 
     private Camera _mainCamera; 
+    private GameObject _peekCamera;
 
     private void OnEnable()
     {
@@ -47,14 +49,13 @@ public class HideActionController : Singleton<HideActionController>
 
     private void HandlePeekAction()
     {
-        CinemachineFreeLook peekCamera = _currentHideableObject.GetComponentInChildren<CinemachineFreeLook>();
-        peekCamera.MoveToTopOfPrioritySubqueue();
+        CameraController.Instance.ChangeCameraToPeek(_currentHideableObject);
         PlayerMove.Instance.AddPlayerState(EPlayerState.Peek);
     }
 
     private void HandlePeekExitAction()
     {
-        PlayerMove.Instance.InCabinetCamera.MoveToTopOfPrioritySubqueue();
+        CameraController.Instance.ChangeCameraToInCabinet();
         PlayerMove.Instance.RemovePlayerState(EPlayerState.Peek);
     }
 
@@ -83,14 +84,14 @@ public class HideActionController : Singleton<HideActionController>
         
         _hideExitActionRoutine = null;
         isHiding = false;
-        PlayerMove.Instance.RestoreState(_prevState);
-        PlayerMove.Instance.ChangeCameraToFreeLook();
+        
+        CameraController.Instance.ChangeCameraToFreeLook();
+        PlayerMove.Instance.ExitHideState(_isCrouch);
     }
 
     private void HandleHideAction()
     {
-        _prevState = PlayerMove.Instance.CurrentState;
-        
+        _isCrouch = PlayerMove.Instance.CheckPlayerState(EPlayerState.Crouch);
         PlayerMove.Instance.SetInitState();
         PlayerMove.Instance.AddPlayerState(EPlayerState.Hide);
         
@@ -126,7 +127,7 @@ public class HideActionController : Singleton<HideActionController>
     private IEnumerator HideActionRoutine()
     {
         isHiding = true;
-        PlayerMove.Instance.ChangeCameraToHideAiming();
+        CameraController.Instance.ChangeCameraToInCabinet();
 
         Vector3 startPosition = transform.position;
         _exitPoint = startPosition;
