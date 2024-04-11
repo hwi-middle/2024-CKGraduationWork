@@ -10,6 +10,7 @@ public class HideActionController : Singleton<HideActionController>
     [SerializeField] private PlayerData _data;
     
     private bool _isCrouch;
+    private bool _isInHideableObject;
 
     private GameObject _currentHideableObject;
     private float _exitDistance;
@@ -18,7 +19,6 @@ public class HideActionController : Singleton<HideActionController>
     private IEnumerator _hideActionRoutine;
     private IEnumerator _hideExitActionRoutine;
     
-
     private Camera _mainCamera; 
     private GameObject _peekCamera;
 
@@ -43,6 +43,29 @@ public class HideActionController : Singleton<HideActionController>
         _mainCamera = Camera.main;
     }
 
+    private void Update()
+    {
+        IsPlayerInHideableZone();
+    }
+
+    private void IsPlayerInHideableZone()
+    {
+        if (_isInHideableObject || HideableZoneHandler.hideableZoneCount == 0)
+        {
+            return;
+        }
+
+        if (!PlayerMove.Instance.CheckPlayerState(EPlayerState.Crouch))
+        {
+            Debug.Assert(!_isInHideableObject, "_isInHideableObject Is Not True");
+            
+            PlayerMove.Instance.RemovePlayerState(EPlayerState.Hide);
+            return;
+        }
+        
+        PlayerMove.Instance.AddPlayerState(EPlayerState.Hide);
+    }
+
     private void HandlePeekAction()
     {
         CameraController.Instance.ChangeCameraToPeek(_currentHideableObject);
@@ -57,6 +80,7 @@ public class HideActionController : Singleton<HideActionController>
 
     private void HandleHideExitAction()
     {
+        _isInHideableObject = false;
         _hideExitActionRoutine = HideExitRoutine();
         StartCoroutine(_hideExitActionRoutine);
     }
@@ -83,6 +107,7 @@ public class HideActionController : Singleton<HideActionController>
 
         _currentHideableObject.GetComponent<Collider>().isTrigger = false;
         CameraController.Instance.ChangeCameraFromCabinetToFreeLook();
+        
         PlayerMove.Instance.ExitHideState(_isCrouch);
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.PlayerAction);
     }
@@ -91,6 +116,7 @@ public class HideActionController : Singleton<HideActionController>
     {
         _isCrouch = PlayerMove.Instance.CheckPlayerState(EPlayerState.Crouch);
         PlayerMove.Instance.SetInitState();
+        _isInHideableObject = true;
         PlayerMove.Instance.AddPlayerState(EPlayerState.Hide);
         
         Transform cameraTransform = _mainCamera.transform;

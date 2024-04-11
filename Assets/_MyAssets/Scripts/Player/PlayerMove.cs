@@ -367,13 +367,13 @@ public class PlayerMove : Singleton<PlayerMove>
 
     public void ExitHideState(bool isCrouch)
     {
-        SetInitState();
+        RemovePlayerState(EPlayerState.Hide);
         if (!isCrouch)
         {
             return;
         }
 
-        _currentState |= (int)EPlayerState.Crouch;
+        AddPlayerState(EPlayerState.Crouch);
     }
     
     public void AddPlayerState(EPlayerState state)
