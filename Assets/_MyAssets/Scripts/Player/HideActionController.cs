@@ -87,6 +87,7 @@ public class HideActionController : Singleton<HideActionController>
 
     private IEnumerator HideExitRoutine()
     {
+        CameraController.Instance.ChangeCameraFromCabinetToFreeLook();
         Vector3 startPosition = transform.position;
         Vector3 exitPoint = transform.forward.normalized * _exitDistance + startPosition;
 
@@ -106,7 +107,6 @@ public class HideActionController : Singleton<HideActionController>
         _hideExitActionRoutine = null;
 
         _currentHideableObject.GetComponent<Collider>().isTrigger = false;
-        CameraController.Instance.ChangeCameraFromCabinetToFreeLook();
         
         PlayerMove.Instance.ExitHideState(_isCrouch);
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.PlayerAction);
@@ -151,6 +151,7 @@ public class HideActionController : Singleton<HideActionController>
 
     private IEnumerator HideActionRoutine()
     {
+        CameraController.Instance.ChangeCameraFromFreeLookToInCabinet();
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.HideAction);
 
         Vector3 startPosition = transform.position;
@@ -176,6 +177,5 @@ public class HideActionController : Singleton<HideActionController>
         transform.position = targetPosition;
         _hideActionRoutine = null;
 
-        CameraController.Instance.ChangeCameraFromFreeLookToInCabinet();
     }
 }

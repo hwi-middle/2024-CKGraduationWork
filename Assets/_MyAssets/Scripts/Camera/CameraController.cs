@@ -72,7 +72,6 @@ public class CameraController : Singleton<CameraController>
 
     public void ChangeCameraFromFreeLookToInCabinet()
     {
-        StartCoroutine(BetweenFreeLookAndInCabinetRoutine());
         InCabinetCamera.MoveToTopOfPrioritySubqueue();
         BrainCamera.m_DefaultBlend.m_Time = 0.5f;
     }
@@ -84,16 +83,8 @@ public class CameraController : Singleton<CameraController>
 
     public void ChangeCameraFromCabinetToFreeLook()
     {
-        StartCoroutine(BetweenFreeLookAndInCabinetRoutine());
         FreeLookCamera.MoveToTopOfPrioritySubqueue();
         FreeLookCamera.m_YAxis.Value = 0.5f;
-    }
-
-    private IEnumerator BetweenFreeLookAndInCabinetRoutine()
-    {
-        BrainCamera.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
-        yield return new WaitForEndOfFrame();
-        BrainCamera.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.EaseOut;
     }
 
     public void ChangeCameraToPeek(GameObject hideableObject)
