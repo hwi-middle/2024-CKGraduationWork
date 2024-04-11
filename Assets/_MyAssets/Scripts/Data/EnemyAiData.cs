@@ -17,6 +17,7 @@ public class EnemyAiData : ScriptableObject
     [Tooltip("걷기 이동 속도")] public float walkSpeed;
     [Tooltip("달리기 이동 속도")] public float sprintSpeed;
     [Tooltip("활동 범위(반경)")] public float moveRange;
+    [Tooltip("정지 거리")] public float stoppingDistance;
 
     [Header("공격 관련")]
     [Tooltip("공격력")] public int attackDamage;
