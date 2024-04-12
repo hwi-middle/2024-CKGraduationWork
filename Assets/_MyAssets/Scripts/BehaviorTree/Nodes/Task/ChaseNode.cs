@@ -29,6 +29,7 @@ public class ChaseNode : TaskNode
             return ENodeState.Failure;
         }
         
+        agent.SetSpeed(agent.AiData.sprintSpeed);
         agent.SetDestination(blackboard.target.transform.position);
         
         return ENodeState.Success;

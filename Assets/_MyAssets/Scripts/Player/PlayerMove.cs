@@ -16,8 +16,8 @@ public enum EPlayerState
     Run = 1 << 3,
     Crouch = 1 << 4,
     Jump = 1 << 5,
-    Stealth = 1 << 6,
-    WallMove = 1 << 7,
+    Hide = 1 << 6,
+    Peek = 1 << 7,
     Alive = 1 << 8,
     Dead = 1 << 9,
     WireAction = 1 << 10,
@@ -26,28 +26,24 @@ public enum EPlayerState
 
 public class PlayerMove : Singleton<PlayerMove>
 {
-    private GameObject _camerasPrefab;
     private Camera _camera;
-    public CinemachineFreeLook FreeLookCamera { get; private set; }
-    public CinemachineFreeLook AimingCamera { get; private set; }
-    public CinemachineBrain BrainCamera { get; private set; }
     
     [SerializeField] private PlayerInputData _inputData;
     private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
-
+    
     [Header("Player Base Data")]
     [SerializeField] private PlayerData _playerData;
 
     private GameObject _playerCanvas;
     private GameObject _wireAvailableUI;
 
-    [Header("WirePoint Offset")]
-    [SerializeField] private float _wirePointOffset;
+    [Header("WirePoint Offset")] [SerializeField]
+    private float _wirePointOffset;
 
     private TMP_Text _stateText;
 
-    private int _hp;
-    
+    // private int _hp;
+
     private RectTransform _wireAvailableUiRectTransform;
     private IEnumerator _wireActionRoutine;
 
@@ -74,8 +70,8 @@ public class PlayerMove : Singleton<PlayerMove>
     private bool _isAssassinating = false;
     private Transform _assassinationTarget;
 
-    [Header("Gravity Scale")]
-    [SerializeField] private float _gravityMultiplier;
+    [Header("Gravity Scale")] [SerializeField]
+    private float _gravityMultiplier;
 
     private float _yVelocity;
     protected float YVelocity => _yVelocity;
@@ -85,7 +81,6 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private CharacterController _controller;
 
-    private static int _slideableTriggerCount = 0;
     private GameObject _hitObject;
     private Vector3 _hitNormal;
     private bool _isSliding;
@@ -103,59 +98,6 @@ public class PlayerMove : Singleton<PlayerMove>
 
         Instantiate(_playerData.lineRendererPrefab);
         LineDrawHelper.Instance.DisableLine();
-        
-        InitCamera();
-    }
-    
-    
-    private void InitCamera()
-    {
-        AudioListener existCamera = FindObjectOfType<AudioListener>();
-        if (existCamera != null)
-        {
-            Destroy(existCamera.gameObject);
-        }
-        
-        Debug.Assert(_playerData.camerasPrefab != null, "_playerData.camerasPrefab != null");
-        
-        _camerasPrefab = Instantiate(_playerData.camerasPrefab);
-        
-        Debug.Assert(_camerasPrefab != null, "_camerasPrefab != null");
-
-        FreeLookCamera = _camerasPrefab.transform.Find("FreeLook Camera").GetComponent<CinemachineFreeLook>();
-        AimingCamera = _camerasPrefab.transform.Find("Aiming Camera").GetComponent<CinemachineFreeLook>();
-        BrainCamera = _camerasPrefab.transform.Find("Main Camera").GetComponent<CinemachineBrain>();
-        
-        Transform tr = gameObject.transform;
-        FreeLookCamera.LookAt = tr;
-        FreeLookCamera.Follow = tr;
-        AimingCamera.LookAt = tr;
-        AimingCamera.Follow = tr;
-        FreeLookCamera.MoveToTopOfPrioritySubqueue();
-        _camera = Camera.main;
-        ChangeCameraToFreeLook();
-    }
-
-    public void ChangeCameraToFreeLook()
-    {
-        Vector3 forwardDirection = _camera.transform.forward;
-        forwardDirection.y = 0.5f;
-
-        FreeLookCamera.m_XAxis.Value = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
-        FreeLookCamera.m_YAxis.Value = forwardDirection.y;
-        
-        FreeLookCamera.MoveToTopOfPrioritySubqueue();
-    }
-
-    public void ChangeCameraToAiming()
-    {
-        Vector3 forwardDirection = _camera.transform.forward;
-        forwardDirection.y = 0.5f;
-
-        AimingCamera.m_XAxis.Value = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
-        AimingCamera.m_YAxis.Value = forwardDirection.y;
-
-        AimingCamera.MoveToTopOfPrioritySubqueue();
     }
 
     private void OnEnable()
@@ -188,61 +130,62 @@ public class PlayerMove : Singleton<PlayerMove>
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        _hp = _playerData.playerHp;
+        // _hp = _playerData.playerHp;
+        _camera = Camera.main;
     }
-    
+
 
     protected virtual void Update()
     {
         // 사망 상태 테스트 용 임시 입력
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            _hp = 0;
-        }
-        
-        CheckAndSwitchLifeState();
+        // if (Input.GetKeyDown(KeyCode.Alpha4))
+        // {
+        //     _hp = 0;
+        // }
+
+        // CheckAndSwitchLifeState();
         SetSlideVelocity();
         ShowWirePointUI();
         RotatePlayer();
         MovePlayer();
-        
+
 
         if (IsGrounded)
         {
             RemovePlayerState(EPlayerState.Jump);
         }
-        
+
         UpdatePlayerStateText();
 
         if (!_isAssassinating)
         {
             _assassinationTarget = GetAimingEnemy();
         }
-
     }
 
-    private void CheckAndSwitchLifeState()
+    // private void CheckAndSwitchLifeState()
+    // {
+    //     if (_hp > 0)
+    //     {
+    //         return;
+    //     }
+    //     
+    //     RemovePlayerState(EPlayerState.Alive);
+    //     AddPlayerState(EPlayerState.Dead);
+    //
+    //     Destroy(gameObject);
+    // }
+
+    public void AlignPlayerToCameraForward()
     {
-        if (_hp > 0)
+        if (CameraController.Instance.IsBlending)
         {
             return;
         }
         
-        RemovePlayerState(EPlayerState.Alive);
-        AddPlayerState(EPlayerState.Dead);
-
-        Destroy(gameObject);
-    }
-
-    public void AlignPlayerToCameraForward()
-    {
-        if (BrainCamera.IsBlending)
-        {
-            return;
-        }
         ApplyRotate();   
     }
-    
+
     private void RotatePlayer()
     {
         Debug.Assert(_camera != null, "_camera != null");
@@ -251,7 +194,7 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             return;
         }
-        
+
         ApplyRotate();
     }
 
@@ -306,14 +249,14 @@ public class PlayerMove : Singleton<PlayerMove>
             if (Mathf.CeilToInt(angle) <= _controller.slopeLimit)
             {
                 float heightFromHit = bottom.y - hit.point.y;
-                
+
                 // 최소 슬라이딩 높이
                 const float MIN_SLIDE_HEIGHT = 0.1f;
                 if (heightFromHit < MIN_SLIDE_HEIGHT)
                 {
                     return true;
                 }
-                
+
                 return false;
             }
         }
@@ -333,9 +276,9 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive | (int)EPlayerState.Sliding;
             _velocity = _slideVelocity;
-            
+
             ApplyGravity();
-            
+
             _controller.Move(_playerData.slopeSlideSpeed * Time.deltaTime * _velocity);
             return;
         }
@@ -344,12 +287,12 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             RemovePlayerState(EPlayerState.Sliding);
         }
-        
+
         _velocity = transform.TransformDirection(_inputDirection);
 
         ApplyGravity();
         ApplyPlayerMoveSpeed();
-        
+
         _controller.Move(_velocity * Time.deltaTime);
     }
 
@@ -367,7 +310,7 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             _playerApplySpeed = _playerData.walkSpeed;
         }
-        
+
         _velocity.x *= _playerApplySpeed;
         _velocity.z *= _playerApplySpeed;
         _velocity.y *= _playerData.yMultiplier;
@@ -411,13 +354,29 @@ public class PlayerMove : Singleton<PlayerMove>
     {
         return (_currentState & (int)state) != 0;
     }
+
+    public void SetInitState()
+    {
+        _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
+    }
+
+    public void ExitHideState(bool isCrouch)
+    {
+        RemovePlayerState(EPlayerState.Hide);
+        if (!isCrouch)
+        {
+            return;
+        }
+
+        AddPlayerState(EPlayerState.Crouch);
+    }
     
-    private void AddPlayerState(EPlayerState state)
+    public void AddPlayerState(EPlayerState state)
     {
         _currentState |= (int)state;
     }
 
-    private void RemovePlayerState(EPlayerState state)
+    public void RemovePlayerState(EPlayerState state)
     {
         _currentState &= ~(int)state;
     }
@@ -436,7 +395,7 @@ public class PlayerMove : Singleton<PlayerMove>
             RemovePlayerState(EPlayerState.Walk);
             return;
         }
-        
+
         AddPlayerState(EPlayerState.Walk);
     }
 
@@ -505,7 +464,7 @@ public class PlayerMove : Singleton<PlayerMove>
         }
 
         float distance = (hit.transform.position - transform.position).magnitude;
-        
+
 
         if (distance < _playerData.minWireDistance)
         {
@@ -523,7 +482,7 @@ public class PlayerMove : Singleton<PlayerMove>
     private bool IsCollideWhenWireAction()
     {
         int detectLayer = LayerMask.GetMask("Ground") + LayerMask.GetMask("Wall");
-        
+
         // 매 프레임 호출 시 문제 발생 가능성 높음 -> 교체 방안 연구
         Collider[] overlappedColliders = Physics.OverlapSphere(transform.position, _controller.radius, detectLayer);
 
@@ -580,20 +539,20 @@ public class PlayerMove : Singleton<PlayerMove>
             _wireAvailableUI.SetActive(false);
             return;
         }
-        
+
         Vector3 wirePointPosition = wirePoint.transform.position;
         Vector3 playerPosition = transform.position;
-        
+
         Vector3 rayDirection = (wirePointPosition - playerPosition).normalized;
         float rayDistance = (wirePointPosition - playerPosition).magnitude;
-        
+
         Ray ray = new Ray(playerPosition, rayDirection);
-        
+
         Physics.Raycast(ray, out RaycastHit hit, rayDistance);
-        
-        Debug.Assert(hit.transform != null,"hit != null");
-        
-        if(!hit.transform.CompareTag("WirePoint"))
+
+        Debug.Assert(hit.transform != null, "hit != null");
+
+        if (!hit.transform.CompareTag("WirePoint"))
         {
             _wireAvailableUI.SetActive(false);
             return;
@@ -616,7 +575,7 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             return;
         }
-        
+
         ApplyWireAction();
     }
 
@@ -638,7 +597,7 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             PerformJump();
         }
-        
+
         _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
 
         Quaternion cameraRotation = _camera.transform.localRotation;
@@ -657,7 +616,6 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             yield return null;
         }
-        
 
         Vector3 initPos = transform.position;
         float t = 0;
@@ -771,7 +729,7 @@ public class PlayerMove : Singleton<PlayerMove>
             yield return null;
             t += Time.deltaTime;
         }
-        
+
         // 임시 암살 처리
         Destroy(_assassinationTarget.gameObject);
 
@@ -810,7 +768,7 @@ public class PlayerMove : Singleton<PlayerMove>
             RemovePlayerState(EPlayerState.Crouch);
             return;
         }
-        
+
         AddPlayerState(EPlayerState.Crouch);
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 
 [CreateAssetMenu()]
-public class BehaviorTree : ScriptableObject
+public class  BehaviorTree : ScriptableObject
 {
     public Node rootNode;
     public Node.ENodeState treeState = Node.ENodeState.InProgress;

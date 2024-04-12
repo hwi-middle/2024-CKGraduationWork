@@ -22,6 +22,8 @@ public class ItemController : MonoBehaviour
     private Vector3 _shootDirection;
     private Vector3 _prevPosition;
 
+    private IEnumerator _cameraBlendingRoutine;
+
     private void Awake()
     {
         _shootPoint = transform.Find("ShootPoint").GetComponent<Transform>();
@@ -53,11 +55,10 @@ public class ItemController : MonoBehaviour
         {
             _itemInHand = _itemPrefab;
         }
-        
+
         if (_isOnAiming)
         {
             SetThrowTargetPosition();
-            
             LineDrawHelper.Instance.EnableLine();
             PlayerMove.Instance.AlignPlayerToCameraForward();
         }
@@ -65,16 +66,43 @@ public class ItemController : MonoBehaviour
 
     private void HandleAiming()
     {
+        CameraController.Instance.ChangeCameraFromFreeLookToAiming();
+        PlayerMove.Instance.AlignPlayerToCameraForward();
+        if (_cameraBlendingRoutine != null)
+        {
+            return;
+        }
+
+        _cameraBlendingRoutine = CameraBlendingRoutine();
+        StartCoroutine(_cameraBlendingRoutine);
+    }
+
+    private IEnumerator CameraBlendingRoutine()
+    {
+        yield return new WaitForEndOfFrame();
+        
+        while (CameraController.Instance.IsBlending)
+        {
+            yield return null;
+        }
+
         _isOnAiming = true;
-        PlayerMove.Instance.ChangeCameraToAiming();
     }
 
     private void HandleAimingCancel()
     {
         _isOnAiming = false;
-        PlayerMove.Instance.ChangeCameraToFreeLook();
+        CameraController.Instance.ChangeCameraFromAimingToFreeLook();
         LineDrawHelper.Instance.DisableLine();
         RemoveTargetPoint();
+
+        if (_cameraBlendingRoutine == null)
+        {
+            return;
+        }
+
+        StopCoroutine(_cameraBlendingRoutine);
+        _cameraBlendingRoutine = null;
     }
 
     private void SetThrowTargetPosition()

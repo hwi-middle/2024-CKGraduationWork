@@ -23,6 +23,7 @@ public class MoveToOriginPointNode : TaskNode
 
     protected override ENodeState OnUpdate()
     {
+        agent.SetSpeed(agent.AiData.walkSpeed);
         agent.SetDestination(agent.MoveRangeCenterPos);
         return ENodeState.Success;
     }
