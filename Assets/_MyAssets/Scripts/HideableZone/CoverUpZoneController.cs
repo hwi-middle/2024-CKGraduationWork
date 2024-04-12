@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HideableZoneHandler : MonoBehaviour
+public class CoverUpZoneController : MonoBehaviour
 {
     public static int hideableZoneCount = 0;
 

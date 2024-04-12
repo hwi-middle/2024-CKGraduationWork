@@ -982,7 +982,7 @@ GameObject:
   - component: {fileID: 1956840769}
   - component: {fileID: 1956840773}
   m_Layer: 0
-  m_Name: HideZone
+  m_Name: CoverUpZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

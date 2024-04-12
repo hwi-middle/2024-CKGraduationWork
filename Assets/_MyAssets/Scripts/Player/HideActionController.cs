@@ -50,7 +50,7 @@ public class HideActionController : Singleton<HideActionController>
 
     private void IsPlayerInHideableZone()
     {
-        if (_isInHideableObject || HideableZoneHandler.hideableZoneCount == 0)
+        if (_isInHideableObject || CoverUpZoneController.hideableZoneCount == 0)
         {
             return;
         }
