@@ -115,8 +115,8 @@ MonoBehaviour:
   agent: {fileID: 0}
   description: "\uC9C0\uC815\uD55C \uC2DC\uAC04 \uBC94\uC704 \uB0B4\uC5D0\uC11C \uB79C\uB364\uC73C\uB85C
     \uB300\uAE30\uD569\uB2C8\uB2E4."
-  durationMin: 1
-  durationMax: 1
+  durationMin: 2
+  durationMax: 3
 --- !u!114 &-6137277382804976303
 MonoBehaviour:
   m_ObjectHideFlags: 0
