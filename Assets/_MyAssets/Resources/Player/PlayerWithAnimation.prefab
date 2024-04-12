@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 7713837995355931857}
   - component: {fileID: 9113156202343665045}
   - component: {fileID: 6410600696061651164}
+  - component: {fileID: 8685829106233264304}
   m_Layer: 7
   m_Name: PlayerWithAnimation
   m_TagString: Player
@@ -140,6 +141,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
   _data: {fileID: 11400000, guid: be439c1712086cc4eb47a854b63c7824, type: 2}
+--- !u!114 &8685829106233264304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5436934767695870256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cd2e7afb5a14fafbfd25c6880f5d68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6475233938985197222
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,7 +163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3668531916804019806}
   m_Layer: 7
-  m_Name: InHideableObjectTarget
+  m_Name: InHideableAim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
