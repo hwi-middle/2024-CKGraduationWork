@@ -24,9 +24,7 @@ public class AnimationUpdater : MonoBehaviour
         _anim.SetBool(PlayerAnimationStates.IDLE, _playerMove.CheckPlayerState(EPlayerState.Idle));
         _anim.SetBool(PlayerAnimationStates.WALK, _playerMove.CheckPlayerState(EPlayerState.Walk));
         _anim.SetBool(PlayerAnimationStates.RUN, _playerMove.CheckPlayerState(EPlayerState.Run));
-        _anim.SetBool(PlayerAnimationStates.JUMP, _playerMove.CheckPlayerState(EPlayerState.Jump));
         _anim.SetBool(PlayerAnimationStates.CROUCH, _playerMove.CheckPlayerState(EPlayerState.Crouch));
-        _anim.SetBool(PlayerAnimationStates.SLIDING, _playerMove.CheckPlayerState(EPlayerState.Sliding));
         _anim.SetBool(PlayerAnimationStates.WIREACTION, _playerMove.CheckPlayerState(EPlayerState.WireAction));
     }
 }
