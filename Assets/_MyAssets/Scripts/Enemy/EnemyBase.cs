@@ -15,6 +15,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public BehaviorTree Tree => _tree;
     [SerializeField] private Canvas _canvas;
 
+    private Animator _animator;
+
+    // AK stands for Animator Key
+    private static readonly int AK_Speed = Animator.StringToHash("Speed");
+
     private float _perceptionGauge = 0f;
     private Vector3 _moveRangeCenterPos;
     public Vector3 MoveRangeCenterPos => _moveRangeCenterPos;
@@ -32,6 +37,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         _perceptionNote = Instantiate(Resources.Load("PerceptionNote/PerceptionNote"), _canvas.transform).GetComponent<PerceptionNote>();
         _perceptionNote.owner = this;
         _moveRangeCenterPos = transform.position;
+        _animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -45,7 +51,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     void Update()
     {
         _tree.Update();
-#if UNITY_EDITOR  
+        _animator.SetFloat(AK_Speed, _navMeshAgent.velocity.magnitude);
+        
+#if UNITY_EDITOR
         _navMeshAgent.stoppingDistance = _aiData.stoppingDistance;
 #endif
     }
