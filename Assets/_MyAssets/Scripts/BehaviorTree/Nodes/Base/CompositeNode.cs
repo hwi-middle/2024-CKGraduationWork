@@ -6,7 +6,7 @@ public abstract class CompositeNode : Node
 {
     [HideInInspector] public List<Node> children = new List<Node>();
     
-    private int lastFrameCount = -1;
+    private int _lastFrameCount = -1;
     protected int currentChildIndex = 0;
     
     public override Node Clone()
@@ -23,8 +23,8 @@ public abstract class CompositeNode : Node
     
     protected bool IsCalledLastFrame()
     {
-        bool result = lastFrameCount == Time.frameCount - 1;
-        lastFrameCount = Time.frameCount;
+        bool result = _lastFrameCount == Time.frameCount - 1;
+        _lastFrameCount = Time.frameCount;
         
         return result;
     }
