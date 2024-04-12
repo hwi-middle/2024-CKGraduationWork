@@ -18,15 +18,16 @@ MonoBehaviour:
   crouchSpeed: 2
   jumpHeight: 4.5
   yMultiplier: 4
-  throwPower: 15
-  maxItemRange: 15
-  itemImpactRadius: 15
-  itemGaugeAmount: 0
   minWireDistance: 7
   maxWireDistance: 12
   wireActionDuration: 2
   assassinateDuration: 1.2
   moveSpeedOnAim: 2
+  throwPower: 15
+  maxItemRange: 15
+  itemImpactRadius: 15
+  itemGaugeAmount: 0
+  maxDistanceHideableObject: 3
   slopeSlideSpeed: 4
   playerCanvas: {fileID: 6670551468554774952, guid: d145af9e61baa8f4b86278040d640948,
     type: 3}

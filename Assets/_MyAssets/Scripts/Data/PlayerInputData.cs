@@ -6,10 +6,17 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "New Player Input", menuName = "Scriptable Object Asset/Player Input")]
-public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
+public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions, IA_Player.IHideActionActions
 {
-    private IA_Player _input;
+    public enum EInputMap
+    {
+        PlayerAction,
+        HideAction
+    }
     
+    private static IA_Player _input;
+    
+    // Player Action
     public Action<Vector2> moveEvent;
     public Action runEvent;
     public Action runQuitEvent;
@@ -21,6 +28,12 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
     public Action aimingEvent;
     public Action aimingCancelEvent;
     public Action shootEvent;
+    
+    // Hide Action
+    public Action hideEvent;
+    public Action hideExitEvent;
+    public Action peekEvent;
+    public Action peekExitEvent;
 
     private void OnEnable()
     {
@@ -28,6 +41,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
         {
             _input = new IA_Player();
             _input.PlayerAction.SetCallbacks(this);
+            _input.HideAction.SetCallbacks(this);
         }
 
         _input.PlayerAction.Enable();
@@ -36,8 +50,10 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
     private void OnDisable()
     {
         _input?.PlayerAction.Disable();
+        _input?.HideAction.Disable();
     }
 
+    // Player Action Map
     public void OnMove(InputAction.CallbackContext context)
     {
         moveEvent?.Invoke(context.ReadValue<Vector2>());
@@ -131,5 +147,60 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions
         }
 
         shootEvent?.Invoke();
+    }
+
+    public void OnInteraction(InputAction.CallbackContext context)
+    {
+        if (!context.started)
+        {
+            return;
+        }
+        
+        hideEvent?.Invoke();
+    }
+    
+    // Hide Action Map
+    public void OnPeek(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            return;
+        }
+
+        if (context.canceled)
+        {
+            peekExitEvent?.Invoke();
+            return;
+        }
+        
+        peekEvent?.Invoke();
+    }
+
+    public void OnExit(InputAction.CallbackContext context)
+    {
+        if (!context.started)
+        {
+            return;
+        }
+
+        hideExitEvent?.Invoke();
+    }
+
+    public static void ChangeInputMap(EInputMap map)
+    {
+        switch (map)
+        {
+            case EInputMap.PlayerAction:
+                _input.HideAction.Disable();
+                _input.PlayerAction.Enable();
+                break;
+            case EInputMap.HideAction:
+                _input.PlayerAction.Disable();
+                _input.HideAction.Enable();
+                break;
+            default:
+                Debug.Assert(false);
+                break;
+        }
     }
 }
