@@ -13,16 +13,20 @@ public class SequenceNode : CompositeNode
     
     protected override void OnStart()
     {
+        if (!IsCalledLastFrame())
+        {
+            currentChildIndex = 0;
+        }
     }
 
     protected override void OnStop()
     {
-        
+        currentChildIndex = 0;
     }
 
     protected override void OnAbort()
     {
-        
+        currentChildIndex = 0;
     }
 
     protected override ENodeState OnUpdate()
@@ -32,11 +36,13 @@ public class SequenceNode : CompositeNode
             return ENodeState.Success;
         }
 
-        foreach (var child in children)
+        for (int index = currentChildIndex; index < children.Count; index++)
         {
+            Node child = children[index];
             switch (child.Update())
             {
                 case ENodeState.InProgress:
+                    currentChildIndex = index;
                     return ENodeState.InProgress;
                 case ENodeState.Failure:
                     return ENodeState.Failure;

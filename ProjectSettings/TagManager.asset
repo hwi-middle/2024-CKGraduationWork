@@ -8,7 +8,6 @@ TagManager:
   - AssassinationTarget
   - WirePoint
   - Wall
-  - Stair
   - PatrolPoint
   layers:
   - Default

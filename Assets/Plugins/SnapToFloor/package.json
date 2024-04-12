@@ -1,0 +1,9 @@
+﻿{
+  "name": "com.nkstudio.snaptofloor",
+  "displayName": "Snap To Floor",
+  "version": "2.5.3",
+  "unity": "2021.3",
+  "description": "Like Unreal, it provides object snapping using the End key.",
+  "documentationUrl": "https://nk-studio.github.io/Packages/com.nkstudio.snap-to-floor@2.5.3/index.html",
+  "keywords": ["snap", "floor"]
+}

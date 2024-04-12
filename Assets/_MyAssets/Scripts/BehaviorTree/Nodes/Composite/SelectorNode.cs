@@ -12,16 +12,20 @@ public class SelectorNode : CompositeNode
 
     protected override void OnStart()
     {
+        if (!IsCalledLastFrame())
+        {
+            currentChildIndex = 0;
+        }
     }
 
     protected override void OnStop()
     {
-
+        currentChildIndex = 0;
     }
 
     protected override void OnAbort()
     {
-
+        currentChildIndex = 0;
     }
 
     protected override ENodeState OnUpdate()

@@ -37,13 +37,13 @@ public class PlayerMove : Singleton<PlayerMove>
     private GameObject _playerCanvas;
     private GameObject _wireAvailableUI;
 
-    [Header("WirePoint Offset")]
-    [SerializeField] private float _wirePointOffset;
+    [Header("WirePoint Offset")] [SerializeField]
+    private float _wirePointOffset;
 
     private TMP_Text _stateText;
 
-    private int _hp;
-    
+    // private int _hp;
+
     private RectTransform _wireAvailableUiRectTransform;
     private IEnumerator _wireActionRoutine;
 
@@ -70,8 +70,8 @@ public class PlayerMove : Singleton<PlayerMove>
     private bool _isAssassinating = false;
     private Transform _assassinationTarget;
 
-    [Header("Gravity Scale")]
-    [SerializeField] private float _gravityMultiplier;
+    [Header("Gravity Scale")] [SerializeField]
+    private float _gravityMultiplier;
 
     private float _yVelocity;
     protected float YVelocity => _yVelocity;
@@ -130,7 +130,7 @@ public class PlayerMove : Singleton<PlayerMove>
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        _hp = _playerData.playerHp;
+        // _hp = _playerData.playerHp;
         _camera = Camera.main;
     }
 
@@ -138,17 +138,17 @@ public class PlayerMove : Singleton<PlayerMove>
     protected virtual void Update()
     {
         // 사망 상태 테스트 용 임시 입력
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            _hp = 0;
-        }
+        // if (Input.GetKeyDown(KeyCode.Alpha4))
+        // {
+        //     _hp = 0;
+        // }
 
-        CheckAndSwitchLifeState();
-
+        // CheckAndSwitchLifeState();
         SetSlideVelocity();
         ShowWirePointUI();
         RotatePlayer();
         MovePlayer();
+
 
         if (IsGrounded)
         {
@@ -163,18 +163,18 @@ public class PlayerMove : Singleton<PlayerMove>
         }
     }
 
-    private void CheckAndSwitchLifeState()
-    {
-        if (_hp > 0)
-        {
-            return;
-        }
-        
-        RemovePlayerState(EPlayerState.Alive);
-        AddPlayerState(EPlayerState.Dead);
-
-        Destroy(gameObject);
-    }
+    // private void CheckAndSwitchLifeState()
+    // {
+    //     if (_hp > 0)
+    //     {
+    //         return;
+    //     }
+    //     
+    //     RemovePlayerState(EPlayerState.Alive);
+    //     AddPlayerState(EPlayerState.Dead);
+    //
+    //     Destroy(gameObject);
+    // }
 
     public void AlignPlayerToCameraForward()
     {
@@ -185,7 +185,7 @@ public class PlayerMove : Singleton<PlayerMove>
         
         ApplyRotate();   
     }
-    
+
     private void RotatePlayer()
     {
         Debug.Assert(_camera != null, "_camera != null");
@@ -194,7 +194,7 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             return;
         }
-        
+
         ApplyRotate();
     }
 
@@ -210,13 +210,6 @@ public class PlayerMove : Singleton<PlayerMove>
     {
         if (IsOnSlope())
         {
-            if (IsBetweenSlopeAndGround())
-            {
-                _slideVelocity = Vector3.zero;
-                _isSliding = false;
-                return;
-            }
-            
             _slideVelocity = Vector3.ProjectOnPlane(new Vector3(0, _velocity.y, 0), _hitNormal);
             _isSliding = true;
             return;
@@ -228,20 +221,20 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private bool IsOnSlope()
     {
-        if (_hitObject == null || _hitObject.CompareTag("Stair") || !IsGrounded)
+        if (_isSliding)
+        {
+            return !IsBetweenSlopeAndGround();
+        }
+
+        if (_hitObject == null || !IsGrounded || SlideableZone.slideableZoneCount == 0)
         {
             return false;
         }
 
-        if (_isSliding)
-        {
-            return true;
-        }
-        
         float angle = Vector3.Angle(Vector3.up, _hitNormal);
         bool isOnSlope = Mathf.FloorToInt(angle) >= _controller.slopeLimit && Mathf.CeilToInt(angle) < 90.0f;
-        
-        return isOnSlope;
+
+        return isOnSlope && !IsBetweenSlopeAndGround();
     }
 
     private bool IsBetweenSlopeAndGround()
@@ -255,13 +248,15 @@ public class PlayerMove : Singleton<PlayerMove>
             float angle = Vector3.Angle(Vector3.up, hit.normal);
             if (Mathf.CeilToInt(angle) <= _controller.slopeLimit)
             {
-                float heightFromHit = bottom.y - hit.transform.position.y;
-                const float MIN_SLIDE_HEIGHT = 0.6f;
+                float heightFromHit = bottom.y - hit.point.y;
+
+                // 최소 슬라이딩 높이
+                const float MIN_SLIDE_HEIGHT = 0.1f;
                 if (heightFromHit < MIN_SLIDE_HEIGHT)
                 {
                     return true;
                 }
-                
+
                 return false;
             }
         }
@@ -281,9 +276,9 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive | (int)EPlayerState.Sliding;
             _velocity = _slideVelocity;
-            
+
             ApplyGravity();
-            
+
             _controller.Move(_playerData.slopeSlideSpeed * Time.deltaTime * _velocity);
             return;
         }
@@ -292,12 +287,12 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             RemovePlayerState(EPlayerState.Sliding);
         }
-        
+
         _velocity = transform.TransformDirection(_inputDirection);
 
         ApplyGravity();
         ApplyPlayerMoveSpeed();
-        
+
         _controller.Move(_velocity * Time.deltaTime);
     }
 
@@ -315,7 +310,7 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             _playerApplySpeed = _playerData.walkSpeed;
         }
-        
+
         _velocity.x *= _playerApplySpeed;
         _velocity.z *= _playerApplySpeed;
         _velocity.y *= _playerData.yMultiplier;
@@ -400,7 +395,7 @@ public class PlayerMove : Singleton<PlayerMove>
             RemovePlayerState(EPlayerState.Walk);
             return;
         }
-        
+
         AddPlayerState(EPlayerState.Walk);
     }
 
@@ -469,7 +464,7 @@ public class PlayerMove : Singleton<PlayerMove>
         }
 
         float distance = (hit.transform.position - transform.position).magnitude;
-        
+
 
         if (distance < _playerData.minWireDistance)
         {
@@ -487,7 +482,7 @@ public class PlayerMove : Singleton<PlayerMove>
     private bool IsCollideWhenWireAction()
     {
         int detectLayer = LayerMask.GetMask("Ground") + LayerMask.GetMask("Wall");
-        
+
         // 매 프레임 호출 시 문제 발생 가능성 높음 -> 교체 방안 연구
         Collider[] overlappedColliders = Physics.OverlapSphere(transform.position, _controller.radius, detectLayer);
 
@@ -544,20 +539,20 @@ public class PlayerMove : Singleton<PlayerMove>
             _wireAvailableUI.SetActive(false);
             return;
         }
-        
+
         Vector3 wirePointPosition = wirePoint.transform.position;
         Vector3 playerPosition = transform.position;
-        
+
         Vector3 rayDirection = (wirePointPosition - playerPosition).normalized;
         float rayDistance = (wirePointPosition - playerPosition).magnitude;
-        
+
         Ray ray = new Ray(playerPosition, rayDirection);
-        
+
         Physics.Raycast(ray, out RaycastHit hit, rayDistance);
-        
-        Debug.Assert(hit.transform != null,"hit != null");
-        
-        if(!hit.transform.CompareTag("WirePoint"))
+
+        Debug.Assert(hit.transform != null, "hit != null");
+
+        if (!hit.transform.CompareTag("WirePoint"))
         {
             _wireAvailableUI.SetActive(false);
             return;
@@ -580,7 +575,7 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             return;
         }
-        
+
         ApplyWireAction();
     }
 
@@ -596,11 +591,13 @@ public class PlayerMove : Singleton<PlayerMove>
             return;
         }
 
+        _inputDirection = Vector3.zero;
+
         if (IsGrounded)
         {
             PerformJump();
         }
-        
+
         _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
 
         Quaternion cameraRotation = _camera.transform.localRotation;
@@ -732,7 +729,7 @@ public class PlayerMove : Singleton<PlayerMove>
             yield return null;
             t += Time.deltaTime;
         }
-        
+
         // 임시 암살 처리
         Destroy(_assassinationTarget.gameObject);
 
@@ -771,7 +768,7 @@ public class PlayerMove : Singleton<PlayerMove>
             RemovePlayerState(EPlayerState.Crouch);
             return;
         }
-        
+
         AddPlayerState(EPlayerState.Crouch);
     }
 }

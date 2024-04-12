@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 92454ad152c41e24d98fb3982f4d1b71
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - STFAboutUXML: {fileID: 9197481963319205126, guid: fa03fce1634d0094ca7219ca7e4d9151, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
