@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveToOriginPointNode : TaskNode
+public class AttackPlayer : TaskNode
 {
     public override void OnCreate()
     {
-        description = "원점으로 돌아갑니다.";
+        description = "플레이어에게 데미지를 입힙니다.";
     }
 
     protected override void OnStart()
@@ -23,8 +23,13 @@ public class MoveToOriginPointNode : TaskNode
 
     protected override ENodeState OnUpdate()
     {
-        agent.SetSpeed(agent.AiData.walkSpeed);
-        agent.SetDestination(agent.MoveRangeCenterPos);
+        if (blackboard.target == null)
+        {
+            return ENodeState.Failure;
+        }
+
+        Debug.Log("AttackPlayer");
+        blackboard.target.GetComponent<Player>().TakeDamage(agent.AiData.attackDamage, agent.gameObject);
         return ENodeState.Success;
     }
 }

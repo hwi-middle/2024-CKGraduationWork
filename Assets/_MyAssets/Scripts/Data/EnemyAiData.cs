@@ -13,9 +13,16 @@ public class EnemyAiData : ScriptableObject
     [Tooltip("게이지 감소 시작 시간")] public float gaugeDecreaseStartTime;
     [Tooltip("초당 게이지 감소량")] public float gaugeDecrementPerSecond;
     
-    [Header("능력치")]
-    [Tooltip("이동 속도")] public float moveSpeed;
+    [Header("이동 관련")]
+    [Tooltip("걷기 이동 속도")] public float walkSpeed;
+    [Tooltip("달리기 이동 속도")] public float sprintSpeed;
     [Tooltip("활동 범위(반경)")] public float moveRange;
+    [Tooltip("정지 거리")] public float stoppingDistance;
+
+    [Header("공격 관련")]
+    [Tooltip("공격력")] public int attackDamage;
+    [Tooltip("공격 범위(반경)")] public float attackRange;
+    [Tooltip("공격 딜레이(초)")] public float attackDelay;
 }
 
 [Serializable]

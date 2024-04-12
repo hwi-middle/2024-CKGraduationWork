@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaseNode : TaskNode
+public class CheckCanAtackNode : DecoratorNode
 {
     public override void OnCreate()
     {
-        description = "플레이어를 추적합니다.";
+        description = "공격 가능한지 확인합니다.";
     }
 
     protected override void OnStart()
@@ -19,7 +19,6 @@ public class ChaseNode : TaskNode
 
     protected override void OnAbort()
     {
-        
     }
 
     protected override ENodeState OnUpdate()
@@ -29,9 +28,13 @@ public class ChaseNode : TaskNode
             return ENodeState.Failure;
         }
         
-        agent.SetSpeed(agent.AiData.sprintSpeed);
-        agent.SetDestination(blackboard.target.transform.position);
-        
-        return ENodeState.Success;
+        if (Vector3.Distance(agent.transform.position, blackboard.target.transform.position) <= agent.AiData.attackRange)
+        {
+            child.Update();
+            return ENodeState.Success;
+        }
+
+        return ENodeState.Failure;
+
     }
 }

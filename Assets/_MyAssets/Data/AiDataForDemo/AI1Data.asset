@@ -27,5 +27,9 @@ MonoBehaviour:
     gaugeIncrementPerSecond: 50
   gaugeDecreaseStartTime: 2
   gaugeDecrementPerSecond: 50
-  moveSpeed: 2
+  walkSpeed: 0
+  sprintSpeed: 0
   moveRange: 17
+  attackDamage: 10
+  attackRange: 2
+  attackDelay: 2

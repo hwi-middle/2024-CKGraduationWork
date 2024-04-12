@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyBase : MonoBehaviour
+public class EnemyBase : MonoBehaviour, IDamageable
 {
     [SerializeField] private EnemyAiData _aiData;
     public EnemyAiData AiData => _aiData;
@@ -25,7 +25,7 @@ public class EnemyBase : MonoBehaviour
 
     public float PerceptionGauge => _perceptionGauge;
     public bool IsPerceptionGaugeFull => _perceptionGauge >= 100f;
-    
+
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -36,14 +36,18 @@ public class EnemyBase : MonoBehaviour
 
     private void Start()
     {
-        _navMeshAgent.speed = _aiData.moveSpeed;
-        _tree = _tree.Clone();        
+        _navMeshAgent.stoppingDistance = _aiData.stoppingDistance;
+        _navMeshAgent.speed = _aiData.walkSpeed;
+        _tree = _tree.Clone();
         _tree.Bind(this);
     }
 
     void Update()
     {
         _tree.Update();
+#if UNITY_EDITOR  
+        _navMeshAgent.stoppingDistance = _aiData.stoppingDistance;
+#endif
     }
 
     private void OnDestroy()
@@ -64,11 +68,16 @@ public class EnemyBase : MonoBehaviour
     {
         Debug.Log($"listen Sound From : {origin}, Increase : {increase}");
     }
- 
-    
+
+
     public void SetDestination(Vector3 destination)
     {
         _navMeshAgent.SetDestination(destination);
+    }
+
+    public void SetSpeed(float speed)
+    {
+        _navMeshAgent.speed = speed;
     }
 
     private float GetPerceptionGaugeIncrement(float distanceToPlayer)
@@ -91,7 +100,7 @@ public class EnemyBase : MonoBehaviour
     {
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
-    
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
@@ -126,7 +135,7 @@ public class EnemyBase : MonoBehaviour
         Handles.DrawWireArc(Application.isPlaying ? _moveRangeCenterPos : transform.position, Vector3.up, transform.forward, 360, _aiData.moveRange);
     }
 #endif
-    
+
     public bool IsArrivedToTarget(Vector3 target)
     {
         float remainingDistance = _navMeshAgent.pathPending ? Vector3.Distance(transform.position, target) : _navMeshAgent.remainingDistance;
@@ -143,5 +152,16 @@ public class EnemyBase : MonoBehaviour
     {
         _perceptionGauge -= _aiData.gaugeDecrementPerSecond * Time.deltaTime;
         _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
+    }
+
+    public void Attack(Player player)
+    {
+        player.TakeDamage(_aiData.attackDamage, gameObject);
+    }
+
+    public int TakeDamage(int damageAmount, GameObject damageCauser)
+    {
+        Destroy(gameObject);
+        return damageAmount;
     }
 }
