@@ -20,7 +20,6 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
     public Action<Vector2> moveEvent;
     public Action runEvent;
     public Action runQuitEvent;
-    public Action jumpEvent;
     public Action wireEvent;
     public Action assassinateEvent;
     public Action crouchEvent;
@@ -28,6 +27,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
     public Action aimingEvent;
     public Action aimingCancelEvent;
     public Action shootEvent;
+    public Action clairvoyanceEvent;
     
     // Hide Action
     public Action hideEvent;
@@ -71,16 +71,6 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
         }
         
         runEvent?.Invoke();
-    }
-
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        if (!context.started)
-        {
-            return;
-        }
-        
-        jumpEvent?.Invoke();
     }
 
     public void OnWire(InputAction.CallbackContext context)
@@ -158,7 +148,17 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
         
         hideEvent?.Invoke();
     }
-    
+
+    public void OnClairvoyance(InputAction.CallbackContext context)
+    {
+        if (!context.started)
+        {
+            return;
+        }
+        
+        clairvoyanceEvent?.Invoke();
+    }
+
     // Hide Action Map
     public void OnPeek(InputAction.CallbackContext context)
     {
