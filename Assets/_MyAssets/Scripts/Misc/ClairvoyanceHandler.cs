@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class ClairvoyanceHandler : MonoBehaviour
 {
@@ -20,6 +22,7 @@ public class ClairvoyanceHandler : MonoBehaviour
     
     private void OnDisable()
     {
+        ToggleClairvoyance(false);
         _inputData.clairvoyanceEvent -= HandleClairvoyanceAction;
     }
     
@@ -27,11 +30,22 @@ public class ClairvoyanceHandler : MonoBehaviour
     {
         _mainCamera = Camera.main;
     }
-    
+
+    private void Start()
+    {
+        ToggleClairvoyance(false);
+    }
+
     private void HandleClairvoyanceAction()
     {
-        _isClairvoyance = !_isClairvoyance;
+        ToggleClairvoyance(!_isClairvoyance);
+    }
+    
+    private void ToggleClairvoyance(bool active)
+    {
+        _isClairvoyance = active;
         _grayscaleMaterial.SetFloat(Alpha, _isClairvoyance ? 1 : 0);
         _clairvoyanceMaterial.SetFloat(Alpha, _isClairvoyance ? 1 : 0);
+        _mainCamera.GetComponent<UniversalAdditionalCameraData>().cameraStack[0].enabled = _isClairvoyance;
     }
 }
