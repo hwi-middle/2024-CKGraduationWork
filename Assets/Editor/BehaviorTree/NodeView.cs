@@ -14,7 +14,7 @@ public class NodeView : UnityEditor.Experimental.GraphView.Node
     public Port input;
     public Port output;
 
-    public NodeView(Node node) : base("Assets/_MyAssets/Editor/BehaviorTree/NodeView.uxml")
+    public NodeView(Node node) : base("Assets/Editor/BehaviorTree/NodeView.uxml")
     {
         this.node = node;
         title = node.name.Replace("Node", "");
