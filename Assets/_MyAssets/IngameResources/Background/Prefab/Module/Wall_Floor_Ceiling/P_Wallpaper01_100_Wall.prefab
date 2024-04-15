@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9034139816396065378}
-  - component: {fileID: -5069174853846211195}
   m_Layer: 0
   m_Name: P_Wallpaper01_100_Wall
   m_TagString: Untagged
@@ -33,27 +32,6 @@ Transform:
   - {fileID: 6817066909290790437}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &-5069174853846211195
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4301973717183199620}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &6418103638440647118
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -120,8 +98,40 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aabe726bd7bd06d4089dd527711ed3b2,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 554302040130510352}
   m_SourcePrefab: {fileID: 100100000, guid: aabe726bd7bd06d4089dd527711ed3b2, type: 3}
+--- !u!1 &6183660613527970975 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: aabe726bd7bd06d4089dd527711ed3b2,
+    type: 3}
+  m_PrefabInstance: {fileID: 6418103638440647118}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &554302040130510352
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183660613527970975}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2881583376491657778, guid: aabe726bd7bd06d4089dd527711ed3b2, type: 3}
 --- !u!4 &6817066909290790437 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: aabe726bd7bd06d4089dd527711ed3b2,

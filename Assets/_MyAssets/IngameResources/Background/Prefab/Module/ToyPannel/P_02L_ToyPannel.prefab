@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5169962846963894807}
   - component: {fileID: 8075163331499853234}
   - component: {fileID: 6337770900085010808}
+  - component: {fileID: 3746884736668702599}
   m_Layer: 0
   m_Name: SM_02L_ToyPannel
   m_TagString: Untagged
@@ -83,6 +84,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3746884736668702599
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5545256593063432365}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.010277379, y: 0.012365547, z: 0.0022755517}
+  m_Center: {x: 2.3283064e-10, y: 0.006161993, z: -9.895302e-10}
 --- !u!1 &5825531842506185015
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,7 +114,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5422273566024391511}
-  - component: {fileID: -566877295451420774}
   m_Layer: 0
   m_Name: P_02L_ToyPannel
   m_TagString: Untagged
@@ -116,24 +137,3 @@ Transform:
   - {fileID: 5169962846963894807}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &-566877295451420774
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5825531842506185015}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}

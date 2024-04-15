@@ -710,6 +710,11 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void HandleRunAction()
     {
+        if (CameraController.Instance.IsOnRoutine)
+        {
+            return;
+        }
+        
         if (CheckPlayerState(EPlayerState.Jump))
         {
             RemovePlayerState(EPlayerState.Run);
@@ -717,7 +722,12 @@ public class PlayerMove : Singleton<PlayerMove>
         }
 
         // Run과 Crouch 상태 중 우선 순위는 Run
-        RemovePlayerState(EPlayerState.Crouch);
+        if (CheckPlayerState(EPlayerState.Crouch))
+        {
+            RemovePlayerState(EPlayerState.Crouch);
+            CameraController.Instance.ToggleCrouchCameraHeight(false);
+        }
+        
         AddPlayerState(EPlayerState.Run);
     }
 
