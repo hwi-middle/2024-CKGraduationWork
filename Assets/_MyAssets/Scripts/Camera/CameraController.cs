@@ -19,8 +19,8 @@ public class CameraController : Singleton<CameraController>
     private IEnumerator _changeHeightRoutine;
     public bool IsOnRoutine => _changeHeightRoutine != null;
 
-    private const float HEIGHT_OFFSET = 0.5f;
-    private const float ROUTINE_TIME = 0.25f;
+    [SerializeField] private float _heightOffset = 0.5f;
+    [SerializeField] private float _routineDuration = 0.25f;
 
     public void Awake()
     {
@@ -60,24 +60,24 @@ public class CameraController : Singleton<CameraController>
         FreeLookCamera.MoveToTopOfPrioritySubqueue();
     }
 
-    public void ChangeCameraHeight(bool isCrouch = true)
+    public void ToggleCrouchCameraHeight(bool isCrouch)
     {
         if (IsOnRoutine)
         {
             return;
         }
 
-        _changeHeightRoutine = ChangeCameraHeightRoutine(isCrouch);
+        _changeHeightRoutine = ToggleCrouchCameraHeightRoutine(isCrouch);
         StartCoroutine(_changeHeightRoutine);
     }
 
-    private IEnumerator ChangeCameraHeightRoutine(bool isCrouch)
+    private IEnumerator ToggleCrouchCameraHeightRoutine(bool isCrouch)
     {
         // Camera Orbit Length (FreeLook Length로 Aiming과 공유)
         float orbitLength = FreeLookCamera.m_Orbits.Length;
         
         // 앉기 상태에 따라 Offset의 증감 결정
-        float offsetVariation = isCrouch ? HEIGHT_OFFSET : -HEIGHT_OFFSET;
+        float offsetDelta = isCrouch ? _heightOffset : -_heightOffset;
         
         // FreeLook Camera values 
         List<float> freeLookStartHeights = new();
@@ -96,24 +96,24 @@ public class CameraController : Singleton<CameraController>
             // Free Look Camera Init
             CinemachineComposer freeLookComposer = FreeLookCamera.GetRig(i).GetCinemachineComponent<CinemachineComposer>();
             freeLookStartHeights.Add(FreeLookCamera.m_Orbits[i].m_Height);
-            freeLookTargetHeights.Add(FreeLookCamera.m_Orbits[i].m_Height - offsetVariation); 
+            freeLookTargetHeights.Add(FreeLookCamera.m_Orbits[i].m_Height - offsetDelta); 
             
             freeLookStartYOffsets.Add(freeLookComposer.m_TrackedObjectOffset.y);
-            freeLookTargetYOffsets.Add(freeLookComposer.m_TrackedObjectOffset.y - offsetVariation);
+            freeLookTargetYOffsets.Add(freeLookComposer.m_TrackedObjectOffset.y - offsetDelta);
             
             // Aiming Camera Init
             CinemachineComposer aimingComposer = AimingCamera.GetRig(i).GetCinemachineComponent<CinemachineComposer>();
             aimingStartHeights.Add(AimingCamera.m_Orbits[i].m_Height);
-            aimingTargetHeights.Add(AimingCamera.m_Orbits[i].m_Height - offsetVariation);
+            aimingTargetHeights.Add(AimingCamera.m_Orbits[i].m_Height - offsetDelta);
             
             aimingStartYOffsets.Add(aimingComposer.m_TrackedObjectOffset.y);
-            aimingTargetYOffsets.Add(aimingComposer.m_TrackedObjectOffset.y - offsetVariation);
+            aimingTargetYOffsets.Add(aimingComposer.m_TrackedObjectOffset.y - offsetDelta);
         }
 
         float t = 0;
-        while (t <= ROUTINE_TIME)
+        while (t <= _routineDuration)
         {
-            float alpha = t / ROUTINE_TIME;
+            float alpha = t / _routineDuration;
 
             for (int i = 0; i < orbitLength; i++)
             {

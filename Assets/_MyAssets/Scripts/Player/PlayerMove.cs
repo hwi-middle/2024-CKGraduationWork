@@ -765,12 +765,12 @@ public class PlayerMove : Singleton<PlayerMove>
 
         if (CheckPlayerState(EPlayerState.Crouch))
         {
-            CameraController.Instance.ChangeCameraHeight(false);
+            CameraController.Instance.ToggleCrouchCameraHeight(false);
             RemovePlayerState(EPlayerState.Crouch);
             return;
         }
 
-        CameraController.Instance.ChangeCameraHeight();
+        CameraController.Instance.ToggleCrouchCameraHeight(true);
         AddPlayerState(EPlayerState.Crouch);
     }
 }
