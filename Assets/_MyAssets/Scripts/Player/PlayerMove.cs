@@ -103,7 +103,6 @@ public class PlayerMove : Singleton<PlayerMove>
     private void OnEnable()
     {
         _inputData.moveEvent += HandleMoveAction;
-        _inputData.jumpEvent += HandleJumpAction;
         _inputData.runEvent += HandleRunAction;
         _inputData.runQuitEvent += HandleQuitRunAction;
         _inputData.assassinateEvent += HandleAssassinateAction;
@@ -114,7 +113,6 @@ public class PlayerMove : Singleton<PlayerMove>
     private void OnDisable()
     {
         _inputData.moveEvent -= HandleMoveAction;
-        _inputData.jumpEvent -= HandleJumpAction;
         _inputData.runEvent -= HandleRunAction;
         _inputData.runQuitEvent -= HandleQuitRunAction;
         _inputData.assassinateEvent -= HandleAssassinateAction;
@@ -399,28 +397,6 @@ public class PlayerMove : Singleton<PlayerMove>
         AddPlayerState(EPlayerState.Walk);
     }
 
-    private void HandleJumpAction()
-    {
-        if (!IsGrounded || _isSliding)
-        {
-            return;
-        }
-
-        if (CheckPlayerState(EPlayerState.Crouch))
-        {
-            RemovePlayerState(EPlayerState.Crouch);
-            return;
-        }
-
-        PerformJump();
-    }
-
-    protected void PerformJump()
-    {
-        AddPlayerState(EPlayerState.Jump);
-        _yVelocity += _playerData.jumpHeight;
-    }
-
     private List<GameObject> GetWirePoints()
     {
         List<GameObject> detectedWirePoints = new();
@@ -593,11 +569,6 @@ public class PlayerMove : Singleton<PlayerMove>
 
         _inputDirection = Vector3.zero;
 
-        if (IsGrounded)
-        {
-            PerformJump();
-        }
-
         _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
 
         Quaternion cameraRotation = _camera.transform.localRotation;
@@ -705,7 +676,6 @@ public class PlayerMove : Singleton<PlayerMove>
                 break;
             case EAssassinationType.Fall:
                 assassinationDuration = _assassinationData.fallAssassinationDuration;
-                PerformJump();
 
                 while (YVelocity > 0f)
                 {
