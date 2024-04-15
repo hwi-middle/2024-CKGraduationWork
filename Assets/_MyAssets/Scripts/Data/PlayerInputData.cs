@@ -34,6 +34,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
     public Action hideExitEvent;
     public Action peekEvent;
     public Action peekExitEvent;
+    public Action<float> mouseAxisEvent;
 
     private void OnEnable()
     {
@@ -184,6 +185,18 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
         }
 
         hideExitEvent?.Invoke();
+    }
+
+    public void OnMouseAxis(InputAction.CallbackContext context)
+    {
+        float xAxis = context.ReadValue<Vector2>().x;
+
+        if (xAxis == 0)
+        {
+            return;
+        }
+        
+        mouseAxisEvent?.Invoke(xAxis);
     }
 
     public static void ChangeInputMap(EInputMap map)
