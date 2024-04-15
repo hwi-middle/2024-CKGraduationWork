@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: PlayerBaseData
   m_EditorClassIdentifier: 
   playerHp: 100
-  walkSpeed: 3.5
-  runSpeed: 7.5
-  crouchSpeed: 2
+  walkSpeed: 2.9
+  runSpeed: 6
+  crouchSpeed: 1.8
   jumpHeight: 4.5
   yMultiplier: 4
   minWireDistance: 7
