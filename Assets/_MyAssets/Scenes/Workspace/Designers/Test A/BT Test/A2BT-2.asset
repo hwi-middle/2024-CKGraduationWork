@@ -1,0 +1,588 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8677666799032554576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ab15960e11a624baf65119dbcfdc27, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 20907c0907a32d24c9a8c7c2430eebb0
+  position: {x: 463, y: 265}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC9C0\uC815\uD55C \uC2DC\uAC04\uB3D9\uC548 \uB300\uAE30\uD569\uB2C8\uB2E4."
+  duration: 1
+--- !u!114 &-8324649424782603865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b184d0f7e6ca444afa5c98b570331a, type: 3}
+  m_Name: SelectorNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: cf141678a26e966439a691664f2850db
+  position: {x: 8, y: 286}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4 \uC911 \uD558\uB098\uB97C \uC2E4\uD589\uD569\uB2C8\uB2E4."
+  children:
+  - {fileID: 1413979703188979457}
+  - {fileID: 4110931460310566279}
+--- !u!114 &-7599413036387602322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 233ad77af8af19646b1c775285529523, type: 3}
+  m_Name: CheckOutOfSightTimeNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: e769f6a4b6da9354186db7337ab8734b
+  position: {x: 768.8261, y: 776.6957}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC2DC\uC57C\uC5D0\uC11C \uC0AC\uB77C\uC9C4 \uD6C4 \uC77C\uC815 \uC2DC\uAC04\uC774
+    \uC9C0\uB0AC\uB294\uC9C0 \uD655\uC778\uD569\uB2C8\uB2E4."
+  child: {fileID: 4777684444957839296}
+  threshold: 1
+--- !u!114 &-6761214752862434176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1220393912b674549858e16961ad2bba, type: 3}
+  m_Name: RootNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: bcd9935dda5f37943af5dff36e037006
+  position: {x: 7.5614433, y: -17.391287}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uD589\uB3D9\uD2B8\uB9AC\uC758 \uC2DC\uC791\uC9C0\uC810\uC785\uB2C8\uB2E4."
+  child: {fileID: -5890487207054386616}
+--- !u!114 &-6652197003274936957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc413eb33a074ca2a840fbe2e1cd286, type: 3}
+  m_Name: MoveToPatrolPointNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 10787a08ca4ba6a4fa811a77ff7261de
+  position: {x: 333.7, y: 1404.1001}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC21C\uCC30 \uC9C0\uC810\uC744 \uC21C\uD68C\uD558\uBA70 \uC774\uB3D9\uD569\uB2C8\uB2E4."
+  getPositionMethod: 0
+--- !u!114 &-5890487207054386616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0116dba939485244a7df62ca601843b, type: 3}
+  m_Name: RepeatNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 6185446adbb8f174287f0793a91831ce
+  position: {x: 7.5, y: 121.5}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uC744 \uBC18\uBCF5\uD574\uC11C \uC2E4\uD589\uD569\uB2C8\uB2E4."
+  child: {fileID: -8324649424782603865}
+--- !u!114 &-5093056340393199406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15834e9a4a3d0ef4dba98b81d05b5398, type: 3}
+  m_Name: AttackPlayer
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 22712a9093f7ca24192b4ed1641a9096
+  position: {x: -215.39204, y: 1550.374}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uD50C\uB808\uC774\uC5B4\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uB97C \uC785\uD799\uB2C8\uB2E4."
+--- !u!114 &-4193468024075095233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e427255788e78449823d1c00181006e, type: 3}
+  m_Name: CheckPlayerOnSight
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 04fccf32bb999634fb4ffbed8c5f6d34
+  position: {x: -82.39203, y: 604.37396}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uD50C\uB808\uC774\uC5B4\uAC00 \uC2DC\uC57C\uC5D0 \uB4E4\uC5B4\uC654\uB294\uC9C0
+    \uD655\uC778\uD569\uB2C8\uB2E4."
+  child: {fileID: -3269995546210836828}
+--- !u!114 &-3339375021750853274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5356b7f00256354e94d22f6f17b6460, type: 3}
+  m_Name: MoveToOriginPointNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: da62ef108a7027c48ad94fe853ff1b32
+  position: {x: -357.17938, y: 621.502}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC6D0\uC810\uC73C\uB85C \uB3CC\uC544\uAC11\uB2C8\uB2E4."
+--- !u!114 &-3269995546210836828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7b6329da002cf24ba5e83e79afb67a8, type: 3}
+  m_Name: ParallelNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: e1ff5010398259a4b8595b50b1170a4a
+  position: {x: -82.39203, y: 773.374}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4\uC744 \uBAA8\uB450 \uC21C\uCC28
+    \uC2E4\uD589\uD569\uB2C8\uB2E4."
+  children:
+  - {fileID: 6286472038238597949}
+  - {fileID: 746951662711262094}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c334522c7831c24ca5db476ef07636f, type: 3}
+  m_Name: A2BT-2
+  m_EditorClassIdentifier: 
+  rootNode: {fileID: -6761214752862434176}
+  treeState: 0
+  nodes:
+  - {fileID: -6761214752862434176}
+  - {fileID: -5890487207054386616}
+  - {fileID: -8324649424782603865}
+  - {fileID: 1413979703188979457}
+  - {fileID: -3339375021750853274}
+  - {fileID: 4110931460310566279}
+  - {fileID: -4193468024075095233}
+  - {fileID: -3269995546210836828}
+  - {fileID: 6286472038238597949}
+  - {fileID: 746951662711262094}
+  - {fileID: 962763454795854867}
+  - {fileID: 7277033399462470871}
+  - {fileID: 7879714561274693205}
+  - {fileID: 4477778252324642816}
+  - {fileID: -5093056340393199406}
+  - {fileID: 2119782498144649698}
+  - {fileID: 7205637370999843912}
+  - {fileID: 8840221909529632323}
+  - {fileID: 4155363722124613692}
+  - {fileID: -6652197003274936957}
+  - {fileID: -7599413036387602322}
+  - {fileID: 4777684444957839296}
+  - {fileID: 5827072381948242588}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+--- !u!114 &746951662711262094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c3eb75142aad8c4cb68a617ae31584a, type: 3}
+  m_Name: CheckPerceptionGaugeFullNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: d4e1e6d2f6c86924e89be35604225c3c
+  position: {x: 15.607976, y: 940.37396}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uAC00 \uAC00\uB4DD \uCC3C\uB294\uC9C0
+    \uD655\uC778\uD569\uB2C8\uB2E4."
+  child: {fileID: 962763454795854867}
+--- !u!114 &962763454795854867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b184d0f7e6ca444afa5c98b570331a, type: 3}
+  m_Name: SelectorNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 0ab4d7a184cdebf4da3333e0ceae4878
+  position: {x: 38.607998, y: 1091.374}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4 \uC911 \uD558\uB098\uB97C \uC2E4\uD589\uD569\uB2C8\uB2E4."
+  children:
+  - {fileID: 7277033399462470871}
+  - {fileID: 7879714561274693205}
+--- !u!114 &1413979703188979457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54ff81cbdd197994fa07961ff3b81333, type: 3}
+  m_Name: CheckOutOfRangeNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: fc9a9373f69ccdd4883e6764b791225e
+  position: {x: -357.17938, y: 453.50195}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uD65C\uB3D9 \uBC94\uC704\uB97C \uBC97\uC5B4\uB0AC\uB294\uC9C0
+    \uD655\uC778\uD569\uB2C8\uB2E4."
+  child: {fileID: -3339375021750853274}
+--- !u!114 &2119782498144649698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ab15960e11a624baf65119dbcfdc27, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 710b2fa1add844747b6d88d8cce9f768
+  position: {x: 35.607964, y: 1554.374}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC9C0\uC815\uD55C \uC2DC\uAC04\uB3D9\uC548 \uB300\uAE30\uD569\uB2C8\uB2E4."
+  duration: 1
+--- !u!114 &4110931460310566279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7b6329da002cf24ba5e83e79afb67a8, type: 3}
+  m_Name: ParallelNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 0e1c4e5535e1f094dae033d963be22dc
+  position: {x: 174, y: 451}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4\uC744 \uBAA8\uB450 \uC21C\uCC28
+    \uC2E4\uD589\uD569\uB2C8\uB2E4."
+  children:
+  - {fileID: -4193468024075095233}
+  - {fileID: 7205637370999843912}
+--- !u!114 &4155363722124613692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 858bb69cb05774b448541fece4e6eda0, type: 3}
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: e325b9c0902d86f44a36bcc035612319
+  position: {x: 417.70013, y: 1240.1002}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4\uC744 \uC21C\uCC28\uC801\uC73C\uB85C
+    \uC2E4\uD589\uD569\uB2C8\uB2E4."
+  children:
+  - {fileID: -6652197003274936957}
+  - {fileID: 5827072381948242588}
+--- !u!114 &4477778252324642816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 858bb69cb05774b448541fece4e6eda0, type: 3}
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 23567c953b097e1428bd1fad2251d8b2
+  position: {x: -82.39203, y: 1390.3741}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4\uC744 \uC21C\uCC28\uC801\uC73C\uB85C
+    \uC2E4\uD589\uD569\uB2C8\uB2E4."
+  children:
+  - {fileID: -5093056340393199406}
+  - {fileID: 2119782498144649698}
+--- !u!114 &4777684444957839296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1575e0e0f57669e47adc33d18fd6f672, type: 3}
+  m_Name: DecreasePerceptionGaugeNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 29dec4cbc2b6b764b8fdd8f94292b508
+  position: {x: 754.4261, y: 974.5696}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uB97C \uAC10\uC18C\uC2DC\uD0B5\uB2C8\uB2E4."
+--- !u!114 &5827072381948242588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5356b7f00256354e94d22f6f17b6460, type: 3}
+  m_Name: MoveToOriginPointNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 14240efbf0602d341b1a965fd12f3c43
+  position: {x: 547.465, y: 1419.1002}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC6D0\uC810\uC73C\uB85C \uB3CC\uC544\uAC11\uB2C8\uB2E4."
+--- !u!114 &6286472038238597949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c55e3513486ade40aaab43a896071d1, type: 3}
+  m_Name: IncreasePerceptionGaugeNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 3a6597196cc5a934ea2abca5c4a15185
+  position: {x: -239.39203, y: 938.374}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uB97C \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
+--- !u!114 &7205637370999843912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b184d0f7e6ca444afa5c98b570331a, type: 3}
+  m_Name: SelectorNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: c52d5e6678b366643a48e7a5bfd40539
+  position: {x: 506.55356, y: 620.00793}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4 \uC911 \uD558\uB098\uB97C \uC2E4\uD589\uD569\uB2C8\uB2E4."
+  children:
+  - {fileID: 8840221909529632323}
+  - {fileID: -7599413036387602322}
+--- !u!114 &7277033399462470871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 000ca179032bdd549889ed60b4144b59, type: 3}
+  m_Name: CheckCanAtackNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 61fd4f2f188a9484db42e76830a6f2c2
+  position: {x: -82.39203, y: 1245.3741}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uACF5\uACA9 \uAC00\uB2A5\uD55C\uC9C0 \uD655\uC778\uD569\uB2C8\uB2E4."
+  child: {fileID: 4477778252324642816}
+--- !u!114 &7879714561274693205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86689c385009ba14893c435a0f5690d2, type: 3}
+  m_Name: ChaseNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 014486420119f224b9e98c3cb1a10423
+  position: {x: 175.60802, y: 1268.374}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uD50C\uB808\uC774\uC5B4\uB97C \uCD94\uC801\uD569\uB2C8\uB2E4."
+--- !u!114 &8840221909529632323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73293fee4bb9c664ebf57b7c1f58dc1b, type: 3}
+  m_Name: CheckPerceptionGaugeZero
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 366039cf592549544a663d5edc9a5de8
+  position: {x: 393.00003, y: 936.15015}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uAC00 0\uC778\uC9C0 \uD655\uC778\uD569\uB2C8\uB2E4."
+  child: {fileID: 4155363722124613692}
