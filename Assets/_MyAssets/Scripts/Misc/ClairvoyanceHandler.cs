@@ -6,6 +6,7 @@ public class ClairvoyanceHandler : MonoBehaviour
 {
     [SerializeField] private PlayerInputData _inputData;
     [SerializeField] private Material _grayscaleMaterial;
+    [SerializeField] private Material _clairvoyanceMaterial;
     
     private Camera _mainCamera;
     
@@ -31,5 +32,6 @@ public class ClairvoyanceHandler : MonoBehaviour
     {
         _isClairvoyance = !_isClairvoyance;
         _grayscaleMaterial.SetFloat(Alpha, _isClairvoyance ? 1 : 0);
+        _clairvoyanceMaterial.SetFloat(Alpha, _isClairvoyance ? 1 : 0);
     }
 }
