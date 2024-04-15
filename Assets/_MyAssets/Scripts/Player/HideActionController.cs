@@ -8,13 +8,16 @@ public class HideActionController : Singleton<HideActionController>
 {
     [SerializeField] private PlayerInputData _inputData;
     [SerializeField] private PlayerData _data;
+
+    private Transform _playerTransform;
     
     private bool _isCrouch;
     private bool _isInHideableObject;
 
     private GameObject _currentHideableObject;
     private float _exitDistance;
-
+    private Vector3 _currentHideableObjectForward;
+    private Transform _peekPoint;
 
     private IEnumerator _hideActionRoutine;
     private IEnumerator _hideExitActionRoutine;
@@ -41,6 +44,7 @@ public class HideActionController : Singleton<HideActionController>
     private void Start()
     {
         _mainCamera = Camera.main;
+        _playerTransform = transform;
     }
 
     private void Update()
@@ -88,8 +92,8 @@ public class HideActionController : Singleton<HideActionController>
     private IEnumerator HideExitRoutine()
     {
         CameraController.Instance.ChangeCameraFromCabinetToFreeLook();
-        Vector3 startPosition = transform.position;
-        Vector3 exitPoint = transform.forward.normalized * _exitDistance + startPosition;
+        Vector3 startPosition = _playerTransform.position;
+        Vector3 exitPoint = _playerTransform.forward.normalized * _exitDistance + startPosition;
 
         float t = 0;
         const float DURATION = 1.0f;
@@ -114,24 +118,26 @@ public class HideActionController : Singleton<HideActionController>
 
     private void HandleHideAction()
     {
+        Transform cameraTransform = _mainCamera.transform;
+        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+        LayerMask layerMask = LayerMask.GetMask("Hideable");
+
+        if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
+        {
+            return;
+        }
+
         _isCrouch = PlayerMove.Instance.CheckPlayerState(EPlayerState.Crouch);
         PlayerMove.Instance.SetInitState();
         _isInHideableObject = true;
         PlayerMove.Instance.AddPlayerState(EPlayerState.Hide);
-        
-        Transform cameraTransform = _mainCamera.transform;
-        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
-        LayerMask layerMask = LayerMask.GetMask("Hideable");
-        
-        if(!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
-        {
-            return; 
-        }
 
-        Vector3 playerOnPlane = Vector3.ProjectOnPlane(transform.position, Vector3.up);
+        Vector3 playerOnPlane = Vector3.ProjectOnPlane(_playerTransform.position, Vector3.up);
         Vector3 hideableObjectOnPlane = Vector3.ProjectOnPlane(hit.transform.position, Vector3.up);
-        float hitDistance = Vector3.Distance(playerOnPlane, hideableObjectOnPlane);
+        _currentHideableObjectForward = hit.normal;
         
+        float hitDistance = Vector3.Distance(playerOnPlane, hideableObjectOnPlane);
+
         if (hitDistance > _data.maxDistanceHideableObject)
         {
             return;
@@ -154,12 +160,16 @@ public class HideActionController : Singleton<HideActionController>
         CameraController.Instance.ChangeCameraFromFreeLookToInCabinet();
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.HideAction);
 
-        Vector3 startPosition = transform.position;
-        Quaternion startRotation = transform.rotation;
+        Vector3 startPosition = _playerTransform.position;
+        Quaternion startRotation = _playerTransform.rotation;
         
         Vector3 targetPosition = _currentHideableObject.transform.position;
         targetPosition.y = startPosition.y;
-        Quaternion targetRotation = Quaternion.Euler(0, 180, 0);
+
+        Quaternion targetRotation = Quaternion.LookRotation(_currentHideableObjectForward);
+        
+        targetRotation.x = 0f;
+        targetRotation.z = 0f;
 
         _exitDistance = Vector3.Distance(startPosition, targetPosition);
         
