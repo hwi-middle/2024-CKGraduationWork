@@ -154,7 +154,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
-  _aimSpeed: 0.01
+  _aimSpeed: 1
+  maxPeekRange: 0.8
+  _returnOffsetDuration: 0.1
   _heightOffset: 0.5
   _routineDuration: 0.25
 --- !u!1 &6475233938985197222
