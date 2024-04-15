@@ -758,17 +758,19 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void HandleCrouchAction()
     {
-        if (!IsGrounded || CheckPlayerState(EPlayerState.Run))
+        if (!IsGrounded || CheckPlayerState(EPlayerState.Run) || CameraController.Instance.IsOnRoutine)
         {
             return;
         }
 
         if (CheckPlayerState(EPlayerState.Crouch))
         {
+            CameraController.Instance.ChangeCameraHeight(false);
             RemovePlayerState(EPlayerState.Crouch);
             return;
         }
 
+        CameraController.Instance.ChangeCameraHeight();
         AddPlayerState(EPlayerState.Crouch);
     }
 }
