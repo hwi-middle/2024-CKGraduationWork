@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CameraController : Singleton<CameraController>
 {
@@ -12,6 +13,8 @@ public class CameraController : Singleton<CameraController>
     public CinemachineFreeLook AimingCamera { get; private set; }
     public CinemachineVirtualCamera InCabinetCamera { get; private set; }
     public CinemachineVirtualCamera PeekCamera { get; private set; }
+
+    private CinemachineComposer _peekCameraComposer;
 
     public bool IsBlending => BrainCamera.IsBlending;
 
@@ -28,7 +31,7 @@ public class CameraController : Singleton<CameraController>
     [SerializeField] private float _aimSpeed = 1.0f;
 
     [Header("Peek Range")]
-    [SerializeField] private float maxPeekRange = 0.8f;
+    [SerializeField] private float _maxPeekRange = 0.8f;
 
     [Header("앉기 시 높이 및 Lerp Time")]
     [SerializeField] private float _heightOffset = 0.5f;
@@ -77,6 +80,7 @@ public class CameraController : Singleton<CameraController>
 
         PeekCamera.Follow = playerTransform;
         PeekCamera.LookAt = _peekPoint;
+        _peekCameraComposer = PeekCamera.GetCinemachineComponent<CinemachineComposer>();
         
         // Live 카메라를 FreeLook으로 설정
         FreeLookCamera.MoveToTopOfPrioritySubqueue();
@@ -88,30 +92,30 @@ public class CameraController : Singleton<CameraController>
         {
             return;
         }
+        
+        float offsetX = _peekCameraComposer.m_TrackedObjectOffset.x;
+        float speed = _aimSpeed * Time.deltaTime;
+        
+        // Mouse Axis의 좌 우 확인
+        bool isLeftAxis = value < 0;
 
-        CinemachineComposer composer = PeekCamera.GetCinemachineComponent<CinemachineComposer>();
+        // offset 연산
+        offsetX += isLeftAxis ? -speed : speed;
+        
+        // 계산 된 Offset이 최대 범위를 벗어나는지 확인
 
-        if (value < 0)
+        bool isOverRange = Mathf.Abs(offsetX) > _maxPeekRange;
+
+        if (isOverRange)
         {
-            // left
-            if (composer.m_TrackedObjectOffset.x <= -maxPeekRange)
-            {
-                composer.m_TrackedObjectOffset.x = -maxPeekRange;
-                return;
-            }
-            
-            composer.m_TrackedObjectOffset.x -= _aimSpeed * Time.deltaTime;
+            // Offset을 최대 범위 값에 맞춤
+            offsetX = isLeftAxis ? -_maxPeekRange : _maxPeekRange;
+            _peekCameraComposer.m_TrackedObjectOffset.x = offsetX;
             return;
         }
-        
-        // right
-        if (composer.m_TrackedObjectOffset.x >= maxPeekRange)
-        {
-            composer.m_TrackedObjectOffset.x = maxPeekRange;
-            return;
-        }
-        
-        composer.m_TrackedObjectOffset.x += _aimSpeed * Time.deltaTime;
+
+        // 계산 된 Offset을 카메라에 적용
+        _peekCameraComposer.m_TrackedObjectOffset.x = offsetX;
     }
 
     public void ToggleCrouchCameraHeight(bool isCrouch)
