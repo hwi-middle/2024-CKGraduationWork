@@ -107,7 +107,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 10787a08ca4ba6a4fa811a77ff7261de
-  position: {x: 333.7, y: 1404.1001}
+  position: {x: 333.80002, y: 1404}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -226,6 +226,28 @@ MonoBehaviour:
   children:
   - {fileID: 6286472038238597949}
   - {fileID: 746951662711262094}
+--- !u!114 &-347627866890815588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ab15960e11a624baf65119dbcfdc27, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 67af44ae2d079b04cbaf5365b692b8bb
+  position: {x: 542.6501, y: 1415.3}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+  agent: {fileID: 0}
+  description: "\uC9C0\uC815\uD55C \uC2DC\uAC04\uB3D9\uC548 \uB300\uAE30\uD569\uB2C8\uB2E4."
+  duration: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,7 +285,7 @@ MonoBehaviour:
   - {fileID: -6652197003274936957}
   - {fileID: -7599413036387602322}
   - {fileID: 4777684444957839296}
-  - {fileID: 5827072381948242588}
+  - {fileID: -347627866890815588}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -408,7 +430,7 @@ MonoBehaviour:
     \uC2E4\uD589\uD569\uB2C8\uB2E4."
   children:
   - {fileID: -6652197003274936957}
-  - {fileID: 5827072381948242588}
+  - {fileID: -347627866890815588}
 --- !u!114 &4477778252324642816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,27 +477,6 @@ MonoBehaviour:
     lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uC778\uC9C0 \uAC8C\uC774\uC9C0\uB97C \uAC10\uC18C\uC2DC\uD0B5\uB2C8\uB2E4."
---- !u!114 &5827072381948242588
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5356b7f00256354e94d22f6f17b6460, type: 3}
-  m_Name: MoveToOriginPointNode
-  m_EditorClassIdentifier: 
-  state: 0
-  started: 0
-  guid: 14240efbf0602d341b1a965fd12f3c43
-  position: {x: 547.465, y: 1419.1002}
-  blackboard:
-    target: {fileID: 0}
-    lastTimePlayerDetected: 0
-  agent: {fileID: 0}
-  description: "\uC6D0\uC810\uC73C\uB85C \uB3CC\uC544\uAC11\uB2C8\uB2E4."
 --- !u!114 &6286472038238597949
 MonoBehaviour:
   m_ObjectHideFlags: 0
