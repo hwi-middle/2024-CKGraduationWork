@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class CheckPointHandler : MonoBehaviour
 {
-    public static int currentCheckPointCount = 0;
-
+    public static int checkPointCount = 0;
     private void Start()
     {
         GetComponent<MeshRenderer>().enabled = CheckPointSceneManager.Instance.IsDebugMode;
@@ -19,8 +18,8 @@ public class CheckPointHandler : MonoBehaviour
             return;
         }
 
-        currentCheckPointCount++;
-        Debug.Log(currentCheckPointCount);
+        checkPointCount++;
+        RespawnHelper.Instance.SaveCheckPoint(transform.position);
         GetComponent<Collider>().enabled = false;
     }
 }

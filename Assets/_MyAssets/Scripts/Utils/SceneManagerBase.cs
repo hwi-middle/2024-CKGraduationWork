@@ -26,6 +26,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     protected virtual void Awake()
     {
         GetSettingsValueAndApply();
+        RespawnData.Instance.InitData();
     }
     
     protected virtual void OnEnable()
