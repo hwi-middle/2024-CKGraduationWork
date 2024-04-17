@@ -17,8 +17,8 @@ public class HideActionController : Singleton<HideActionController>
     private GameObject _currentHideableObject;
     private float _exitDistance;
     private Vector3 _currentHideableObjectForward;
-    private Transform _peekPoint;
 
+    public bool IsOnRoutine => _hideActionRoutine != null || _hideExitActionRoutine != null;
     private IEnumerator _hideActionRoutine;
     private IEnumerator _hideExitActionRoutine;
     
@@ -72,7 +72,7 @@ public class HideActionController : Singleton<HideActionController>
 
     private void HandlePeekAction()
     {
-        CameraController.Instance.ChangeCameraToPeek(_currentHideableObject);
+        CameraController.Instance.ChangeCameraToPeek();
         PlayerMove.Instance.AddPlayerState(EPlayerState.Peek);
     }
 
@@ -84,6 +84,11 @@ public class HideActionController : Singleton<HideActionController>
 
     private void HandleHideExitAction()
     {
+        if (PlayerMove.Instance.CheckPlayerState(EPlayerState.Peek) || IsOnRoutine)
+        {
+            return;
+        }
+        
         _isInHideableObject = false;
         _hideExitActionRoutine = HideExitRoutine();
         StartCoroutine(_hideExitActionRoutine);
@@ -116,22 +121,40 @@ public class HideActionController : Singleton<HideActionController>
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.PlayerAction);
     }
 
+    private bool IsInFrontOfHideableObject(Transform hitObject)
+    {
+        Vector3 playerPosition = Vector3.ProjectOnPlane(_playerTransform.position, Vector3.up);
+        Vector3 hitObjectPosition = Vector3.ProjectOnPlane(hitObject.position, Vector3.up);
+        Vector3 objectForward = hitObject.forward;
+        Vector3 playerDirectionFromObject = (playerPosition - hitObjectPosition).normalized;
+
+        float angle = Vector3.Angle(objectForward, playerDirectionFromObject);
+
+        return angle < 45.0f || Mathf.Approximately(angle, 45.0f);
+    }
+
     private void HandleHideAction()
     {
+        if (IsOnRoutine)
+        {
+            return;
+        }
+        
         Transform cameraTransform = _mainCamera.transform;
         Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
         LayerMask layerMask = LayerMask.GetMask("Hideable");
 
-        if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
+        if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask)
+            || !IsInFrontOfHideableObject(hit.transform))
         {
             return;
         }
-
+        
         _isCrouch = PlayerMove.Instance.CheckPlayerState(EPlayerState.Crouch);
         PlayerMove.Instance.SetInitState();
         _isInHideableObject = true;
         PlayerMove.Instance.AddPlayerState(EPlayerState.Hide);
-
+        
         Vector3 playerOnPlane = Vector3.ProjectOnPlane(_playerTransform.position, Vector3.up);
         Vector3 hideableObjectOnPlane = Vector3.ProjectOnPlane(hit.transform.position, Vector3.up);
         _currentHideableObjectForward = hit.normal;
@@ -186,6 +209,5 @@ public class HideActionController : Singleton<HideActionController>
 
         transform.position = targetPosition;
         _hideActionRoutine = null;
-
     }
 }

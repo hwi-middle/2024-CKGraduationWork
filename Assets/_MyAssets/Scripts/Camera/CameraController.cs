@@ -22,14 +22,13 @@ public class CameraController : Singleton<CameraController>
 
     private IEnumerator _changeCameraFromPeekToInCabinet;
 
+    private Transform _peekPoint;
+    
     [Header("Peek Camera 이동 속도")]
     [SerializeField] private float _aimSpeed = 1.0f;
 
     [Header("Peek Range")]
     [SerializeField] private float maxPeekRange = 0.8f;
-
-    [Header("Peek Offset을 0으로 돌리는 시간")]
-    [SerializeField] private float _returnOffsetDuration= 0.1f;
 
     [Header("앉기 시 높이 및 Lerp Time")]
     [SerializeField] private float _heightOffset = 0.5f;
@@ -59,9 +58,13 @@ public class CameraController : Singleton<CameraController>
         AimingCamera = cameras.transform.Find("Aiming Camera").GetComponent<CinemachineFreeLook>();
         InCabinetCamera = cameras.transform.Find("InCabinet Camera").GetComponent<CinemachineVirtualCamera>();
         PeekCamera = cameras.transform.Find("Peek Camera").GetComponent<CinemachineVirtualCamera>();
+        
+        Transform playerTransform = transform;
+        
+        // Peek Point Transform
+        _peekPoint = playerTransform.Find("PeekPoint");
 
         // Cameras Follow & LookAt Setting
-        Transform playerTransform = transform;
         FreeLookCamera.Follow = playerTransform;
         FreeLookCamera.LookAt = playerTransform;
 
@@ -71,8 +74,9 @@ public class CameraController : Singleton<CameraController>
         Transform hideableObjectAimTransform = playerTransform.Find("InHideableObjectAim").transform;
         InCabinetCamera.Follow = playerTransform;
         InCabinetCamera.LookAt = hideableObjectAimTransform;
-        
-        // Peek Camera는 동적으로 설정
+
+        PeekCamera.Follow = playerTransform;
+        PeekCamera.LookAt = _peekPoint;
         
         // Live 카메라를 FreeLook으로 설정
         FreeLookCamera.MoveToTopOfPrioritySubqueue();
@@ -87,7 +91,7 @@ public class CameraController : Singleton<CameraController>
 
         CinemachineComposer composer = PeekCamera.GetCinemachineComponent<CinemachineComposer>();
 
-        if (value > 0)
+        if (value < 0)
         {
             // left
             if (composer.m_TrackedObjectOffset.x <= -maxPeekRange)
@@ -228,30 +232,8 @@ public class CameraController : Singleton<CameraController>
         {
             return;
         }
-
-        _changeCameraFromPeekToInCabinet = ChangeCameraFromPeekToInCabinetRoutine();
-        StartCoroutine(_changeCameraFromPeekToInCabinet);
-    }
-
-    private IEnumerator ChangeCameraFromPeekToInCabinetRoutine()
-    {
-        CinemachineComposer composer = PeekCamera.GetCinemachineComponent<CinemachineComposer>();
-        float startOffset = composer.m_TrackedObjectOffset.x;
-
-        float t = 0;
-
-        while (t <= _returnOffsetDuration)
-        {
-            float alpha = t / _returnOffsetDuration;
-            composer.m_TrackedObjectOffset.x = Mathf.Lerp(startOffset, 0, alpha);
-            
-            yield return null;
-            t += Time.deltaTime;
-        }
-
-        composer.m_TrackedObjectOffset.x = 0;
+        
         InCabinetCamera.MoveToTopOfPrioritySubqueue();
-        _changeCameraFromPeekToInCabinet = null;
     }
 
     public void ChangeCameraFromCabinetToFreeLook()
@@ -260,17 +242,12 @@ public class CameraController : Singleton<CameraController>
         FreeLookCamera.m_YAxis.Value = 0.5f;
     }
 
-    public void ChangeCameraToPeek(GameObject hideableObject)
+    public void ChangeCameraToPeek()
     {
         if (_changeCameraFromPeekToInCabinet != null)
         {
             return;
         }
-        
-        Transform peekPoint = hideableObject.transform.Find("PeekPoint");
-
-        PeekCamera.Follow = hideableObject.transform;
-        PeekCamera.LookAt = peekPoint;
 
         // PeekCamera.m_XAxis.Value = 0;
         PeekCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x = 0;
