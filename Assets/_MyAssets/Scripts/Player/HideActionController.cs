@@ -18,7 +18,7 @@ public class HideActionController : Singleton<HideActionController>
     private float _exitDistance;
     private Vector3 _currentHideableObjectForward;
 
-    public bool IsOnRoutine => _hideActionRoutine != null || _hideExitActionRoutine != null;
+    private bool IsOnRoutine => _hideActionRoutine != null || _hideExitActionRoutine != null;
     private IEnumerator _hideActionRoutine;
     private IEnumerator _hideExitActionRoutine;
     
