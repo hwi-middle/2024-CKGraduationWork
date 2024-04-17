@@ -24,15 +24,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Jump",
-                    "type": "Button",
-                    "id": "30834a8a-5b3d-466c-a882-ff8aeb9c1e81",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Wire",
                     "type": "Button",
                     "id": "a8213568-675a-4e6f-9131-535bee700080",
@@ -94,20 +85,18 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Clairvoyance",
+                    "type": "Button",
+                    "id": "cd97813d-cb75-4f64-841e-aebdc92a9a1e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "74f989c8-da51-4009-bacb-2dcbaf5ab422",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "2D Vector",
                     "id": "4e7511f7-a5d2-43ac-b6f6-be1fbbe59619",
@@ -248,6 +237,17 @@
                     "processors": "",
                     "groups": "PC",
                     "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0e879c5f-9102-499e-8153-04f2df91fb93",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Clairvoyance",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

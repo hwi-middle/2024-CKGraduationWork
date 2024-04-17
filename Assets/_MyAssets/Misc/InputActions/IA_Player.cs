@@ -46,15 +46,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""30834a8a-5b3d-466c-a882-ff8aeb9c1e81"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Wire"",
                     ""type"": ""Button"",
                     ""id"": ""a8213568-675a-4e6f-9131-535bee700080"",
@@ -116,20 +107,18 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Clairvoyance"",
+                    ""type"": ""Button"",
+                    ""id"": ""cd97813d-cb75-4f64-841e-aebdc92a9a1e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""74f989c8-da51-4009-bacb-2dcbaf5ab422"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PC"",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": ""2D Vector"",
                     ""id"": ""4e7511f7-a5d2-43ac-b6f6-be1fbbe59619"",
@@ -270,6 +259,17 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""PC"",
                     ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0e879c5f-9102-499e-8153-04f2df91fb93"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""Clairvoyance"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -422,7 +422,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_PlayerAction = asset.FindActionMap("PlayerAction", throwIfNotFound: true);
         m_PlayerAction_Move = m_PlayerAction.FindAction("Move", throwIfNotFound: true);
         m_PlayerAction_Run = m_PlayerAction.FindAction("Run", throwIfNotFound: true);
-        m_PlayerAction_Jump = m_PlayerAction.FindAction("Jump", throwIfNotFound: true);
         m_PlayerAction_Wire = m_PlayerAction.FindAction("Wire", throwIfNotFound: true);
         m_PlayerAction_Assassinate = m_PlayerAction.FindAction("Assassinate", throwIfNotFound: true);
         m_PlayerAction_Crouch = m_PlayerAction.FindAction("Crouch", throwIfNotFound: true);
@@ -430,6 +429,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_PlayerAction_Aiming = m_PlayerAction.FindAction("Aiming", throwIfNotFound: true);
         m_PlayerAction_Shoot = m_PlayerAction.FindAction("Shoot", throwIfNotFound: true);
         m_PlayerAction_Interaction = m_PlayerAction.FindAction("Interaction", throwIfNotFound: true);
+        m_PlayerAction_Clairvoyance = m_PlayerAction.FindAction("Clairvoyance", throwIfNotFound: true);
         // HideAction
         m_HideAction = asset.FindActionMap("HideAction", throwIfNotFound: true);
         m_HideAction_Peek = m_HideAction.FindAction("Peek", throwIfNotFound: true);
@@ -498,7 +498,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private List<IPlayerActionActions> m_PlayerActionActionsCallbackInterfaces = new List<IPlayerActionActions>();
     private readonly InputAction m_PlayerAction_Move;
     private readonly InputAction m_PlayerAction_Run;
-    private readonly InputAction m_PlayerAction_Jump;
     private readonly InputAction m_PlayerAction_Wire;
     private readonly InputAction m_PlayerAction_Assassinate;
     private readonly InputAction m_PlayerAction_Crouch;
@@ -506,13 +505,13 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerAction_Aiming;
     private readonly InputAction m_PlayerAction_Shoot;
     private readonly InputAction m_PlayerAction_Interaction;
+    private readonly InputAction m_PlayerAction_Clairvoyance;
     public struct PlayerActionActions
     {
         private @IA_Player m_Wrapper;
         public PlayerActionActions(@IA_Player wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_PlayerAction_Move;
         public InputAction @Run => m_Wrapper.m_PlayerAction_Run;
-        public InputAction @Jump => m_Wrapper.m_PlayerAction_Jump;
         public InputAction @Wire => m_Wrapper.m_PlayerAction_Wire;
         public InputAction @Assassinate => m_Wrapper.m_PlayerAction_Assassinate;
         public InputAction @Crouch => m_Wrapper.m_PlayerAction_Crouch;
@@ -520,6 +519,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         public InputAction @Aiming => m_Wrapper.m_PlayerAction_Aiming;
         public InputAction @Shoot => m_Wrapper.m_PlayerAction_Shoot;
         public InputAction @Interaction => m_Wrapper.m_PlayerAction_Interaction;
+        public InputAction @Clairvoyance => m_Wrapper.m_PlayerAction_Clairvoyance;
         public InputActionMap Get() { return m_Wrapper.m_PlayerAction; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -535,9 +535,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Run.started += instance.OnRun;
             @Run.performed += instance.OnRun;
             @Run.canceled += instance.OnRun;
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
             @Wire.started += instance.OnWire;
             @Wire.performed += instance.OnWire;
             @Wire.canceled += instance.OnWire;
@@ -559,6 +556,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Interaction.started += instance.OnInteraction;
             @Interaction.performed += instance.OnInteraction;
             @Interaction.canceled += instance.OnInteraction;
+            @Clairvoyance.started += instance.OnClairvoyance;
+            @Clairvoyance.performed += instance.OnClairvoyance;
+            @Clairvoyance.canceled += instance.OnClairvoyance;
         }
 
         private void UnregisterCallbacks(IPlayerActionActions instance)
@@ -569,9 +569,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Run.started -= instance.OnRun;
             @Run.performed -= instance.OnRun;
             @Run.canceled -= instance.OnRun;
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
             @Wire.started -= instance.OnWire;
             @Wire.performed -= instance.OnWire;
             @Wire.canceled -= instance.OnWire;
@@ -593,6 +590,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Interaction.started -= instance.OnInteraction;
             @Interaction.performed -= instance.OnInteraction;
             @Interaction.canceled -= instance.OnInteraction;
+            @Clairvoyance.started -= instance.OnClairvoyance;
+            @Clairvoyance.performed -= instance.OnClairvoyance;
+            @Clairvoyance.canceled -= instance.OnClairvoyance;
         }
 
         public void RemoveCallbacks(IPlayerActionActions instance)
@@ -694,7 +694,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
         void OnWire(InputAction.CallbackContext context);
         void OnAssassinate(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
@@ -702,6 +701,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         void OnAiming(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
         void OnInteraction(InputAction.CallbackContext context);
+        void OnClairvoyance(InputAction.CallbackContext context);
     }
     public interface IHideActionActions
     {

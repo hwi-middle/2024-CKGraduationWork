@@ -21,7 +21,7 @@ public class MainMenuSceneManager : SceneManagerBase
 
     public void OnStartButton()
     {
-        LoadSceneWithLoadingUI("DemoPlay");
+        LoadSceneWithLoadingUI("ALL2");
     }
 
     public void OnExitButton()

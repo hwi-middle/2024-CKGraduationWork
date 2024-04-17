@@ -425,6 +425,75 @@ Transform:
   - {fileID: 3461877785720427880}
   m_Father: {fileID: 2587024959355921941}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1527205132507038531
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5304136914814737180}
+  - component: {fileID: 3627866615485413067}
+  - component: {fileID: 6164548792350170075}
+  m_Layer: 12
+  m_Name: AssassinateZone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5304136914814737180
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527205132507038531}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3130192474072920239}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3627866615485413067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527205132507038531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3433e8b5506e934e82699834c3c58c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerInputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
+  _targetEnemy: {fileID: 9219317410509712847}
+  _assassinateUI: {fileID: 0}
+--- !u!65 &6164548792350170075
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527205132507038531}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.35, y: 1.4405351, z: 2.1432095}
+  m_Center: {x: 0, y: 0.9495168, z: -1.0585752}
 --- !u!1 &1719820610987925437
 GameObject:
   m_ObjectHideFlags: 0
@@ -1432,6 +1501,7 @@ Transform:
   - {fileID: 6605488267323841562}
   - {fileID: 6023802661894778390}
   - {fileID: 5541392844391721292}
+  - {fileID: 5304136914814737180}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &5864940528831095931
