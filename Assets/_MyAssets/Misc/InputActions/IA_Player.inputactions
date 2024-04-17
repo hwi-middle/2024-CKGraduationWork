@@ -274,6 +274,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "MouseAxis",
+                    "type": "Value",
+                    "id": "8ba2651e-c9f9-49c6-a115-35e3afb74ad6",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -342,6 +351,17 @@
                     "action": "Exit",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "83069f03-721d-40e1-9090-3ccf8018a0ea",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "MouseAxis",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
