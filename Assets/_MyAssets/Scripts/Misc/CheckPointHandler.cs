@@ -15,6 +15,8 @@ public class CheckPointHandler : MonoBehaviour
         }
 
         RespawnHelper.Instance.SaveCheckPoint(transform.position);
+        MiddleSaveData.Instance.MiddleSave();
         GetComponent<Collider>().enabled = false;
+        GetComponent<MeshRenderer>().enabled = GetComponent<Collider>().enabled;
     }
 }

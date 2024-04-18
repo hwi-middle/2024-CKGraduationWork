@@ -27,7 +27,9 @@ public class AssassinateZone : MonoBehaviour
             return;
         }
         
-        Destroy(_targetEnemy.gameObject);
+        MiddleSaveData.Instance.KillEnemy(_targetEnemy.gameObject);
+        _targetEnemy.gameObject.SetActive(false);
+        //Destroy(_targetEnemy.gameObject);
     }
 
     private void OnTriggerEnter(Collider other)

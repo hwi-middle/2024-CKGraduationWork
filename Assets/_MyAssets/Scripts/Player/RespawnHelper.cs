@@ -13,6 +13,7 @@ public class RespawnHelper : Singleton<RespawnHelper>
     
     [SerializeField] private GameObject _playerModel;
 
+    public Vector3 LastDeadPoint { get; private set; }
     public Vector3 LastCheckPoint { get; private set; }
     
     public GameObject PlayerModel => _playerModel;
@@ -58,7 +59,8 @@ public class RespawnHelper : Singleton<RespawnHelper>
         {
             return;
         }
-        
+
+        LastDeadPoint = transform.position;
         RespawnPlayer();
     }
 

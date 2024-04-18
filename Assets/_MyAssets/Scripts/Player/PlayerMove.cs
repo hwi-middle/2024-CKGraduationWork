@@ -105,7 +105,6 @@ public class PlayerMove : Singleton<PlayerMove>
         _inputData.moveEvent += HandleMoveAction;
         _inputData.runEvent += HandleRunAction;
         _inputData.runQuitEvent += HandleQuitRunAction;
-        _inputData.assassinateEvent += HandleAssassinateAction;
         _inputData.wireEvent += HandleWireAction;
         _inputData.crouchEvent += HandleCrouchAction;
     }
@@ -115,7 +114,6 @@ public class PlayerMove : Singleton<PlayerMove>
         _inputData.moveEvent -= HandleMoveAction;
         _inputData.runEvent -= HandleRunAction;
         _inputData.runQuitEvent -= HandleQuitRunAction;
-        _inputData.assassinateEvent -= HandleAssassinateAction;
         _inputData.wireEvent -= HandleWireAction;
         _inputData.crouchEvent -= HandleCrouchAction;
     }
@@ -195,22 +193,23 @@ public class PlayerMove : Singleton<PlayerMove>
         Vector3 startPosition = transform.position;
         Vector3 checkPoint = RespawnHelper.Instance.LastCheckPoint;
 
-        Quaternion startRotation = transform.rotation;
-        Quaternion arrivalRotation = Quaternion.identity;
-
         float t = 0;
         while (t <= _respawnMoveDuration)
         {
             float alpha = t / _respawnMoveDuration;
             transform.position = Vector3.Lerp(startPosition, checkPoint, alpha * alpha * alpha);
-            transform.rotation = Quaternion.Slerp(startRotation, arrivalRotation, alpha);
             yield return null;
             t += Time.deltaTime;
         }
 
+        Vector3 lookDirection = (RespawnHelper.Instance.LastDeadPoint - transform.position).normalized;
+
+        transform.rotation = Quaternion.LookRotation(lookDirection);
+        transform.position = checkPoint;
         SetInitState();
-        CameraController.Instance.AlignCameraToCenter();
+        CameraController.Instance.AlignCameraToPlayer();
         RespawnHelper.Instance.PlayerModel.SetActive(true);
+        MiddleSaveData.Instance.LoadSavedData();
         _movePlayerToRespawnPointRoutine = null;
     }
 
