@@ -7,27 +7,29 @@ public class MiddleSaveData : Singleton<MiddleSaveData>
 {
     private class ObjectSaveData
     {
+        public GameObject obj;
         public readonly Vector3 position;
         public bool isAlive;
 
-        public ObjectSaveData(Vector3 position)
+        public ObjectSaveData(GameObject obj)
         {
-            this.position = position;
+            this.obj = obj;
+            position = obj.transform.position;
             isAlive = true;
         }
     }
-    
+
     // Enemy와 Item은 각 Empty Object로 Root를 가지고 있어야 함
     [SerializeField] private Transform _enemyRoot;
     [SerializeField] private Transform _itemRoot;
-    
+
     // Load를 위해 저장 된 Data
-    private Dictionary<GameObject, ObjectSaveData> _savedEnemies = new();
-    private Dictionary<GameObject, ObjectSaveData> _savedItems = new();
+    private Dictionary<int, ObjectSaveData> _savedEnemies = new();
+    private Dictionary<int, ObjectSaveData> _savedItems = new();
 
     // Save를 위해 저장 된 Data
-    private Dictionary<GameObject, ObjectSaveData> _changedEnemies = new();
-    private Dictionary<GameObject, ObjectSaveData> _changedItems = new();
+    private Dictionary<int, ObjectSaveData> _changedEnemies = new();
+    private Dictionary<int, ObjectSaveData> _changedItems = new();
 
     private void Awake()
     {
@@ -35,14 +37,15 @@ public class MiddleSaveData : Singleton<MiddleSaveData>
         InitItems();
     }
 
-    public void KillEnemy(GameObject enemy)
+    public void KillEnemy(int key)
     {
-        _changedEnemies[enemy].isAlive = false;
+        Debug.Log(_changedEnemies[key].obj.name);
+        _changedEnemies[key].isAlive = false;
     }
 
-    public void UseItem(GameObject item)
+    public void UseItem(int key)
     {
-        _changedItems[item].isAlive = false;
+        _changedItems[key].isAlive = false;
     }
 
     public void MiddleSave()
@@ -63,8 +66,10 @@ public class MiddleSaveData : Singleton<MiddleSaveData>
         for (int i = 0; i < enemyCount; i++)
         {
             Transform enemy = _enemyRoot.GetChild(i);
-            ObjectSaveData objectSaveData = new(enemy.position);
-            _savedEnemies.Add(enemy.gameObject, objectSaveData);   
+            int key = enemy.GetInstanceID();
+            Debug.Log(enemy.GetInstanceID());
+            ObjectSaveData objectSaveData = new(enemy.gameObject);
+            _savedEnemies.Add(key, objectSaveData);   
         }
 
         _changedEnemies = new(_savedEnemies);
@@ -76,8 +81,9 @@ public class MiddleSaveData : Singleton<MiddleSaveData>
         for (int i = 0; i < itemCount; i++)
         {
             Transform item = _itemRoot.GetChild(i);
-            ObjectSaveData itemSaveData = new(item.position);
-            _savedItems.Add(item.gameObject, itemSaveData);
+            int key = item.GetInstanceID();
+            ObjectSaveData itemSaveData = new(item.gameObject);
+            _savedItems.Add(key, itemSaveData);
         }
 
         _changedItems = new(_savedItems);
@@ -90,16 +96,18 @@ public class MiddleSaveData : Singleton<MiddleSaveData>
         for (int i = 0; i < remainEnemyCount; i++)
         {
             Transform enemy = _enemyRoot.GetChild(i);
-            ObjectSaveData objectSaveData = _changedEnemies[enemy.gameObject];
+            int key = enemy.GetInstanceID();
+            ObjectSaveData objectSaveData = _changedEnemies[key];
             
-            if (!objectSaveData.isAlive)
+            if (!objectSaveData.isAlive && !enemy.gameObject.activeSelf)
             {
-                _changedEnemies.Remove(enemy.gameObject);
+                Debug.Log($"Enemy is Dead {enemy.gameObject.name}");
+                _changedEnemies.Remove(key);
                 Destroy(enemy.gameObject);
                 continue;
             }
 
-            _savedEnemies.Add(enemy.gameObject, objectSaveData);
+            _savedEnemies.Add(key, objectSaveData);
         }
 
         _changedEnemies.Clear();
@@ -113,18 +121,20 @@ public class MiddleSaveData : Singleton<MiddleSaveData>
         for (int i = 0; i < remainItemCount; i++)
         {
             Transform item = _itemRoot.GetChild(i);
+            int key = item.GetInstanceID();
+            ObjectSaveData objectSaveData = _changedItems[key];
 
-            if (_changedItems[item.gameObject].isAlive)
+            if (!objectSaveData.isAlive)
             {
-                _changedItems.Remove(item.gameObject);
+                _changedItems.Remove(key);
                 Destroy(item.gameObject);
                 continue;
             }
             
-            ObjectSaveData itemSaveData = new ObjectSaveData(item.position);
-            _savedItems.Add(item.gameObject, itemSaveData);
+            _savedItems.Add(key, objectSaveData);
         }
 
+        _changedItems.Clear();
         _changedItems = new(_savedItems);
     }
 
@@ -132,19 +142,23 @@ public class MiddleSaveData : Singleton<MiddleSaveData>
     {
         foreach (var enemy in _savedEnemies)
         {
-            enemy.Key.SetActive(true);
+            enemy.Value.obj.SetActive(true);
             enemy.Value.isAlive = true;
-            enemy.Key.transform.position = enemy.Value.position;
+            enemy.Value.obj.transform.position = enemy.Value.position;
         }
+
+        _changedEnemies = new(_savedEnemies);
     }
 
     private void LoadItems()
     {
         foreach (var item in _savedItems)
         {
-            item.Key.SetActive(true);
+            item.Value.obj.SetActive(true);
             item.Value.isAlive = true;
-            item.Key.transform.position = item.Value.position;
+            item.Value.obj.transform.position = item.Value.position;
         }
+
+        _changedItems = new(_savedItems);
     }
 }
