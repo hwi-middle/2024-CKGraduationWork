@@ -9,6 +9,14 @@ using UnityEngine.AI;
 
 public class EnemyBase : MonoBehaviour, IDamageable
 {
+    public enum EPerceptionPhase
+    {
+        None,
+        Perceive,
+        Suspect,
+        Detection,
+    }
+    
     [SerializeField] private EnemyAiData _aiData;
     public EnemyAiData AiData => _aiData;
     [SerializeField] private BehaviorTree _tree;
@@ -17,7 +25,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private Animator _animator;
 
-    // AK stands for Animator Key
+    // "AK" stands for Animator Key
     private static readonly int AK_Speed = Animator.StringToHash("Speed");
 
     private float _perceptionGauge = 0f;
@@ -30,7 +38,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public float PerceptionGauge => _perceptionGauge;
     public bool IsPerceptionGaugeFull => _perceptionGauge >= 100f;
-
+    
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -72,11 +80,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    public void OnListenStrangeSound(Vector3 origin, float increase)
+    public void OnListenItemSound(Vector3 origin, float increase)
     {
-        Debug.Log($"listen Sound From : {origin}, Increase : {increase}");
+        _perceptionGauge = Mathf.Clamp(_perceptionGauge, 50f, 100f);
     }
-
 
     public void SetDestination(Vector3 destination)
     {
@@ -171,5 +178,26 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         Destroy(gameObject);
         return damageAmount;
+    }
+
+    public EPerceptionPhase GetCurrentPerceptionPhase()
+    {
+        Debug.Log(_perceptionGauge);
+        if (_perceptionGauge >= 100f)
+        {
+            return EPerceptionPhase.Detection;
+        }
+
+        if (_perceptionGauge >= 50f)
+        {
+            return EPerceptionPhase.Suspect;
+        }
+
+        if (_perceptionGauge > Mathf.Epsilon)
+        {
+            return EPerceptionPhase.Perceive;
+        }
+
+        return EPerceptionPhase.None;
     }
 }
