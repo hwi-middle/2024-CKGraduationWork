@@ -113,7 +113,7 @@ MonoBehaviour:
     lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uC21C\uCC30 \uC9C0\uC810\uC744 \uC21C\uD68C\uD558\uBA70 \uC774\uB3D9\uD569\uB2C8\uB2E4."
-  getPositionMethod: 1
+  getPositionMethod: 0
 --- !u!114 &-5890487207054386616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,7 +151,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 22712a9093f7ca24192b4ed1641a9096
-  position: {x: -215.39204, y: 1550.374}
+  position: {x: -46.182873, y: 1550.1217}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -336,8 +336,8 @@ MonoBehaviour:
   agent: {fileID: 0}
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4 \uC911 \uD558\uB098\uB97C \uC2E4\uD589\uD569\uB2C8\uB2E4."
   children:
-  - {fileID: 7277033399462470871}
   - {fileID: 7879714561274693205}
+  - {fileID: 7277033399462470871}
 --- !u!114 &1413979703188979457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,13 +376,13 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 710b2fa1add844747b6d88d8cce9f768
-  position: {x: 30.479752, y: 1552.5072}
+  position: {x: 198.81705, y: 1553.1216}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
   agent: {fileID: 0}
   description: "\uC9C0\uC815\uD55C \uC2DC\uAC04\uB3D9\uC548 \uB300\uAE30\uD569\uB2C8\uB2E4."
-  duration: 3
+  duration: 1
 --- !u!114 &4110931460310566279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -448,7 +448,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 23567c953b097e1428bd1fad2251d8b2
-  position: {x: -82.39203, y: 1390.3741}
+  position: {x: 86.81711, y: 1390.1217}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -539,7 +539,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 61fd4f2f188a9484db42e76830a6f2c2
-  position: {x: -82.39203, y: 1245.3741}
+  position: {x: 86.81711, y: 1245.1217}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -561,7 +561,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 014486420119f224b9e98c3cb1a10423
-  position: {x: 175.60802, y: 1268.374}
+  position: {x: -121.25055, y: 1258.5626}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0

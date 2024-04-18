@@ -12,25 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccfb3b0dcd218467c942c6e05326d52e, type: 3}
   m_Name: SampleEnemyAiData
   m_EditorClassIdentifier: 
-  perceptionDistance: 10.5
+  perceptionDistance: 9
   perceptionAngle: 60
   perceptionRanges:
   - rangePercent: 10
     gaugeIncrementPerSecond: 1000
   - rangePercent: 30
-    gaugeIncrementPerSecond: 300
-  - rangePercent: 60
     gaugeIncrementPerSecond: 100
-  - rangePercent: 90
-    gaugeIncrementPerSecond: 80
+  - rangePercent: 60
+    gaugeIncrementPerSecond: 45
   - rangePercent: 100
-    gaugeIncrementPerSecond: 50
+    gaugeIncrementPerSecond: 27
   gaugeDecreaseStartTime: 2
   gaugeDecrementPerSecond: 50
-  walkSpeed: 2
-  sprintSpeed: 7
-  moveRange: 19
+  walkSpeed: 2.87
+  sprintSpeed: 6.15
+  moveRange: 15
   stoppingDistance: 0
-  attackDamage: 10
-  attackRange: 3
-  attackDelay: 5
+  attackDamage: 23
+  attackRange: 5
+  attackDelay: 1
