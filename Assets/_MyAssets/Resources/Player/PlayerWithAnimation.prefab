@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 1556170460316511095}
   - component: {fileID: 2054570745502388043}
   - component: {fileID: 1863128557706384626}
+  - component: {fileID: 7055732148601747212}
   m_Layer: 7
   m_Name: PlayerWithAnimation
   m_TagString: Player
@@ -113,6 +114,7 @@ MonoBehaviour:
   _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
   _playerData: {fileID: 11400000, guid: be439c1712086cc4eb47a854b63c7824, type: 2}
   _wirePointOffset: 2
+  _respawnMoveDuration: 2
   _assassinationData: {fileID: 11400000, guid: c3d73802406926c4eb7883edbc33bd52, type: 2}
   _gravityMultiplier: 1
 --- !u!114 &9113156202343665045
@@ -186,6 +188,22 @@ MonoBehaviour:
   _grayscaleMaterial: {fileID: 2100000, guid: a7bba10f6e4b48645afba0cf7f74d878, type: 2}
   _clairvoyanceMaterial: {fileID: 2100000, guid: 7f8b2d47d30b8ef4a9a205e40db05513,
     type: 2}
+--- !u!114 &7055732148601747212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5436934767695870256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb285f065ef3bc14791162efa386cecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemies: {fileID: 0}
+  _items: {fileID: 0}
+  _deadRoutineDuration: 2
+  _playerModel: {fileID: 2647643979913312349}
 --- !u!1 &6475233938985197222
 GameObject:
   m_ObjectHideFlags: 0

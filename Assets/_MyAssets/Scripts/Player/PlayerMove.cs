@@ -15,13 +15,11 @@ public enum EPlayerState
     Walk = 1 << 2,
     Run = 1 << 3,
     Crouch = 1 << 4,
-    Jump = 1 << 5,
-    Hide = 1 << 6,
-    Peek = 1 << 7,
-    Alive = 1 << 8,
-    Dead = 1 << 9,
-    WireAction = 1 << 10,
-    Sliding = 1 << 11
+    Hide = 1 << 7,
+    Peek = 1 << 8,
+    Alive = 1 << 9,
+    Dead = 1 << 10,
+    WireAction = 1 << 11,
 }
 
 public class PlayerMove : Singleton<PlayerMove>
@@ -31,7 +29,7 @@ public class PlayerMove : Singleton<PlayerMove>
     [SerializeField] private PlayerInputData _inputData;
     private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
     
-    [Header("Player Base Data")]
+    [Header("Player Data")]
     [SerializeField] private PlayerData _playerData;
 
     private GameObject _playerCanvas;
@@ -41,8 +39,6 @@ public class PlayerMove : Singleton<PlayerMove>
     private float _wirePointOffset;
 
     private TMP_Text _stateText;
-
-    // private int _hp;
 
     private RectTransform _wireAvailableUiRectTransform;
     private IEnumerator _wireActionRoutine;
@@ -57,6 +53,10 @@ public class PlayerMove : Singleton<PlayerMove>
     private readonly int _stateCount = Enum.GetValues(typeof(EPlayerState)).Length;
 
     private bool IsOnWire => _wireActionRoutine != null;
+    
+    // Player Respawn
+    private IEnumerator _movePlayerToRespawnPointRoutine;
+    [SerializeField] private float _respawnMoveDuration;
 
     private enum EAssassinationType
     {
@@ -128,29 +128,16 @@ public class PlayerMove : Singleton<PlayerMove>
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // _hp = _playerData.playerHp;
         _camera = Camera.main;
     }
 
-
     protected virtual void Update()
     {
-        // 사망 상태 테스트 용 임시 입력
-        // if (Input.GetKeyDown(KeyCode.Alpha4))
-        // {
-        //     _hp = 0;
-        // }
-
-        // CheckAndSwitchLifeState();
-        SetSlideVelocity();
-        ShowWirePointUI();
-        RotatePlayer();
-        MovePlayer();
-
-
-        if (IsGrounded)
+        if (!CheckPlayerState(EPlayerState.Dead))
         {
-            RemovePlayerState(EPlayerState.Jump);
+            ShowWirePointUI();
+            RotatePlayer();
+            MovePlayer();
         }
 
         UpdatePlayerStateText();
@@ -160,19 +147,6 @@ public class PlayerMove : Singleton<PlayerMove>
             _assassinationTarget = GetAimingEnemy();
         }
     }
-
-    // private void CheckAndSwitchLifeState()
-    // {
-    //     if (_hp > 0)
-    //     {
-    //         return;
-    //     }
-    //     
-    //     RemovePlayerState(EPlayerState.Alive);
-    //     AddPlayerState(EPlayerState.Dead);
-    //
-    //     Destroy(gameObject);
-    // }
 
     public void AlignPlayerToCameraForward()
     {
@@ -204,88 +178,44 @@ public class PlayerMove : Singleton<PlayerMove>
         transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 1.0f);
     }
 
-    private void SetSlideVelocity()
+    // Reset Player Position To CheckPoint
+    public void ResetPlayerPosition()
     {
-        if (IsOnSlope())
+        if (_movePlayerToRespawnPointRoutine != null)
         {
-            _slideVelocity = Vector3.ProjectOnPlane(new Vector3(0, _velocity.y, 0), _hitNormal);
-            _isSliding = true;
             return;
         }
 
-        _slideVelocity = Vector3.zero;
-        _isSliding = false;
+        _movePlayerToRespawnPointRoutine = MovePlayerToRespawnPointRoutine();
+        StartCoroutine(_movePlayerToRespawnPointRoutine);
     }
 
-    private bool IsOnSlope()
+    private IEnumerator MovePlayerToRespawnPointRoutine()
     {
-        if (_isSliding)
+        Vector3 startPosition = transform.position;
+        Vector3 checkPoint = RespawnHelper.Instance.LastCheckPoint;
+
+        Quaternion startRotation = transform.rotation;
+        Quaternion arrivalRotation = Quaternion.identity;
+
+        float t = 0;
+        while (t <= _respawnMoveDuration)
         {
-            return !IsBetweenSlopeAndGround();
+            float alpha = t / _respawnMoveDuration;
+            transform.position = Vector3.Lerp(startPosition, checkPoint, alpha * alpha * alpha);
+            transform.rotation = Quaternion.Slerp(startRotation, arrivalRotation, alpha);
+            yield return null;
+            t += Time.deltaTime;
         }
 
-        if (_hitObject == null || !IsGrounded || SlideableZone.slideableZoneCount == 0)
-        {
-            return false;
-        }
-
-        float angle = Vector3.Angle(Vector3.up, _hitNormal);
-        bool isOnSlope = Mathf.FloorToInt(angle) >= _controller.slopeLimit && Mathf.CeilToInt(angle) < 90.0f;
-
-        return isOnSlope && !IsBetweenSlopeAndGround();
-    }
-
-    private bool IsBetweenSlopeAndGround()
-    {
-        // Ground에 Ray가 닿았을 때 Ground와의 거리가 최소 슬라이드 높이 이하면 _isSliding -> false
-        Vector3 bottom = transform.position - new Vector3(0, _controller.height / 2, 0);
-        Ray ray = new Ray(bottom, Vector3.down);
-        const float RAY_DISTANCE = 3.0f;
-        if (Physics.Raycast(ray, out RaycastHit hit, RAY_DISTANCE))
-        {
-            float angle = Vector3.Angle(Vector3.up, hit.normal);
-            if (Mathf.CeilToInt(angle) <= _controller.slopeLimit)
-            {
-                float heightFromHit = bottom.y - hit.point.y;
-
-                // 최소 슬라이딩 높이
-                const float MIN_SLIDE_HEIGHT = 0.1f;
-                if (heightFromHit < MIN_SLIDE_HEIGHT)
-                {
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
-        return false;
-    }
-
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        _hitObject = hit.gameObject;
-        _hitNormal = hit.normal;
+        SetInitState();
+        CameraController.Instance.AlignCameraToCenter();
+        RespawnHelper.Instance.PlayerModel.SetActive(true);
+        _movePlayerToRespawnPointRoutine = null;
     }
 
     private void MovePlayer()
     {
-        if (_isSliding)
-        {
-            _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive | (int)EPlayerState.Sliding;
-            _velocity = _slideVelocity;
-
-            ApplyGravity();
-
-            _controller.Move(_playerData.slopeSlideSpeed * Time.deltaTime * _velocity);
-            return;
-        }
-
-        if (CheckPlayerState(EPlayerState.Sliding))
-        {
-            RemovePlayerState(EPlayerState.Sliding);
-        }
-
         _velocity = transform.TransformDirection(_inputDirection);
 
         ApplyGravity();
@@ -356,6 +286,11 @@ public class PlayerMove : Singleton<PlayerMove>
     public void SetInitState()
     {
         _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
+    }
+
+    public void SetDeadState()
+    {
+        _currentState = (int)EPlayerState.Dead;   
     }
 
     public void ExitHideState(bool isCrouch)
@@ -460,6 +395,8 @@ public class PlayerMove : Singleton<PlayerMove>
         int detectLayer = LayerMask.GetMask("Ground") + LayerMask.GetMask("Wall");
 
         // 매 프레임 호출 시 문제 발생 가능성 높음 -> 교체 방안 연구
+        // NonAlloc -> 0 일때는 충돌 없음, 1 일때는 둘중 하나의 충돌이 있었음
+        // 후에 NonAlloc으로 변경
         Collider[] overlappedColliders = Physics.OverlapSphere(transform.position, _controller.radius, detectLayer);
 
         return overlappedColliders.Length != 0;
@@ -715,12 +652,6 @@ public class PlayerMove : Singleton<PlayerMove>
             return;
         }
         
-        if (CheckPlayerState(EPlayerState.Jump))
-        {
-            RemovePlayerState(EPlayerState.Run);
-            return;
-        }
-
         // Run과 Crouch 상태 중 우선 순위는 Run
         if (CheckPlayerState(EPlayerState.Crouch))
         {

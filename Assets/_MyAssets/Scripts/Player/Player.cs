@@ -6,6 +6,7 @@ using UnityEngine;
 public class Player : Singleton<Player>, IDamageable
 {
     [SerializeField] private PlayerData _playerData;
+    
     public PlayerData PlayerData => _playerData;
     
     private int _hp;
@@ -24,7 +25,10 @@ public class Player : Singleton<Player>, IDamageable
 
     private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            _hp = 0;
+        }
     }
     
     public int TakeDamage(int damageAmount, GameObject damageCauser)
@@ -32,5 +36,11 @@ public class Player : Singleton<Player>, IDamageable
         Debug.Log("Player TakeDamage()");
         _hp -= damageAmount;
         return damageAmount;
+    }
+
+    public void Respawn()
+    {
+        _hp = PlayerData.playerHp;
+        PlayerMove.Instance.ResetPlayerPosition();
     }
 }

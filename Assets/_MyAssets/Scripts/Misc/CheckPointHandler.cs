@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CheckPointHandler : MonoBehaviour
 {
-    public static int checkPointCount = 0;
     private void Start()
     {
         GetComponent<MeshRenderer>().enabled = CheckPointSceneManager.Instance.IsDebugMode;
@@ -13,12 +9,11 @@ public class CheckPointHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.transform.CompareTag("Player"))
+        if (!other.transform.CompareTag("Player") || PlayerMove.Instance.CheckPlayerState(EPlayerState.Dead))
         {
             return;
         }
 
-        checkPointCount++;
         RespawnHelper.Instance.SaveCheckPoint(transform.position);
         GetComponent<Collider>().enabled = false;
     }

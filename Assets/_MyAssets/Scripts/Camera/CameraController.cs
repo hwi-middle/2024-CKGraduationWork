@@ -60,6 +60,15 @@ public class CameraController : Singleton<CameraController>
         FreeLookCamera.MoveToTopOfPrioritySubqueue();
     }
 
+    public void AlignCameraToCenter()
+    {
+        FreeLookCamera.m_XAxis.Value = 0;
+        FreeLookCamera.m_YAxis.Value = 0.5f;
+        
+        AimingCamera.m_XAxis.Value = 0;
+        AimingCamera.m_YAxis.Value = 0.5f;
+    }
+
     public void ToggleCrouchCameraHeight(bool isCrouch)
     {
         if (IsOnRoutine)
