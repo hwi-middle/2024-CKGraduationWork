@@ -6,7 +6,9 @@ using UnityEngine;
 public class SSPerceptionGaugeUiHandler : Singleton<SSPerceptionGaugeUiHandler>
 {
     private readonly Dictionary<EnemyBase, ScreenSpacePerceptionGauge> _enemies = new Dictionary<EnemyBase, ScreenSpacePerceptionGauge>();
-
+    public float yOffset = 0.0f;
+    public float radius = 0.0f;
+    
     private void Start()
     {
     }
@@ -40,6 +42,7 @@ public class SSPerceptionGaugeUiHandler : Singleton<SSPerceptionGaugeUiHandler>
             return;
         }
 
+        // 게이지 업데이트
         float currentPerceptionGauge = enemy.PerceptionGauge;
         float alertThreshold = enemy.AiData.alertThreshold;
         if (currentPerceptionGauge >= alertThreshold)
@@ -50,5 +53,15 @@ public class SSPerceptionGaugeUiHandler : Singleton<SSPerceptionGaugeUiHandler>
         {
             gauge.SetPerceptionGauge(currentPerceptionGauge / alertThreshold, 0.0f);
         }
+        
+        // 위치 업데이트
+
+        Vector3 dir = enemy.transform.position - Camera.main.transform.position;
+        float z = Mathf.Acos(Vector3.Dot(Camera.main.transform.forward, dir.normalized)) * Mathf.Rad2Deg;
+        if (Vector3.Cross(Camera.main.transform.forward, dir.normalized).y > 0)
+        {
+            z *= -1;
+        }
+        gauge.transform.rotation = Quaternion.Euler(0, 0, z);
     }
 }
