@@ -22,19 +22,12 @@ public class AssassinateZone : MonoBehaviour
 
     private void HandleAssassinateAction()
     {
-        GameObject enemy = _targetEnemy.gameObject;
         if (!_isInZone)
         {
             return;
         }
         
-        Debug.Log($"Target Enemy : {_targetEnemy.name} Called");
-
-        int key = _targetEnemy.transform.GetInstanceID();
-        MiddleSaveData.Instance.KillEnemy(key);
-        _targetEnemy.gameObject.SetActive(false);
-        _isInZone = false;
-        //Destroy(_targetEnemy.gameObject);
+        Destroy(_targetEnemy.gameObject);
     }
 
     private void OnTriggerEnter(Collider other)

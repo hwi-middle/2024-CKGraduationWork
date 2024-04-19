@@ -49,7 +49,7 @@ public class RespawnHelper : Singleton<RespawnHelper>
         PlayerMove.Instance.SetDeadState();
         yield return new WaitForSeconds(_deadRoutineDuration);
         _playerModel.SetActive(false);
-        Player.Instance.Respawn();
+        //Player.Instance.Respawn();
         _respawnRoutine = null;
     }
 

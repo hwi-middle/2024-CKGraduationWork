@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 [Flags]
 public enum EPlayerState
@@ -24,6 +21,8 @@ public enum EPlayerState
 
 public class PlayerMove : Singleton<PlayerMove>
 {
+    private bool _isInitialized = false;
+    
     private Camera _camera;
     
     [SerializeField] private PlayerInputData _inputData;
@@ -138,6 +137,21 @@ public class PlayerMove : Singleton<PlayerMove>
             MovePlayer();
         }
 
+        if (!_isInitialized)
+        {
+            if(CheckPointData.CheckPoint != Vector3.zero)
+            {
+                _controller.enabled = false;
+                transform.position = CheckPointData.CheckPoint;
+                _isInitialized = true;
+                _controller.enabled = true;
+            }
+            else
+            {
+                _isInitialized = true;
+            }
+        }
+
         UpdatePlayerStateText();
 
         if (!_isAssassinating)
@@ -174,43 +188,6 @@ public class PlayerMove : Singleton<PlayerMove>
         cameraRotation.x = 0;
         cameraRotation.z = 0;
         transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 1.0f);
-    }
-
-    // Reset Player Position To CheckPoint
-    public void ResetPlayerPosition()
-    {
-        if (_movePlayerToRespawnPointRoutine != null)
-        {
-            return;
-        }
-
-        _movePlayerToRespawnPointRoutine = MovePlayerToRespawnPointRoutine();
-        StartCoroutine(_movePlayerToRespawnPointRoutine);
-    }
-
-    private IEnumerator MovePlayerToRespawnPointRoutine()
-    {
-        Vector3 startPosition = transform.position;
-        Vector3 checkPoint = RespawnHelper.Instance.LastCheckPoint;
-
-        float t = 0;
-        while (t <= _respawnMoveDuration)
-        {
-            float alpha = t / _respawnMoveDuration;
-            transform.position = Vector3.Lerp(startPosition, checkPoint, alpha * alpha * alpha);
-            yield return null;
-            t += Time.deltaTime;
-        }
-
-        Vector3 lookDirection = (RespawnHelper.Instance.LastDeadPoint - transform.position).normalized;
-
-        transform.rotation = Quaternion.LookRotation(lookDirection);
-        transform.position = checkPoint;
-        SetInitState();
-        CameraController.Instance.AlignCameraToPlayer();
-        RespawnHelper.Instance.PlayerModel.SetActive(true);
-        MiddleSaveData.Instance.LoadSavedData();
-        _movePlayerToRespawnPointRoutine = null;
     }
 
     private void MovePlayer()

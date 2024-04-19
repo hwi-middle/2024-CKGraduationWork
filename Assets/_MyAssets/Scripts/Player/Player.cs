@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : Singleton<Player>, IDamageable
@@ -30,17 +27,16 @@ public class Player : Singleton<Player>, IDamageable
             _hp = 0;
         }
     }
+
+    public bool IsPlayerDead()
+    {
+        return _hp <= 0;
+    }
     
     public int TakeDamage(int damageAmount, GameObject damageCauser)
     {
         Debug.Log("Player TakeDamage()");
         _hp -= damageAmount;
         return damageAmount;
-    }
-
-    public void Respawn()
-    {
-        _hp = PlayerData.playerHp;
-        PlayerMove.Instance.ResetPlayerPosition();
     }
 }

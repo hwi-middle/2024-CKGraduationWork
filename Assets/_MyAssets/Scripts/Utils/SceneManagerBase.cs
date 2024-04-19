@@ -2,9 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 using Cursor = UnityEngine.Cursor;
 using Image = UnityEngine.UI.Image;
 
@@ -22,6 +20,9 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     public const float DEFAULT_FADE_DURATION = 0.5f;
     public bool IsFading { get; private set; }
+
+    private Player _player;
+    private IEnumerator _playerDeadSequence;
 
     protected virtual void Awake()
     {
@@ -47,10 +48,38 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         _settingCanvas = Instantiate(Resources.Load<GameObject>("SettingCanvas"));
         _settingCanvas.SetActive(false);
         _isPaused = false;
+
+        _player = Player.Instance;
+        CheckPointData.ChangeSceneName(SceneManager.GetActiveScene().name);
     }
 
     protected virtual void Update()
     {
+        ExecuteDeadSequence();
+    }
+
+    private void ExecuteDeadSequence()
+    {
+        if (!_player.IsPlayerDead() || _playerDeadSequence != null)
+        {
+            return;
+        }
+
+        _playerDeadSequence = PlayerDeadRoutine();
+        StartCoroutine(_playerDeadSequence);
+    }
+
+    private IEnumerator PlayerDeadRoutine()
+    {
+        PlayerMove.Instance.SetDeadState();
+        const float DEAD_ANIMATION_TIME = 2.0f;
+        yield return new WaitForSeconds(DEAD_ANIMATION_TIME);
+        RestartScene();   
+    }
+
+    private void RestartScene()
+    {
+        LoadSceneWithLoadingUI(SceneManager.GetActiveScene().name);   
     }
 
     private void HandlePauseAction()
