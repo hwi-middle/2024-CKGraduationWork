@@ -3,14 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class CameraController : Singleton<CameraController> 
+public class CameraController : Singleton<CameraController>
 {
+    [SerializeField] private PlayerInputData _inputData;
     public CinemachineBrain BrainCamera { get; private set; }
     public CinemachineFreeLook FreeLookCamera { get; private set; }
     public CinemachineFreeLook AimingCamera { get; private set; }
     public CinemachineVirtualCamera InCabinetCamera { get; private set; }
-    public CinemachineFreeLook PeekCamera { get; private set; }
+    public CinemachineVirtualCamera PeekCamera { get; private set; }
+
+    private CinemachineComposer _peekCameraComposer;
 
     public bool IsBlending => BrainCamera.IsBlending;
 
@@ -19,12 +23,28 @@ public class CameraController : Singleton<CameraController>
     private IEnumerator _changeHeightRoutine;
     public bool IsOnRoutine => _changeHeightRoutine != null;
 
+    private IEnumerator _changeCameraFromPeekToInCabinet;
+
+    private Transform _peekPoint;
+    
+    [Header("Peek Camera 이동 속도")]
+    [SerializeField] private float _aimSpeed = 1.0f;
+
+    [Header("Peek Range")]
+    [SerializeField] private float _maxPeekRange = 0.8f;
+
+    [Header("앉기 시 높이 및 Lerp Time")]
     [SerializeField] private float _heightOffset = 0.5f;
     [SerializeField] private float _routineDuration = 0.25f;
 
     public void Awake()
     {
         _mainCamera = Camera.main;
+    }
+
+    public void OnEnable()
+    {
+        _inputData.mouseAxisEvent += HandleMouseAxisEvent;
     }
 
     public void Start()
@@ -40,10 +60,14 @@ public class CameraController : Singleton<CameraController>
         FreeLookCamera = cameras.transform.Find("FreeLook Camera").GetComponent<CinemachineFreeLook>();
         AimingCamera = cameras.transform.Find("Aiming Camera").GetComponent<CinemachineFreeLook>();
         InCabinetCamera = cameras.transform.Find("InCabinet Camera").GetComponent<CinemachineVirtualCamera>();
-        PeekCamera = cameras.transform.Find("Peek Camera").GetComponent<CinemachineFreeLook>();
+        PeekCamera = cameras.transform.Find("Peek Camera").GetComponent<CinemachineVirtualCamera>();
+        
+        Transform playerTransform = transform;
+        
+        // Peek Point Transform
+        _peekPoint = playerTransform.Find("PeekPoint");
 
         // Cameras Follow & LookAt Setting
-        Transform playerTransform = transform;
         FreeLookCamera.Follow = playerTransform;
         FreeLookCamera.LookAt = playerTransform;
 
@@ -53,8 +77,10 @@ public class CameraController : Singleton<CameraController>
         Transform hideableObjectAimTransform = playerTransform.Find("InHideableObjectAim").transform;
         InCabinetCamera.Follow = playerTransform;
         InCabinetCamera.LookAt = hideableObjectAimTransform;
-        
-        // Peek Camera는 동적으로 설정
+
+        PeekCamera.Follow = playerTransform;
+        PeekCamera.LookAt = _peekPoint;
+        _peekCameraComposer = PeekCamera.GetCinemachineComponent<CinemachineComposer>();
         
         // Live 카메라를 FreeLook으로 설정
         FreeLookCamera.MoveToTopOfPrioritySubqueue();
@@ -70,6 +96,38 @@ public class CameraController : Singleton<CameraController>
 
         AimingCamera.m_XAxis.Value = xAxis;
         AimingCamera.m_YAxis.Value = 0.5f;
+    }
+    
+    private void HandleMouseAxisEvent(float value)
+    {
+        if (BrainCamera.ActiveVirtualCamera.Name != PeekCamera.name)
+        {
+            return;
+        }
+        
+        float offsetX = _peekCameraComposer.m_TrackedObjectOffset.x;
+        float speed = _aimSpeed * Time.deltaTime;
+        
+        // Mouse Axis의 좌 우 확인
+        bool isLeftAxis = value < 0;
+
+        // offset 연산
+        offsetX += isLeftAxis ? -speed : speed;
+        
+        // 계산 된 Offset이 최대 범위를 벗어나는지 확인
+
+        bool isOverRange = Mathf.Abs(offsetX) > _maxPeekRange;
+
+        if (isOverRange)
+        {
+            // Offset을 최대 범위 값에 맞춤
+            offsetX = isLeftAxis ? -_maxPeekRange : _maxPeekRange;
+            _peekCameraComposer.m_TrackedObjectOffset.x = offsetX;
+            return;
+        }
+
+        // 계산 된 Offset을 카메라에 적용
+        _peekCameraComposer.m_TrackedObjectOffset.x = offsetX;
     }
 
     public void ToggleCrouchCameraHeight(bool isCrouch)
@@ -186,6 +244,11 @@ public class CameraController : Singleton<CameraController>
 
     public void ChangeCameraFromPeekToInCabinet()
     {
+        if (_changeCameraFromPeekToInCabinet != null)
+        {
+            return;
+        }
+        
         InCabinetCamera.MoveToTopOfPrioritySubqueue();
     }
 
@@ -195,14 +258,15 @@ public class CameraController : Singleton<CameraController>
         FreeLookCamera.m_YAxis.Value = 0.5f;
     }
 
-    public void ChangeCameraToPeek(GameObject hideableObject)
+    public void ChangeCameraToPeek()
     {
-        Transform peekPoint = hideableObject.transform.Find("PeekPoint");
-        
-        PeekCamera.Follow = hideableObject.transform;
-        PeekCamera.LookAt = peekPoint;
+        if (_changeCameraFromPeekToInCabinet != null)
+        {
+            return;
+        }
 
-        PeekCamera.m_XAxis.Value = 0;
+        // PeekCamera.m_XAxis.Value = 0;
+        PeekCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x = 0;
         PeekCamera.MoveToTopOfPrioritySubqueue();
     }
 }

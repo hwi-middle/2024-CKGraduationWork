@@ -296,6 +296,15 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""MouseAxis"",
+                    ""type"": ""Value"",
+                    ""id"": ""8ba2651e-c9f9-49c6-a115-35e3afb74ad6"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -364,6 +373,17 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""action"": ""Exit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83069f03-721d-40e1-9090-3ccf8018a0ea"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""MouseAxis"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -414,6 +434,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_HideAction = asset.FindActionMap("HideAction", throwIfNotFound: true);
         m_HideAction_Peek = m_HideAction.FindAction("Peek", throwIfNotFound: true);
         m_HideAction_Exit = m_HideAction.FindAction("Exit", throwIfNotFound: true);
+        m_HideAction_MouseAxis = m_HideAction.FindAction("MouseAxis", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -595,12 +616,14 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private List<IHideActionActions> m_HideActionActionsCallbackInterfaces = new List<IHideActionActions>();
     private readonly InputAction m_HideAction_Peek;
     private readonly InputAction m_HideAction_Exit;
+    private readonly InputAction m_HideAction_MouseAxis;
     public struct HideActionActions
     {
         private @IA_Player m_Wrapper;
         public HideActionActions(@IA_Player wrapper) { m_Wrapper = wrapper; }
         public InputAction @Peek => m_Wrapper.m_HideAction_Peek;
         public InputAction @Exit => m_Wrapper.m_HideAction_Exit;
+        public InputAction @MouseAxis => m_Wrapper.m_HideAction_MouseAxis;
         public InputActionMap Get() { return m_Wrapper.m_HideAction; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -616,6 +639,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Exit.started += instance.OnExit;
             @Exit.performed += instance.OnExit;
             @Exit.canceled += instance.OnExit;
+            @MouseAxis.started += instance.OnMouseAxis;
+            @MouseAxis.performed += instance.OnMouseAxis;
+            @MouseAxis.canceled += instance.OnMouseAxis;
         }
 
         private void UnregisterCallbacks(IHideActionActions instance)
@@ -626,6 +652,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Exit.started -= instance.OnExit;
             @Exit.performed -= instance.OnExit;
             @Exit.canceled -= instance.OnExit;
+            @MouseAxis.started -= instance.OnMouseAxis;
+            @MouseAxis.performed -= instance.OnMouseAxis;
+            @MouseAxis.canceled -= instance.OnMouseAxis;
         }
 
         public void RemoveCallbacks(IHideActionActions instance)
@@ -678,5 +707,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     {
         void OnPeek(InputAction.CallbackContext context);
         void OnExit(InputAction.CallbackContext context);
+        void OnMouseAxis(InputAction.CallbackContext context);
     }
 }
