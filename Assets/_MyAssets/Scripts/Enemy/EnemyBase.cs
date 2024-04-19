@@ -182,7 +182,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public EPerceptionPhase GetCurrentPerceptionPhase()
     {
-        Debug.Log(_perceptionGauge);
         if (_perceptionGauge >= 100f)
         {
             return EPerceptionPhase.Detection;
