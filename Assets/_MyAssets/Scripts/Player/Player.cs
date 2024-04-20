@@ -22,9 +22,12 @@ public class Player : Singleton<Player>, IDamageable
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha0))
+        if (SceneManagerBase.Instance.IsDebugMode)
         {
-            _hp = 0;
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+            {
+                _hp = 0;
+            }
         }
     }
 

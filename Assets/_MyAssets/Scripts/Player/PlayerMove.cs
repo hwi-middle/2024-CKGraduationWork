@@ -139,10 +139,11 @@ public class PlayerMove : Singleton<PlayerMove>
 
         if (!_isInitialized)
         {
-            if(CheckPointData.CheckPoint != Vector3.zero)
+            Vector3 checkPoint = CheckPointRootHandler.Instance.LastCheckPoint;
+            if(checkPoint != Vector3.zero)
             {
                 _controller.enabled = false;
-                transform.position = CheckPointData.CheckPoint;
+                transform.position = checkPoint;
                 _isInitialized = true;
                 _controller.enabled = true;
             }

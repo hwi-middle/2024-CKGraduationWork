@@ -26,7 +26,12 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     protected virtual void Awake()
     {
+#if !UNITY_EDITOR
+        _isDebugMode = false;
+#endif
+        
         GetSettingsValueAndApply();
+
     }
     
     protected virtual void OnEnable()
@@ -50,12 +55,19 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         _isPaused = false;
 
         _player = Player.Instance;
-        CheckPointData.ChangeSceneName(SceneManager.GetActiveScene().name);
     }
 
     protected virtual void Update()
     {
         ExecuteDeadSequence();
+
+        if (IsDebugMode)
+        {
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                LoadSceneWithLoadingUI("Respawn2");
+            }
+        }
     }
 
     private void ExecuteDeadSequence()
