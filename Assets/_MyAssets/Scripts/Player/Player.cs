@@ -1,11 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : Singleton<Player>, IDamageable
 {
     [SerializeField] private PlayerData _playerData;
+    
     public PlayerData PlayerData => _playerData;
     
     private int _hp;
@@ -24,7 +22,15 @@ public class Player : Singleton<Player>, IDamageable
 
     private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            _hp = 0;
+        }
+    }
+
+    public bool IsPlayerDead()
+    {
+        return _hp <= 0;
     }
     
     public int TakeDamage(int damageAmount, GameObject damageCauser)
