@@ -11,7 +11,7 @@ public enum EInteractionType
 
 public class InteractionObject
 {
-    public EInteractionType type;
+    public readonly EInteractionType type;
     public readonly GameObject obj;
 
     public InteractionObject(EInteractionType type, GameObject obj)
@@ -29,7 +29,7 @@ public class InteractionController : Singleton<InteractionController>
     
     private Dictionary<int, InteractionObject> _interactionObjects = new();
     
-    public InteractionObject NearestObject => new (_nearestObjectType, _nearestObject);
+    private InteractionObject NearestObject => new (_nearestObjectType, _nearestObject);
 
     private GameObject _nearestObject;
     private EInteractionType _nearestObjectType;
@@ -63,10 +63,12 @@ public class InteractionController : Singleton<InteractionController>
     
     private void SelectCloserInteractionObject()
     {
+        
+
         _nearestObjectDistance = Mathf.Infinity;
         _nearestObject = null;
         
-        if (_interactionObjects.Count == 0)
+        if (_interactionObjects.Count == 0 || PlayerMove.Instance.CheckPlayerState(EPlayerState.Hide))
         {
             return;
         }
@@ -78,8 +80,6 @@ public class InteractionController : Singleton<InteractionController>
             Vector3 objPosition = data.Value.obj.transform.position;
             Vector3 playerPosition = transform.position;
             Vector3 direction = (objPosition - playerPosition).normalized;
-            
-            Debug.DrawRay(transform.position, direction * 5.0f, Color.blue);
             
             Ray ray = new Ray(transform.position, direction);
             if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity)
@@ -94,11 +94,6 @@ public class InteractionController : Singleton<InteractionController>
             {
                 continue;
             }
-
-            if (!isItem && PlayerMove.Instance.CheckPlayerState(EPlayerState.Hide))
-            {
-                return;
-            }
             
             if (isOnlyOne)
             {
@@ -111,7 +106,6 @@ public class InteractionController : Singleton<InteractionController>
                 }
                 else
                 {
-                    // infront?
                     if (!HideActionController.Instance.IsInFrontOfHideableObject(hit.transform))
                     {
                         continue;
@@ -170,7 +164,7 @@ public class InteractionController : Singleton<InteractionController>
 
     private void ShowInteractionUI()
     {
-        _interactionUI.SetActive(_nearestObject != null);
+        _interactionUI.SetActive(NearestObject.obj != null);
 
         if (!_interactionUI.activeSelf)
         {

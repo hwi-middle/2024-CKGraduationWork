@@ -27,8 +27,6 @@ public class HideActionController : Singleton<HideActionController>
 
     private void OnEnable()
     {
-        //_inputData.hideEvent += HandleHideAction;
-        
         _inputData.peekEvent += HandlePeekAction;
         _inputData.hideExitEvent += HandleHideExitAction;
         _inputData.peekExitEvent += HandlePeekExitAction;
@@ -36,8 +34,6 @@ public class HideActionController : Singleton<HideActionController>
 
     private void OnDisable()
     {
-        //_inputData.hideEvent -= HandleHideAction;
-        
         _inputData.peekEvent -= HandlePeekAction;
         _inputData.hideExitEvent -= HandleHideExitAction;
         _inputData.peekExitEvent -= HandlePeekExitAction;

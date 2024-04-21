@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 7713837995355931857}
   - component: {fileID: 9113156202343665045}
   - component: {fileID: 6410600696061651164}
+  - component: {fileID: 665646016214072101}
   - component: {fileID: 1556170460316511095}
   - component: {fileID: 2054570745502388043}
   - component: {fileID: 1863128557706384626}
@@ -175,6 +176,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
   _data: {fileID: 11400000, guid: be439c1712086cc4eb47a854b63c7824, type: 2}
+--- !u!114 &665646016214072101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5436934767695870256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db46241d11767b4287c0e8796170738, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
 --- !u!114 &1556170460316511095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,8 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
   _aimSpeed: 1
-  maxPeekRange: 0.8
-  _returnOffsetDuration: 0.1
+  _maxPeekRange: 0.8
   _heightOffset: 0.5
   _routineDuration: 0.25
 --- !u!114 &2054570745502388043
