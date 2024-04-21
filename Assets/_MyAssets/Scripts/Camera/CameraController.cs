@@ -84,6 +84,18 @@ public class CameraController : Singleton<CameraController>
         
         // Live 카메라를 FreeLook으로 설정
         FreeLookCamera.MoveToTopOfPrioritySubqueue();
+        AlignCameraToPlayer();
+    }
+
+    public void AlignCameraToPlayer()
+    {
+        Vector3 playerForward = transform.forward;
+        float xAxis = Mathf.Atan2(playerForward.x, playerForward.z) * Mathf.Rad2Deg;
+        FreeLookCamera.m_XAxis.Value = xAxis;
+        FreeLookCamera.m_YAxis.Value = 0.5f;
+
+        AimingCamera.m_XAxis.Value = xAxis;
+        AimingCamera.m_YAxis.Value = 0.5f;
     }
     
     private void HandleMouseAxisEvent(float value)

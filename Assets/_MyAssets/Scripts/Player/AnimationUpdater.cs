@@ -10,7 +10,7 @@ public class AnimationUpdater : MonoBehaviour
 
     private void Awake()
     {
-        _playerMove = GetComponentInParent<PlayerMove>();
+        _playerMove = PlayerMove.Instance;
         _anim = GetComponent<Animator>();
     }
 
@@ -21,6 +21,7 @@ public class AnimationUpdater : MonoBehaviour
 
     private void UpdateAnimationState()
     {
+        _anim.SetBool(PlayerAnimationStates.DEAD, _playerMove.CheckPlayerState(EPlayerState.Dead));
         _anim.SetBool(PlayerAnimationStates.IDLE, _playerMove.CheckPlayerState(EPlayerState.Idle));
         _anim.SetBool(PlayerAnimationStates.WALK, _playerMove.CheckPlayerState(EPlayerState.Walk));
         _anim.SetBool(PlayerAnimationStates.RUN, _playerMove.CheckPlayerState(EPlayerState.Run));
