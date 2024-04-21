@@ -30,6 +30,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
     public Action clairvoyanceEvent;
     
     // Hide Action
+    public Action interactionEvent;
     public Action hideEvent;
     public Action hideExitEvent;
     public Action peekEvent;
@@ -147,7 +148,8 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
         
-        hideEvent?.Invoke();
+        //hideEvent?.Invoke();
+        interactionEvent?.Invoke();
     }
 
     public void OnClairvoyance(InputAction.CallbackContext context)

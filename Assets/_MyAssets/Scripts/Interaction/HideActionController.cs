@@ -27,7 +27,8 @@ public class HideActionController : Singleton<HideActionController>
 
     private void OnEnable()
     {
-        _inputData.hideEvent += HandleHideAction;
+        //_inputData.hideEvent += HandleHideAction;
+        
         _inputData.peekEvent += HandlePeekAction;
         _inputData.hideExitEvent += HandleHideExitAction;
         _inputData.peekExitEvent += HandlePeekExitAction;
@@ -35,7 +36,8 @@ public class HideActionController : Singleton<HideActionController>
 
     private void OnDisable()
     {
-        _inputData.hideEvent -= HandleHideAction;
+        //_inputData.hideEvent -= HandleHideAction;
+        
         _inputData.peekEvent -= HandlePeekAction;
         _inputData.hideExitEvent -= HandleHideExitAction;
         _inputData.peekExitEvent -= HandlePeekExitAction;
@@ -121,7 +123,7 @@ public class HideActionController : Singleton<HideActionController>
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.PlayerAction);
     }
 
-    private bool IsInFrontOfHideableObject(Transform hitObject)
+    public bool IsInFrontOfHideableObject(Transform hitObject)
     {
         Vector3 playerPosition = Vector3.ProjectOnPlane(_playerTransform.position, Vector3.up);
         Vector3 hitObjectPosition = Vector3.ProjectOnPlane(hitObject.position, Vector3.up);
@@ -133,7 +135,7 @@ public class HideActionController : Singleton<HideActionController>
         return angle < 45.0f || Mathf.Approximately(angle, 45.0f);
     }
 
-    private void HandleHideAction()
+    public void HideAction()
     {
         if (IsOnRoutine)
         {
@@ -144,8 +146,7 @@ public class HideActionController : Singleton<HideActionController>
         Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
         LayerMask layerMask = LayerMask.GetMask("Hideable");
 
-        if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask)
-            || !IsInFrontOfHideableObject(hit.transform))
+        if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
         {
             return;
         }

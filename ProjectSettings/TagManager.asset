@@ -9,6 +9,7 @@ TagManager:
   - WirePoint
   - Wall
   - PatrolPoint
+  - InteractionTriggerZone
   layers:
   - Default
   - TransparentFX

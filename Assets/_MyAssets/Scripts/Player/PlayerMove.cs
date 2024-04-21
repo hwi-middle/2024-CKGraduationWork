@@ -34,6 +34,7 @@ public class PlayerMove : Singleton<PlayerMove>
     [Header("Player Base Data")]
     [SerializeField] private PlayerData _playerData;
 
+    public GameObject PlayerCanvas => _playerCanvas;
     private GameObject _playerCanvas;
     private GameObject _wireAvailableUI;
 
