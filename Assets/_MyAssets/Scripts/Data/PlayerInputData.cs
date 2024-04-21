@@ -148,7 +148,6 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
         
-        //hideEvent?.Invoke();
         interactionEvent?.Invoke();
     }
 
