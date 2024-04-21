@@ -131,18 +131,9 @@ public class HideActionController : Singleton<HideActionController>
         return angle < 45.0f || Mathf.Approximately(angle, 45.0f);
     }
 
-    public void HideAction()
+    public void HideAction(Transform objectTransform)
     {
         if (IsOnRoutine)
-        {
-            return;
-        }
-        
-        Transform cameraTransform = _mainCamera.transform;
-        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
-        LayerMask layerMask = LayerMask.GetMask("Hideable");
-
-        if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
         {
             return;
         }
@@ -153,8 +144,8 @@ public class HideActionController : Singleton<HideActionController>
         PlayerMove.Instance.AddPlayerState(EPlayerState.Hide);
         
         Vector3 playerOnPlane = Vector3.ProjectOnPlane(_playerTransform.position, Vector3.up);
-        Vector3 hideableObjectOnPlane = Vector3.ProjectOnPlane(hit.transform.position, Vector3.up);
-        _currentHideableObjectForward = hit.normal;
+        Vector3 hideableObjectOnPlane = Vector3.ProjectOnPlane(objectTransform.position, Vector3.up);
+        _currentHideableObjectForward = objectTransform.forward;
         
         float hitDistance = Vector3.Distance(playerOnPlane, hideableObjectOnPlane);
 
@@ -168,7 +159,7 @@ public class HideActionController : Singleton<HideActionController>
             return;
         }
 
-        _currentHideableObject = hit.transform.gameObject;
+        _currentHideableObject = objectTransform.gameObject;
         _currentHideableObject.GetComponent<Collider>().isTrigger = true;
 
         _hideActionRoutine = HideActionRoutine();

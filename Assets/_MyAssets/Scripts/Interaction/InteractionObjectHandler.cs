@@ -22,7 +22,7 @@ public class InteractionObjectHandler : MonoBehaviour
             return;
         }
         
-        HideActionController.Instance.HideAction();
+        HideActionController.Instance.HideAction(transform.parent);
     }
     
     private void OnTriggerEnter(Collider other)
