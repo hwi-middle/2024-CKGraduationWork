@@ -21,7 +21,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     public const float DEFAULT_FADE_DURATION = 0.5f;
     public bool IsFading { get; private set; }
 
-    private Player _player;
+    protected Player _player;
     private IEnumerator _playerDeadSequence;
 
     protected virtual void Awake()
@@ -53,24 +53,13 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         _settingCanvas = Instantiate(Resources.Load<GameObject>("SettingCanvas"));
         _settingCanvas.SetActive(false);
         _isPaused = false;
-
-        _player = Player.Instance;
     }
 
     protected virtual void Update()
     {
-        ExecuteDeadSequence();
-
-        if (IsDebugMode)
-        {
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                LoadSceneWithLoadingUI("Respawn2");
-            }
-        }
     }
 
-    private void ExecuteDeadSequence()
+    protected void ExecuteDeadSequence()
     {
         if (!_player.IsPlayerDead() || _playerDeadSequence != null)
         {
