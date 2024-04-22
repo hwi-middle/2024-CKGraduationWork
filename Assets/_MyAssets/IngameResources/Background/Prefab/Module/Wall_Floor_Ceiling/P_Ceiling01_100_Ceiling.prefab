@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2142047354124978102
 Transform:
@@ -116,6 +116,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SM_Ceiling01_100_Ceiling
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 90121f6d7efe7d84da43e16917a04b3d,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
