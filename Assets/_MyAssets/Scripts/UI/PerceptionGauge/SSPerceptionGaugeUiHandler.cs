@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,9 +7,14 @@ using UnityEngine;
 public class SSPerceptionGaugeUiHandler : Singleton<SSPerceptionGaugeUiHandler>
 {
     private readonly Dictionary<EnemyBase, ScreenSpacePerceptionGauge> _enemies = new Dictionary<EnemyBase, ScreenSpacePerceptionGauge>();
-    public float yOffset = 0.0f;
-    public float radius = 0.0f;
-    
+    private Camera _mainCamera;
+
+
+    private void Awake()
+    {
+        _mainCamera = Camera.main;
+    }
+
     private void Start()
     {
     }
@@ -55,10 +61,11 @@ public class SSPerceptionGaugeUiHandler : Singleton<SSPerceptionGaugeUiHandler>
         }
         
         // 위치 업데이트
+        // 월드 좌표계를 기준으로 enemy가 전후좌우 어디에 있는지 표시
 
-        Vector3 dir = enemy.transform.position - Camera.main.transform.position;
-        float z = Mathf.Acos(Vector3.Dot(Camera.main.transform.forward, dir.normalized)) * Mathf.Rad2Deg;
-        if (Vector3.Cross(Camera.main.transform.forward, dir.normalized).y > 0)
+        Vector3 dir = enemy.transform.position - _mainCamera.transform.position;
+        float z = Mathf.Acos(Vector3.Dot(_mainCamera.transform.forward, dir.normalized)) * Mathf.Rad2Deg;
+        if (Vector3.Cross(_mainCamera.transform.forward, dir.normalized).y > 0)
         {
             z *= -1;
         }
