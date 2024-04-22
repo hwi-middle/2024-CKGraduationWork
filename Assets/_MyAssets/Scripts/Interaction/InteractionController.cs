@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum EInteractionType
@@ -27,7 +28,7 @@ public class InteractionController : Singleton<InteractionController>
     
     private static readonly Vector3 CAMERA_CENTER_POINT = new (0.5f, 0.5f, 0);
     
-    private Dictionary<int, InteractionObject> _interactionObjects = new();
+    private Dictionary<int, InteractionObject> _interactableObjects = new();
     
     private InteractionObject NearestObject => new (_nearestObjectType, _nearestObject);
 
@@ -63,59 +64,28 @@ public class InteractionController : Singleton<InteractionController>
     
     private void SelectCloserInteractionObject()
     {
-        
-
         _nearestObjectDistance = Mathf.Infinity;
         _nearestObject = null;
         
-        if (_interactionObjects.Count == 0 || PlayerMove.Instance.CheckPlayerState(EPlayerState.Hide))
+        if (_interactableObjects.Count == 0 || PlayerMove.Instance.CheckPlayerState(EPlayerState.Hide))
         {
             return;
         }
 
-        bool isOnlyOne = _interactionObjects.Count == 1;
-
-        foreach (var data in _interactionObjects)
+        if (_interactableObjects.Count == 1)
         {
-            Vector3 objPosition = data.Value.obj.transform.position;
-            Vector3 playerPosition = transform.position;
-            Vector3 direction = (objPosition - playerPosition).normalized;
-            
-            Ray ray = new Ray(transform.position, direction);
-            if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity)
-                || hit.transform.gameObject.GetInstanceID() != data.Key)
-            {
-                continue;
-            }
-            
-            bool isItem = data.Value.type == EInteractionType.Item;
+            var data = _interactableObjects.First();
+            ProcessOnlyOneInteractableObjects(data);
+            return;
+        }
+
+        RaycastHit hit = new();
+        foreach (var data in _interactableObjects)
+        {
             Vector3 curObjViewportPosition = _mainCamera.WorldToViewportPoint(data.Value.obj.transform.position);
             if (curObjViewportPosition.z < 0)
             {
                 continue;
-            }
-            
-            if (isOnlyOne)
-            {
-                if (isItem)
-                {
-                    if (ItemController.Instance.IsItemInHand)
-                    {
-                        continue;
-                    }
-                }
-                else
-                {
-                    if (!HideActionController.Instance.IsInFrontOfHideableObject(hit.transform))
-                    {
-                        continue;
-                    }
-                }
-                
-                _nearestObject = data.Value.obj;
-                _nearestObjectType = data.Value.type;
-                _nearestObjectDistance = CalculateDistanceFromCenterToObject(curObjViewportPosition);
-                return;
             }
 
             if (!IsNearest(curObjViewportPosition, out float distance))
@@ -123,16 +93,15 @@ public class InteractionController : Singleton<InteractionController>
                 continue;
             }
 
-            if (isItem && ItemController.Instance.IsItemInHand)
+            if (!IsValidInteraction(data.Value.type, hit))
             {
-                continue;
+                return;
             }
             
             _nearestObject = data.Value.obj;
             _nearestObjectType = data.Value.type;
             _nearestObjectDistance = distance;
         }
-        
     }
 
     private bool IsInScreen(Vector3 viewportPosition)
@@ -142,6 +111,57 @@ public class InteractionController : Singleton<InteractionController>
         return isXInScreen && isYInScreen;
     }
 
+    private void ProcessOnlyOneInteractableObjects(KeyValuePair<int, InteractionObject> data)
+    {
+        Vector3 viewportPosition = _mainCamera.WorldToViewportPoint(data.Value.obj.transform.position);
+        if (viewportPosition.z < 0)
+        {
+            return;
+        }
+
+        if (IsAnyObstaclesExist(data, out RaycastHit hit))
+        {
+            return;
+        }
+
+        if (!IsValidInteraction(data.Value.type, hit))
+        {
+            return;
+        }
+
+        _nearestObject = data.Value.obj;
+        _nearestObjectType = data.Value.type;
+    }
+
+    private bool IsAnyObstaclesExist(KeyValuePair<int, InteractionObject> data, out RaycastHit hit)
+    {
+        Vector3 objPosition = data.Value.obj.transform.position;
+        Vector3 playerPosition = transform.position;
+        Vector3 direction = (objPosition - playerPosition).normalized;
+
+        Ray ray = new Ray(playerPosition, direction);
+        if (!Physics.Raycast(ray, out hit, Mathf.Infinity)
+            || hit.transform.gameObject.GetInstanceID() != data.Key)
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
+    private bool IsValidInteraction(EInteractionType type, RaycastHit hit)
+    {
+        switch (type)
+        {
+            case EInteractionType.Item when ItemThrowHandler.Instance.IsItemOnHand:
+                return false;   
+            case EInteractionType.HideableObject when !HideActionController.Instance.IsInFrontOfHideableObject(hit.transform):
+                return false;
+            default:
+                return true;
+        }
+    }
+    
     private bool IsNearest(Vector3 viewportPosition, out float distanceFromCenter)
     {
         distanceFromCenter = Mathf.Infinity;
@@ -181,12 +201,12 @@ public class InteractionController : Singleton<InteractionController>
     public void AddInteractionObject(EInteractionType type, GameObject obj)
     {
         InteractionObject interactionObject = new(type, obj);
-        _interactionObjects.Add(obj.GetInstanceID(), interactionObject);
+        _interactableObjects.Add(obj.GetInstanceID(), interactionObject);
     }
 
     public void RemoveInteractionObject(GameObject obj)
     {
-        _interactionObjects.Remove(obj.GetInstanceID());
+        _interactableObjects.Remove(obj.GetInstanceID());
     }
 
     private void HandleInteraction()

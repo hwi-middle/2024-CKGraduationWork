@@ -18,7 +18,7 @@ public class InteractionObjectHandler : MonoBehaviour
         {
             InteractionController.Instance.RemoveInteractionObject(transform.parent.gameObject);
             Destroy(transform.parent.gameObject);
-            ItemController.Instance.GetItem();
+            ItemThrowHandler.Instance.GetItem();
             return;
         }
         
