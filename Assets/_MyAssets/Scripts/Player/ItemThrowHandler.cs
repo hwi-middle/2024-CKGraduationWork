@@ -1,9 +1,8 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
-public class ItemController : MonoBehaviour
+public class ItemThrowHandler : Singleton<ItemThrowHandler>
 {
     [SerializeField] private PlayerData _playerData;
     [SerializeField] private PlayerInputData _inputData;
@@ -11,7 +10,8 @@ public class ItemController : MonoBehaviour
     private GameObject _itemPrefab;
     private GameObject _itemShowPrefabInstance;
 
-    private GameObject _itemInHand;
+    public bool IsItemOnHand { get; private set; }
+    
     private Camera _mainCamera;
 
     private bool _isOnAiming;
@@ -51,11 +51,6 @@ public class ItemController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            _itemInHand = _itemPrefab;
-        }
-
         if (_isOnAiming)
         {
             SetThrowTargetPosition();
@@ -64,8 +59,18 @@ public class ItemController : MonoBehaviour
         }
     }
 
+    public void GetItem()
+    {
+        IsItemOnHand = true;
+    }
+
     private void HandleAiming()
     {
+        if (!IsItemOnHand)
+        {
+            return;
+        }
+        
         CameraController.Instance.ChangeCameraFromFreeLookToAiming();
         PlayerMove.Instance.AlignPlayerToCameraForward();
         if (_cameraBlendingRoutine != null)
@@ -91,6 +96,10 @@ public class ItemController : MonoBehaviour
 
     private void HandleAimingCancel()
     {
+        if (CameraController.Instance.BrainCamera.ActiveVirtualCamera as CinemachineFreeLook != CameraController.Instance.AimingCamera)
+        {
+            return;
+        }
         _isOnAiming = false;
         CameraController.Instance.ChangeCameraFromAimingToFreeLook();
         LineDrawHelper.Instance.DisableLine();
@@ -114,10 +123,9 @@ public class ItemController : MonoBehaviour
         Vector3 playerForward = playerTransform.forward;
 
         Ray ray = new Ray(playerPosition, cameraForward);
-        
+
         LayerMask layerMask = ~(LayerMask.GetMask("Player")
-                                | LayerMask.GetMask("Item")
-                                | LayerMask.GetMask("Enemy"));
+                                | LayerMask.GetMask("Item"));
         
         if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
         {
@@ -277,7 +285,9 @@ public class ItemController : MonoBehaviour
 
     private void HandleShoot()
     {
-        if (_itemInHand == null)
+        if (!IsItemOnHand 
+            || CameraController.Instance.BrainCamera.ActiveVirtualCamera as CinemachineFreeLook !=
+            CameraController.Instance.AimingCamera)
         {
             return;
         }
@@ -285,13 +295,14 @@ public class ItemController : MonoBehaviour
         Debug.Assert(_mainCamera != null, "_mainCamera != null");
         Transform cameraTransform = _mainCamera.transform;
         Vector3 playerPosTop = _shootPoint.position;
-        GameObject itemPrefab =
-            Instantiate(_itemInHand, playerPosTop, cameraTransform.localRotation);
-        Rigidbody itemRigidbody = itemPrefab.GetComponent<Rigidbody>();
-        itemPrefab.GetComponent<ItemHandler>().Init(_playerData.itemGaugeAmount, _playerData.itemImpactRadius);
-        itemRigidbody.AddForce(_shootPoint.forward * _playerData.throwPower, ForceMode.VelocityChange);
         
-        _itemInHand = null;
+        GameObject itemPrefab =
+            Instantiate(_itemPrefab, playerPosTop, cameraTransform.localRotation);
+        Rigidbody itemRigidbody = itemPrefab.GetComponent<Rigidbody>();
+        itemPrefab.GetComponent<ItemFlyHandler>().Init(_playerData.itemGaugeAmount, _playerData.itemImpactRadius);
+        itemRigidbody.AddForce(_shootPoint.forward * _playerData.throwPower, ForceMode.VelocityChange);
+
+        IsItemOnHand = false;
         HandleAimingCancel();
     }
 }
