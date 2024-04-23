@@ -12,6 +12,7 @@ public class EnemyAiData : ScriptableObject
     [Tooltip("거리(%)별 초당 게이지 증가량")] public List<EnemyAiPerceptionRange> perceptionRanges;
     [Tooltip("게이지 감소 시작 시간")] public float gaugeDecreaseStartTime;
     [Tooltip("초당 게이지 감소량")] public float gaugeDecrementPerSecond;
+    [Tooltip("경계 돌입 기준값")] public float alertThreshold;
     
     [Header("이동 관련")]
     [Tooltip("걷기 이동 속도")] public float walkSpeed;

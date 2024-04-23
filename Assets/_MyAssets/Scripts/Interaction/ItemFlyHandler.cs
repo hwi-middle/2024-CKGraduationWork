@@ -28,7 +28,7 @@ public class ItemFlyHandler : MonoBehaviour
         {
             foreach (Collider enemy in enemies)
             {
-                enemy.gameObject.GetComponent<EnemyBase>().OnListenStrangeSound(transform.position, _gaugeIncreaseAmount);
+                enemy.gameObject.GetComponent<EnemyBase>().OnListenItemSound(transform.position, _gaugeIncreaseAmount);
             }
         }
         

@@ -21,7 +21,7 @@ public class MainMenuSceneManager : SceneManagerBase
 
     public void OnStartButton()
     {
-        LoadSceneWithLoadingUI("ALL2");
+        LoadSceneWithLoadingUI("LastScene");
     }
 
     public void OnExitButton()

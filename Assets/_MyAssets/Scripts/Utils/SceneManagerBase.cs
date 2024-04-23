@@ -2,9 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 using Cursor = UnityEngine.Cursor;
 using Image = UnityEngine.UI.Image;
 
@@ -23,9 +21,17 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     public const float DEFAULT_FADE_DURATION = 0.5f;
     public bool IsFading { get; private set; }
 
+    protected Player _player;
+    private IEnumerator _playerDeadSequence;
+
     protected virtual void Awake()
     {
+#if !UNITY_EDITOR
+        _isDebugMode = false;
+#endif
+        
         GetSettingsValueAndApply();
+
     }
     
     protected virtual void OnEnable()
@@ -51,6 +57,30 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     protected virtual void Update()
     {
+    }
+
+    protected void ExecuteDeadSequence()
+    {
+        if (!_player.IsPlayerDead() || _playerDeadSequence != null)
+        {
+            return;
+        }
+
+        _playerDeadSequence = PlayerDeadRoutine();
+        StartCoroutine(_playerDeadSequence);
+    }
+
+    private IEnumerator PlayerDeadRoutine()
+    {
+        PlayerMove.Instance.SetDeadState();
+        const float DEAD_ANIMATION_TIME = 2.0f;
+        yield return new WaitForSeconds(DEAD_ANIMATION_TIME);
+        RestartScene();   
+    }
+
+    private void RestartScene()
+    {
+        LoadSceneWithLoadingUI(SceneManager.GetActiveScene().name);   
     }
 
     private void HandlePauseAction()
