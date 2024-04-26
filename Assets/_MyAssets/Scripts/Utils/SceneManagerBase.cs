@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Cursor = UnityEngine.Cursor;
 using Image = UnityEngine.UI.Image;
@@ -91,6 +92,10 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         {
             return;
         }
+        
+        EventSystem.current.SetSelectedGameObject(null);
+        Transform firstSelected = _settingCanvas.transform.GetChild(1);
+        EventSystem.current.SetSelectedGameObject(firstSelected.GetChild(0).gameObject);
         
         ToggleSettingCanvas();
     }

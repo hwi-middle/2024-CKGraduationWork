@@ -29,6 +29,10 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
     public Action shootEvent;
     public Action clairvoyanceEvent;
     
+    public Action<Vector2, bool> gamePadAxisEvent;
+    
+    private Vector2 _gamePadAxis;
+        
     // Hide Action
     public Action interactionEvent;
     public Action hideEvent;
@@ -200,6 +204,19 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
         mouseAxisEvent?.Invoke(xAxis);
     }
 
+    public void OnGamepadAxis(InputAction.CallbackContext context)
+    {
+        Vector2 axis = context.ReadValue<Vector2>();
+
+        if (context.canceled)
+        {
+            axis = Vector2.zero;
+            gamePadAxisEvent?.Invoke(axis, false);
+            return;
+        }
+        
+        gamePadAxisEvent?.Invoke(axis, true);
+    }
     public static void ChangeInputMap(EInputMap map)
     {
         switch (map)

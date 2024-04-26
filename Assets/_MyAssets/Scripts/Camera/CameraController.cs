@@ -27,6 +27,12 @@ public class CameraController : Singleton<CameraController>
 
     private Transform _peekPoint;
     
+    [Header("Gamepad Camera 이동 속도")]
+    [SerializeField] private float _gamePadSpeed = 180.0f;
+
+    private Vector2 _gamePadAxis;
+    private bool _isGamePadAxisPressed;
+    
     [Header("Peek Camera 이동 속도")]
     [SerializeField] private float _aimSpeed = 1.0f;
 
@@ -45,6 +51,7 @@ public class CameraController : Singleton<CameraController>
     public void OnEnable()
     {
         _inputData.mouseAxisEvent += HandleMouseAxisEvent;
+        _inputData.gamePadAxisEvent += HandleCameraAxisByGamepad;
     }
 
     public void Start()
@@ -85,6 +92,28 @@ public class CameraController : Singleton<CameraController>
         // Live 카메라를 FreeLook으로 설정
         FreeLookCamera.MoveToTopOfPrioritySubqueue();
         AlignCameraToPlayer();
+    }
+
+    private void Update()
+    {
+        RotateCameraByGamepad();
+    }
+
+    private void HandleCameraAxisByGamepad(Vector2 axis, bool isPressed)
+    {
+        _isGamePadAxisPressed = isPressed;
+        _gamePadAxis = axis;
+    }
+
+    private void RotateCameraByGamepad()
+    {
+        if (!_isGamePadAxisPressed)
+        {
+            return;
+        }
+
+        FreeLookCamera.m_XAxis.Value += _gamePadAxis.x * _gamePadSpeed * Time.deltaTime;
+        FreeLookCamera.m_YAxis.Value += -_gamePadAxis.y * Time.deltaTime;
     }
 
     public void AlignCameraToPlayer()
