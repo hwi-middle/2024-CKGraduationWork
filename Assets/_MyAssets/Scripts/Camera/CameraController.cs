@@ -169,30 +169,10 @@ public class CameraController : Singleton<CameraController>
         {
             return;
         }
-
-        float offsetX = _peekCameraComposer.m_TrackedObjectOffset.x;
-        float speed = _aimSpeed * Time.deltaTime;
         
-        // Gamepad Axis의 좌 우 확인
-        bool isLeftAxis = axis.x < 0;
+        // Axis.x 값 0 ~ 1 사이의 값으로 들어옴
+        // Speed를 적용해서 움직일 수 있도록
 
-        // offset 연산
-        offsetX += isLeftAxis ? -speed : speed;
-        
-        // 계산 된 Offset이 최대 범위를 벗어나는지 확인
-
-        bool isOverRange = Mathf.Abs(offsetX) > _maxPeekRange;
-
-        if (isOverRange)
-        {
-            // Offset을 최대 범위 값에 맞춤
-            offsetX = isLeftAxis ? -_maxPeekRange : _maxPeekRange;
-            _peekCameraComposer.m_TrackedObjectOffset.x = offsetX;
-            return;
-        }
-
-        // 계산 된 Offset을 카메라에 적용
-        _peekCameraComposer.m_TrackedObjectOffset.x = offsetX;
     }
 
     public void ToggleCrouchCameraHeight(bool isCrouch)
