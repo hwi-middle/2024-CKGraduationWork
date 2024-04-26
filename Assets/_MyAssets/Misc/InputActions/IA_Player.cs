@@ -424,6 +424,15 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PeekGamepadAxis"",
+                    ""type"": ""Value"",
+                    ""id"": ""9dd6c878-8491-4de3-8060-17f423f82046"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -434,6 +443,17 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""PC"",
+                    ""action"": ""Peek"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b44584c3-caa3-4c2a-b776-8b9e010cc28d"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Peek"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -495,12 +515,34 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""49134788-8a4a-4565-bcbe-bb3e836f6f49"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""83069f03-721d-40e1-9090-3ccf8018a0ea"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""PC"",
                     ""action"": ""MouseAxis"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb7ce27d-14bc-4942-83b1-305ba265a41b"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""PeekGamepadAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -720,6 +762,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_HideAction_Peek = m_HideAction.FindAction("Peek", throwIfNotFound: true);
         m_HideAction_Exit = m_HideAction.FindAction("Exit", throwIfNotFound: true);
         m_HideAction_MouseAxis = m_HideAction.FindAction("MouseAxis", throwIfNotFound: true);
+        m_HideAction_PeekGamepadAxis = m_HideAction.FindAction("PeekGamepadAxis", throwIfNotFound: true);
         // SettingAction
         m_SettingAction = asset.FindActionMap("SettingAction", throwIfNotFound: true);
         m_SettingAction_Move = m_SettingAction.FindAction("Move", throwIfNotFound: true);
@@ -916,6 +959,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_HideAction_Peek;
     private readonly InputAction m_HideAction_Exit;
     private readonly InputAction m_HideAction_MouseAxis;
+    private readonly InputAction m_HideAction_PeekGamepadAxis;
     public struct HideActionActions
     {
         private @IA_Player m_Wrapper;
@@ -923,6 +967,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         public InputAction @Peek => m_Wrapper.m_HideAction_Peek;
         public InputAction @Exit => m_Wrapper.m_HideAction_Exit;
         public InputAction @MouseAxis => m_Wrapper.m_HideAction_MouseAxis;
+        public InputAction @PeekGamepadAxis => m_Wrapper.m_HideAction_PeekGamepadAxis;
         public InputActionMap Get() { return m_Wrapper.m_HideAction; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -941,6 +986,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @MouseAxis.started += instance.OnMouseAxis;
             @MouseAxis.performed += instance.OnMouseAxis;
             @MouseAxis.canceled += instance.OnMouseAxis;
+            @PeekGamepadAxis.started += instance.OnPeekGamepadAxis;
+            @PeekGamepadAxis.performed += instance.OnPeekGamepadAxis;
+            @PeekGamepadAxis.canceled += instance.OnPeekGamepadAxis;
         }
 
         private void UnregisterCallbacks(IHideActionActions instance)
@@ -954,6 +1002,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @MouseAxis.started -= instance.OnMouseAxis;
             @MouseAxis.performed -= instance.OnMouseAxis;
             @MouseAxis.canceled -= instance.OnMouseAxis;
+            @PeekGamepadAxis.started -= instance.OnPeekGamepadAxis;
+            @PeekGamepadAxis.performed -= instance.OnPeekGamepadAxis;
+            @PeekGamepadAxis.canceled -= instance.OnPeekGamepadAxis;
         }
 
         public void RemoveCallbacks(IHideActionActions instance)
@@ -1087,6 +1138,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         void OnPeek(InputAction.CallbackContext context);
         void OnExit(InputAction.CallbackContext context);
         void OnMouseAxis(InputAction.CallbackContext context);
+        void OnPeekGamepadAxis(InputAction.CallbackContext context);
     }
     public interface ISettingActionActions
     {

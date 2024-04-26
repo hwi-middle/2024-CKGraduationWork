@@ -35,11 +35,11 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
         
     // Hide Action
     public Action interactionEvent;
-    public Action hideEvent;
     public Action hideExitEvent;
     public Action peekEvent;
     public Action peekExitEvent;
     public Action<float> mouseAxisEvent;
+    public Action<Vector2, bool> peekGamePadAxisEvent;
 
     private void OnEnable()
     {
@@ -165,6 +165,20 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
         clairvoyanceEvent?.Invoke();
     }
 
+    public void OnGamepadAxis(InputAction.CallbackContext context)
+    {
+        Vector2 axis = context.ReadValue<Vector2>();
+
+        if (context.canceled)
+        {
+            axis = Vector2.zero;
+            gamePadAxisEvent?.Invoke(axis, false);
+            return;
+        }
+
+        gamePadAxisEvent?.Invoke(axis, true);
+    }
+
     // Hide Action Map
     public void OnPeek(InputAction.CallbackContext context)
     {
@@ -204,19 +218,20 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
         mouseAxisEvent?.Invoke(xAxis);
     }
 
-    public void OnGamepadAxis(InputAction.CallbackContext context)
+    public void OnPeekGamepadAxis(InputAction.CallbackContext context)
     {
         Vector2 axis = context.ReadValue<Vector2>();
 
         if (context.canceled)
         {
             axis = Vector2.zero;
-            gamePadAxisEvent?.Invoke(axis, false);
+            peekGamePadAxisEvent?.Invoke(axis, false);
             return;
         }
-        
-        gamePadAxisEvent?.Invoke(axis, true);
+
+        peekGamePadAxisEvent?.Invoke(axis, true);
     }
+    
     public static void ChangeInputMap(EInputMap map)
     {
         switch (map)

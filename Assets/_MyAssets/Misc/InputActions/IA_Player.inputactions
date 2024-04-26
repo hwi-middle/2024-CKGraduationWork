@@ -402,6 +402,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "PeekGamepadAxis",
+                    "type": "Value",
+                    "id": "9dd6c878-8491-4de3-8060-17f423f82046",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -412,6 +421,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
+                    "action": "Peek",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b44584c3-caa3-4c2a-b776-8b9e010cc28d",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Peek",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -473,12 +493,34 @@
                 },
                 {
                     "name": "",
+                    "id": "49134788-8a4a-4565-bcbe-bb3e836f6f49",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Exit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "83069f03-721d-40e1-9090-3ccf8018a0ea",
                     "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
                     "action": "MouseAxis",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cb7ce27d-14bc-4942-83b1-305ba265a41b",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "PeekGamepadAxis",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

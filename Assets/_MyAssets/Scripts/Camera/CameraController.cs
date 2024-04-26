@@ -51,7 +51,8 @@ public class CameraController : Singleton<CameraController>
     public void OnEnable()
     {
         _inputData.mouseAxisEvent += HandleMouseAxisEvent;
-        _inputData.gamePadAxisEvent += HandleCameraAxisByGamepad;
+        _inputData.gamePadAxisEvent += HandleCameraAxisByGamepadNormalEvent;
+        _inputData.peekGamePadAxisEvent += HandleGamepadAxisPeekEvent;
     }
 
     public void Start()
@@ -99,7 +100,7 @@ public class CameraController : Singleton<CameraController>
         RotateCameraByGamepad();
     }
 
-    private void HandleCameraAxisByGamepad(Vector2 axis, bool isPressed)
+    private void HandleCameraAxisByGamepadNormalEvent(Vector2 axis, bool isPressed)
     {
         _isGamePadAxisPressed = isPressed;
         _gamePadAxis = axis;
@@ -114,9 +115,12 @@ public class CameraController : Singleton<CameraController>
 
         FreeLookCamera.m_XAxis.Value += _gamePadAxis.x * _gamePadSpeed * Time.deltaTime;
         FreeLookCamera.m_YAxis.Value += -_gamePadAxis.y * Time.deltaTime;
+        
+        AimingCamera.m_XAxis.Value += _gamePadAxis.x * _gamePadSpeed * Time.deltaTime;
+        AimingCamera.m_YAxis.Value += -_gamePadAxis.y * Time.deltaTime;
     }
 
-    public void AlignCameraToPlayer()
+    private void AlignCameraToPlayer()
     {
         Vector3 playerForward = transform.forward;
         float xAxis = Mathf.Atan2(playerForward.x, playerForward.z) * Mathf.Rad2Deg;
@@ -139,6 +143,38 @@ public class CameraController : Singleton<CameraController>
         
         // Mouse Axis의 좌 우 확인
         bool isLeftAxis = value < 0;
+
+        // offset 연산
+        offsetX += isLeftAxis ? -speed : speed;
+        
+        // 계산 된 Offset이 최대 범위를 벗어나는지 확인
+
+        bool isOverRange = Mathf.Abs(offsetX) > _maxPeekRange;
+
+        if (isOverRange)
+        {
+            // Offset을 최대 범위 값에 맞춤
+            offsetX = isLeftAxis ? -_maxPeekRange : _maxPeekRange;
+            _peekCameraComposer.m_TrackedObjectOffset.x = offsetX;
+            return;
+        }
+
+        // 계산 된 Offset을 카메라에 적용
+        _peekCameraComposer.m_TrackedObjectOffset.x = offsetX;
+    }
+
+    private void HandleGamepadAxisPeekEvent(Vector2 axis, bool isPressed)
+    {
+        if (!isPressed)
+        {
+            return;
+        }
+
+        float offsetX = _peekCameraComposer.m_TrackedObjectOffset.x;
+        float speed = _aimSpeed * Time.deltaTime;
+        
+        // Gamepad Axis의 좌 우 확인
+        bool isLeftAxis = axis.x < 0;
 
         // offset 연산
         offsetX += isLeftAxis ? -speed : speed;
