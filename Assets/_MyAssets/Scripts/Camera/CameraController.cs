@@ -28,13 +28,20 @@ public class CameraController : Singleton<CameraController>
     private Transform _peekPoint;
     
     [Header("Gamepad Camera 이동 속도")]
-    [SerializeField] private float _gamePadSpeed = 180.0f;
+    [SerializeField] private float _gamepadFreeLookSpeed = 180.0f;
 
-    private Vector2 _gamePadAxis;
+    [Header("Gamepad Camera Item Aim 이동 속도")]
+    [SerializeField] private float _gamepadAimSpeed = 90.0f;
+
+    private Vector2 _gamepadAxis;
+    private Vector2 _gamepadPeekAxis;
     private bool _isGamePadAxisPressed;
     
-    [Header("Peek Camera 이동 속도")]
-    [SerializeField] private float _aimSpeed = 1.0f;
+    [Header("Peek Camera 마우스 이동 속도")]
+    [SerializeField] private float _mousePeekAimSpeed = 1.0f;
+    [Header("Peek Camera 게임패드 이동 속도")]
+    [SerializeField] private float _gamepadPeekAimSpeed = 1.0f;
+    
 
     [Header("Peek Range")]
     [SerializeField] private float _maxPeekRange = 0.8f;
@@ -43,16 +50,23 @@ public class CameraController : Singleton<CameraController>
     [SerializeField] private float _heightOffset = 0.5f;
     [SerializeField] private float _routineDuration = 0.25f;
 
-    public void Awake()
+    private void Awake()
     {
         _mainCamera = Camera.main;
     }
 
-    public void OnEnable()
+    private void OnEnable()
     {
         _inputData.mouseAxisEvent += HandleMouseAxisEvent;
-        _inputData.gamePadAxisEvent += HandleCameraAxisByGamepadNormalEvent;
-        _inputData.peekGamePadAxisEvent += HandleGamepadAxisPeekEvent;
+        _inputData.gamepadAxisEvent += HandleCameraAxisByGamepadNormalEvent;
+        _inputData.peekGamepadAxisEvent += HandleGamepadAxisPeekEvent;
+    }
+
+    private void OnDisable()
+    {
+        _inputData.mouseAxisEvent -= HandleMouseAxisEvent;
+        _inputData.gamepadAxisEvent -= HandleCameraAxisByGamepadNormalEvent;
+        _inputData.peekGamepadAxisEvent -= HandleGamepadAxisPeekEvent;
     }
 
     public void Start()
@@ -98,12 +112,13 @@ public class CameraController : Singleton<CameraController>
     private void Update()
     {
         RotateCameraByGamepad();
+        RotatePeekCameraByGamepad();
     }
 
     private void HandleCameraAxisByGamepadNormalEvent(Vector2 axis, bool isPressed)
     {
         _isGamePadAxisPressed = isPressed;
-        _gamePadAxis = axis;
+        _gamepadAxis = axis;
     }
 
     private void RotateCameraByGamepad()
@@ -113,11 +128,11 @@ public class CameraController : Singleton<CameraController>
             return;
         }
 
-        FreeLookCamera.m_XAxis.Value += _gamePadAxis.x * _gamePadSpeed * Time.deltaTime;
-        FreeLookCamera.m_YAxis.Value += -_gamePadAxis.y * Time.deltaTime;
+        FreeLookCamera.m_XAxis.Value += _gamepadAxis.x * _gamepadFreeLookSpeed * Time.deltaTime;
+        FreeLookCamera.m_YAxis.Value += -_gamepadAxis.y * Time.deltaTime;
         
-        AimingCamera.m_XAxis.Value += _gamePadAxis.x * _gamePadSpeed * Time.deltaTime;
-        AimingCamera.m_YAxis.Value += -_gamePadAxis.y * Time.deltaTime;
+        AimingCamera.m_XAxis.Value += _gamepadAxis.x * _gamepadAimSpeed * Time.deltaTime;
+        AimingCamera.m_YAxis.Value += -(_gamepadAxis.y * 0.5f) * Time.deltaTime;
     }
 
     private void AlignCameraToPlayer()
@@ -138,41 +153,44 @@ public class CameraController : Singleton<CameraController>
             return;
         }
         
-        float offsetX = _peekCameraComposer.m_TrackedObjectOffset.x;
-        float speed = _aimSpeed * Time.deltaTime;
-        
-        // Mouse Axis의 좌 우 확인
-        bool isLeftAxis = value < 0;
+        CalculatePeekCameraOffsetX(false, value);
+    }
 
-        // offset 연산
+    private void HandleGamepadAxisPeekEvent(Vector2 axis, bool isPressed)
+    {
+        _isGamePadAxisPressed = isPressed;
+        _gamepadPeekAxis = axis;
+    }
+
+    private void RotatePeekCameraByGamepad()
+    {
+        if (!_isGamePadAxisPressed || BrainCamera.ActiveVirtualCamera.Name != PeekCamera.name)
+        {
+            return;
+        }
+
+        CalculatePeekCameraOffsetX(true);
+    }
+
+    private void CalculatePeekCameraOffsetX(bool isGamepad, float value = 0)
+    {
+        float offsetX = _peekCameraComposer.m_TrackedObjectOffset.x;
+        float speed = isGamepad ? _gamepadPeekAimSpeed * Time.deltaTime : _mousePeekAimSpeed * Time.deltaTime;
+
+        bool isLeftAxis = isGamepad ? _gamepadPeekAxis.x < 0 : value < 0;
+
         offsetX += isLeftAxis ? -speed : speed;
-        
-        // 계산 된 Offset이 최대 범위를 벗어나는지 확인
 
         bool isOverRange = Mathf.Abs(offsetX) > _maxPeekRange;
 
         if (isOverRange)
         {
-            // Offset을 최대 범위 값에 맞춤
             offsetX = isLeftAxis ? -_maxPeekRange : _maxPeekRange;
             _peekCameraComposer.m_TrackedObjectOffset.x = offsetX;
             return;
         }
 
-        // 계산 된 Offset을 카메라에 적용
         _peekCameraComposer.m_TrackedObjectOffset.x = offsetX;
-    }
-
-    private void HandleGamepadAxisPeekEvent(Vector2 axis, bool isPressed)
-    {
-        if (!isPressed)
-        {
-            return;
-        }
-        
-        // Axis.x 값 0 ~ 1 사이의 값으로 들어옴
-        // Speed를 적용해서 움직일 수 있도록
-
     }
 
     public void ToggleCrouchCameraHeight(bool isCrouch)

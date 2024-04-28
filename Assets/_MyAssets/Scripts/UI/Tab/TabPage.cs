@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class TabPage : MonoBehaviour
 {
+    [SerializeField] private GameObject _firstSelectedObject;
+    public GameObject FirstSelected => _firstSelectedObject;
+    
     public void OnHeaderClick()
     {
         gameObject.SetActive(true);

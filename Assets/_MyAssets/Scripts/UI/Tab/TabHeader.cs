@@ -37,7 +37,7 @@ public class TabHeader : MonoBehaviour
         Debug.Assert(_buttonText);
     }
 
-    private void OnClick()
+    public void OnClick()
     {
         _tabGroup.OnHeaderClick(this);
         MarkAsSelected();
