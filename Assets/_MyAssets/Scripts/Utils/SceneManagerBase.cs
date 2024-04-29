@@ -46,18 +46,12 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     {
         _inputData.pauseEvent += HandlePauseAction;
         _inputData.tabMoveEvent += HandleTabMoveAction;
-        _inputData.settingSubmitEvent += HandleSubmitAction;
-        
-        _inputData.backEvent += HandleBackAction;
     }
 
     protected void OnDisable()
     {
         _inputData.pauseEvent -= HandlePauseAction;
         _inputData.tabMoveEvent -= HandleTabMoveAction;
-        _inputData.settingSubmitEvent -= HandleSubmitAction;
-        
-        _inputData.backEvent -= HandleBackAction;
     }
 
     protected virtual void Start()
@@ -182,72 +176,13 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         }
 
         Transform selectedHeader = _settingCanvasTabGroup.GetChild(activeChildIndex);
-        
+        Transform selectedTabPage = _settingCanvasTabPages.GetChild(activeChildIndex);
+        TabPage selectedTabPageComponent = selectedTabPage.GetComponent<TabPage>();
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(selectedTabPageComponent.FirstSelected);
         selectedHeader.GetComponent<TabHeader>().OnClick();
     }
-
-    private void HandleSubmitAction()
-    {
-        int childCount = _settingCanvasTabGroup.childCount;
-        for (int i = 0; i < childCount; i++)
-        {
-            _settingCanvasTabGroup.GetChild(i).GetComponent<Button>().interactable = false;
-        }
-
-        foreach (Transform tab in _settingCanvasTabPages)
-        {
-            if (tab.gameObject.activeSelf)
-            {
-                TabPage tabPage = tab.GetComponent<TabPage>();
-                EventSystem.current.SetSelectedGameObject(null);
-                EventSystem.current.SetSelectedGameObject(tabPage.FirstSelected);
-                break;
-            }
-        }
-
-        _settingCanvas.transform.GetChild(_settingCanvas.transform.childCount - 1).gameObject.SetActive(false);
-        SetInputSystemUIInputModule();
-        PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.SettingDetailAction);
-    }
-
-    private void HandleBackAction()
-    {
-        GameObject lastChildObject = _settingCanvas.transform.GetChild(_settingCanvas.transform.childCount - 1).gameObject;
-        if (lastChildObject.name == "Blocker")
-        {
-            return;
-        }
-        
-        int childCount = _settingCanvasTabGroup.childCount;
-        for (int i = 0; i < childCount; i++)
-        {
-            _settingCanvasTabGroup.GetChild(i).GetComponent<Button>().interactable = true;
-        }
-
-        _settingCanvas.transform.GetChild(_settingCanvas.transform.childCount - 1).gameObject.SetActive(true);
-        UnsetInputSystemUIInputModule();
-        PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.SettingAction);
-    }
-
-    private void SetInputSystemUIInputModule()
-    {
-        InputSystemUIInputModule module = EventSystem.current.transform.GetComponent<InputSystemUIInputModule>();
-
-        InputAction moveAction = _actionAsset.FindAction("DetailMove");
-        InputAction submitAction = _actionAsset.FindAction("DetailSubmit");
-        
-        module.move = InputActionReference.Create(moveAction);
-        module.submit = InputActionReference.Create(submitAction);
-    }
-    
-    private void UnsetInputSystemUIInputModule()
-    {
-        InputSystemUIInputModule module = EventSystem.current.transform.GetComponent<InputSystemUIInputModule>();
-        module.move = null;
-        module.submit = null;
-    }
-
-    
     
     private void ToggleCursorVisible()
     {

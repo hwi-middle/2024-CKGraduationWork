@@ -6,19 +6,25 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "New Player Input", menuName = "Scriptable Object Asset/Player Input")]
-public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions, IA_Player.IHideActionActions, IA_Player.ISettingActionActions, IA_Player.ISettingDetailActionActions
+public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions, IA_Player.IHideActionActions, IA_Player.ISettingActionActions
 {
     public enum EInputMap
     {
         PlayerAction,
         HideAction,
         SettingAction,
-        SettingDetailAction
+    }
+    
+    public enum EInputMode
+    {
+        Keyboard,
+        Gamepad
     }
     
     private static IA_Player _input;
     private static List<InputActionMap> _inputActionMaps = new();
-    
+    public static EInputMode InputMode { get; private set; } = EInputMode.Keyboard;
+
     // Player Action Map
     public Action<Vector2> moveEvent;
     public Action runEvent;
@@ -45,10 +51,6 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
     
     // Setting Action Map
     public Action<float> tabMoveEvent;
-    public Action settingSubmitEvent;
-    
-    // Setting Detail Action Map
-    public Action backEvent;
     
     // 모든 Action Map에 적용
     public Action pauseEvent;
@@ -61,12 +63,10 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             _input.PlayerAction.SetCallbacks(this);
             _input.HideAction.SetCallbacks(this);
             _input.SettingAction.SetCallbacks(this);
-            _input.SettingDetailAction.SetCallbacks(this);
             
             _inputActionMaps.Add(_input.PlayerAction);
             _inputActionMaps.Add(_input.HideAction);
             _inputActionMaps.Add(_input.SettingAction);
-            _inputActionMaps.Add(_input.SettingDetailAction);
         }
 
         _input.PlayerAction.Enable();
@@ -80,6 +80,8 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
         }
     }
 
+    
+
     // 모든 Action Map에 적용
     public void OnPause(InputAction.CallbackContext context)
     {
@@ -88,12 +90,14 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
 
+        UpdateInputMode(context.action.activeControl.device);
         pauseEvent?.Invoke();
     }
 
     // Player Action Map
     public void OnMove(InputAction.CallbackContext context)
     {
+        UpdateInputMode(context.action.activeControl.device);
         moveEvent?.Invoke(context.ReadValue<Vector2>());
     }
 
@@ -108,6 +112,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
         
+        UpdateInputMode(context.action.activeControl.device);
         runEvent?.Invoke();
     }
 
@@ -118,6 +123,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
         
+        UpdateInputMode(context.action.activeControl.device);
         wireEvent?.Invoke();
     }
 
@@ -128,6 +134,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
         
+        UpdateInputMode(context.action.activeControl.device);
         assassinateEvent?.Invoke();
     }
 
@@ -138,6 +145,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
         
+        UpdateInputMode(context.action.activeControl.device);
         crouchEvent?.Invoke();
     }
 
@@ -154,6 +162,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
         
+        UpdateInputMode(context.action.activeControl.device);
         aimingEvent?.Invoke();
     }
 
@@ -164,6 +173,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
 
+        UpdateInputMode(context.action.activeControl.device);
         shootEvent?.Invoke();
     }
 
@@ -174,6 +184,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
         
+        UpdateInputMode(context.action.activeControl.device);
         interactionEvent?.Invoke();
     }
 
@@ -184,6 +195,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
         
+        UpdateInputMode(context.action.activeControl.device);
         clairvoyanceEvent?.Invoke();
     }
 
@@ -198,6 +210,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
 
+        UpdateInputMode(context.action.activeControl.device);
         gamepadAxisEvent?.Invoke(axis, true);
     }
 
@@ -215,6 +228,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
         
+        UpdateInputMode(context.action.activeControl.device);
         peekEvent?.Invoke();
     }
 
@@ -225,6 +239,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
 
+        UpdateInputMode(context.action.activeControl.device);
         hideExitEvent?.Invoke();
     }
 
@@ -237,6 +252,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
         
+        UpdateInputMode(context.action.activeControl.device);
         mouseAxisEvent?.Invoke(xAxis);
     }
 
@@ -256,19 +272,39 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
 
+        UpdateInputMode(context.action.activeControl.device);
         peekGamepadAxisEvent?.Invoke(axis, true);
     }
     
     // Setting Action Map
+    #region Input System UI Input Module 영역
+    
+    public void OnMousePoint(InputAction.CallbackContext context)
+    {
+        UpdateInputMode(context.action.activeControl.device);
+    }
+
     public void OnSubmit(InputAction.CallbackContext context)
     {
-        if (!context.started)
-        {
-            return;
-        }
-        
-        settingSubmitEvent?.Invoke();
+        UpdateInputMode(context.action.activeControl.device);
     }
+    
+    public void OnSettingMove(InputAction.CallbackContext context)
+    {
+        UpdateInputMode(context.action.activeControl.device);
+    }
+    
+    public void OnSettingLeftClick(InputAction.CallbackContext context)
+    {
+        UpdateInputMode(context.action.activeControl.device);
+    }
+
+    public void OnSettingScroll(InputAction.CallbackContext context)
+    {
+        UpdateInputMode(context.action.activeControl.device);
+    }
+
+    #endregion 
     
     public void OnTabMove(InputAction.CallbackContext context)
     {
@@ -277,31 +313,19 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             return;
         }
         
+        UpdateInputMode(context.action.activeControl.device);
         tabMoveEvent?.Invoke(context.ReadValue<float>());
     }
-    
-    // Setting Detail Action Map
-    
-    #region Input System UI Input Module 영역
 
-    public void OnDetailSubmit(InputAction.CallbackContext context)
+    private void UpdateInputMode(InputDevice device)
     {
-    }
-    
-    public void OnDetailMove(InputAction.CallbackContext context)
-    {
-    }
-    
-    #endregion 
-    
-    public void OnBack(InputAction.CallbackContext context)
-    {
-        if (!context.started)
+        if (device.name is "Keyboard" or "Mouse")
         {
+            InputMode = EInputMode.Keyboard;
             return;
         }
-        
-        backEvent?.Invoke();
+
+        InputMode = EInputMode.Gamepad;
     }
 
     public static void ChangeInputMap(EInputMap map)

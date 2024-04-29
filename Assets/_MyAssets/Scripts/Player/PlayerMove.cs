@@ -304,6 +304,7 @@ public class PlayerMove : Singleton<PlayerMove>
         if (_inputDirection.sqrMagnitude == 0)
         {
             RemovePlayerState(EPlayerState.Walk);
+            RemovePlayerState(EPlayerState.Run);
             return;
         }
 

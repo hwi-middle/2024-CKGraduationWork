@@ -66,15 +66,18 @@ MonoBehaviour:
   m_XRTrackingOrigin: {fileID: 0}
   m_ActionsAsset: {fileID: -944628639613478452, guid: fc5fe568ab7bf0347a4dbdf0db6b99c5,
     type: 3}
-  m_PointAction: {fileID: 0}
-  m_MoveAction: {fileID: 8752755269960117422, guid: fc5fe568ab7bf0347a4dbdf0db6b99c5,
+  m_PointAction: {fileID: 6477016351381842756, guid: fc5fe568ab7bf0347a4dbdf0db6b99c5,
     type: 3}
-  m_SubmitAction: {fileID: 0}
+  m_MoveAction: {fileID: -8651481823350614064, guid: fc5fe568ab7bf0347a4dbdf0db6b99c5,
+    type: 3}
+  m_SubmitAction: {fileID: -5422586956004868700, guid: fc5fe568ab7bf0347a4dbdf0db6b99c5,
+    type: 3}
   m_CancelAction: {fileID: 0}
-  m_LeftClickAction: {fileID: 0}
+  m_LeftClickAction: {fileID: 5308468183245047116, guid: fc5fe568ab7bf0347a4dbdf0db6b99c5,
+    type: 3}
   m_MiddleClickAction: {fileID: 0}
   m_RightClickAction: {fileID: 0}
-  m_ScrollWheelAction: {fileID: -728226491484806776, guid: fc5fe568ab7bf0347a4dbdf0db6b99c5,
+  m_ScrollWheelAction: {fileID: 452952706751978813, guid: fc5fe568ab7bf0347a4dbdf0db6b99c5,
     type: 3}
   m_TrackedDevicePositionAction: {fileID: 0}
   m_TrackedDeviceOrientationAction: {fileID: 0}
