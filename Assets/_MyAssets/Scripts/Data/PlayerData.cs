@@ -14,6 +14,8 @@ public class PlayerData : ScriptableObject
     [Tooltip("달리기 속도")] public float runSpeed;
 
     [Tooltip("앉기 속도")] public float crouchSpeed;
+    
+    [Tooltip("플레이어 회전 속도")] public float rotateSpeed;
 
     [Tooltip("점프 높이")] public float jumpHeight;
     [Tooltip("y 이동 속도 (일반 이동 속도와 분리하기 위함)")] public float yMultiplier;

@@ -189,7 +189,8 @@ public class PlayerMove : Singleton<PlayerMove>
         Quaternion cameraRotation = _camera.transform.localRotation;
         cameraRotation.x = 0;
         cameraRotation.z = 0;
-        transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, 1.0f);
+        transform.rotation =
+            Quaternion.Slerp(transform.rotation, cameraRotation, _playerData.rotateSpeed * Time.deltaTime);
     }
 
     private void MovePlayer()
@@ -625,7 +626,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void HandleRunAction()
     {
-        if (CameraController.Instance.IsOnRoutine)
+        if (CameraController.Instance.IsOnChangeHeightRoutine)
         {
             return;
         }
@@ -647,7 +648,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void HandleCrouchAction()
     {
-        if (!IsGrounded || CheckPlayerState(EPlayerState.Run) || CameraController.Instance.IsOnRoutine)
+        if (!IsGrounded || CheckPlayerState(EPlayerState.Run) || CameraController.Instance.IsOnChangeHeightRoutine)
         {
             return;
         }
