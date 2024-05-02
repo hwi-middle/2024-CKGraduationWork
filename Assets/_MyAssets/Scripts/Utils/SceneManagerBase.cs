@@ -17,7 +17,6 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     public bool IsDebugMode => _isDebugMode;
     
     [SerializeField] private PlayerInputData _inputData;
-    [SerializeField] private InputActionAsset _actionAsset;
     [SerializeField] private bool _cursorLock;
     private SceneFadeManager _fadeManager;
     private GameObject _settingCanvas;
@@ -161,19 +160,8 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         }
 
         int inputValue = (int)value;
-
-        switch (inputValue)
-        {
-            case -1:
-                activeChildIndex = activeChildIndex != 0 ? activeChildIndex - 1 : 0;
-                break;
-            case 1:
-                activeChildIndex = activeChildIndex != childCount - 1 ? activeChildIndex + 1 : childCount - 1;
-                break;
-            default:
-                Debug.Assert(false);
-                break;
-        }
+        Debug.Assert(inputValue is -1 or 1);
+        activeChildIndex = Mathf.Clamp(activeChildIndex + inputValue, 0, childCount - 1);
 
         Transform selectedHeader = _settingCanvasTabGroup.GetChild(activeChildIndex);
         Transform selectedTabPage = _settingCanvasTabPages.GetChild(activeChildIndex);
