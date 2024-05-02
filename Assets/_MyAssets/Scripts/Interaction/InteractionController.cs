@@ -7,7 +7,8 @@ using UnityEngine;
 public enum EInteractionType
 {
     Item,
-    HideableObject
+    HideableObject,
+    Overstep
 }
 
 public class InteractionObject
@@ -93,6 +94,11 @@ public class InteractionController : Singleton<InteractionController>
                 continue;
             }
 
+            if (IsAnyObstaclesExist(data, out hit))
+            {
+                return;
+            }
+
             if (!IsValidInteraction(data.Value.type, hit))
             {
                 return;
@@ -157,6 +163,8 @@ public class InteractionController : Singleton<InteractionController>
                 return false;   
             case EInteractionType.HideableObject when !HideActionController.Instance.IsInFrontOfHideableObject(hit.transform):
                 return false;
+            case EInteractionType.Overstep when PlayerMove.Instance.CheckPlayerState(EPlayerState.Crouch):
+                return false;
             default:
                 return true;
         }
@@ -195,6 +203,12 @@ public class InteractionController : Singleton<InteractionController>
         Vector3 screenPosition = _mainCamera.WorldToScreenPoint(nearestObjectPosition);
         const float OFFSET = 50.0f;
         screenPosition.x += OFFSET;
+
+        if (NearestObject.type is EInteractionType.Overstep)
+        {
+            screenPosition.y += OFFSET * 6.0f;
+        }
+        
         _interactionUIRectTransform.position = screenPosition;
     }
 
@@ -216,6 +230,12 @@ public class InteractionController : Singleton<InteractionController>
             return;
         }
 
+        if (NearestObject.type is EInteractionType.Overstep)
+        {
+            NearestObject.obj.GetComponentInParent<InteractionObjectHandler>().Interaction();
+            return;
+        }
+        
         NearestObject.obj.GetComponentInChildren<InteractionObjectHandler>().Interaction();
     }
 }

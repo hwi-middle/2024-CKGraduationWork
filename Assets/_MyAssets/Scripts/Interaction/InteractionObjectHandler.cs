@@ -6,29 +6,54 @@ using UnityEngine;
 public class InteractionObjectHandler : MonoBehaviour
 {
     [SerializeField] private InteractionData _data;
+    private readonly Vector3 COLLIDER_ADDITIVE_CENTER = new (0, 0.5f, 0);
     
     private void Awake()
     {
-        GetComponent<SphereCollider>().radius = _data.detectRadius;
+        SphereCollider coll = GetComponent<SphereCollider>();
+        coll.radius = _data.detectRadius;
+        if (_data.type is not EInteractionType.Overstep)
+        {
+            coll.center = COLLIDER_ADDITIVE_CENTER;
+        }
     }
 
     public void Interaction()
     {
-        if (_data.type == EInteractionType.Item)
+        Transform parentTransform = transform.parent;
+
+        switch (_data.type)
         {
-            InteractionController.Instance.RemoveInteractionObject(transform.parent.gameObject);
-            Destroy(transform.parent.gameObject);
-            ItemThrowHandler.Instance.GetItem();
-            return;
+            case EInteractionType.Item:
+                InteractionController.Instance.RemoveInteractionObject(parentTransform.gameObject);
+                Destroy(parentTransform.gameObject);
+                ItemThrowHandler.Instance.GetItem();
+                return;
+            
+            case EInteractionType.HideableObject:
+                HideActionController.Instance.HideAction(parentTransform);
+                return;
+            
+            case EInteractionType.Overstep:
+                Transform childTransform = transform.GetChild(0);
+                OverstepActionController.Instance.OverstepAction(childTransform, _data.detectRadius);
+                return;
+            default:
+                Debug.Assert(false);
+                return;
         }
-        
-        HideActionController.Instance.HideAction(transform.parent);
     }
     
     private void OnTriggerEnter(Collider other)
     {
         if (!other.transform.CompareTag("Player"))
         {
+            return;
+        }
+
+        if (_data.type is EInteractionType.Overstep)
+        {
+            InteractionController.Instance.AddInteractionObject(_data.type, transform.GetChild(0).gameObject);
             return;
         }
 
@@ -42,6 +67,12 @@ public class InteractionObjectHandler : MonoBehaviour
             return;
         }
 
+        if (_data.type is EInteractionType.Overstep)
+        {
+            InteractionController.Instance.RemoveInteractionObject(transform.GetChild(0).gameObject);
+            return;
+        }
+        
         InteractionController.Instance.RemoveInteractionObject(transform.parent.gameObject);
     }
 }
