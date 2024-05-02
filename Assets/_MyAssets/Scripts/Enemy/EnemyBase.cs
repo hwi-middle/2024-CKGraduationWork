@@ -110,46 +110,44 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Debug.Assert(false);
         return -1f;
     }
-
-    private Vector3 CalculateDirectionVector(float angle)
-    {
-        return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
-    }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        Handles.color = Color.gray;
-        for (int i = 0; i < _aiData.perceptionRanges.Count - 1; i++) // 마지막 와이어는 따로 그림
-        {
-            Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, 360,
-                _aiData.perceptionRanges[i].rangePercent * _aiData.perceptionDistance / 100);
-        }
-
-        Handles.DrawWireArc(
-            transform.position,
-            Vector3.up,
-            transform.rotation * CalculateDirectionVector(_aiData.perceptionAngle / 2),
-            360 - _aiData.perceptionAngle,
-            _aiData.perceptionDistance);
-
-        Handles.color = _foundPlayer == null ? Color.white : Color.red;
-        Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, -_aiData.perceptionAngle / 2, _aiData.perceptionDistance, 2.0f);
-        Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, _aiData.perceptionAngle / 2, _aiData.perceptionDistance, 2.0f);
-        Handles.DrawLine(transform.position,
-            transform.position + transform.rotation * CalculateDirectionVector(-_aiData.perceptionAngle / 2) * _aiData.perceptionDistance, 2.0f);
-        Handles.DrawLine(transform.position,
-            transform.position + transform.rotation * CalculateDirectionVector(_aiData.perceptionAngle / 2) * _aiData.perceptionDistance, 2.0f);
-
-        if (_foundPlayer != null)
-        {
-            Handles.DrawLine(transform.position, _foundPlayer.position, 2.0f);
-        }
-
-        Handles.color = Color.green;
-        Handles.DrawWireArc(Application.isPlaying ? _moveRangeCenterPos : transform.position, Vector3.up, transform.forward, 360, _aiData.moveRange);
-    }
-#endif
+// #if UNITY_EDITOR
+//    private Vector3 CalculateDirectionVector(float angle)
+//    {
+//        return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
+//    }
+//     private void OnDrawGizmos()
+//     {
+//         Handles.color = Color.gray;
+//         for (int i = 0; i < _aiData.perceptionRanges.Count - 1; i++) // 마지막 와이어는 따로 그림
+//         {
+//             Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, 360,
+//                 _aiData.perceptionRanges[i].rangePercent * _aiData.perceptionDistance / 100);
+//         }
+//
+//         Handles.DrawWireArc(
+//             transform.position,
+//             Vector3.up,
+//             transform.rotation * CalculateDirectionVector(_aiData.perceptionAngle / 2),
+//             360 - _aiData.perceptionAngle,
+//             _aiData.perceptionDistance);
+//
+//         Handles.color = _foundPlayer == null ? Color.white : Color.red;
+//         Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, -_aiData.perceptionAngle / 2, _aiData.perceptionDistance, 2.0f);
+//         Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, _aiData.perceptionAngle / 2, _aiData.perceptionDistance, 2.0f);
+//         Handles.DrawLine(transform.position,
+//             transform.position + transform.rotation * CalculateDirectionVector(-_aiData.perceptionAngle / 2) * _aiData.perceptionDistance, 2.0f);
+//         Handles.DrawLine(transform.position,
+//             transform.position + transform.rotation * CalculateDirectionVector(_aiData.perceptionAngle / 2) * _aiData.perceptionDistance, 2.0f);
+//
+//         if (_foundPlayer != null)
+//         {
+//             Handles.DrawLine(transform.position, _foundPlayer.position, 2.0f);
+//         }
+//
+//         Handles.color = Color.green;
+//         Handles.DrawWireArc(Application.isPlaying ? _moveRangeCenterPos : transform.position, Vector3.up, transform.forward, 360, _aiData.moveRange);
+//     }
+// #endif
 
     public bool IsArrivedToTarget(Vector3 target)
     {
