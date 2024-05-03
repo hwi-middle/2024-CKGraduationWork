@@ -13,10 +13,12 @@ public class CheckPlayerOnSight : DecoratorNode
 
     protected override void OnStart()
     {
+        SSPerceptionGaugeUiHandler.Instance.RegisterEnemy(agent);
     }
 
     protected override void OnStop()
     {
+        SSPerceptionGaugeUiHandler.Instance.UpdateEnemyPerceptionGauge(agent);
     }
 
     protected override void OnAbort()
@@ -30,6 +32,7 @@ public class CheckPlayerOnSight : DecoratorNode
             return ENodeState.Failure;
         }
 
+        
         child.Update();
         return ENodeState.Success;
     }

@@ -9,15 +9,6 @@ EditorBuildSettings:
     path: Assets/_MyAssets/Scenes/MainMenu.unity
     guid: c3a0d83db3470f841b680f165d8dea31
   - enabled: 1
-    path: Assets/_MyAssets/Scenes/DemoPlay.unity
-    guid: eb8e0e61b3e9187428935d3637b03f35
-  - enabled: 1
-    path: Assets/_MyAssets/IngameResources/Background/ALL2.unity
-    guid: 667fd2bccb2be734d9c93b1f713027a7
-  - enabled: 1
-    path: Assets/_MyAssets/Scenes/Workspace/Respawn/RespawnDesigned.unity
-    guid: baf08cc086368144da8714ab789f186c
-  - enabled: 1
-    path: Assets/_MyAssets/Scenes/Workspace/Respawn/Respawn2.unity
-    guid: 7099d2a7f703fcd4a9f9a36e6157689c
+    path: Assets/_MyAssets/Scenes/Workspace/Environment/LastScene.unity
+    guid: 43144c37018f2624dad95d00cd7cc69a
   m_configObjects: {}

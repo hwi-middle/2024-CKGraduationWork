@@ -16,6 +16,7 @@ MonoBehaviour:
   walkSpeed: 2.9
   runSpeed: 6
   crouchSpeed: 1.8
+  rotateSpeed: 5
   jumpHeight: 4.5
   yMultiplier: 4
   minWireDistance: 7
