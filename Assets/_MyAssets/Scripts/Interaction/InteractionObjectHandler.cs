@@ -7,12 +7,12 @@ public class InteractionObjectHandler : MonoBehaviour
 {
     [SerializeField] private InteractionData _data;
     private readonly Vector3 COLLIDER_ADDITIVE_CENTER = new (0, 0.5f, 0);
-    
+
     private void Awake()
     {
         SphereCollider coll = GetComponent<SphereCollider>();
         coll.radius = _data.detectRadius;
-        if (_data.type is not EInteractionType.Overstep)
+        if (_data.type is EInteractionType.Overstep)
         {
             coll.center = COLLIDER_ADDITIVE_CENTER;
         }
