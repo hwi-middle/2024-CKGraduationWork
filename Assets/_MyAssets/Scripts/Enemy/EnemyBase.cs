@@ -23,6 +23,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public BehaviorTree Tree => _tree;
     [SerializeField] private Canvas _canvas;
 
+    [SerializeField] private PerceptionBound _centerSight;
+    public PerceptionBound CenterSight => _centerSight;
+    [SerializeField] private PerceptionBound _sideSight;
+    public PerceptionBound SideSight => _sideSight;
+    
     private Animator _animator;
 
     // "AK" stands for Animator Key
