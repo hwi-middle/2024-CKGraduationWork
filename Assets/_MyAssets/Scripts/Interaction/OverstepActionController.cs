@@ -29,16 +29,18 @@ public class OverstepActionController : Singleton<OverstepActionController>
             return;
         }
 
-        Vector3 hitPoint = hit.point;
+        Vector3 hitTransformPosition = hit.transform.position;
+        hitTransformPosition.y = hit.point.y;
+        Vector3 direction = -hit.normal;
         Collider hitCollider = hit.transform.GetComponent<Collider>();
         _yTopPoint = hitCollider.bounds.max.y;
 
-        _firstTargetPosition = playerTransform.forward * (distance / 2.0f);
-        _firstTargetPosition += hitPoint;
+        _firstTargetPosition = distance * 0.5f * direction;
+        _firstTargetPosition += hitTransformPosition;
         _firstTargetPosition.y += _yTopPoint;
-        
-        _secondTargetPosition = playerTransform.forward * distance;
-        _secondTargetPosition += hitPoint;
+
+        _secondTargetPosition = distance * direction;
+        _secondTargetPosition += hitTransformPosition;
         
         _overstepActionRoutine = OverstepActionRoutine();
         StartCoroutine(_overstepActionRoutine);
@@ -53,8 +55,10 @@ public class OverstepActionController : Singleton<OverstepActionController>
         // 최고점으로 이동
         while (t <= _data.overstepActionDuration / 2)
         {
+            // 시간 절반 이전
+            float alpha = t / (_data.overstepActionDuration * 0.5f);
             transform.position =
-                Vector3.Lerp(_startPosition, _firstTargetPosition, t / (_data.overstepActionDuration / 2));
+                Vector3.Lerp(_startPosition, _firstTargetPosition, alpha);
             yield return null;
             t += Time.deltaTime;
         }
@@ -62,8 +66,10 @@ public class OverstepActionController : Singleton<OverstepActionController>
         // 최고점에서 바닥으로 이동
         while (t <= _data.overstepActionDuration)
         {
-            transform.position = 
-                Vector3.Lerp(_firstTargetPosition, _secondTargetPosition, (t - _data.overstepActionDuration / 2) / (_data.overstepActionDuration / 2));
+            // 시간 절반 이후
+            float alpha = (t - _data.overstepActionDuration * 0.5f) / (_data.overstepActionDuration * 0.5f);
+            transform.position =
+                Vector3.Lerp(_firstTargetPosition, _secondTargetPosition, alpha);
             yield return null;
             t += Time.deltaTime;
         }
