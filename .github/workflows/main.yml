@@ -93,7 +93,7 @@ jobs:
           path: build/StandaloneWindows64
 
   buildWebGL:
-    needs: testJob
+    needs: buildWindows
     name: 🌐WebGL
     runs-on: ubuntu-latest
     strategy:
