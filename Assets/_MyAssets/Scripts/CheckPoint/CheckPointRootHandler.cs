@@ -18,6 +18,8 @@ public class CheckPointRootHandler : Singleton<CheckPointRootHandler>
     
     private bool IsSameScene => PlayerPrefs.GetString(_lastSceneName).Equals(SceneManager.GetActiveScene().name);
     
+    public bool IsCheckPointExist => PlayerPrefs.HasKey(_lastCheckPoint);
+    
     public Vector3 LastCheckPoint
     {
         get

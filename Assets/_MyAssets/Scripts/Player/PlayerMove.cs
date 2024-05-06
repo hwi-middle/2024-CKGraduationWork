@@ -12,11 +12,11 @@ public enum EPlayerState
     Walk = 1 << 2,
     Run = 1 << 3,
     Crouch = 1 << 4,
-    Hide = 1 << 7,
-    Peek = 1 << 8,
-    Alive = 1 << 9,
-    Dead = 1 << 10,
-    WireAction = 1 << 11,
+    Hide = 1 << 5,
+    Peek = 1 << 6,
+    Alive = 1 << 7,
+    Dead = 1 << 8,
+    WireAction = 1 << 9
 }
 
 public class PlayerMove : Singleton<PlayerMove>

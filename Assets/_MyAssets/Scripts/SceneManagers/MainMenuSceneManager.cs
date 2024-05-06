@@ -19,17 +19,36 @@ public class MainMenuSceneManager : SceneManagerBase
         base.Update();
     }
 
-    public void OnStartButton()
+    public void OnNewGameButton()
     {
-        LoadSceneWithLoadingUI("LastScene");
+        // First Game Scene Start
+        LoadSceneWithLoadingUI("PopupScene");
+    }
+
+    public void OnContinueButton()
+    {
+        // Saved Game Scene Start
+        LoadSceneWithLoadingUI("PopupScene");
     }
 
     public void OnExitButton()
     {
+        PopupHandler.Instance.ShowPopup("MenuQuit");
+        PopupHandler.Instance.SubscribeButtonAction(HandlePopupButtonAction);
+    }
+    
+    
+    private void HandlePopupButtonAction(bool isPositive)
+    {
+        if (isPositive)
+        {
 #if UNITY_EDITOR
-        EditorApplication.isPlaying = false;
+            EditorApplication.isPlaying = false;
 #else
-        Application.Quit(1);
+            Application.Quit(1);
 #endif
+        }
+        
+        PopupHandler.Instance.UnsubscribeButtonAction(HandlePopupButtonAction);
     }
 }

@@ -8,13 +8,19 @@ using Image = UnityEngine.UI.Image;
 
 public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 {
-    [SerializeField] private bool _isDebugMode;
-    public bool IsDebugMode => _isDebugMode;
-    
     [SerializeField] private PlayerInputData _inputData;
+    
+    [SerializeField] private bool _isDebugMode;
+    [SerializeField] private bool _isMainMenu;
     [SerializeField] private bool _cursorLock;
+    
+    public bool IsDebugMode => _isDebugMode;
+    public bool IsMainMenu => _isMainMenu;
+    
     private SceneFadeManager _fadeManager;
+    
     private GameObject _settingCanvas;
+    private GameObject _pauseCanvas;
 
     private bool _isPaused;
 
@@ -31,7 +37,6 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 #endif
         
         GetSettingsValueAndApply();
-
     }
     
     protected virtual void OnEnable()
@@ -52,6 +57,10 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
         _settingCanvas = Instantiate(Resources.Load<GameObject>("SettingCanvas"));
         _settingCanvas.SetActive(false);
+
+        _pauseCanvas = Instantiate(Resources.Load<GameObject>("PauseCanvas"));
+        _pauseCanvas.SetActive(false);
+        
         _isPaused = false;
     }
 
@@ -86,27 +95,76 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     private void HandlePauseAction()
     {
         Debug.Assert(_settingCanvas != null, "_settingCanvas != null");
+        Debug.Assert(_pauseCanvas != null, "_popupCanvas != null");
         
-        if (IsFading)
+        if (IsFading || PopupHandler.Instance.IsPopupActive)
+        {
+            return;
+        }
+
+        if (_settingCanvas.activeSelf)
+        {
+            ToggleSettingCanvas();
+            return;
+        }
+        TogglePauseCanvas();
+    }
+
+    private void TogglePauseCanvas()
+    {
+        _isPaused = !_isPaused;
+        
+        _pauseCanvas.SetActive(_isPaused);
+        ToggleCursorVisible();
+        Time.timeScale = _isPaused ? 0.0f : 1.0f;
+    }
+
+    public void OnResumeButtonClick()
+    {
+        TogglePauseCanvas();
+    }
+
+    public void OnOptionsButtonClick()
+    {
+        ToggleSettingCanvas();
+    }
+
+    public void OnQuitButtonClick()
+    {
+        if (!PopupHandler.Instance.ShowPopup("Quit"))
         {
             return;
         }
         
-        ToggleSettingCanvas();
+        PopupHandler.Instance.SubscribeButtonAction(HandlePopupButtonAction);
+    }
+    
+    private void HandlePopupButtonAction(bool isPositive)
+    {
+        if (isPositive)
+        {
+            TogglePauseCanvas();
+            LoadSceneWithLoadingUI("MainMenu");
+        }
+        
+        PopupHandler.Instance.UnsubscribeButtonAction(HandlePopupButtonAction);
     }
     
     private void ToggleSettingCanvas()
     {
-        _isPaused = !_isPaused;
-        
-        _settingCanvas.SetActive(_isPaused);
-        ToggleCursorVisible();
-        Time.timeScale = _isPaused ? 0.0f : 1.0f;
+        _settingCanvas.SetActive(!_settingCanvas.activeSelf);
     }
 
     private void ToggleCursorVisible()
     {
         if (_settingCanvas.activeSelf)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            return;
+        }
+
+        if (_pauseCanvas.activeSelf)
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
