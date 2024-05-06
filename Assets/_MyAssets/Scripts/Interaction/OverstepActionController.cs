@@ -49,14 +49,15 @@ public class OverstepActionController : Singleton<OverstepActionController>
     private IEnumerator OverstepActionRoutine()
     {
         float t = 0;
+        float halfDuration = _data.overstepActionDuration * 0.5f;
         _startPosition = transform.position;
         PlayerMove.Instance.AddPlayerState(EPlayerState.Overstep);
         
         // 최고점으로 이동
-        while (t <= _data.overstepActionDuration / 2)
+        while (t <= halfDuration)
         {
             // 시간 절반 이전
-            float alpha = t / (_data.overstepActionDuration * 0.5f);
+            float alpha = t / halfDuration;
             transform.position =
                 Vector3.Lerp(_startPosition, _firstTargetPosition, alpha);
             yield return null;
@@ -67,7 +68,7 @@ public class OverstepActionController : Singleton<OverstepActionController>
         while (t <= _data.overstepActionDuration)
         {
             // 시간 절반 이후
-            float alpha = (t - _data.overstepActionDuration * 0.5f) / (_data.overstepActionDuration * 0.5f);
+            float alpha = (t - halfDuration) / halfDuration;
             transform.position =
                 Vector3.Lerp(_firstTargetPosition, _secondTargetPosition, alpha);
             yield return null;

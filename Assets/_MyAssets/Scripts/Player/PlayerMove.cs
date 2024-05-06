@@ -51,7 +51,6 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private static readonly Vector3 CAMERA_CENTER_POINT = new(0.5f, 0.5f, 0.0f);
 
-    // Enum Count의 None = 0 은 상수 값이 아니므로 제외됨
     private readonly int _stateCount = Enum.GetValues(typeof(EPlayerState)).Length;
 
     private bool IsOnWire => _wireActionRoutine != null;
