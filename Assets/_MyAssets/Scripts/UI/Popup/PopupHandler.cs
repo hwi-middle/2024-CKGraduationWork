@@ -50,14 +50,28 @@ public class PopupHandler : Singleton<PopupHandler>
         _popupPrefab.SetActive(false);
     }
 
-    public void FloatInfoPopup(Action<bool> action, string title, string description, string positive,
-        string negative = "")
+    /// <summary>
+    /// 버튼이 하나만 있는 팝업을 띄웁니다. 알림 메시지를 띄울 때 사용 합니다.
+    /// </summary>
+    /// <param name="action">User의 버튼 입력 정보를 받을 Handler</param>
+    /// <param name="title">팝업의 타이틀</param>
+    /// <param name="description">팝업의 내용</param>
+    /// <param name="positive">확인 버튼</param>
+    public void FloatInfoPopup(Action<bool> action, string title, string description, string positive)
     {
         buttonAction += action;
         _currentType = EPopupType.Info;
-        SetPopupText(title, description, positive, negative);
+        SetPopupText(title, description, positive, "");
     }
 
+    /// <summary>
+    /// 버튼이 두 개인 팝업을 띄웁니다. User의 선택이 필요 할 경우 사용합니다.
+    /// </summary>
+    /// <param name="action">User의 버튼 입력 정보를 받을 Handler</param>
+    /// <param name="title">팝업의 타이틀</param>
+    /// <param name="description">팝업의 내용</param>
+    /// <param name="positive">확인 버튼</param>
+    /// <param name="negative">취소 버튼</param>
     public void FloatConfirmPopup(Action<bool> action, string title, string description, string positive,
         string negative)
     {
@@ -66,20 +80,34 @@ public class PopupHandler : Singleton<PopupHandler>
         SetPopupText(title, description, positive, negative);
     }
 
+    /// <summary>
+    /// 경고 문구를 띄우는 팝업입니다. User의 선택을 받을 수도 안받을 수도 있습니다.
+    /// </summary>
+    /// <param name="action">User의 버튼 입력 정보를 받을 Handler</param>
+    /// <param name="title">팝업의 타이틀</param>
+    /// <param name="description">팝업의 내용</param>
+    /// <param name="positive">확인 버튼</param>
+    /// <param name="negative">취소 버튼 (Default = "")</param>
     public void FloatWarningPopup(Action<bool> action, string title, string description, string positive,
-        string negative)
+        string negative="")
     {
         buttonAction += action;
         _currentType = EPopupType.Warning;
         SetPopupText(title, description, positive, negative);
     }
 
-    public void FloatErrorPopup(Action<bool> action, string title, string description, string positive,
-        string negative = "")
+    /// <summary>
+    /// 에러 문구를 띄우는 팝업입니다. 확인 버튼 입력 시 게임을 강제로 종료합니다.
+    /// </summary>
+    /// <param name="action">User의 버튼 입력 정보를 받을 Handler</param>
+    /// <param name="title">팝업의 타이틀</param>
+    /// <param name="description">팝업의 내용</param>
+    /// <param name="positive">확인 버튼</param>
+    public void FloatErrorPopup(string title, string description, string positive)
     {
-        buttonAction += action;
+        buttonAction += HandleErrorPopup;
         _currentType = EPopupType.Error;
-        SetPopupText(title, description, positive, negative);
+        SetPopupText(title, description, positive, "");
     }
 
     private void SetPopupText(string title, string description, string positive, string negative)
@@ -119,5 +147,14 @@ public class PopupHandler : Singleton<PopupHandler>
         buttonAction?.Invoke(state);
         buttonAction = null;
         _popupPrefab.SetActive(false);
+    }
+    
+    private void HandleErrorPopup(bool isPositive)
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit(0);
+#endif
     }
 }

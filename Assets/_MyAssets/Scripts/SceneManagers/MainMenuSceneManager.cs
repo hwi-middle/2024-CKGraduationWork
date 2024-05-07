@@ -17,6 +17,14 @@ public class MainMenuSceneManager : SceneManagerBase
     protected override void Update()
     {
         base.Update();
+
+        if (IsDebugMode)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+            {
+                PopupHandler.Instance.FloatErrorPopup("Test Error Title", "Test Error Popup으로 게임을 종료합니다.", "게임 종료");
+            }
+        }
     }
 
     public void OnNewGameButton()
