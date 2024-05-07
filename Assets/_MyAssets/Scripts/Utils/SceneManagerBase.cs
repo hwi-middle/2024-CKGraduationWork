@@ -4,27 +4,28 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Cursor = UnityEngine.Cursor;
 using Image = UnityEngine.UI.Image;
 
 public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 {
     [SerializeField] private PlayerInputData _inputData;
-    [SerializeField] private PopupData _popupData;
     
     [SerializeField] private bool _isDebugMode;
     [SerializeField] private bool _isMainMenu;
-    [SerializeField] private bool _cursorLock;
-    
-    public PopupData PopupData => _popupData;
-    
+    [SerializeField] private bool _isNeedCursorLock;
+
+    public bool IsNeedCursorLock => _isNeedCursorLock;
     public bool IsDebugMode => _isDebugMode;
     public bool IsMainMenu => _isMainMenu;
+    
     
     private SceneFadeManager _fadeManager;
     
     private GameObject _settingCanvas;
     private GameObject _pauseCanvas;
+
+    public bool IsOnSettingCanvas => _settingCanvas.activeSelf;
+    public bool IsOnPauseCanvas => _pauseCanvas.activeSelf;
 
     private bool _isPaused;
 
@@ -42,6 +43,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
         GetSettingsValueAndApply();
         AllocatePopupHandler();
+        AllocateCursorVisibleUpdater();
     }
 
     private void AllocatePopupHandler()
@@ -52,6 +54,16 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         }
 
         transform.AddComponent<PopupHandler>();
+    }
+
+    private void AllocateCursorVisibleUpdater()
+    {
+        if(transform.GetComponent<CursorVisibleUpdater>() != null)
+        {
+            return;
+        }
+        
+        transform.AddComponent<CursorVisibleUpdater>();
     }
     
     protected virtual void OnEnable()
@@ -117,11 +129,12 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
             return;
         }
 
-        if (_settingCanvas.activeSelf)
+        if (IsOnSettingCanvas)
         {
             ToggleSettingCanvas();
             return;
         }
+        
         TogglePauseCanvas();
     }
 
@@ -130,7 +143,6 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         _isPaused = !_isPaused;
         
         _pauseCanvas.SetActive(_isPaused);
-        ToggleCursorVisible();
         Time.timeScale = _isPaused ? 0.0f : 1.0f;
     }
 
@@ -146,53 +158,23 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     public void OnQuitButtonClick()
     {
-        if (!PopupHandler.Instance.ShowPopup("Quit"))
-        {
-            return;
-        }
-        
-        PopupHandler.Instance.SubscribeButtonAction(HandlePopupButtonAction);
+        PopupHandler.Instance.FloatConfirmPopup(HandlePopupButtonAction, "메인으로", "메인 메뉴로 돌아가시겠습니까?", "예", "아니오");
     }
-    
+
     private void HandlePopupButtonAction(bool isPositive)
     {
-        if (isPositive)
+        if (!isPositive)
         {
-            TogglePauseCanvas();
-            LoadSceneWithLoadingUI("MainMenu");
+            return;
         }
-        
-        PopupHandler.Instance.UnsubscribeButtonAction(HandlePopupButtonAction);
+
+        TogglePauseCanvas();
+        LoadSceneWithLoadingUI("MainMenu");
     }
-    
+
     private void ToggleSettingCanvas()
     {
-        _settingCanvas.SetActive(!_settingCanvas.activeSelf);
-    }
-
-    private void ToggleCursorVisible()
-    {
-        if (_settingCanvas.activeSelf)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            return;
-        }
-
-        if (_pauseCanvas.activeSelf)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            return;
-        }
-
-        if (!_cursorLock)
-        {
-            return;
-        }
-        
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        _settingCanvas.SetActive(!IsOnSettingCanvas);
     }
 
     public void FadeIn(float duration, float delay = 0f, bool ignoreAudio = false)

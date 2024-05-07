@@ -6,9 +6,20 @@ using UnityEngine;
 
 public class PopupHandler : Singleton<PopupHandler>
 {
-    private PopupData _popupData;
+    private enum EPopupType
+    {
+        None,
+        Info,
+        Confirm,
+        Warning,
+        Error
+    }
+
     private GameObject _popupPrefab;
 
+    private EPopupType _currentType = EPopupType.None;
+    
+    private TMP_Text _typeText;
     private TMP_Text _title;
     private TMP_Text _description;
     private TMP_Text _positiveButton;
@@ -20,72 +31,93 @@ public class PopupHandler : Singleton<PopupHandler>
 
     private void Awake()
     {
-        _popupData = SceneManagerBase.Instance.PopupData;
         _popupPrefab = Instantiate(Resources.Load<GameObject>("PopupCanvas"));
         Transform popupImage = _popupPrefab.transform.GetChild(0);
+        _typeText = popupImage.GetChild(0).GetComponentInParent<TMP_Text>();
 
         // Title Object
-        _title = popupImage.GetChild(0).GetComponent<TMP_Text>();
+        _title = popupImage.GetChild(1).GetComponent<TMP_Text>();
         
         // Subscription Object
-        _description = popupImage.GetChild(1).GetComponent<TMP_Text>();
+        _description = popupImage.GetChild(2).GetComponent<TMP_Text>();
         
         // Positive Object
-        _positiveButton = popupImage.GetChild(2).GetComponentInChildren<TMP_Text>();
+        _positiveButton = popupImage.GetChild(3).GetComponentInChildren<TMP_Text>();
 
         // Negative Object
-        _negativeButton = popupImage.GetChild(3).GetComponentInChildren<TMP_Text>();
+        _negativeButton = popupImage.GetChild(4).GetComponentInChildren<TMP_Text>();
         
         _popupPrefab.SetActive(false);
     }
 
-    public void SubscribeButtonAction(Action<bool> action)
+    public void FloatInfoPopup(Action<bool> action, string title, string description, string positive,
+        string negative = "")
     {
         buttonAction += action;
+        _currentType = EPopupType.Info;
+        SetPopupText(title, description, positive, negative);
     }
-    
-    public void UnsubscribeButtonAction(Action<bool> action)
+
+    public void FloatConfirmPopup(Action<bool> action, string title, string description, string positive,
+        string negative)
     {
-        buttonAction -= action;
+        buttonAction += action;
+        _currentType = EPopupType.Confirm;
+        SetPopupText(title, description, positive, negative);
     }
-    
-    public bool ShowPopup(string popupName)
+
+    public void FloatWarningPopup(Action<bool> action, string title, string description, string positive,
+        string negative)
     {
-        PopupData.Popup popup = FindPopupData(popupName);
-        
-        if (popup == null)
+        buttonAction += action;
+        _currentType = EPopupType.Warning;
+        SetPopupText(title, description, positive, negative);
+    }
+
+    public void FloatErrorPopup(Action<bool> action, string title, string description, string positive,
+        string negative = "")
+    {
+        buttonAction += action;
+        _currentType = EPopupType.Error;
+        SetPopupText(title, description, positive, negative);
+    }
+
+    private void SetPopupText(string title, string description, string positive, string negative)
+    {
+        switch (_currentType)
         {
-            return false;
+            case EPopupType.Info:
+                _typeText.text = "알림";
+                break;
+            case EPopupType.Confirm:
+                _typeText.text = "확인";
+                break;
+            case EPopupType.Warning:
+                _typeText.text = "경고";
+                break;
+            case EPopupType.Error:
+                _typeText.text = "오류";
+                break;
+            case EPopupType.None:
+            default:
+                Debug.Assert(false);
+                break;
         }
         
-        _title.text = popup.title.Replace("\\n", "\n");
-        _description.text = popup.description.Replace("\\n", "\n");
-        _positiveButton.text = popup.positiveButton.Replace("\\n", "\n");
-        _negativeButton.text = popup.negativeButton.Replace("\\n", "\n");
+        _title.text = title;
+        _description.text = description;
+        _positiveButton.text = positive;
+        _negativeButton.text = negative;
 
+        _negativeButton.transform.parent.gameObject.SetActive(!string.IsNullOrEmpty(negative));
+        
         _popupPrefab.SetActive(true);
-        return true;
-    }
-
-    private PopupData.Popup FindPopupData(string popupName)
-    {
-        Debug.Assert(_popupData != null,"_popupData != null");
-        Debug.Assert(_popupData.popupList != null, "_popupData.popupList != null");
-        
-        foreach (var data in _popupData.popupList)
-        {
-            if (data.popupName == popupName)
-            {
-                return data;
-            }
-        }
-        
-        return null;
     }
 
     public void SetButtonState(bool state)
     {
         buttonAction?.Invoke(state);
+        buttonAction = null;
         _popupPrefab.SetActive(false);
     }
 }
