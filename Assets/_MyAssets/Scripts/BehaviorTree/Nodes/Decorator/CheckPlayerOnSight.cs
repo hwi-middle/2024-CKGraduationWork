@@ -31,7 +31,6 @@ public class CheckPlayerOnSight : DecoratorNode
         {
             return ENodeState.Failure;
         }
-
         
         child.Update();
         return ENodeState.Success;
@@ -39,34 +38,19 @@ public class CheckPlayerOnSight : DecoratorNode
 
     private bool IsPlayerOnSight()
     {
-        int bufferCount = Physics.OverlapSphereNonAlloc(agent.transform.position, agent.AiData.perceptionDistance, _overlappedPlayerBuffer,
-            LayerMask.GetMask("Player"));
-        Debug.Assert(bufferCount is 0 or 1);
-        if (bufferCount == 0)
-        {
-            blackboard.target = null;
-            return false;
-        }
-
-        Transform overlappedPlayer = _overlappedPlayerBuffer[0].transform;
-        Debug.Assert(overlappedPlayer != null);
-
+        // 시야 범위 내에 들었는지 확인
         if (!agent.CenterSight.IsOnSight && !agent.SideSight.IsOnSight)
         {
             blackboard.target = null;
             return false;
         }
-        
-        // Vector3 direction = (overlappedPlayer.position - agent.transform.position).normalized;
-        // if (Vector3.Dot(direction, agent.transform.forward) < Mathf.Cos(agent.AiData.perceptionAngle * 0.5f * Mathf.Deg2Rad))
-        // {
-        //     blackboard.target = null;
-        //     return false;
-        // }
 
         // 나(AI)와 플레이어 사이에 장애물이 있는지 확인
-        Vector3 rayDirection = (overlappedPlayer.position - agent.transform.position).normalized;
-        Ray ray = new Ray(agent.transform.position, rayDirection);
+        Player player = Player.Instance;
+        Debug.Assert(player != null);
+        Transform playerTransform = player.transform;
+        Vector3 rayDirection = (playerTransform.position - agent.transform.position).normalized;
+        var ray = new Ray(agent.transform.position, rayDirection);
 
         if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity) || !hit.transform.CompareTag("Player"))
         {
@@ -75,7 +59,7 @@ public class CheckPlayerOnSight : DecoratorNode
         }
         
         // 시야에 플레이어가 들어옴
-        blackboard.target = overlappedPlayer.gameObject;
+        blackboard.target = playerTransform.gameObject;
         blackboard.lastTimePlayerDetected = Time.time;
         return true;
     }
