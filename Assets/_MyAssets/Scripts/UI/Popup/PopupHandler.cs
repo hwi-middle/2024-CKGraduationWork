@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class PopupHandler : Singleton<PopupHandler>
 {
-    [SerializeField] private PopupData _popupData;
-    
+    private PopupData _popupData;
     private GameObject _popupPrefab;
 
     private TMP_Text _title;
@@ -21,6 +20,7 @@ public class PopupHandler : Singleton<PopupHandler>
 
     private void Awake()
     {
+        _popupData = SceneManagerBase.Instance.PopupData;
         _popupPrefab = Instantiate(Resources.Load<GameObject>("PopupCanvas"));
         Transform popupImage = _popupPrefab.transform.GetChild(0);
 

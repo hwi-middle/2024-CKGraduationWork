@@ -270,7 +270,6 @@ GameObject:
   m_Component:
   - component: {fileID: 264924208}
   - component: {fileID: 264924209}
-  - component: {fileID: 264924210}
   m_Layer: 0
   m_Name: '@SceneManager'
   m_TagString: Untagged
@@ -305,22 +304,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 259b2b06a078c43e698d9027c771bff2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isDebugMode: 1
   _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
-  _cursorLock: 1
---- !u!114 &264924210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 264924207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36b21dc0b9fbc45b897dafb04e2bbfc7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   _popupData: {fileID: 11400000, guid: f911844157855436e88614af9d80fc63, type: 2}
+  _isDebugMode: 1
+  _isMainMenu: 0
+  _cursorLock: 1
 --- !u!1 &468605680
 GameObject:
   m_ObjectHideFlags: 0

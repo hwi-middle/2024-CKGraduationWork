@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cursor = UnityEngine.Cursor;
@@ -9,10 +10,13 @@ using Image = UnityEngine.UI.Image;
 public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 {
     [SerializeField] private PlayerInputData _inputData;
+    [SerializeField] private PopupData _popupData;
     
     [SerializeField] private bool _isDebugMode;
     [SerializeField] private bool _isMainMenu;
     [SerializeField] private bool _cursorLock;
+    
+    public PopupData PopupData => _popupData;
     
     public bool IsDebugMode => _isDebugMode;
     public bool IsMainMenu => _isMainMenu;
@@ -35,8 +39,19 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 #if !UNITY_EDITOR
         _isDebugMode = false;
 #endif
-        
+
         GetSettingsValueAndApply();
+        AllocatePopupHandler();
+    }
+
+    private void AllocatePopupHandler()
+    {
+        if (transform.GetComponent<PopupHandler>() != null)
+        {
+            return;
+        }
+
+        transform.AddComponent<PopupHandler>();
     }
     
     protected virtual void OnEnable()
