@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 47db600482fdc564faa9c5d068f53945, type: 3}
-  m_Name: CabinetInteractionData
+  m_Name: OverstepInteractionData
   m_EditorClassIdentifier: 
-  detectRadius: 2
-  type: 1
+  detectRadius: 0.5
+  type: 2

@@ -22,6 +22,8 @@ MonoBehaviour:
   minWireDistance: 7
   maxWireDistance: 12
   wireActionDuration: 2
+  overstepActionDuration: 2
+  overstepTargetDistance: 0.5
   assassinateDuration: 1.2
   moveSpeedOnAim: 2
   throwPower: 15
