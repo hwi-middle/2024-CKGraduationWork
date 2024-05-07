@@ -99,7 +99,6 @@ public class PopupHandler : Singleton<PopupHandler>
     /// <summary>
     /// 에러 문구를 띄우는 팝업입니다. 확인 버튼 입력 시 게임을 강제로 종료합니다.
     /// </summary>
-    /// <param name="action">User의 버튼 입력 정보를 받을 Handler</param>
     /// <param name="title">팝업의 타이틀</param>
     /// <param name="description">팝업의 내용</param>
     /// <param name="positive">확인 버튼</param>
