@@ -19,28 +19,34 @@ public enum EPlayType
 public class SoundPlayManager : Singleton<SoundPlayManager>
 {
     [SerializeField] SoundClipData _soundClipData;
-
-    private GameObject _soundObject;
+    
+    // 효과음 오브젝트 프리팹
+    private GameObject _soundObjectPrefab;
+    
+    // 배경음 오브젝트 풀
     private SoundObject _bgmSoundObject;
-    private List<SoundObject> _soundObjectList = new();
+    // 효과음 오브젝트 풀
+    private List<SoundObject> _allocatedSfxSoundObjects = new();
+    
+    // string 할당을 단 한번만 하기 위한 Dictionary
     private Dictionary<int, AudioClip> _cachedSfxClips = new();
     private Dictionary<int, AudioClip> _cachedBgmClips = new();
     
     private void Awake()
     {
-        Init();      
+        Init();
     }
 
     private void Init()
     {
-        if (_soundObject == null)
+        if (_soundObjectPrefab == null)
         {
-            _soundObject = Resources.Load<GameObject>("Sound/SoundObject");
+            _soundObjectPrefab = Resources.Load<GameObject>("Sound/SoundObject");
         }
         
-        if (_soundObjectList.Count != 0)
+        if (_allocatedSfxSoundObjects.Count != 0)
         {
-            _soundObjectList.Clear();
+            _allocatedSfxSoundObjects.Clear();
             
             for (int i = 0; i < transform.childCount; i++)
             {
@@ -48,22 +54,22 @@ public class SoundPlayManager : Singleton<SoundPlayManager>
             }
         }
 
-        GameObject bgmSoundObject = Instantiate(_soundObject, transform);
+        GameObject bgmSoundObject = Instantiate(_soundObjectPrefab, transform);
         bgmSoundObject.name = "BGMSoundObject";
         _bgmSoundObject = bgmSoundObject.GetComponent<SoundObject>();
         
         for (int i = 0; i <= _soundClipData.maxSoundObjectCount; i++)
         {
-            GameObject soundObject = Instantiate(_soundObject, transform);
+            GameObject soundObject = Instantiate(_soundObjectPrefab, transform);
             soundObject.name = "SoundObject_" + i;
             soundObject.SetActive(false);
-            _soundObjectList.Add(soundObject.GetComponent<SoundObject>());
+            _allocatedSfxSoundObjects.Add(soundObject.GetComponent<SoundObject>());
         }
     }
 
     private SoundObject GetAvailableSoundObject()
     {
-        foreach(SoundObject soundObject in _soundObjectList)
+        foreach(SoundObject soundObject in _allocatedSfxSoundObjects)
         {
             if (!soundObject.gameObject.activeSelf)
             {
