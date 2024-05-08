@@ -92,8 +92,22 @@ jobs:
           name: build-StandaloneWindows64
           path: build/StandaloneWindows64
 
-  buildWebGL:
+  FreeupDiskForWebGL:
     needs: buildWindows
+    name: 🗑️FreeupDisk
+    runs-on: ubuntu-latest
+    steps:
+        - name: FreeupDisk
+          if: failure()
+          run: |
+            sudo swapoff -a
+            sudo rm -f /swapfile
+            sudo apt clean
+            docker rmi $(docker images -q)
+            df -h
+
+  buildWebGL:
+    needs: FreeupDiskForWebGL
     name: 🌐WebGL
     runs-on: ubuntu-latest
     strategy:
