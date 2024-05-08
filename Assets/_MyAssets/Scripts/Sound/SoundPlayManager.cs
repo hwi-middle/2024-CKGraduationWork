@@ -18,7 +18,7 @@ public enum EPlayType
 
 public class SoundPlayManager : Singleton<SoundPlayManager>
 {
-    [SerializeField] private int _maxSoundObjectCount = 10;
+    [SerializeField] SoundClipData _soundClipData;
 
     private GameObject _soundObject;
     private SoundObject _bgmSoundObject;
@@ -50,7 +50,7 @@ public class SoundPlayManager : Singleton<SoundPlayManager>
         bgmSoundObject.name = "BGMSoundObject";
         _bgmSoundObject = bgmSoundObject.GetComponent<SoundObject>();
         
-        for (int i = 0; i <= _maxSoundObjectCount; i++)
+        for (int i = 0; i <= _soundClipData.maxSoundObjectCount; i++)
         {
             GameObject soundObject = Instantiate(_soundObject, transform);
             soundObject.name = "SoundObject_" + i;
@@ -71,19 +71,25 @@ public class SoundPlayManager : Singleton<SoundPlayManager>
 
         return null;
     }
+    
+    private AudioClip GetClip(ESoundType soundType, string clipName)
+    {
+        List<AudioClip> clipList = soundType == ESoundType.Bgm ? _soundClipData.bgmClipList : _soundClipData.sfxClipList;
+        return clipList.Find(clip => clip.name == clipName);
+    }
 
-    public SoundObject PlaySfxSound(AudioClip clip)
+    public SoundObject PlaySfxSound(string clipName)
     {
         SoundObject availableObject = GetAvailableSoundObject();
         availableObject.gameObject.SetActive(true);
-        availableObject.PlaySound(clip, EPlayType.PlayOnce);
+        availableObject.PlaySound(GetClip(ESoundType.Sfx, clipName), EPlayType.PlayOnce);
         return availableObject;
     }
 
-    public SoundObject PlayBgmSound(AudioClip clip)
+    public SoundObject PlayBgmSound(string clipName)
     {
         _bgmSoundObject.gameObject.SetActive(true);
-        _bgmSoundObject.PlaySound(clip, EPlayType.Loop);
+        _bgmSoundObject.PlaySound(GetClip(ESoundType.Bgm, clipName), EPlayType.Loop);
         return _bgmSoundObject;
     }
 }
