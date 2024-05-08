@@ -23,6 +23,8 @@ public class SoundPlayManager : Singleton<SoundPlayManager>
     private GameObject _soundObject;
     private SoundObject _bgmSoundObject;
     private List<SoundObject> _soundObjectList = new();
+    private Dictionary<int, AudioClip> _cachedSfxClips = new();
+    private Dictionary<int, AudioClip> _cachedBgmClips = new();
     
     private void Awake()
     {
@@ -78,18 +80,30 @@ public class SoundPlayManager : Singleton<SoundPlayManager>
         return clipList.Find(clip => clip.name == clipName);
     }
 
-    public SoundObject PlaySfxSound(string clipName)
+    public SoundObject PlaySfxSound(ESfxAudioClipIndex clip)
     {
+        if (!_cachedSfxClips.TryGetValue((int)clip, out AudioClip audioClip))
+        {
+            audioClip = GetClip(ESoundType.Sfx, clip.ToString());
+            _cachedSfxClips.Add((int)clip, audioClip);
+        }
+
         SoundObject availableObject = GetAvailableSoundObject();
         availableObject.gameObject.SetActive(true);
-        availableObject.PlaySound(GetClip(ESoundType.Sfx, clipName), EPlayType.PlayOnce);
+        availableObject.PlaySound(audioClip, EPlayType.PlayOnce);
         return availableObject;
     }
 
-    public SoundObject PlayBgmSound(string clipName)
+    public SoundObject PlayBgmSound(EBgmAudioClipIndex clip)
     {
+        if (!_cachedBgmClips.TryGetValue((int)clip, out AudioClip audioClip))
+        {
+            audioClip = GetClip(ESoundType.Bgm, clip.ToString());
+            _cachedBgmClips.Add((int)clip, audioClip);
+        }
+        
         _bgmSoundObject.gameObject.SetActive(true);
-        _bgmSoundObject.PlaySound(GetClip(ESoundType.Bgm, clipName), EPlayType.Loop);
+        _bgmSoundObject.PlaySound(audioClip, EPlayType.Loop);
         return _bgmSoundObject;
     }
 }

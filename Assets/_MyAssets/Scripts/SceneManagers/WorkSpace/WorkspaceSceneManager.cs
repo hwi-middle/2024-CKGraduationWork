@@ -17,12 +17,12 @@ public class WorkspaceSceneManager : SceneManagerBase
         {
             if (Input.GetKeyDown(KeyCode.Alpha0))
             {
-                SoundPlayManager.Instance.PlaySfxSound(ESfxAudioClipIndex.TestSE.ToString());
+                SoundPlayManager.Instance.PlaySfxSound(ESfxAudioClipIndex.TestSE);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha9))
             {
-                SoundPlayManager.Instance.PlayBgmSound(EBgmAudioClipIndex.TestBGM.ToString());
+                SoundPlayManager.Instance.PlayBgmSound(EBgmAudioClipIndex.TestBGM);
             }
         }
     }
