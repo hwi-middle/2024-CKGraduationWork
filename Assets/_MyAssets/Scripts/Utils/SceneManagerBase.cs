@@ -24,6 +24,8 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     protected Player _player;
     private IEnumerator _playerDeadSequence;
 
+    private GameObject _soundManager;
+
     protected virtual void Awake()
     {
 #if !UNITY_EDITOR
@@ -31,7 +33,15 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 #endif
         
         GetSettingsValueAndApply();
+        AllocateSoundManager();
+    }
 
+    private void AllocateSoundManager()
+    {
+        if (_soundManager == null)
+        {
+            _soundManager = Instantiate(Resources.Load<GameObject>("Sound/SoundManager"));
+        }
     }
     
     protected virtual void OnEnable()

@@ -541,7 +541,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isDebugMode: 1
   _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
-  _cursorLock: 0
+  _cursorLock: 1
+  _clip: {fileID: 8300000, guid: 9d66019d844335f43bddf621b4eb5550, type: 3}
 --- !u!1 &821023138
 GameObject:
   m_ObjectHideFlags: 0
