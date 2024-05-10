@@ -23,10 +23,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public BehaviorTree Tree => _tree;
     [SerializeField] private Canvas _canvas;
 
-    [SerializeField] private PerceptionBound _centerSight;
-    public PerceptionBound CenterSight => _centerSight;
-    [SerializeField] private PerceptionBound _sideSight;
-    public PerceptionBound SideSight => _sideSight;
+    [SerializeField] private CenterSightBound _centerSight;
+    public SightBound CenterSight => _centerSight;
+    [SerializeField] private SideSightBound _sideSight;
+    public SightBound SideSight => _sideSight;
     
     private Animator _animator;
 
@@ -100,11 +100,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
         _navMeshAgent.speed = speed;
     }
 
-    private float GetPerceptionGaugeIncrement(float distanceToPlayer)
+    private float GetPerceptionGaugeIncrement()
     {
-        float distanceRatio = Mathf.Clamp(distanceToPlayer / _aiData.perceptionDistance, 0, 1);
+        // float distanceRatio = Mathf.Clamp(distanceToPlayer / _centerSight.GetComponent<Renderer>().bounds.size.z, 0, 1);
+        float distanceRatio = _centerSight.GetPlayerPositionRatio();
+        Debug.Log(distanceRatio);
+
         float multiplier = _aiData.perceptionGaugeCurve.Evaluate(distanceRatio);
-        Debug.Log(multiplier);
         float increment = _aiData.maxPerceptionGaugeIncrementPerSecond * multiplier * Time.deltaTime;
         Debug.Assert(increment >= 0);
         return increment;
@@ -116,9 +118,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
         return remainingDistance <= _navMeshAgent.stoppingDistance;
     }
 
-    public void IncrementPerceptionGauge(float distance)
+    public void IncrementPerceptionGauge()
     {
-        _perceptionGauge += GetPerceptionGaugeIncrement(distance);
+        _perceptionGauge += GetPerceptionGaugeIncrement();
         _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
     }
 

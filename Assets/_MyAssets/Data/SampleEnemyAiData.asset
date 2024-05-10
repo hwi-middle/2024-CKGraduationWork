@@ -37,19 +37,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   perceptionDistance: 10.5
-  perceptionAngle: 60
-  perceptionRanges:
-  - rangePercent: 10
-    gaugeIncrementPerSecond: 1000
-  - rangePercent: 30
-    gaugeIncrementPerSecond: 300
-  - rangePercent: 60
-    gaugeIncrementPerSecond: 100
-  - rangePercent: 90
-    gaugeIncrementPerSecond: 80
-  - rangePercent: 100
-    gaugeIncrementPerSecond: 50
-  gaugeDecreaseStartTime: 2
+  maxPerceptionGaugeIncrementPerSecond: 100
   gaugeDecrementPerSecond: 50
   alertThreshold: 60
   walkSpeed: 2
