@@ -15,10 +15,13 @@ public class SoundObject : MonoBehaviour
     private ESfxAudioClipIndex _sfxClipIndex;
     private EBgmAudioClipIndex _bgmClipIndex;
     private AudioSource _audioSource;
+
+    private bool _isPaused;
     
     private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
+        _isPaused = false;
     }
 
     private void Update()
@@ -29,6 +32,11 @@ public class SoundObject : MonoBehaviour
     // 효과음 재생이 끝났는지 확인하고 반환
     private void CheckSfxIsPlayingAndReturnObject()
     {
+        if (_isPaused)
+        {
+            return;
+        }
+        
         if (_audioSource.isPlaying || _sfxClipIndex == ESfxAudioClipIndex.None)
         {
             return;
@@ -72,5 +80,17 @@ public class SoundObject : MonoBehaviour
         
         _audioSource.clip = null;
         gameObject.SetActive(false);
+    }
+
+    public void PauseSound()
+    {
+        _isPaused = true;
+        _audioSource.Pause();
+    }
+
+    public void UnPauseSound()
+    {
+        _isPaused = false;
+        _audioSource.UnPause();
     }
 } 

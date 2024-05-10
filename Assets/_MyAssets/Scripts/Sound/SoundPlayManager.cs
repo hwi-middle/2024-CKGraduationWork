@@ -179,4 +179,34 @@ public class SoundPlayManager : Singleton<SoundPlayManager>
             _bgmSoundObject.StopSound();
         }
     }
+
+    public void PauseAllSound()
+    {
+        foreach (SoundObject soundObject in _allocatedSfxSoundObjects)
+        {
+            if (!soundObject.gameObject.activeSelf)
+            {
+                continue;
+            }
+            
+            soundObject.PauseSound();
+        }
+        
+        _bgmSoundObject.PauseSound();
+    }
+
+    public void UnPauseAllSound()
+    {
+        foreach (SoundObject soundObject in _allocatedSfxSoundObjects)
+        {
+            if (!soundObject.gameObject.activeSelf)
+            {
+                continue;
+            }
+            
+            soundObject.UnPauseSound();
+        }
+        
+        _bgmSoundObject.UnPauseSound();
+    }
 }

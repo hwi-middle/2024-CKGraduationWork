@@ -108,7 +108,15 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     private void ToggleSettingCanvas()
     {
         _isPaused = !_isPaused;
-        
+
+        if (_isPaused)
+        {
+            SoundPlayManager.Instance.PauseAllSound();
+        }
+        else
+        {
+            SoundPlayManager.Instance.UnPauseAllSound();   
+        }
         _settingCanvas.SetActive(_isPaused);
         ToggleCursorVisible();
         Time.timeScale = _isPaused ? 0.0f : 1.0f;
