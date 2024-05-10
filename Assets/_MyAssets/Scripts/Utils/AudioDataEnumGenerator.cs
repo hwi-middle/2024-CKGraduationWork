@@ -6,8 +6,8 @@ using System.Text;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(SoundClipData))]
-public class SoundDataEnumGenerator : Editor
+[CustomEditor(typeof(AudioClipData))]
+public class AudioDataEnumGenerator : Editor
 {
     private SerializedProperty _bgmClipList;
     private SerializedProperty _sfxClipList;

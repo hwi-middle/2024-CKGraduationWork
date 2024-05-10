@@ -542,8 +542,6 @@ MonoBehaviour:
   _isDebugMode: 1
   _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
   _cursorLock: 1
-  _clip: {fileID: 8300000, guid: 9d66019d844335f43bddf621b4eb5550, type: 3}
-  _clip2: {fileID: 8300000, guid: c5b031af451f0064dbc02af3a3cb262a, type: 3}
 --- !u!1 &821023138
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,6 +1077,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _returnOffsetDuration
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863128557706384626, guid: 9ba41a872af3ef74a9319cd62f270f33,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4312329920012413826, guid: 9ba41a872af3ef74a9319cd62f270f33,
         type: 3}

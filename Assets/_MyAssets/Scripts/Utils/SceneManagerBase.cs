@@ -24,7 +24,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     protected Player _player;
     private IEnumerator _playerDeadSequence;
 
-    private GameObject _soundManager;
+    private GameObject _audioManager;
 
     protected virtual void Awake()
     {
@@ -38,9 +38,9 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     private void AllocateSoundManager()
     {
-        if (_soundManager == null)
+        if (_audioManager == null)
         {
-            _soundManager = Instantiate(Resources.Load<GameObject>("Sound/SoundManager"));
+            _audioManager = Instantiate(Resources.Load<GameObject>("Sound/AudioManager"));
         }
     }
     
@@ -111,11 +111,11 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
         if (_isPaused)
         {
-            SoundPlayManager.Instance.PauseAllSound();
+            AudioPlayManager.Instance.PauseAllAudio();
         }
         else
         {
-            SoundPlayManager.Instance.UnPauseAllSound();   
+            AudioPlayManager.Instance.UnPauseAllAudio();   
         }
         _settingCanvas.SetActive(_isPaused);
         ToggleCursorVisible();

@@ -19,27 +19,27 @@ public class WorkspaceSceneManager : SceneManagerBase
         {
             if (Input.GetKeyDown(KeyCode.F1))
             {
-                SoundPlayManager.Instance.PlayOnceSfxSound(ESfxAudioClipIndex.TestSE);
+                AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.TestSE);
             }
 
             if (Input.GetKeyDown(KeyCode.F2))
             {
-                _loopSfxSoundObjectID = SoundPlayManager.Instance.PlayLoopSfxSound(ESfxAudioClipIndex.TestSE);
+                _loopSfxSoundObjectID = AudioPlayManager.Instance.PlayLoopSfxAudio(ESfxAudioClipIndex.TestSE);
             }
 
             if (Input.GetKeyDown(KeyCode.F3))
             {
-                SoundPlayManager.Instance.PlayBgmSound(EBgmAudioClipIndex.TestBGM);
+                AudioPlayManager.Instance.PlayBgmAudio(EBgmAudioClipIndex.TestBGM);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha0))
             {
-                SoundPlayManager.Instance.StopBgmSound();
+                AudioPlayManager.Instance.StopBgmAudio();
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha9))
             {
-                SoundPlayManager.Instance.StopLoopSfxSound(_loopSfxSoundObjectID);
+                AudioPlayManager.Instance.StopLoopSfxAudio(_loopSfxSoundObjectID);
             }
         }
     }

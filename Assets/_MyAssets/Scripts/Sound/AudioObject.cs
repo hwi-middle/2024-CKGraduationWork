@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class SoundObject : MonoBehaviour
+public class AudioObject : MonoBehaviour
 {
     public AudioClip Clip => _audioSource.clip;
-    public bool IsLoop => _audioSource.loop;
+    private int _loopSfxAudioObjectID;
     
-    private int _loopSfxSoundObjectID;
-    public int LoopSfxSoundObjectID => _loopSfxSoundObjectID;
+    public int LoopSfxAudioObjectID => _loopSfxAudioObjectID;
     
     private ESfxAudioClipIndex _sfxClipIndex;
     private EBgmAudioClipIndex _bgmClipIndex;
@@ -47,17 +46,17 @@ public class SoundObject : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void PlaySfxSound(ESfxAudioClipIndex clipIndex, AudioClip clip, EPlayType playType)
+    public void PlaySfxAudio(ESfxAudioClipIndex clipIndex, AudioClip clip, EPlayType playType)
     {
         _sfxClipIndex = clipIndex;
         _audioSource.clip = clip;
         _audioSource.loop = playType == EPlayType.Loop;
-        _loopSfxSoundObjectID = playType == EPlayType.Loop ? Random.Range(int.MinValue, int.MaxValue) : int.MaxValue;
+        _loopSfxAudioObjectID = playType == EPlayType.Loop ? Random.Range(int.MinValue, int.MaxValue) : int.MaxValue;
         
         _audioSource.Play();
     }
 
-    public void PlayBgmSound(EBgmAudioClipIndex clipIndex, AudioClip clip)
+    public void PlayBgmAudio(EBgmAudioClipIndex clipIndex, AudioClip clip)
     {
         _bgmClipIndex = clipIndex;
         _audioSource.clip = clip;
@@ -65,7 +64,7 @@ public class SoundObject : MonoBehaviour
         _audioSource.Play();
     }
 
-    public void StopSound()
+    public void StopAudio()
     {
         _audioSource.Stop();
         
@@ -82,13 +81,13 @@ public class SoundObject : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void PauseSound()
+    public void PauseAudio()
     {
         _isPaused = true;
         _audioSource.Pause();
     }
 
-    public void UnPauseSound()
+    public void UnPauseAudio()
     {
         _isPaused = false;
         _audioSource.UnPause();
