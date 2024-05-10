@@ -8,10 +8,7 @@ public class EnemyAiData : ScriptableObject
     [Header("플레이어 인지")]
     [Tooltip("인식 거리 별 게이지 증가량 그래프")] public AnimationCurve perceptionGaugeCurve;
     
-    // TODO: 이하 내용 삭제
-    [Tooltip("인식 거리(반경)"), Range(0.5f, 100)] public float perceptionDistance;
     [Tooltip("초당 인지 게이지 증가량(최대)")] public float maxPerceptionGaugeIncrementPerSecond;
-    // ---------------------
     [Tooltip("초당 게이지 감소량")] public float gaugeDecrementPerSecond;
     [Tooltip("경계 돌입 기준값")] public float alertThreshold;
     

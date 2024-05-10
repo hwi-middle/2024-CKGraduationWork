@@ -12,8 +12,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public enum EPerceptionPhase
     {
         None,
-        Perceive,
-        Suspect,
+        Suspection,
+        Alert,
         Detection,
     }
     
@@ -126,33 +126,31 @@ public class EnemyBase : MonoBehaviour, IDamageable
         _perceptionGauge -= _aiData.gaugeDecrementPerSecond * Time.deltaTime;
         _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
     }
-
-    public void Attack(Player player)
-    {
-        player.TakeDamage(_aiData.attackDamage, gameObject);
-    }
-
+    
     public int TakeDamage(int damageAmount, GameObject damageCauser)
     {
+        Debug.Assert(damageCauser == Player.Instance.gameObject);
         Destroy(gameObject);
         return damageAmount;
     }
 
     public EPerceptionPhase GetCurrentPerceptionPhase()
     {
+        Debug.Assert(_aiData.alertThreshold is > 0f and < 100f);
+        
         if (_perceptionGauge >= 100f)
         {
             return EPerceptionPhase.Detection;
         }
 
-        if (_perceptionGauge >= 50f)
+        if (_perceptionGauge >= _aiData.alertThreshold)
         {
-            return EPerceptionPhase.Suspect;
+            return EPerceptionPhase.Alert;
         }
 
         if (_perceptionGauge > Mathf.Epsilon)
         {
-            return EPerceptionPhase.Perceive;
+            return EPerceptionPhase.Suspection;
         }
 
         return EPerceptionPhase.None;
