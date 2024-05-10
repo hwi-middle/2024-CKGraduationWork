@@ -42,13 +42,13 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
     {
         if (_audioObjectPrefab == null)
         {
-            _audioObjectPrefab = Resources.Load<GameObject>("Sound/AudioObject");
+            _audioObjectPrefab = Resources.Load<GameObject>("Audio/AudioObject");
         }
-        
+
         if (_allocatedSfxAudioObjects.Count != 0)
         {
             _allocatedSfxAudioObjects.Clear();
-            
+
             for (int i = 0; i < transform.childCount; i++)
             {
                 Destroy(transform.GetChild(i).gameObject);
@@ -59,7 +59,7 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
         bmgAudioObject.name = "BGMAudioObject";
         _bgmAudioObject = bmgAudioObject.GetComponent<AudioObject>();
         bmgAudioObject.SetActive(false);
-        
+
         for (int i = 0; i <= _audioClipData.maxAudioObjectCount; i++)
         {
             GameObject audioObject = Instantiate(_audioObjectPrefab, transform);
@@ -97,6 +97,13 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
         }
 
         AudioObject availableObject = GetAvailableAudioObject();
+        Debug.Assert(availableObject != null, "Out of Range Exception: Expand the size of the audio object pool.");
+
+        if (availableObject == null)
+        {
+            return;
+        }
+        
         availableObject.gameObject.SetActive(true);
         availableObject.PlaySfxAudio(clip, audioClip, EPlayType.PlayOnce);
     }
@@ -118,6 +125,13 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
         }
         
         AudioObject availableObject = GetAvailableAudioObject();
+        Debug.Assert(availableObject != null, "Out of Range Exception: Expand the size of the audio object pool.");
+        
+        if(availableObject == null)
+        {
+            return int.MaxValue;
+        }
+        
         availableObject.gameObject.SetActive(true);
         availableObject.PlaySfxAudio(clip, audioClip, EPlayType.Loop);
         return availableObject.LoopSfxAudioObjectID;

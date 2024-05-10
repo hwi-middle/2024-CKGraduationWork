@@ -40,7 +40,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     {
         if (_audioManager == null)
         {
-            _audioManager = Instantiate(Resources.Load<GameObject>("Sound/AudioManager"));
+            _audioManager = Instantiate(Resources.Load<GameObject>("Audio/AudioManager"));
         }
     }
     
