@@ -57,6 +57,7 @@ public class SoundPlayManager : Singleton<SoundPlayManager>
         GameObject bgmSoundObject = Instantiate(_soundObjectPrefab, transform);
         bgmSoundObject.name = "BGMSoundObject";
         _bgmSoundObject = bgmSoundObject.GetComponent<SoundObject>();
+        bgmSoundObject.SetActive(false);
         
         for (int i = 0; i <= _soundClipData.maxSoundObjectCount; i++)
         {
@@ -86,7 +87,7 @@ public class SoundPlayManager : Singleton<SoundPlayManager>
         return clipList.Find(clip => clip.name == clipName);
     }
 
-    public SoundObject PlaySfxSound(ESfxAudioClipIndex clip)
+    public void PlayOnceSfxSound(ESfxAudioClipIndex clip)
     {
         if (!_cachedSfxClips.TryGetValue((int)clip, out AudioClip audioClip))
         {
@@ -96,20 +97,86 @@ public class SoundPlayManager : Singleton<SoundPlayManager>
 
         SoundObject availableObject = GetAvailableSoundObject();
         availableObject.gameObject.SetActive(true);
-        availableObject.PlaySound(audioClip, EPlayType.PlayOnce);
-        return availableObject;
+        availableObject.PlaySfxSound(clip, audioClip, EPlayType.PlayOnce);
     }
 
-    public SoundObject PlayBgmSound(EBgmAudioClipIndex clip)
+    public int PlayLoopSfxSound(ESfxAudioClipIndex clip)
+    {
+        if(!_cachedSfxClips.TryGetValue((int)clip, out AudioClip audioClip))
+        {
+            audioClip = GetClip(ESoundType.Sfx, clip.ToString());
+            _cachedSfxClips.Add((int)clip, audioClip);
+        }
+
+        Debug.Assert(audioClip.name != null);
+
+        int playingLoopSfxID = CheckIsPlayingLoopSfx(audioClip);
+        if (playingLoopSfxID != int.MaxValue)
+        {
+            return playingLoopSfxID;
+        }
+        
+        SoundObject availableObject = GetAvailableSoundObject();
+        availableObject.gameObject.SetActive(true);
+        availableObject.PlaySfxSound(clip, audioClip, EPlayType.Loop);
+        return availableObject.LoopSfxSoundObjectID;
+    }
+
+    private int CheckIsPlayingLoopSfx(AudioClip audioClip)
+    {
+        foreach (SoundObject soundObject in _allocatedSfxSoundObjects)
+        {
+            if (!soundObject.gameObject.activeSelf || soundObject.LoopSfxSoundObjectID == int.MaxValue)
+            {
+                continue;
+            }
+            
+            if (soundObject.Clip.name == audioClip.name)
+            {
+                return soundObject.LoopSfxSoundObjectID;
+            }
+        }
+
+        return int.MaxValue;
+    }
+
+    public void PlayBgmSound(EBgmAudioClipIndex clip)
     {
         if (!_cachedBgmClips.TryGetValue((int)clip, out AudioClip audioClip))
         {
             audioClip = GetClip(ESoundType.Bgm, clip.ToString());
             _cachedBgmClips.Add((int)clip, audioClip);
         }
+
+        if (_bgmSoundObject.gameObject.activeSelf && _bgmSoundObject.Clip == audioClip)
+        {
+            return;
+        }
         
         _bgmSoundObject.gameObject.SetActive(true);
-        _bgmSoundObject.PlaySound(audioClip, EPlayType.Loop);
-        return _bgmSoundObject;
+        _bgmSoundObject.PlayBgmSound(clip, audioClip);
+    }
+    
+    public void StopLoopSfxSound(int soundObjectID)
+    {
+        foreach (SoundObject currentSoundObject in _allocatedSfxSoundObjects)
+        {
+            if (!currentSoundObject.gameObject.activeSelf
+                || currentSoundObject.LoopSfxSoundObjectID != soundObjectID)
+            {
+                continue;
+            }
+
+            currentSoundObject.StopSound();
+            break;
+        }
+    }
+
+    public void StopBgmSound()
+    {
+        if (_bgmSoundObject.gameObject.activeSelf)
+        {
+            _bgmSoundObject.StopSound();
+        }
     }
 }

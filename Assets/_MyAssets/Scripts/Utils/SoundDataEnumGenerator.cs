@@ -55,9 +55,13 @@ public class SoundDataEnumGenerator : Editor
     {
         StringBuilder builder = new();
         string startString = $"public enum {enumName}\n{{\n    ";
+        const string NONE = "None";
         const string END = ",\n    ";
 
         builder.Append(startString);
+        builder.Append(NONE);
+        builder.Append(END);
+        
         for (int i = 0; i < clipList.arraySize; i++)
         {
             SerializedProperty clip = clipList.GetArrayElementAtIndex(i);
