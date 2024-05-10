@@ -85,9 +85,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    public void OnListenItemSound(Vector3 origin, float increase)
+    public void OnListenItemSound(Vector3 origin, float increment)
     {
-        _perceptionGauge = Mathf.Clamp(_perceptionGauge, 50f, 100f);
+        _perceptionGauge = Mathf.Clamp(_perceptionGauge, _aiData.alertThreshold, 100f);
+    }
+
+    public void OnListenNoiseSound(Vector3 origin, float increment)
+    {
+        // 청각만으로는 Detection 단계까지 올라가지 않음
+        _perceptionGauge = Mathf.Clamp(_perceptionGauge + increment, 0f, _aiData.alertThreshold);
     }
 
     public void SetDestination(Vector3 destination)
