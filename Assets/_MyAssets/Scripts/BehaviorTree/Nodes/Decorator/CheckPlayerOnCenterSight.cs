@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckPlayerOnSight : DecoratorNode
+public class CheckPlayerOnCenterSight : DecoratorNode
 {
-    private readonly Collider[] _overlappedPlayerBuffer = new Collider[1];
-
     public override void OnCreate()
     {
-        description = "플레이어가 시야에 들어왔는지 확인합니다.";
+        description = "플레이어가 중심 시야에 들어왔는지 확인합니다.";
     }
 
     protected override void OnStart()
@@ -39,7 +37,7 @@ public class CheckPlayerOnSight : DecoratorNode
     private bool IsPlayerOnSight()
     {
         // 시야 범위 내에 들었는지 확인
-        if (!agent.CenterSight.IsOnSight && !agent.SideSight.IsOnSight)
+        if (!agent.CenterSight.IsOnSight)
         {
             blackboard.target = null;
             return false;

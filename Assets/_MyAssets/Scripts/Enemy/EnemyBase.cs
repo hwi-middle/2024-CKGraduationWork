@@ -102,10 +102,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private float GetPerceptionGaugeIncrement()
     {
-        // float distanceRatio = Mathf.Clamp(distanceToPlayer / _centerSight.GetComponent<Renderer>().bounds.size.z, 0, 1);
         float distanceRatio = _centerSight.GetPlayerPositionRatio();
-        Debug.Log(distanceRatio);
-
         float multiplier = _aiData.perceptionGaugeCurve.Evaluate(distanceRatio);
         float increment = _aiData.maxPerceptionGaugeIncrementPerSecond * multiplier * Time.deltaTime;
         Debug.Assert(increment >= 0);
