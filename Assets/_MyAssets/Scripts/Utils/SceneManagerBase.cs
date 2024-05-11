@@ -6,26 +6,25 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Image = UnityEngine.UI.Image;
 
+[RequireComponent(typeof(PopupHandler))]
+[RequireComponent(typeof(CursorLockModeUpdater))]
 public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 {
     [SerializeField] private PlayerInputData _inputData;
     
     [SerializeField] private bool _isDebugMode;
-    [SerializeField] private bool _isMainMenu;
     [SerializeField] private bool _isNeedCursorLock;
 
     public bool IsNeedCursorLock => _isNeedCursorLock;
     public bool IsDebugMode => _isDebugMode;
-    public bool IsMainMenu => _isMainMenu;
-    
     
     private SceneFadeManager _fadeManager;
     
-    private GameObject _settingCanvas;
+    private GameObject _settingsCanvas;
     private GameObject _pauseCanvas;
 
-    public bool IsOnSettingCanvas => _settingCanvas.activeSelf;
-    public bool IsOnPauseCanvas => _pauseCanvas.activeSelf;
+    public bool IsSettingsCanvasActive => _settingsCanvas.activeSelf;
+    public bool IsPauseCanvasActive => _pauseCanvas.activeSelf;
 
     private bool _isPaused;
 
@@ -42,28 +41,6 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 #endif
 
         GetSettingsValueAndApply();
-        AllocatePopupHandler();
-        AllocateCursorVisibleUpdater();
-    }
-
-    private void AllocatePopupHandler()
-    {
-        if (transform.GetComponent<PopupHandler>() != null)
-        {
-            return;
-        }
-
-        transform.AddComponent<PopupHandler>();
-    }
-
-    private void AllocateCursorVisibleUpdater()
-    {
-        if(transform.GetComponent<CursorVisibleUpdater>() != null)
-        {
-            return;
-        }
-        
-        transform.AddComponent<CursorVisibleUpdater>();
     }
     
     protected virtual void OnEnable()
@@ -82,8 +59,8 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         _fadeManager = SceneFadeManager.Instance;
         _fadeManager.GetComponent<Image>().enabled = true;
 
-        _settingCanvas = Instantiate(Resources.Load<GameObject>("SettingCanvas"));
-        _settingCanvas.SetActive(false);
+        _settingsCanvas = Instantiate(Resources.Load<GameObject>("SettingsCanvas"));
+        _settingsCanvas.SetActive(false);
 
         _pauseCanvas = Instantiate(Resources.Load<GameObject>("PauseCanvas"));
         _pauseCanvas.SetActive(false);
@@ -121,17 +98,23 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     private void HandlePauseAction()
     {
-        Debug.Assert(_settingCanvas != null, "_settingCanvas != null");
+        Debug.Assert(_settingsCanvas != null, "_settingsCanvas != null");
         Debug.Assert(_pauseCanvas != null, "_popupCanvas != null");
         
-        if (IsFading || PopupHandler.Instance.IsPopupActive)
+        if (IsFading)
         {
             return;
         }
 
-        if (IsOnSettingCanvas)
+        if (PopupHandler.Instance.IsPopupActive)
         {
-            ToggleSettingCanvas();
+            PopupHandler.Instance.ClosePopup();
+            return;
+        }
+
+        if (IsSettingsCanvasActive)
+        {
+            ToggleSettingsCanvas();
             return;
         }
         
@@ -151,14 +134,14 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         TogglePauseCanvas();
     }
 
-    public void OnOptionsButtonClick()
+    public void OnSettingsButtonClick()
     {
-        ToggleSettingCanvas();
+        ToggleSettingsCanvas();
     }
 
     public void OnQuitButtonClick()
     {
-        PopupHandler.Instance.FloatConfirmPopup(HandlePopupButtonAction, "메인으로", "메인 메뉴로 돌아가시겠습니까?", "예", "아니오");
+        PopupHandler.Instance.DisplayConfirmPopup(HandlePopupButtonAction, "메인으로", "메인 메뉴로 돌아가시겠습니까?", "예", "아니오");
     }
 
     private void HandlePopupButtonAction(bool isPositive)
@@ -169,12 +152,12 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         }
 
         TogglePauseCanvas();
-        LoadSceneWithLoadingUI("MainMenu");
+        LoadSceneWithLoadingUI(SceneNames.MAIN_MENU);
     }
 
-    private void ToggleSettingCanvas()
+    private void ToggleSettingsCanvas()
     {
-        _settingCanvas.SetActive(!IsOnSettingCanvas);
+        _settingsCanvas.SetActive(!IsSettingsCanvasActive);
     }
 
     public void FadeIn(float duration, float delay = 0f, bool ignoreAudio = false)

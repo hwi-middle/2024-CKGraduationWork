@@ -22,8 +22,8 @@ public class PopupHandler : Singleton<PopupHandler>
     private TMP_Text _typeText;
     private TMP_Text _title;
     private TMP_Text _description;
-    private TMP_Text _positiveButton;
-    private TMP_Text _negativeButton;
+    private TMP_Text _positiveText;
+    private TMP_Text _negativeText;
 
     private Action<bool> buttonAction;
     
@@ -38,14 +38,14 @@ public class PopupHandler : Singleton<PopupHandler>
         // Title Object
         _title = popupImage.GetChild(1).GetComponent<TMP_Text>();
         
-        // Subscription Object
+        // Description Object
         _description = popupImage.GetChild(2).GetComponent<TMP_Text>();
         
         // Positive Object
-        _positiveButton = popupImage.GetChild(3).GetComponentInChildren<TMP_Text>();
+        _positiveText = popupImage.GetChild(3).GetComponentInChildren<TMP_Text>();
 
         // Negative Object
-        _negativeButton = popupImage.GetChild(4).GetComponentInChildren<TMP_Text>();
+        _negativeText = popupImage.GetChild(4).GetComponentInChildren<TMP_Text>();
         
         _popupPrefab.SetActive(false);
     }
@@ -57,11 +57,11 @@ public class PopupHandler : Singleton<PopupHandler>
     /// <param name="title">팝업의 타이틀</param>
     /// <param name="description">팝업의 내용</param>
     /// <param name="positive">확인 버튼</param>
-    public void FloatInfoPopup(Action<bool> action, string title, string description, string positive)
+    public void DisplayInfoPopup(Action<bool> action, string title, string description, string positive)
     {
         buttonAction += action;
         _currentType = EPopupType.Info;
-        SetPopupText(title, description, positive, "");
+        SetPopupTextAndDisplayPopup(title, description, positive);
     }
 
     /// <summary>
@@ -72,12 +72,12 @@ public class PopupHandler : Singleton<PopupHandler>
     /// <param name="description">팝업의 내용</param>
     /// <param name="positive">확인 버튼</param>
     /// <param name="negative">취소 버튼</param>
-    public void FloatConfirmPopup(Action<bool> action, string title, string description, string positive,
+    public void DisplayConfirmPopup(Action<bool> action, string title, string description, string positive,
         string negative)
     {
         buttonAction += action;
         _currentType = EPopupType.Confirm;
-        SetPopupText(title, description, positive, negative);
+        SetPopupTextAndDisplayPopup(title, description, positive, negative);
     }
 
     /// <summary>
@@ -88,12 +88,12 @@ public class PopupHandler : Singleton<PopupHandler>
     /// <param name="description">팝업의 내용</param>
     /// <param name="positive">확인 버튼</param>
     /// <param name="negative">취소 버튼 (Default = "")</param>
-    public void FloatWarningPopup(Action<bool> action, string title, string description, string positive,
+    public void DisplayWarningPopup(Action<bool> action, string title, string description, string positive,
         string negative="")
     {
         buttonAction += action;
         _currentType = EPopupType.Warning;
-        SetPopupText(title, description, positive, negative);
+        SetPopupTextAndDisplayPopup(title, description, positive, negative);
     }
 
     /// <summary>
@@ -102,14 +102,14 @@ public class PopupHandler : Singleton<PopupHandler>
     /// <param name="title">팝업의 타이틀</param>
     /// <param name="description">팝업의 내용</param>
     /// <param name="positive">확인 버튼</param>
-    public void FloatErrorPopup(string title, string description, string positive)
+    public void DisplayErrorPopup(Action<bool> action, string title, string description, string positive)
     {
-        buttonAction += HandleErrorPopup;
+        buttonAction += action;
         _currentType = EPopupType.Error;
-        SetPopupText(title, description, positive, "");
+        SetPopupTextAndDisplayPopup(title, description, positive);
     }
 
-    private void SetPopupText(string title, string description, string positive, string negative)
+    private void SetPopupTextAndDisplayPopup(string title, string description, string positive, string negative = "")
     {
         switch (_currentType)
         {
@@ -133,27 +133,23 @@ public class PopupHandler : Singleton<PopupHandler>
         
         _title.text = title;
         _description.text = description;
-        _positiveButton.text = positive;
-        _negativeButton.text = negative;
+        _positiveText.text = positive;
+        _negativeText.text = negative;
 
-        _negativeButton.transform.parent.gameObject.SetActive(!string.IsNullOrEmpty(negative));
+        _negativeText.transform.parent.gameObject.SetActive(!negative.Equals(string.Empty));
         
         _popupPrefab.SetActive(true);
     }
 
-    public void SetButtonState(bool state)
+    public void ExecuteActionOnButtonClick(bool isPositive)
     {
-        buttonAction?.Invoke(state);
+        buttonAction?.Invoke(isPositive);
+        ClosePopup();
+    }
+
+    public void ClosePopup()
+    {
         buttonAction = null;
         _popupPrefab.SetActive(false);
-    }
-    
-    private void HandleErrorPopup(bool isPositive)
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit(0);
-#endif
     }
 }

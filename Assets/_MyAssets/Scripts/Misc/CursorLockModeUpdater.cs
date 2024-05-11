@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CursorVisibleUpdater : Singleton<CursorVisibleUpdater>
+public class CursorLockModeUpdater : Singleton<CursorLockModeUpdater>
 {
     private bool _isNeedCursorLock;
     
@@ -12,18 +12,18 @@ public class CursorVisibleUpdater : Singleton<CursorVisibleUpdater>
 
     private void Awake()
     {
-        _isNeedCursorLock = SceneManagerBase.Instance.IsNeedCursorLock;
-        
         _sceneManagerBase = SceneManagerBase.Instance;
+        _isNeedCursorLock = _sceneManagerBase.IsNeedCursorLock;
+        
         _popupHandler = PopupHandler.Instance;
     }
     
     private void Update()
     {
-        CheckAndUpdateCanvasState();
+        UpdateCursorVisibility();
     }
 
-    private void CheckAndUpdateCanvasState()
+    private void UpdateCursorVisibility()
     {
         if (!_isNeedCursorLock)
         {
@@ -37,13 +37,13 @@ public class CursorVisibleUpdater : Singleton<CursorVisibleUpdater>
             return;
         }
 
-        if (_sceneManagerBase.IsOnSettingCanvas)
+        if (_sceneManagerBase.IsSettingsCanvasActive)
         {
             EnableCursorVisible();
             return;
         }
 
-        if (_sceneManagerBase.IsOnPauseCanvas)
+        if (_sceneManagerBase.IsPauseCanvasActive)
         {
             EnableCursorVisible();
             return;

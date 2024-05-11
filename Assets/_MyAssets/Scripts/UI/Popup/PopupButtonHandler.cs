@@ -1,16 +1,27 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PopupButtonHandler : MonoBehaviour
 {
-    public void OnPositiveButtonClick()
+    [SerializeField] private Button _positiveButton;
+    [SerializeField] private Button _negativeButton;
+    
+    private void Awake()
     {
-         PopupHandler.Instance.SetButtonState(true);  
+        _positiveButton.onClick.AddListener(OnPositiveButtonClick);
+        _negativeButton.onClick.AddListener(OnNegativeButtonClick);
+    }
+
+    private void OnPositiveButtonClick()
+    {
+         PopupHandler.Instance.ExecuteActionOnButtonClick(true);  
     }
     
-    public void OnNegativeButtonClick()
+    private void OnNegativeButtonClick()
     {
-        PopupHandler.Instance.SetButtonState(false);
+        PopupHandler.Instance.ExecuteActionOnButtonClick(false);
     }
 }

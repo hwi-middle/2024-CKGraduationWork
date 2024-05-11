@@ -123,6 +123,74 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &217773838
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462454442576684729, guid: 4e8a70db09ef07545a324c4d659db62f,
+        type: 3}
+      propertyPath: m_Name
+      value: CheckPointRoot
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4e8a70db09ef07545a324c4d659db62f, type: 3}
 --- !u!1 &293098652
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +276,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1805447869}
         m_TargetAssemblyTypeName: MainMenuSceneManager, Assembly-CSharp
-        m_MethodName: OnNewGameButton
+        m_MethodName: OnNewGameButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1453,6 +1521,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1805447868}
   - component: {fileID: 1805447869}
+  - component: {fileID: 1805447872}
+  - component: {fileID: 1805447871}
   m_Layer: 0
   m_Name: '@SceneManager'
   m_TagString: Untagged
@@ -1489,8 +1559,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
   _isDebugMode: 1
-  _isMainMenu: 1
   _isNeedCursorLock: 0
+  _newGameButton: {fileID: 293098654}
+  _continueButton: {fileID: 1089156911}
+  _exitButton: {fileID: 1856892842}
+--- !u!114 &1805447871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805447867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baed17d26b501c24f8f23f6defbcaa22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1805447872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805447867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36b21dc0b9fbc45b897dafb04e2bbfc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1856892840
 GameObject:
   m_ObjectHideFlags: 0
@@ -1576,7 +1672,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1805447869}
         m_TargetAssemblyTypeName: DemoSceneManager, Assembly-CSharp
-        m_MethodName: OnExitButton
+        m_MethodName: OnExitButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1835,3 +1931,4 @@ SceneRoots:
   - {fileID: 720450734}
   - {fileID: 1805447868}
   - {fileID: 1191542627}
+  - {fileID: 217773838}

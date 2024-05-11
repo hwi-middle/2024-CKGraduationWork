@@ -5,13 +5,29 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenuSceneManager : SceneManagerBase
 {
+    [SerializeField] private Button _newGameButton;
+    [SerializeField] private Button _continueButton;
+    [SerializeField] private Button _exitButton;
+    
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        _newGameButton.onClick.AddListener(OnNewGameButtonClick);
+        _continueButton.onClick.AddListener(OnContinueButton);
+        _exitButton.onClick.AddListener(OnExitButtonClick);
+    }
+
     protected override void Start()
     {
         base.Start();
         FadeIn(0.5f);
+
+        _continueButton.interactable = CheckPointRootHandler.Instance.HasSavedCheckPointData;
     }
 
     protected override void Update()
@@ -22,15 +38,15 @@ public class MainMenuSceneManager : SceneManagerBase
         {
             if (Input.GetKeyDown(KeyCode.Alpha0))
             {
-                PopupHandler.Instance.FloatErrorPopup("Test Error Title", "Test Error Popup으로 게임을 종료합니다.", "게임 종료");
+                PopupHandler.Instance.DisplayErrorPopup(HandleErrorPopupButtonAction, "Test Error Title", "Error Popup 테스트 입니다.", "확인");
             }
         }
     }
 
-    public void OnNewGameButton()
+    public void OnNewGameButtonClick()
     {
         // First Game Scene Start
-        PopupHandler.Instance.FloatWarningPopup(HandleNewGameButtonAction, "새 게임",
+        PopupHandler.Instance.DisplayWarningPopup(HandleNewGameButtonAction, "새 게임",
             "새 게임을 시작하시겠습니까?\n저장된 데이터는 모두 사라집니다.", "예", "아니오");
     }
 
@@ -41,22 +57,27 @@ public class MainMenuSceneManager : SceneManagerBase
             return;
         }
 
-        LoadSceneWithLoadingUI("PopupScene");
+        LoadSceneWithLoadingUI(SceneNames.WORKSPACE_POPUP_SCENE);
     }
 
     public void OnContinueButton()
     {
         // Saved Game Scene Start
-        PopupHandler.Instance.FloatInfoPopup(HandleContinueButtonAction, "이어 하기 (준비 중)", "해당 기능은 구현 중 입니다.", "확인");
+        PopupHandler.Instance.DisplayInfoPopup(HandleContinueButtonAction, "이어 하기 (준비 중)", "해당 기능은 구현 중 입니다.", "확인");
     }
 
     private void HandleContinueButtonAction(bool isPositive)
     {
     }
 
-    public void OnExitButton()
+    public void OnExitButtonClick()
     {
-        PopupHandler.Instance.FloatConfirmPopup(HandleExitPopupButtonAction, "게임 종료", "게임을 종료하시겠습니까?", "예", "아니오");
+        PopupHandler.Instance.DisplayConfirmPopup(HandleExitPopupButtonAction, "게임 종료", "게임을 종료하시겠습니까?", "예", "아니오");
+    }
+    
+    private void HandleErrorPopupButtonAction(bool isPositive)
+    {
+        // Error에 대한 처리를 여기서 작성합니다.
     }
 
     private void HandleExitPopupButtonAction(bool isPositive)

@@ -38,7 +38,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 234.755, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3773766829418276813
@@ -122,19 +122,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8829762075403047778}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 60758083775390536}
-        m_TargetAssemblyTypeName: PopupButtonHandler, Assembly-CSharp
-        m_MethodName: OnNegativeButtonClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &5351941436478240264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,6 +535,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50430ce00598148989f10f0c1d06de25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _positiveButton: {fileID: 6617339387590454062}
+  _negativeButton: {fileID: 2263487188431050549}
 --- !u!1 &5979476692699583970
 GameObject:
   m_ObjectHideFlags: 0
@@ -720,7 +710,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 234.755, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6038567918376243473
@@ -804,19 +794,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 497966017558698935}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 60758083775390536}
-        m_TargetAssemblyTypeName: PopupButtonHandler, Assembly-CSharp
-        m_MethodName: OnPositiveButtonClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &3182589920349926010
 MonoBehaviour:
   m_ObjectHideFlags: 0

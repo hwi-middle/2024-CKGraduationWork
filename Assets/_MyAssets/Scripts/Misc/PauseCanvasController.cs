@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseCanvasController : MonoBehaviour
@@ -15,8 +16,9 @@ public class PauseCanvasController : MonoBehaviour
         _resumeButton.onClick.AddListener(HandleResumeButton);
         _optionsButton.onClick.AddListener(HandleOptionsButton);
         _quitButton.onClick.AddListener(HandleQuitButton);
-        
-        _quitButton.gameObject.SetActive(!SceneManagerBase.Instance.IsMainMenu);
+
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        _quitButton.gameObject.SetActive(!currentSceneName.Equals(SceneNames.MAIN_MENU));
     }
     
     private void OnDisable()
@@ -33,7 +35,7 @@ public class PauseCanvasController : MonoBehaviour
     
     private void HandleOptionsButton()
     {
-        SceneManagerBase.Instance.OnOptionsButtonClick();
+        SceneManagerBase.Instance.OnSettingsButtonClick();
     }
     
     private void HandleQuitButton()
