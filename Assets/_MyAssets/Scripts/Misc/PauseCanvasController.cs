@@ -17,8 +17,8 @@ public class PauseCanvasController : MonoBehaviour
         _optionsButton.onClick.AddListener(HandleOptionsButton);
         _quitButton.onClick.AddListener(HandleQuitButton);
 
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        _quitButton.gameObject.SetActive(!currentSceneName.Equals(SceneNames.MAIN_MENU));
+        bool isMainMenu = SceneManager.GetActiveScene().name.Equals(SceneNames.MAIN_MENU);
+        _quitButton.gameObject.SetActive(!isMainMenu);
     }
     
     private void OnDisable()
