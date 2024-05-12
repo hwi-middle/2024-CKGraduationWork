@@ -20,7 +20,6 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
     public Action<Vector2> moveEvent;
     public Action runEvent;
     public Action runQuitEvent;
-    public Action wireEvent;
     public Action assassinateEvent;
     public Action crouchEvent;
     public Action pauseEvent;
@@ -73,16 +72,6 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
         }
         
         runEvent?.Invoke();
-    }
-
-    public void OnWire(InputAction.CallbackContext context)
-    {
-        if (!context.started)
-        {
-            return;
-        }
-        
-        wireEvent?.Invoke();
     }
 
     public void OnAssassinate(InputAction.CallbackContext context)
