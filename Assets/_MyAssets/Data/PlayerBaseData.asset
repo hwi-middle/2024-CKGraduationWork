@@ -29,6 +29,12 @@ MonoBehaviour:
   itemImpactRadius: 15
   itemGaugeAmount: 0
   maxDistanceHideableObject: 3
+  walkNoiseRadius: 1
+  walkNoiseIncrementPerSecond: 10
+  sprintNoiseRadius: 2
+  sprintNoiseIncrementPerSecond: 20
+  crouchWalkNoiseRadius: 2
+  crouchWalkNoiseIncrementPerSecond: 5
   slopeSlideSpeed: 4
   playerCanvas: {fileID: 6670551468554774952, guid: d145af9e61baa8f4b86278040d640948,
     type: 3}

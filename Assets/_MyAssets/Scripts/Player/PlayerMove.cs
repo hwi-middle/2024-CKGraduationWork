@@ -42,6 +42,9 @@ public class PlayerMove : Singleton<PlayerMove>
     // Player Respawn
     private IEnumerator _movePlayerToRespawnPointRoutine;
     [SerializeField] private float _respawnMoveDuration;
+    
+    // Noise
+    private MakeNoiseHandler _makeNoiseHandler;
 
     private enum EAssassinationType
     {
@@ -80,6 +83,8 @@ public class PlayerMove : Singleton<PlayerMove>
 
         Instantiate(_playerData.lineRendererPrefab);
         LineDrawHelper.Instance.DisableLine();
+
+        _makeNoiseHandler = GetComponent<MakeNoiseHandler>();
     }
 
     private void OnEnable()
@@ -185,14 +190,17 @@ public class PlayerMove : Singleton<PlayerMove>
         if (CheckPlayerState(EPlayerState.Run))
         {
             _playerApplySpeed = _playerData.runSpeed;
+            _makeNoiseHandler.OnMakeNoise(_playerData.sprintNoiseRadius, _playerData.sprintNoiseIncrementPerSecond * Time.deltaTime);
         }
         else if (CheckPlayerState(EPlayerState.Crouch))
         {
             _playerApplySpeed = _playerData.crouchSpeed;
+            _makeNoiseHandler.OnMakeNoise(_playerData.crouchWalkNoiseRadius, _playerData.crouchWalkNoiseIncrementPerSecond * Time.deltaTime);
         }
         else
         {
             _playerApplySpeed = _playerData.walkSpeed;
+            _makeNoiseHandler.OnMakeNoise(_playerData.walkNoiseRadius, _playerData.walkNoiseIncrementPerSecond * Time.deltaTime);
         }
 
         _velocity.x *= _playerApplySpeed;
@@ -209,11 +217,6 @@ public class PlayerMove : Singleton<PlayerMove>
         else
         {
             _yVelocity += Physics.gravity.y * _gravityMultiplier * Time.deltaTime;
-        }
-
-        if (_yVelocity < 0)
-        {
-            _yVelocity = 0;
         }
 
         _velocity.y = _yVelocity;

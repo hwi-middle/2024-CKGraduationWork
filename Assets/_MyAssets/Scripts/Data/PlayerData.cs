@@ -40,7 +40,15 @@ public class PlayerData : ScriptableObject
 
     [Header("숨기")]
     [Tooltip("숨을 수 있는 오브젝트 최대 거리")] public float maxDistanceHideableObject;
-
+    
+    [Header("플레이어가 내는 소리")]
+    [Tooltip("걷기 시 소리 반경")] public float walkNoiseRadius;
+    [Tooltip("걷기 시 초당 인지게이지 증가량")] public float walkNoiseIncrementPerSecond;
+    [Tooltip("달리기 시 소리 반경")] public float sprintNoiseRadius;
+    [Tooltip("달리기 시 초당 인지게이지 증가량")] public float sprintNoiseIncrementPerSecond;
+    [Tooltip("앉은 상태로 걷기 시 소리 반경")] public float crouchWalkNoiseRadius;
+    [Tooltip("앉은 상태로 걷기 시 초당 인지게이지 증가량")] public float crouchWalkNoiseIncrementPerSecond;
+    
     [Header("-----변경 시 주의-----")]
     [Header("경사로 미끄러짐 속도")]
     [Tooltip("올라기지 못하는 경사로에서 미끄러질 때 속도")] public float slopeSlideSpeed;
