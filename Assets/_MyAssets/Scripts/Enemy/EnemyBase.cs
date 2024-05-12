@@ -65,7 +65,17 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         _tree.Update();
         _animator.SetFloat(AK_Speed, _navMeshAgent.velocity.magnitude);
+        if (_perceptionGauge > 0)
+        {
+            SSPerceptionGaugeUiHandler.Instance.RegisterEnemy(this);
+            SSPerceptionGaugeUiHandler.Instance.UpdateEnemyPerceptionGauge(this);
+        }
+        else
+        {
+            SSPerceptionGaugeUiHandler.Instance.UnregisterEnemy(this);
+        }
         
+        // 에디터가 아니라면 프레임마다 할당해 줄 필요는 없음
 #if UNITY_EDITOR
         _navMeshAgent.stoppingDistance = _aiData.stoppingDistance;
 #endif
@@ -94,6 +104,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         // 청각만으로는 Detection 단계까지 올라가지 않음
         _perceptionGauge = Mathf.Clamp(_perceptionGauge + increment, 0f, _aiData.alertThreshold);
+        Debug.Log($"OnListenNoiseSound: {_perceptionGauge} (+{increment})");
     }
 
     public void SetDestination(Vector3 destination)

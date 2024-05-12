@@ -12,12 +12,12 @@ public class CheckPlayerOnSideSight : DecoratorNode
 
     protected override void OnStart()
     {
-        SSPerceptionGaugeUiHandler.Instance.RegisterEnemy(agent);
+        // SSPerceptionGaugeUiHandler.Instance.RegisterEnemy(agent);
     }
 
     protected override void OnStop()
     {
-        SSPerceptionGaugeUiHandler.Instance.UpdateEnemyPerceptionGauge(agent);
+        // SSPerceptionGaugeUiHandler.Instance.UpdateEnemyPerceptionGauge(agent);
     }
 
     protected override void OnAbort()
