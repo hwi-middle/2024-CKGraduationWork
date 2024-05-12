@@ -91,56 +91,23 @@ jobs:
         with:
           name: build-StandaloneWindows64
           path: build/StandaloneWindows64
-  buildMacOS:
-    needs: testJob
-    name: 💻macOS
+
+  FreeupDiskForWebGL:
+    needs: buildWindows
+    name: 🗑️FreeupDisk
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
     steps:
-      # Checkout
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          lfs: true
+        - name: FreeupDisk
+          if: failure()
+          run: |
+            sudo swapoff -a
+            sudo rm -f /swapfile
+            sudo apt clean
+            docker rmi $(docker images -q)
+            df -h
 
-      # Cache
-      - uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-
-            
-      - uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          customParameters: -BuildOnCloud
-          targetPlatform: StandaloneOSX
-
-      # Check for dirty branch
-      - name: Check diff if dirty-branch error caused
-        if: failure()
-        run: |
-          git diff --name-only > modified_files.txt
-          echo "List of modified files:"
-          cat modified_files.txt
-          while read -r line; do
-            echo "Changes in $line:"
-            git diff "$line"
-          done < modified_files.txt
-
-      # Output
-      - uses: actions/upload-artifact@v4
-        with:
-          name: build-StandaloneOSX
-          path: build/StandaloneOSX
-          
   buildWebGL:
-    needs: testJob
+    needs: FreeupDiskForWebGL
     name: 🌐WebGL
     runs-on: ubuntu-latest
     strategy:

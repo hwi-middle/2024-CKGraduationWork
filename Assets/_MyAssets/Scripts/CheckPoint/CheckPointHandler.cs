@@ -15,6 +15,6 @@ public class CheckPointHandler : MonoBehaviour
         }
         
         GetComponent<Collider>().enabled = false;
-        CheckPointData.SetCheckPoint(transform.position);
+        CheckPointRootHandler.Instance.SetNewCheckPoint();
     }
 }

@@ -21,12 +21,17 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     public const float DEFAULT_FADE_DURATION = 0.5f;
     public bool IsFading { get; private set; }
 
-    private Player _player;
+    protected Player _player;
     private IEnumerator _playerDeadSequence;
 
     protected virtual void Awake()
     {
+#if !UNITY_EDITOR
+        _isDebugMode = false;
+#endif
+        
         GetSettingsValueAndApply();
+
     }
     
     protected virtual void OnEnable()
@@ -48,17 +53,13 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         _settingCanvas = Instantiate(Resources.Load<GameObject>("SettingCanvas"));
         _settingCanvas.SetActive(false);
         _isPaused = false;
-
-        _player = Player.Instance;
-        CheckPointData.ChangeSceneName(SceneManager.GetActiveScene().name);
     }
 
     protected virtual void Update()
     {
-        ExecuteDeadSequence();
     }
 
-    private void ExecuteDeadSequence()
+    protected void ExecuteDeadSequence()
     {
         if (!_player.IsPlayerDead() || _playerDeadSequence != null)
         {

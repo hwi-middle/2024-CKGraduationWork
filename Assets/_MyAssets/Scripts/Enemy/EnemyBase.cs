@@ -9,15 +9,28 @@ using UnityEngine.AI;
 
 public class EnemyBase : MonoBehaviour, IDamageable
 {
+    public enum EPerceptionPhase
+    {
+        None,
+        Perceive,
+        Suspect,
+        Detection,
+    }
+    
     [SerializeField] private EnemyAiData _aiData;
     public EnemyAiData AiData => _aiData;
     [SerializeField] private BehaviorTree _tree;
     public BehaviorTree Tree => _tree;
     [SerializeField] private Canvas _canvas;
 
+    [SerializeField] private PerceptionBound _centerSight;
+    public PerceptionBound CenterSight => _centerSight;
+    [SerializeField] private PerceptionBound _sideSight;
+    public PerceptionBound SideSight => _sideSight;
+    
     private Animator _animator;
 
-    // AK stands for Animator Key
+    // "AK" stands for Animator Key
     private static readonly int AK_Speed = Animator.StringToHash("Speed");
 
     private float _perceptionGauge = 0f;
@@ -30,7 +43,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public float PerceptionGauge => _perceptionGauge;
     public bool IsPerceptionGaugeFull => _perceptionGauge >= 100f;
-
+    
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -72,11 +85,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    public void OnListenStrangeSound(Vector3 origin, float increase)
+    public void OnListenItemSound(Vector3 origin, float increase)
     {
-        Debug.Log($"listen Sound From : {origin}, Increase : {increase}");
+        _perceptionGauge = Mathf.Clamp(_perceptionGauge, 50f, 100f);
     }
-
 
     public void SetDestination(Vector3 destination)
     {
@@ -103,46 +115,44 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Debug.Assert(false);
         return -1f;
     }
-
-    private Vector3 CalculateDirectionVector(float angle)
-    {
-        return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
-    }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        Handles.color = Color.gray;
-        for (int i = 0; i < _aiData.perceptionRanges.Count - 1; i++) // 마지막 와이어는 따로 그림
-        {
-            Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, 360,
-                _aiData.perceptionRanges[i].rangePercent * _aiData.perceptionDistance / 100);
-        }
-
-        Handles.DrawWireArc(
-            transform.position,
-            Vector3.up,
-            transform.rotation * CalculateDirectionVector(_aiData.perceptionAngle / 2),
-            360 - _aiData.perceptionAngle,
-            _aiData.perceptionDistance);
-
-        Handles.color = _foundPlayer == null ? Color.white : Color.red;
-        Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, -_aiData.perceptionAngle / 2, _aiData.perceptionDistance, 2.0f);
-        Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, _aiData.perceptionAngle / 2, _aiData.perceptionDistance, 2.0f);
-        Handles.DrawLine(transform.position,
-            transform.position + transform.rotation * CalculateDirectionVector(-_aiData.perceptionAngle / 2) * _aiData.perceptionDistance, 2.0f);
-        Handles.DrawLine(transform.position,
-            transform.position + transform.rotation * CalculateDirectionVector(_aiData.perceptionAngle / 2) * _aiData.perceptionDistance, 2.0f);
-
-        if (_foundPlayer != null)
-        {
-            Handles.DrawLine(transform.position, _foundPlayer.position, 2.0f);
-        }
-
-        Handles.color = Color.green;
-        Handles.DrawWireArc(Application.isPlaying ? _moveRangeCenterPos : transform.position, Vector3.up, transform.forward, 360, _aiData.moveRange);
-    }
-#endif
+// #if UNITY_EDITOR
+//    private Vector3 CalculateDirectionVector(float angle)
+//    {
+//        return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
+//    }
+//     private void OnDrawGizmos()
+//     {
+//         Handles.color = Color.gray;
+//         for (int i = 0; i < _aiData.perceptionRanges.Count - 1; i++) // 마지막 와이어는 따로 그림
+//         {
+//             Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, 360,
+//                 _aiData.perceptionRanges[i].rangePercent * _aiData.perceptionDistance / 100);
+//         }
+//
+//         Handles.DrawWireArc(
+//             transform.position,
+//             Vector3.up,
+//             transform.rotation * CalculateDirectionVector(_aiData.perceptionAngle / 2),
+//             360 - _aiData.perceptionAngle,
+//             _aiData.perceptionDistance);
+//
+//         Handles.color = _foundPlayer == null ? Color.white : Color.red;
+//         Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, -_aiData.perceptionAngle / 2, _aiData.perceptionDistance, 2.0f);
+//         Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, _aiData.perceptionAngle / 2, _aiData.perceptionDistance, 2.0f);
+//         Handles.DrawLine(transform.position,
+//             transform.position + transform.rotation * CalculateDirectionVector(-_aiData.perceptionAngle / 2) * _aiData.perceptionDistance, 2.0f);
+//         Handles.DrawLine(transform.position,
+//             transform.position + transform.rotation * CalculateDirectionVector(_aiData.perceptionAngle / 2) * _aiData.perceptionDistance, 2.0f);
+//
+//         if (_foundPlayer != null)
+//         {
+//             Handles.DrawLine(transform.position, _foundPlayer.position, 2.0f);
+//         }
+//
+//         Handles.color = Color.green;
+//         Handles.DrawWireArc(Application.isPlaying ? _moveRangeCenterPos : transform.position, Vector3.up, transform.forward, 360, _aiData.moveRange);
+//     }
+// #endif
 
     public bool IsArrivedToTarget(Vector3 target)
     {
@@ -171,5 +181,25 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         Destroy(gameObject);
         return damageAmount;
+    }
+
+    public EPerceptionPhase GetCurrentPerceptionPhase()
+    {
+        if (_perceptionGauge >= 100f)
+        {
+            return EPerceptionPhase.Detection;
+        }
+
+        if (_perceptionGauge >= 50f)
+        {
+            return EPerceptionPhase.Suspect;
+        }
+
+        if (_perceptionGauge > Mathf.Epsilon)
+        {
+            return EPerceptionPhase.Perceive;
+        }
+
+        return EPerceptionPhase.None;
     }
 }

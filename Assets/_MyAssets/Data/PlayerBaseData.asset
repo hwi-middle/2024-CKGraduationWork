@@ -16,11 +16,14 @@ MonoBehaviour:
   walkSpeed: 2.9
   runSpeed: 6
   crouchSpeed: 1.8
+  rotateSpeed: 5
   jumpHeight: 4.5
   yMultiplier: 4
   minWireDistance: 7
   maxWireDistance: 12
   wireActionDuration: 2
+  overstepActionDuration: 2
+  overstepTargetDistance: 0.5
   assassinateDuration: 1.2
   moveSpeedOnAim: 2
   throwPower: 15

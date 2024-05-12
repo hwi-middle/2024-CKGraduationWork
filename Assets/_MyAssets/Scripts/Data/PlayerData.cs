@@ -14,6 +14,8 @@ public class PlayerData : ScriptableObject
     [Tooltip("달리기 속도")] public float runSpeed;
 
     [Tooltip("앉기 속도")] public float crouchSpeed;
+    
+    [Tooltip("플레이어 회전 속도")] public float rotateSpeed;
 
     [Tooltip("점프 높이")] public float jumpHeight;
     [Tooltip("y 이동 속도 (일반 이동 속도와 분리하기 위함)")] public float yMultiplier;
@@ -24,6 +26,11 @@ public class PlayerData : ScriptableObject
     [Tooltip("와이어 액션 최대 범위")] public float maxWireDistance;
 
     [Tooltip("와이어 액션 시간(초)")] public float wireActionDuration;
+    
+    [Header("장애물 극복 액션")]
+    [Tooltip("장애물 극복 시간(초)")] public float overstepActionDuration;
+
+    [Tooltip("장애물 넘기 도착 거리")] public float overstepTargetDistance;
 
     [Header("암살 액션")]
     [Tooltip("암살 소요 시간(초)")] public float assassinateDuration;

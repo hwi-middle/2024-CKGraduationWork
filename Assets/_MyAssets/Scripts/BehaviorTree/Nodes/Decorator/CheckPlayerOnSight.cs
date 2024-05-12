@@ -13,10 +13,12 @@ public class CheckPlayerOnSight : DecoratorNode
 
     protected override void OnStart()
     {
+        SSPerceptionGaugeUiHandler.Instance.RegisterEnemy(agent);
     }
 
     protected override void OnStop()
     {
+        SSPerceptionGaugeUiHandler.Instance.UpdateEnemyPerceptionGauge(agent);
     }
 
     protected override void OnAbort()
@@ -30,6 +32,7 @@ public class CheckPlayerOnSight : DecoratorNode
             return ENodeState.Failure;
         }
 
+        
         child.Update();
         return ENodeState.Success;
     }
@@ -48,12 +51,18 @@ public class CheckPlayerOnSight : DecoratorNode
         Transform overlappedPlayer = _overlappedPlayerBuffer[0].transform;
         Debug.Assert(overlappedPlayer != null);
 
-        Vector3 direction = (overlappedPlayer.position - agent.transform.position).normalized;
-        if (Vector3.Dot(direction, agent.transform.forward) < Mathf.Cos(agent.AiData.perceptionAngle * 0.5f * Mathf.Deg2Rad))
+        if (!agent.CenterSight.IsOnSight && !agent.SideSight.IsOnSight)
         {
             blackboard.target = null;
             return false;
         }
+        
+        // Vector3 direction = (overlappedPlayer.position - agent.transform.position).normalized;
+        // if (Vector3.Dot(direction, agent.transform.forward) < Mathf.Cos(agent.AiData.perceptionAngle * 0.5f * Mathf.Deg2Rad))
+        // {
+        //     blackboard.target = null;
+        //     return false;
+        // }
 
         // 나(AI)와 플레이어 사이에 장애물이 있는지 확인
         Vector3 rayDirection = (overlappedPlayer.position - agent.transform.position).normalized;

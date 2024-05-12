@@ -9,7 +9,7 @@ TagManager:
   - WirePoint
   - Wall
   - PatrolPoint
-  - Item
+  - InteractionTriggerZone
   layers:
   - Default
   - TransparentFX
@@ -25,8 +25,8 @@ TagManager:
   - Item
   - Enemy
   - Hideable
-  - 
-  - 
+  - AO_Plane
+  - Non_Light
   - 
   - 
   - 
