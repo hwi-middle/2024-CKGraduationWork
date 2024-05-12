@@ -129,17 +129,17 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 916427829}
     m_Modifications:
     - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1599
       objectReference: {fileID: 0}
     - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -104.01999
       objectReference: {fileID: 0}
     - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
         type: 3}
@@ -154,17 +154,17 @@ PrefabInstance:
     - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
         type: 3}
@@ -191,6 +191,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e8a70db09ef07545a324c4d659db62f, type: 3}
+--- !u!4 &217773839 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5338214782293949645, guid: 4e8a70db09ef07545a324c4d659db62f,
+    type: 3}
+  m_PrefabInstance: {fileID: 217773838}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &293098652
 GameObject:
   m_ObjectHideFlags: 0
@@ -878,7 +884,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 217773839}
   m_Father: {fileID: 1191542627}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -906,7 +913,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "7\uC8FC\uCC28 \uC2DC\uC5F0\uC6A9 \uBE4C\uB4DC"
+  m_text: "11\uC8FC\uCC28 \uC2DC\uC5F0\uC6A9 \uBE4C\uB4DC"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fb993a96c41552f4789cd50ddb1593e2, type: 2}
   m_sharedMaterial: {fileID: -3043692392977860844, guid: fb993a96c41552f4789cd50ddb1593e2,
@@ -1845,7 +1852,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Cross [x] Out
+  m_text: Cotton Nightmare
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fb993a96c41552f4789cd50ddb1593e2, type: 2}
   m_sharedMaterial: {fileID: -3043692392977860844, guid: fb993a96c41552f4789cd50ddb1593e2,
@@ -1931,4 +1938,3 @@ SceneRoots:
   - {fileID: 720450734}
   - {fileID: 1805447868}
   - {fileID: 1191542627}
-  - {fileID: 217773838}
