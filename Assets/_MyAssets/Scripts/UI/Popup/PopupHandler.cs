@@ -12,10 +12,12 @@ public class PopupHandler : Singleton<PopupHandler>
         Info,
         Confirm,
         Warning,
-        Error
+        Error,
+        Tutorial
     }
 
     private GameObject _popupPrefab;
+    private GameObject _tutorialVideoRawImage;
 
     private EPopupType _currentType = EPopupType.None;
     
@@ -41,11 +43,14 @@ public class PopupHandler : Singleton<PopupHandler>
         // Description Object
         _description = popupImage.GetChild(2).GetComponent<TMP_Text>();
         
+        // Index 3 is Video Player Raw Image
+        _tutorialVideoRawImage = popupImage.GetChild(3).gameObject;
+        
         // Positive Object
-        _positiveText = popupImage.GetChild(3).GetComponentInChildren<TMP_Text>();
+        _positiveText = popupImage.GetChild(4).GetComponentInChildren<TMP_Text>();
 
         // Negative Object
-        _negativeText = popupImage.GetChild(4).GetComponentInChildren<TMP_Text>();
+        _negativeText = popupImage.GetChild(5).GetComponentInChildren<TMP_Text>();
         
         _popupPrefab.SetActive(false);
     }
@@ -99,6 +104,7 @@ public class PopupHandler : Singleton<PopupHandler>
     /// <summary>
     /// 에러 문구를 띄우는 팝업입니다. 확인 버튼 입력 시 게임을 강제로 종료합니다.
     /// </summary>
+    /// <param name="action">User의 버튼 입력 정보를 받을 Handler</param>
     /// <param name="title">팝업의 타이틀</param>
     /// <param name="description">팝업의 내용</param>
     /// <param name="positive">확인 버튼</param>
@@ -108,12 +114,20 @@ public class PopupHandler : Singleton<PopupHandler>
         _currentType = EPopupType.Error;
         SetPopupTextAndDisplayPopup(title, description, positive);
     }
+    
+    public void DisplayTutorialPopup(Action<bool> action, string title, string description, string positive)
+    {
+        SceneManagerBase.Instance.TogglePause();
+        buttonAction += action;
+        _currentType = EPopupType.Tutorial;
+        SetPopupTextAndDisplayPopup(title, description, positive);
+    }
 
     private void SetPopupTextAndDisplayPopup(string title, string description, string positive, string negative = "")
     {
         switch (_currentType)
         {
-            case EPopupType.Info:
+            case EPopupType.Info or EPopupType.Tutorial:
                 _typeText.text = "알림";
                 break;
             case EPopupType.Confirm:
@@ -130,13 +144,14 @@ public class PopupHandler : Singleton<PopupHandler>
                 Debug.Assert(false);
                 break;
         }
-        
+
         _title.text = title;
         _description.text = description;
         _positiveText.text = positive;
         _negativeText.text = negative;
 
         _negativeText.transform.parent.gameObject.SetActive(!negative.Equals(string.Empty));
+        _tutorialVideoRawImage.SetActive(_currentType is EPopupType.Tutorial);
         
         _popupPrefab.SetActive(true);
     }

@@ -123,9 +123,13 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     private void TogglePauseCanvas()
     {
-        _isPaused = !_isPaused;
-        
+        TogglePause();
         _pauseCanvas.SetActive(_isPaused);
+    }
+
+    public void TogglePause()
+    {
+        _isPaused = !_isPaused;
         Time.timeScale = _isPaused ? 0.0f : 1.0f;
     }
 
