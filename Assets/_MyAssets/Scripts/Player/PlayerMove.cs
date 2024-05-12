@@ -34,10 +34,7 @@ public class PlayerMove : Singleton<PlayerMove>
     private GameObject _playerCanvas;
 
     private Vector3 _targetPosition;
-
     private float _playerApplySpeed;
-
-    private static readonly Vector3 CAMERA_CENTER_POINT = new(0.5f, 0.5f, 0.0f);
     
     // Player Respawn
     private IEnumerator _movePlayerToRespawnPointRoutine;
@@ -46,23 +43,14 @@ public class PlayerMove : Singleton<PlayerMove>
     // Noise
     private MakeNoiseHandler _makeNoiseHandler;
 
-    private enum EAssassinationType
-    {
-        Ground, // 평지에서 암살
-        Fall, // 위에서 아래로 떨어지며 암살
-        Jump, // 아래에서 위로 점프하며 암살
-    }
-
     [SerializeField] private PlayerAssassinationData _assassinationData;
 
     private bool _isAssassinating = false;
-    private Transform _assassinationTarget;
 
     [Header("Gravity Scale")] [SerializeField]
     private float _gravityMultiplier;
 
     private float _yVelocity;
-    private float YVelocity => _yVelocity;
 
     private Vector3 _inputDirection;
     private Vector3 _velocity;
@@ -136,11 +124,6 @@ public class PlayerMove : Singleton<PlayerMove>
             {
                 _isInitialized = true;
             }
-        }
-        
-        if (!_isAssassinating)
-        {
-            _assassinationTarget = GetAimingEnemy();
         }
     }
 
@@ -271,151 +254,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
         AddPlayerState(EPlayerState.Walk);
     }
-
-    private List<GameObject> GetWirePoints()
-    {
-        List<GameObject> detectedWirePoints = new();
-        Vector3 playerPos = transform.position;
-
-        Collider[] wirePointsInRange =
-            Physics.OverlapSphere(playerPos, _playerData.maxWireDistance, LayerMask.GetMask("WirePoint"));
-
-        foreach (Collider wirePoint in wirePointsInRange)
-        {
-            Vector3 wirePointPos = wirePoint.transform.position;
-            float distance = (wirePointPos - playerPos).magnitude;
-            if (distance < _playerData.minWireDistance || _camera.WorldToViewportPoint(wirePointPos).z < 0)
-            {
-                continue;
-            }
-
-            detectedWirePoints.Add(wirePoint.gameObject);
-        }
-
-        return detectedWirePoints;
-    }
-
-    private GameObject FindNearestWirePointFromAim()
-    {
-        List<GameObject> wirePointInScreen = GetWirePoints();
-
-        if (wirePointInScreen.Count == 0)
-        {
-            return null;
-        }
-
-        const float INFINITY = 2.0f;
-        float minDistanceFromCenter = INFINITY;
-        GameObject nearestWirePoint = null;
-
-        foreach (GameObject wirePoint in wirePointInScreen)
-        {
-            Vector3 wirePointPos = wirePoint.transform.position;
-            Vector3 viewportPos = _camera.WorldToViewportPoint(wirePointPos);
-
-            float distanceFromAim = ((Vector2)CAMERA_CENTER_POINT - (Vector2)viewportPos).magnitude;
-            const float RESTRICT_RANGE_FROM_CENTER = 0.15f;
-
-            if (distanceFromAim > minDistanceFromCenter || distanceFromAim > RESTRICT_RANGE_FROM_CENTER)
-            {
-                continue;
-            }
-
-            minDistanceFromCenter = distanceFromAim;
-            nearestWirePoint = wirePoint;
-        }
-
-        return nearestWirePoint;
-    }
     
-    private Transform GetAimingEnemy()
-    {
-        Camera mainCamera = Camera.main;
-        Debug.Assert(mainCamera != null);
-        Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-        float assassinateDistance = _assassinationData.assassinateDistance;
-        int layerMask = (-1) - (1 << LayerMask.NameToLayer("BypassAiming"));
-
-        if (Physics.Raycast(ray, out RaycastHit hit, assassinateDistance, layerMask) &&
-            hit.transform.CompareTag("AssassinationTarget"))
-        {
-            return hit.transform;
-        }
-
-        return null;
-    }
-
-    private void Assassinate()
-    {
-        Debug.Assert(_assassinationTarget != null);
-
-        EAssassinationType assassinationType;
-        float yPositionDiff = Mathf.Abs(transform.position.y - _assassinationTarget.position.y);
-        if (transform.position.y > _assassinationTarget.position.y &&
-            yPositionDiff >= _assassinationData.fallAssassinationHeightThreshold)
-        {
-            assassinationType = EAssassinationType.Fall;
-        }
-        else if (transform.position.y < _assassinationTarget.position.y &&
-                 yPositionDiff >= _assassinationData.jumpAssassinationHeightThreshold)
-        {
-            assassinationType = EAssassinationType.Jump;
-        }
-        else
-        {
-            assassinationType = EAssassinationType.Ground;
-        }
-
-        StartCoroutine(AssassinateRoutine(assassinationType));
-    }
-
-    private IEnumerator AssassinateRoutine(EAssassinationType assassinationType)
-    {
-        _isAssassinating = true;
-
-        float assassinationDuration = 0f;
-        switch (assassinationType)
-        {
-            case EAssassinationType.Ground:
-                assassinationDuration = _assassinationData.groundAssassinationDuration;
-                break;
-            case EAssassinationType.Jump:
-                assassinationDuration = _assassinationData.jumpAssassinationDuration;
-                break;
-            case EAssassinationType.Fall:
-                assassinationDuration = _assassinationData.fallAssassinationDuration;
-
-                while (YVelocity > 0f)
-                {
-                    yield return null;
-                }
-
-                break;
-            default:
-                Debug.Assert(false);
-                break;
-        }
-
-        float t = 0f;
-        Vector3 initialPos = transform.position;
-
-        while (t <= assassinationDuration)
-        {
-            float alpha = t / assassinationDuration;
-            transform.position = Vector3.Lerp(initialPos, _assassinationTarget.position, alpha * alpha * alpha);
-
-            yield return null;
-            t += Time.deltaTime;
-        }
-
-        // 임시 암살 처리
-        Destroy(_assassinationTarget.gameObject);
-
-        // TODO: 실제 적에게 데미지를 입혀야함
-
-        _isAssassinating = false;
-    }
-
     private void HandleRunAction()
     {
         if (CameraController.Instance.IsOnChangeHeightRoutine)
