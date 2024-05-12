@@ -20,7 +20,7 @@ public class Demo7WeekSceneManager : SceneManagerBase
         {
             if (Input.GetKeyDown(KeyCode.T))
             {
-                LoadSceneWithLoadingUI("Respawn2");
+                LoadSceneWithLoadingUI(SceneNames.WORKSPACE_RESPAWN_2);
             }
         }
     }

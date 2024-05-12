@@ -125,10 +125,6 @@ public class PlayerMove : Singleton<PlayerMove>
     {
         Debug.Assert(_controller != null, "_controller !=null");
 
-        // Cursor Visible
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         _camera = Camera.main;
     }
 

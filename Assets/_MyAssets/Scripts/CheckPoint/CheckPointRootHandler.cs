@@ -17,6 +17,9 @@ public class CheckPointRootHandler : Singleton<CheckPointRootHandler>
     private int _currentIndex;
     
     private bool IsSameScene => PlayerPrefs.GetString(_lastSceneName).Equals(SceneManager.GetActiveScene().name);
+
+    public bool HasSavedCheckPointData =>
+        !PlayerPrefs.GetString(CheckPointPlayerPrefsNames.LAST_SCENE_NAME).Equals(SceneNames.MAIN_MENU);
     
     public Vector3 LastCheckPoint
     {

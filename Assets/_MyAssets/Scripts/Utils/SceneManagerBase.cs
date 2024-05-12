@@ -1,20 +1,30 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Cursor = UnityEngine.Cursor;
 using Image = UnityEngine.UI.Image;
 
+[RequireComponent(typeof(PopupHandler))]
+[RequireComponent(typeof(CursorLockModeUpdater))]
 public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 {
+    [SerializeField] private PlayerInputData _inputData;
+    
     [SerializeField] private bool _isDebugMode;
+    [SerializeField] private bool _isNeedCursorLock;
+
+    public bool IsNeedCursorLock => _isNeedCursorLock;
     public bool IsDebugMode => _isDebugMode;
     
-    [SerializeField] private PlayerInputData _inputData;
-    [SerializeField] private bool _cursorLock;
     private SceneFadeManager _fadeManager;
-    private GameObject _settingCanvas;
+    
+    private GameObject _settingsCanvas;
+    private GameObject _pauseCanvas;
+
+    public bool IsSettingsCanvasActive => _settingsCanvas.activeSelf;
+    public bool IsPauseCanvasActive => _pauseCanvas.activeSelf;
 
     private bool _isPaused;
 
@@ -29,9 +39,8 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 #if !UNITY_EDITOR
         _isDebugMode = false;
 #endif
-        
-        GetSettingsValueAndApply();
 
+        GetSettingsValueAndApply();
     }
     
     protected virtual void OnEnable()
@@ -50,8 +59,12 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         _fadeManager = SceneFadeManager.Instance;
         _fadeManager.GetComponent<Image>().enabled = true;
 
-        _settingCanvas = Instantiate(Resources.Load<GameObject>("SettingCanvas"));
-        _settingCanvas.SetActive(false);
+        _settingsCanvas = Instantiate(Resources.Load<GameObject>("SettingsCanvas"));
+        _settingsCanvas.SetActive(false);
+
+        _pauseCanvas = Instantiate(Resources.Load<GameObject>("PauseCanvas"));
+        _pauseCanvas.SetActive(false);
+        
         _isPaused = false;
     }
 
@@ -85,41 +98,66 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     private void HandlePauseAction()
     {
-        Debug.Assert(_settingCanvas != null, "_settingCanvas != null");
+        Debug.Assert(_settingsCanvas != null, "_settingsCanvas != null");
+        Debug.Assert(_pauseCanvas != null, "_popupCanvas != null");
         
         if (IsFading)
         {
             return;
         }
+
+        if (PopupHandler.Instance.IsPopupActive)
+        {
+            PopupHandler.Instance.ClosePopup();
+            return;
+        }
+
+        if (IsSettingsCanvasActive)
+        {
+            ToggleSettingsCanvas();
+            return;
+        }
         
-        ToggleSettingCanvas();
+        TogglePauseCanvas();
     }
-    
-    private void ToggleSettingCanvas()
+
+    private void TogglePauseCanvas()
     {
         _isPaused = !_isPaused;
         
-        _settingCanvas.SetActive(_isPaused);
-        ToggleCursorVisible();
+        _pauseCanvas.SetActive(_isPaused);
         Time.timeScale = _isPaused ? 0.0f : 1.0f;
     }
 
-    private void ToggleCursorVisible()
+    public void OnResumeButtonClick()
     {
-        if (_settingCanvas.activeSelf)
+        TogglePauseCanvas();
+    }
+
+    public void OnSettingsButtonClick()
+    {
+        ToggleSettingsCanvas();
+    }
+
+    public void OnQuitButtonClick()
+    {
+        PopupHandler.Instance.DisplayConfirmPopup(HandlePopupButtonAction, "메인으로", "메인 메뉴로 돌아가시겠습니까?", "예", "아니오");
+    }
+
+    private void HandlePopupButtonAction(bool isPositive)
+    {
+        if (!isPositive)
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
             return;
         }
 
-        if (!_cursorLock)
-        {
-            return;
-        }
-        
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        TogglePauseCanvas();
+        LoadSceneWithLoadingUI(SceneNames.MAIN_MENU);
+    }
+
+    private void ToggleSettingsCanvas()
+    {
+        _settingsCanvas.SetActive(!IsSettingsCanvasActive);
     }
 
     public void FadeIn(float duration, float delay = 0f, bool ignoreAudio = false)
