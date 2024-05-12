@@ -14,7 +14,7 @@ public class PauseCanvasController : MonoBehaviour
     private void OnEnable()
     {
         _resumeButton.onClick.AddListener(HandleResumeButton);
-        _optionsButton.onClick.AddListener(HandleOptionsButton);
+        _optionsButton.onClick.AddListener(HandleSettingsButton);
         _quitButton.onClick.AddListener(HandleQuitButton);
 
         bool isMainMenu = SceneManager.GetActiveScene().name.Equals(SceneNames.MAIN_MENU);
@@ -24,7 +24,7 @@ public class PauseCanvasController : MonoBehaviour
     private void OnDisable()
     {
         _resumeButton.onClick.RemoveListener(HandleResumeButton);
-        _optionsButton.onClick.RemoveListener(HandleOptionsButton);
+        _optionsButton.onClick.RemoveListener(HandleSettingsButton);
         _quitButton.onClick.RemoveListener(HandleQuitButton);
     }
     
@@ -33,7 +33,7 @@ public class PauseCanvasController : MonoBehaviour
         SceneManagerBase.Instance.OnResumeButtonClick();
     }
     
-    private void HandleOptionsButton()
+    private void HandleSettingsButton()
     {
         SceneManagerBase.Instance.OnSettingsButtonClick();
     }
