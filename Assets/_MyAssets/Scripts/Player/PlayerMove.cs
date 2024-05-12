@@ -12,11 +12,12 @@ public enum EPlayerState
     Walk = 1 << 2,
     Run = 1 << 3,
     Crouch = 1 << 4,
-    Hide = 1 << 7,
-    Peek = 1 << 8,
-    Alive = 1 << 9,
-    Dead = 1 << 10,
-    WireAction = 1 << 11,
+    Hide = 1 << 5,
+    Peek = 1 << 6,
+    Alive = 1 << 7,
+    Dead = 1 << 8,
+    WireAction = 1 << 9,
+    Overstep = 1 << 10,
 }
 
 public class PlayerMove : Singleton<PlayerMove>
@@ -86,6 +87,8 @@ public class PlayerMove : Singleton<PlayerMove>
     private bool _isSliding;
     private Vector3 _slideVelocity;
 
+    private bool CanActing => !CheckPlayerState(EPlayerState.Dead) && !CheckPlayerState(EPlayerState.Overstep);
+
     private bool IsGrounded => _controller.isGrounded;
 
     protected virtual void Awake()
@@ -122,16 +125,12 @@ public class PlayerMove : Singleton<PlayerMove>
     {
         Debug.Assert(_controller != null, "_controller !=null");
 
-        // Cursor Visible
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         _camera = Camera.main;
     }
 
     protected virtual void Update()
     {
-        if (!CheckPlayerState(EPlayerState.Dead))
+        if (CanActing)
         {
             ShowWirePointUI();
             RotatePlayer();
@@ -295,7 +294,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void HandleMoveAction(Vector2 pos)
     {
-        if (IsOnWire)
+        if (IsOnWire || !CanActing)
         {
             return;
         }
@@ -626,11 +625,11 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void HandleRunAction()
     {
-        if (CameraController.Instance.IsOnChangeHeightRoutine)
+        if (CameraController.Instance.IsOnChangeHeightRoutine || !CheckPlayerState(EPlayerState.Walk))
         {
             return;
         }
-        
+
         // Run과 Crouch 상태 중 우선 순위는 Run
         if (CheckPlayerState(EPlayerState.Crouch))
         {
@@ -648,7 +647,8 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void HandleCrouchAction()
     {
-        if (!IsGrounded || CheckPlayerState(EPlayerState.Run) || CameraController.Instance.IsOnChangeHeightRoutine)
+        if (!IsGrounded || CheckPlayerState(EPlayerState.Run) || CameraController.Instance.IsOnChangeHeightRoutine
+            || !CanActing)
         {
             return;
         }

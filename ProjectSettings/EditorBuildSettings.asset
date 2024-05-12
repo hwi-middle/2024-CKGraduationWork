@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/_MyAssets/Scenes/MainMenu.unity
     guid: c3a0d83db3470f841b680f165d8dea31
   - enabled: 1
-    path: Assets/_MyAssets/Scenes/Workspace/Environment/LastScene.unity
-    guid: 43144c37018f2624dad95d00cd7cc69a
+    path: Assets/_MyAssets/Scenes/Workspace/Popup/PopupScene.unity
+    guid: aa8642894c802024ca2c4b19b70babac
   m_configObjects: {}
