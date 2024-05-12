@@ -6,7 +6,12 @@ using UnityEngine;
 public abstract class SightBound : MonoBehaviour
 {
     public bool IsOnSight { get; private set; }
-    
+
+    protected virtual void Awake()
+    {
+        GetComponent<Renderer>().enabled = SceneManagerBase.Instance.IsDebugMode;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         IsOnSight = true;

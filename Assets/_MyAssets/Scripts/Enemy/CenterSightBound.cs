@@ -8,8 +8,9 @@ public class CenterSightBound : SightBound
     private Transform _sightStart;
     private Transform _sightEnd;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _player = Player.Instance;
         Debug.Assert(_player != null);
         Debug.Assert(transform.childCount >= 2);
