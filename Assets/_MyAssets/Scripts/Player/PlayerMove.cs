@@ -125,8 +125,27 @@ public class PlayerMove : Singleton<PlayerMove>
                 _isInitialized = true;
             }
         }
+
+        MakeNoiseByCurrentState();
     }
 
+    private void MakeNoiseByCurrentState()
+    {
+        if (CheckPlayerState(EPlayerState.Walk))
+        {
+            bool isCrouch = CheckPlayerState(EPlayerState.Crouch);
+            float noiseRadius = isCrouch ? _playerData.crouchWalkNoiseRadius : _playerData.walkNoiseRadius;
+            float noiseIncrement = isCrouch ? _playerData.crouchWalkNoiseIncrementPerSecond : _playerData.walkNoiseIncrementPerSecond ;
+            _makeNoiseHandler.OnMakeNoise(noiseRadius, noiseIncrement * Time.deltaTime);
+        }
+        else if (CheckPlayerState(EPlayerState.Run))
+        {
+            float noiseRadius = _playerData.sprintNoiseRadius;
+            float noiseIncrement = _playerData.sprintNoiseIncrementPerSecond;
+            _makeNoiseHandler.OnMakeNoise(noiseRadius, noiseIncrement * Time.deltaTime);
+        }
+    }
+    
     public void AlignPlayerToCameraForward()
     {
         if (CameraController.Instance.IsBlending)
@@ -173,17 +192,14 @@ public class PlayerMove : Singleton<PlayerMove>
         if (CheckPlayerState(EPlayerState.Run))
         {
             _playerApplySpeed = _playerData.runSpeed;
-            _makeNoiseHandler.OnMakeNoise(_playerData.sprintNoiseRadius, _playerData.sprintNoiseIncrementPerSecond * Time.deltaTime);
         }
         else if (CheckPlayerState(EPlayerState.Crouch))
         {
             _playerApplySpeed = _playerData.crouchSpeed;
-            _makeNoiseHandler.OnMakeNoise(_playerData.crouchWalkNoiseRadius, _playerData.crouchWalkNoiseIncrementPerSecond * Time.deltaTime);
         }
         else
         {
             _playerApplySpeed = _playerData.walkSpeed;
-            _makeNoiseHandler.OnMakeNoise(_playerData.walkNoiseRadius, _playerData.walkNoiseIncrementPerSecond * Time.deltaTime);
         }
 
         _velocity.x *= _playerApplySpeed;
