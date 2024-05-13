@@ -15,6 +15,9 @@ public class CheckPointGenerator : Editor
     
     // 마우스 클릭 이벤트 -> OnSceneGUI으로부터 호출
     private Action _mouseClickAction;
+
+    private Vector3 _mouseWorldPosition;
+    private Collider[] _overlappedCheckPoint = new Collider[1];
     
     private void OnEnable()
     {
@@ -74,28 +77,56 @@ public class CheckPointGenerator : Editor
     private void HandleMouseClickAction()
     {
         Vector3 mousePosition = Event.current.mousePosition;
+        if (!IsAnyObjectHit(mousePosition) || !IsOverlappedObjectExist())
+        {
+            return;
+        }
+
+        GenerateCheckPoint();
+    }
+
+    private bool IsAnyObjectHit(Vector3 mousePosition)
+    {
         Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
         if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
             _isGenerateButtonClicked = false;
             Debug.LogError($"Generate Failed : No Hit Object");
-            return;
+            return false;
         }
 
         const float OFFSET = 0.5f;
-        Vector3 hitPosition = hit.point;
-        hitPosition.y += OFFSET;
-        GenerateCheckPoint(hitPosition);
+        _mouseWorldPosition = hit.point;
+        _mouseWorldPosition.y += OFFSET;
+        return true;
     }
 
-    private void GenerateCheckPoint(Vector3 position)
+    private bool IsOverlappedObjectExist()
+    {
+        const float RADIUS = 1.0f;
+        int layerMask = LayerMask.GetMask("CheckPoint");
+
+        int count = Physics.OverlapSphereNonAlloc(_mouseWorldPosition, RADIUS, _overlappedCheckPoint, layerMask,
+            QueryTriggerInteraction.Collide);
+
+        if (count is 0)
+        {
+            return true;
+        }
+
+        _isGenerateButtonClicked = false;
+        Debug.LogError($"Generate Failed : Already Exist CheckPoint Nearby");
+        return false;
+    }
+
+    private void GenerateCheckPoint()
     {
         GameObject checkPointPrefab = Instantiate(Resources.Load<GameObject>("CheckPoint/CheckPoint"),
             _checkPointRootHandler.transform);
-        checkPointPrefab.transform.position = position;
+        checkPointPrefab.transform.position = _mouseWorldPosition;
         _checkPointRootHandler.CheckPointList.Add(checkPointPrefab);
 
-        Debug.Log($"Success to Generate CheckPoint! : Position {position}");
+        Debug.Log($"Success to Generate CheckPoint! : Position {_mouseWorldPosition}");
         _isGenerateButtonClicked = false;
     }
 }
