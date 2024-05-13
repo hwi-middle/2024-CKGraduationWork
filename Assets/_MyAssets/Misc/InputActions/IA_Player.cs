@@ -46,15 +46,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Wire"",
-                    ""type"": ""Button"",
-                    ""id"": ""a8213568-675a-4e6f-9131-535bee700080"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Assassinate"",
                     ""type"": ""Button"",
                     ""id"": ""c806ddfd-84d4-4e85-a89f-bef7e0450b60"",
@@ -173,17 +164,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6bb6b0dd-0548-42cb-bbbd-ed203beb2a2a"",
-                    ""path"": ""<Mouse>/middleButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PC"",
-                    ""action"": ""Wire"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
@@ -422,7 +402,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_PlayerAction = asset.FindActionMap("PlayerAction", throwIfNotFound: true);
         m_PlayerAction_Move = m_PlayerAction.FindAction("Move", throwIfNotFound: true);
         m_PlayerAction_Run = m_PlayerAction.FindAction("Run", throwIfNotFound: true);
-        m_PlayerAction_Wire = m_PlayerAction.FindAction("Wire", throwIfNotFound: true);
         m_PlayerAction_Assassinate = m_PlayerAction.FindAction("Assassinate", throwIfNotFound: true);
         m_PlayerAction_Crouch = m_PlayerAction.FindAction("Crouch", throwIfNotFound: true);
         m_PlayerAction_Pause = m_PlayerAction.FindAction("Pause", throwIfNotFound: true);
@@ -498,7 +477,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private List<IPlayerActionActions> m_PlayerActionActionsCallbackInterfaces = new List<IPlayerActionActions>();
     private readonly InputAction m_PlayerAction_Move;
     private readonly InputAction m_PlayerAction_Run;
-    private readonly InputAction m_PlayerAction_Wire;
     private readonly InputAction m_PlayerAction_Assassinate;
     private readonly InputAction m_PlayerAction_Crouch;
     private readonly InputAction m_PlayerAction_Pause;
@@ -512,7 +490,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         public PlayerActionActions(@IA_Player wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_PlayerAction_Move;
         public InputAction @Run => m_Wrapper.m_PlayerAction_Run;
-        public InputAction @Wire => m_Wrapper.m_PlayerAction_Wire;
         public InputAction @Assassinate => m_Wrapper.m_PlayerAction_Assassinate;
         public InputAction @Crouch => m_Wrapper.m_PlayerAction_Crouch;
         public InputAction @Pause => m_Wrapper.m_PlayerAction_Pause;
@@ -535,9 +512,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Run.started += instance.OnRun;
             @Run.performed += instance.OnRun;
             @Run.canceled += instance.OnRun;
-            @Wire.started += instance.OnWire;
-            @Wire.performed += instance.OnWire;
-            @Wire.canceled += instance.OnWire;
             @Assassinate.started += instance.OnAssassinate;
             @Assassinate.performed += instance.OnAssassinate;
             @Assassinate.canceled += instance.OnAssassinate;
@@ -569,9 +543,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Run.started -= instance.OnRun;
             @Run.performed -= instance.OnRun;
             @Run.canceled -= instance.OnRun;
-            @Wire.started -= instance.OnWire;
-            @Wire.performed -= instance.OnWire;
-            @Wire.canceled -= instance.OnWire;
             @Assassinate.started -= instance.OnAssassinate;
             @Assassinate.performed -= instance.OnAssassinate;
             @Assassinate.canceled -= instance.OnAssassinate;
@@ -694,7 +665,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
-        void OnWire(InputAction.CallbackContext context);
         void OnAssassinate(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);

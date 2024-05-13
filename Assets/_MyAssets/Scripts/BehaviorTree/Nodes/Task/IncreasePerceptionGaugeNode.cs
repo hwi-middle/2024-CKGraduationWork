@@ -29,8 +29,7 @@ public class IncreasePerceptionGaugeNode : TaskNode
             return ENodeState.Failure;
         } 
         
-        float distance= Vector3.Distance(agent.transform.position, player.transform.position);
-        agent.IncrementPerceptionGauge(distance);
+        agent.IncrementPerceptionGauge();
         
         return ENodeState.Success;
     }

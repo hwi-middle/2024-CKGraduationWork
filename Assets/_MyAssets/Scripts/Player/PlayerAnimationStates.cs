@@ -10,7 +10,6 @@ public class PlayerAnimationStates : MonoBehaviour
     public static readonly int JUMP = Animator.StringToHash("IsJump");
     public static readonly int CROUCH = Animator.StringToHash("IsCrouch");
     public static readonly int SLIDING = Animator.StringToHash("IsSliding");
-    public static readonly int WIREACTION = Animator.StringToHash("IsWireAction");
     public static readonly int DEAD = Animator.StringToHash("IsDead");
     public static readonly int OVERSTEP = Animator.StringToHash("IsOverstep");
 }

@@ -28,7 +28,7 @@ public class CheckPerceptionGaugeZero : DecoratorNode
             return ENodeState.Failure;
         }
         
-        SSPerceptionGaugeUiHandler.Instance.UnregisterEnemy(agent);
+        // SSPerceptionGaugeUiHandler.Instance.UnregisterEnemy(agent);
 
         switch (child.Update())
         {
