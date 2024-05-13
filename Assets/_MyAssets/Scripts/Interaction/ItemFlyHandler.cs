@@ -27,8 +27,9 @@ public class ItemFlyHandler : MonoBehaviour
         int size = Physics.OverlapSphereNonAlloc(transform.position, _impactRadius, _enemiesBuffer, layerMask);
         if (size != 0)
         {
-            foreach (Collider enemy in _enemiesBuffer)
+            for (int index = 0; index < size; index++)
             {
+                Collider enemy = _enemiesBuffer[index];
                 enemy.gameObject.GetComponent<EnemyBase>().OnListenItemSound(transform.position, _gaugeIncreaseAmount);
             }
         }
