@@ -7,27 +7,20 @@ using UnityEditor;
 [CustomEditor(typeof(CheckPointRootHandler))]
 public class CheckPointGenerator : Editor
 {
+    private GameObject _checkPointPrefab;
     private CheckPointRootHandler _checkPointRootHandler;
     private int _prevChildCount;
     
     // Generate button 클릭 상태 확인
     private bool _isGenerateButtonClicked;
     
-    // 마우스 클릭 이벤트 -> OnSceneGUI으로부터 호출
-    private Action _mouseClickAction;
-
     private Vector3 _mouseWorldPosition;
     private Collider[] _overlappedCheckPoint = new Collider[1];
     
     private void OnEnable()
     {
         _checkPointRootHandler = (CheckPointRootHandler)target;
-        _mouseClickAction += HandleMouseClickAction;
-    }
-
-    private void OnDisable()
-    {
-        _mouseClickAction -= HandleMouseClickAction;
+        _checkPointPrefab = Resources.Load<GameObject>("CheckPoint/CheckPoint");
     }
 
     public override void OnInspectorGUI()
@@ -70,7 +63,7 @@ public class CheckPointGenerator : Editor
         Event e = Event.current;
         if (e.type == EventType.MouseDown && _isGenerateButtonClicked)
         {
-            _mouseClickAction?.Invoke();
+            HandleMouseClickAction();
         }
     }
     
@@ -121,10 +114,9 @@ public class CheckPointGenerator : Editor
 
     private void GenerateCheckPoint()
     {
-        GameObject checkPointPrefab = Instantiate(Resources.Load<GameObject>("CheckPoint/CheckPoint"),
-            _checkPointRootHandler.transform);
-        checkPointPrefab.transform.position = _mouseWorldPosition;
-        _checkPointRootHandler.CheckPointList.Add(checkPointPrefab);
+        GameObject checkPoint = Instantiate(_checkPointPrefab, _checkPointRootHandler.transform);
+        checkPoint.transform.position = _mouseWorldPosition;
+        _checkPointRootHandler.CheckPointList.Add(checkPoint);
 
         Debug.Log($"Success to Generate CheckPoint! : Position {_mouseWorldPosition}");
         _isGenerateButtonClicked = false;
