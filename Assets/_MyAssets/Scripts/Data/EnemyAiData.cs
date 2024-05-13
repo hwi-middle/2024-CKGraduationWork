@@ -11,6 +11,7 @@ public class EnemyAiData : ScriptableObject
     [Tooltip("초당 인지 게이지 증가량(최대)")] public float maxPerceptionGaugeIncrementPerSecond;
     [Tooltip("초당 게이지 감소량")] public float gaugeDecrementPerSecond;
     [Tooltip("경계 돌입 기준값")] public float alertThreshold;
+    [Tooltip("청각으로 인한 게이지 증가 최댓값")] public float maxPerceptionGaugeByHearing;
     
     [Header("이동 관련")]
     [Tooltip("걷기 이동 속도")] public float walkSpeed;

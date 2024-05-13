@@ -16,7 +16,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Alert,
         Detection,
     }
-    
+
     [SerializeField] private EnemyAiData _aiData;
     public EnemyAiData AiData => _aiData;
     [SerializeField] private BehaviorTree _tree;
@@ -27,7 +27,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public SightBound CenterSight => _centerSight;
     [SerializeField] private SideSightBound _sideSight;
     public SightBound SideSight => _sideSight;
-    
+
     private Animator _animator;
 
     // "AK" stands for Animator Key
@@ -43,7 +43,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public float PerceptionGauge => _perceptionGauge;
     public bool IsPerceptionGaugeFull => _perceptionGauge >= 100f;
-    
+
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -74,7 +74,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             SSPerceptionGaugeUiHandler.Instance.UnregisterEnemy(this);
         }
-        
+
         // 에디터가 아니라면 프레임마다 할당해 줄 필요는 없음
 #if UNITY_EDITOR
         _navMeshAgent.stoppingDistance = _aiData.stoppingDistance;
@@ -103,8 +103,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public void OnListenNoiseSound(Vector3 origin, float increment)
     {
         // 청각만으로는 Detection 단계까지 올라가지 않음
-        _perceptionGauge = Mathf.Clamp(_perceptionGauge + increment, 0f, _aiData.alertThreshold);
-        Debug.Log($"OnListenNoiseSound: {_perceptionGauge} (+{increment})");
+        if (_perceptionGauge >= _aiData.maxPerceptionGaugeByHearing)
+        {
+            return;
+        }
+        _perceptionGauge = Mathf.Clamp(_perceptionGauge + increment, 0f, _aiData.maxPerceptionGaugeByHearing);
     }
 
     public void SetDestination(Vector3 destination)
@@ -143,7 +146,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         _perceptionGauge -= _aiData.gaugeDecrementPerSecond * Time.deltaTime;
         _perceptionGauge = Mathf.Clamp(_perceptionGauge, 0, 100);
     }
-    
+
     public int TakeDamage(int damageAmount, GameObject damageCauser)
     {
         Debug.Assert(damageCauser == Player.Instance.gameObject);
@@ -154,7 +157,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public EPerceptionPhase GetCurrentPerceptionPhase()
     {
         Debug.Assert(_aiData.alertThreshold is > 0f and < 100f);
-        
+
         if (_perceptionGauge >= 100f)
         {
             return EPerceptionPhase.Detection;
