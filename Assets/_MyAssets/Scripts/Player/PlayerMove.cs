@@ -21,25 +21,25 @@ public enum EPlayerState
 public class PlayerMove : Singleton<PlayerMove>
 {
     private bool _isInitialized = false;
-    
+
     private Camera _camera;
-    
+
     [SerializeField] private PlayerInputData _inputData;
     private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
-    
-    [Header("Player Data")]
-    [SerializeField] private PlayerData _playerData;
+
+    [Header("Player Data")] [SerializeField]
+    private PlayerData _playerData;
 
     public GameObject PlayerCanvas => _playerCanvas;
     private GameObject _playerCanvas;
 
     private Vector3 _targetPosition;
     private float _playerApplySpeed;
-    
+
     // Player Respawn
     private IEnumerator _movePlayerToRespawnPointRoutine;
     [SerializeField] private float _respawnMoveDuration;
-    
+
     // Noise
     private MakeNoiseHandler _makeNoiseHandler;
 
@@ -113,7 +113,7 @@ public class PlayerMove : Singleton<PlayerMove>
         if (!_isInitialized)
         {
             Vector3 checkPoint = CheckPointRootHandler.Instance.LastCheckPoint;
-            if(checkPoint != Vector3.zero)
+            if (checkPoint != Vector3.zero)
             {
                 _controller.enabled = false;
                 transform.position = checkPoint;
@@ -131,29 +131,29 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void MakeNoiseByCurrentState()
     {
-        if (CheckPlayerState(EPlayerState.Walk))
-        {
-            bool isCrouch = CheckPlayerState(EPlayerState.Crouch);
-            float noiseRadius = isCrouch ? _playerData.crouchWalkNoiseRadius : _playerData.walkNoiseRadius;
-            float noiseIncrement = isCrouch ? _playerData.crouchWalkNoiseIncrementPerSecond : _playerData.walkNoiseIncrementPerSecond ;
-            _makeNoiseHandler.OnMakeNoise(noiseRadius, noiseIncrement * Time.deltaTime);
-        }
-        else if (CheckPlayerState(EPlayerState.Run))
+        if (CheckPlayerState(EPlayerState.Run))
         {
             float noiseRadius = _playerData.sprintNoiseRadius;
             float noiseIncrement = _playerData.sprintNoiseIncrementPerSecond;
             _makeNoiseHandler.OnMakeNoise(noiseRadius, noiseIncrement * Time.deltaTime);
         }
+        else if (CheckPlayerState(EPlayerState.Walk))
+        {
+            bool isCrouch = CheckPlayerState(EPlayerState.Crouch);
+            float noiseRadius = isCrouch ? _playerData.crouchWalkNoiseRadius : _playerData.walkNoiseRadius;
+            float noiseIncrement = isCrouch ? _playerData.crouchWalkNoiseIncrementPerSecond : _playerData.walkNoiseIncrementPerSecond;
+            _makeNoiseHandler.OnMakeNoise(noiseRadius, noiseIncrement * Time.deltaTime);
+        }
     }
-    
+
     public void AlignPlayerToCameraForward()
     {
         if (CameraController.Instance.IsBlending)
         {
             return;
         }
-        
-        ApplyRotate();   
+
+        ApplyRotate();
     }
 
     private void RotatePlayer()
@@ -234,7 +234,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
     public void SetDeadState()
     {
-        _currentState = (int)EPlayerState.Dead;   
+        _currentState = (int)EPlayerState.Dead;
     }
 
     public void ExitHideState(bool isCrouch)
@@ -247,7 +247,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
         AddPlayerState(EPlayerState.Crouch);
     }
-    
+
     public void AddPlayerState(EPlayerState state)
     {
         _currentState |= (int)state;
@@ -270,21 +270,21 @@ public class PlayerMove : Singleton<PlayerMove>
 
         AddPlayerState(EPlayerState.Walk);
     }
-    
+
     private void HandleRunAction()
     {
         if (CameraController.Instance.IsOnChangeHeightRoutine)
         {
             return;
         }
-        
+
         // Run과 Crouch 상태 중 우선 순위는 Run
         if (CheckPlayerState(EPlayerState.Crouch))
         {
             RemovePlayerState(EPlayerState.Crouch);
             CameraController.Instance.ToggleCrouchCameraHeight(false);
         }
-        
+
         AddPlayerState(EPlayerState.Run);
     }
 

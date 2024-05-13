@@ -12,7 +12,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public enum EPerceptionPhase
     {
         None,
-        Suspection,
+        Suspicion,
         Alert,
         Detection,
     }
@@ -97,11 +97,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public void OnListenItemSound(Vector3 origin, float increment)
     {
+        _tree.blackboard.lastTimeNoiseDetected = Time.time;
         _perceptionGauge = Mathf.Clamp(_perceptionGauge, _aiData.alertThreshold, 100f);
     }
 
     public void OnListenNoiseSound(Vector3 origin, float increment)
     {
+        _tree.blackboard.lastTimeNoiseDetected = Time.time;
+        
         // 청각만으로는 Detection 단계까지 올라가지 않음
         if (_perceptionGauge >= _aiData.maxPerceptionGaugeByHearing)
         {
@@ -170,7 +173,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         if (_perceptionGauge > Mathf.Epsilon)
         {
-            return EPerceptionPhase.Suspection;
+            return EPerceptionPhase.Suspicion;
         }
 
         return EPerceptionPhase.None;

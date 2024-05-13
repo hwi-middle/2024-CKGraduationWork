@@ -20,13 +20,6 @@ public class PlayerData : ScriptableObject
     [Tooltip("점프 높이")] public float jumpHeight;
     [Tooltip("y 이동 속도 (일반 이동 속도와 분리하기 위함)")] public float yMultiplier;
 
-    [Header("와이어 액션")]
-    [Tooltip("와이어 액션 최소 거리")] public float minWireDistance;
-
-    [Tooltip("와이어 액션 최대 범위")] public float maxWireDistance;
-
-    [Tooltip("와이어 액션 시간(초)")] public float wireActionDuration;
-
     [Header("암살 액션")]
     [Tooltip("암살 소요 시간(초)")] public float assassinateDuration;
 
@@ -50,9 +43,6 @@ public class PlayerData : ScriptableObject
     [Tooltip("앉은 상태로 걷기 시 초당 인지게이지 증가량")] public float crouchWalkNoiseIncrementPerSecond;
     
     [Header("-----변경 시 주의-----")]
-    [Header("경사로 미끄러짐 속도")]
-    [Tooltip("올라기지 못하는 경사로에서 미끄러질 때 속도")] public float slopeSlideSpeed;
-
     [Header("와이어 및 플레이어 Canvas")]
     [Tooltip("Player Canvas Prefab")] public GameObject playerCanvas;
 

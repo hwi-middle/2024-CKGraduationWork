@@ -36,10 +36,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  perceptionDistance: 10.5
   maxPerceptionGaugeIncrementPerSecond: 100
   gaugeDecrementPerSecond: 50
   alertThreshold: 60
+  maxPerceptionGaugeByHearing: 70
   walkSpeed: 2
   sprintSpeed: 7
   moveRange: 19
