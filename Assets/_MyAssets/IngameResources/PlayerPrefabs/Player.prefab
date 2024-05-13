@@ -81,7 +81,7 @@ GameObject:
   - component: {fileID: 1863128557706384626}
   - component: {fileID: 7025208716302005405}
   m_Layer: 7
-  m_Name: PlayerWithAnimation
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -203,6 +203,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
+  _blendingDuration: 0.5
+  _peekPoint: {fileID: 8188508482255064100}
   _aimSpeed: 1
   _maxPeekRange: 0.8
   _heightOffset: 0.5

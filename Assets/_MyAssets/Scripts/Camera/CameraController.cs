@@ -8,6 +8,7 @@ using UnityEngine.Serialization;
 public class CameraController : Singleton<CameraController>
 {
     [SerializeField] private PlayerInputData _inputData;
+    [SerializeField] private float _blendingDuration = 0.5f;
     public CinemachineBrain BrainCamera { get; private set; }
     public CinemachineFreeLook FreeLookCamera { get; private set; }
     public CinemachineFreeLook AimingCamera { get; private set; }
@@ -25,7 +26,8 @@ public class CameraController : Singleton<CameraController>
 
     private IEnumerator _changeCameraFromPeekToInCabinet;
 
-    private Transform _peekPoint;
+    [Header("Peek Point Transform")]
+    [SerializeField] private Transform _peekPoint;
     
     [Header("Peek Camera 이동 속도")]
     [SerializeField] private float _aimSpeed = 1.0f;
@@ -51,21 +53,21 @@ public class CameraController : Singleton<CameraController>
     {
         Debug.Assert(_mainCamera != null, "_mainCamera != null");
         
-        GameObject cameras = Instantiate(Resources.Load<GameObject>("Camera/Cameras"));
+        GameObject virtualCameras = Instantiate(Resources.Load<GameObject>("Camera/VirtualCameras"));
         
-        Debug.Assert(cameras != null, "cameras != null");
+        Debug.Assert(virtualCameras != null, "virtualCameras != null");
 
         // Camera Component Setting
         BrainCamera = _mainCamera.GetComponent<CinemachineBrain>();
-        FreeLookCamera = cameras.transform.Find("FreeLook Camera").GetComponent<CinemachineFreeLook>();
-        AimingCamera = cameras.transform.Find("Aiming Camera").GetComponent<CinemachineFreeLook>();
-        InCabinetCamera = cameras.transform.Find("InCabinet Camera").GetComponent<CinemachineVirtualCamera>();
-        PeekCamera = cameras.transform.Find("Peek Camera").GetComponent<CinemachineVirtualCamera>();
+        FreeLookCamera = virtualCameras.transform.Find("FreeLook Camera").GetComponent<CinemachineFreeLook>();
+        AimingCamera = virtualCameras.transform.Find("Aiming Camera").GetComponent<CinemachineFreeLook>();
+        InCabinetCamera = virtualCameras.transform.Find("InCabinet Camera").GetComponent<CinemachineVirtualCamera>();
+        PeekCamera = virtualCameras.transform.Find("Peek Camera").GetComponent<CinemachineVirtualCamera>();
+        
+        // Brain Camera Blending Duration Setting
+        BrainCamera.m_DefaultBlend.m_Time = _blendingDuration;
         
         Transform playerTransform = transform;
-        
-        // Peek Point Transform
-        _peekPoint = playerTransform.Find("PeekPoint");
 
         // Cameras Follow & LookAt Setting
         FreeLookCamera.Follow = playerTransform;
