@@ -36,6 +36,8 @@ public class PopupHandler : Singleton<PopupHandler>
     
     public bool IsPopupActive => _popupPrefab.activeSelf;
 
+    private bool IsTutorialPopup => _currentType == EPopupType.Tutorial;
+        
     private void Awake()
     {
         _popupPrefab = Instantiate(Resources.Load<GameObject>("PopupCanvas"));
@@ -127,10 +129,10 @@ public class PopupHandler : Singleton<PopupHandler>
         SetPopupTextAndDisplayPopup(title, description, positive);
     }
     
-    public void DisplayTutorialPopup(Action<bool> action, string title, string description, string positive, ETutorialVideoIndex index)
+    public void DisplayTutorialPopup(string title, string description, string positive, ETutorialVideoIndex index,
+        Action<bool> action = null)
     {
         SceneManagerBase.Instance.TogglePause();
-        buttonAction += HandleTutorialOkButtonAction;
         buttonAction += action;
         _currentType = EPopupType.Tutorial;
         SetTextAndDisplayTutorialPopup(title, description, positive, index);
@@ -191,13 +193,13 @@ public class PopupHandler : Singleton<PopupHandler>
         ClosePopup();
     }
 
-    private void HandleTutorialOkButtonAction(bool isPositive)
-    {
-        SceneManagerBase.Instance.TogglePause();
-    }
-
     public void ClosePopup()
     {
+        if (IsTutorialPopup)
+        {
+            SceneManagerBase.Instance.TogglePause();
+        }
+        
         buttonAction = null;
         _popupPrefab.SetActive(false);
     }

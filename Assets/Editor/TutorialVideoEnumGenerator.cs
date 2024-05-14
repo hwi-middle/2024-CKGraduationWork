@@ -9,6 +9,7 @@ using UnityEngine;
 public class TutorialVideoEnumGenerator : Editor
 {
     private const string PATH = "Assets/_MyAssets/Data/ETutorialVideoIndex.cs";
+    private const string NAME = "ETutorialVideoIndex";
     
     private SerializedProperty _tutorialVideos;
     private TutorialVideoData _tutorialVideoData;
@@ -32,33 +33,25 @@ public class TutorialVideoEnumGenerator : Editor
 
     private void GenerateEnumFile()
     {
-        WriteEnumFile("ETutorialVideoIndex", _tutorialVideoData.tutorialVideos);
-    }
-    
-    private void WriteEnumFile(string enumName, List<TutorialVideo> enumValues)
-    {
-        if (File.Exists(PATH))
+        const string TAB = "    ";
+
+        StringBuilder builder = new();
+        builder.AppendLine("public enum " + NAME);
+        builder.AppendLine("{");
+        builder.AppendLine(TAB + "None,");
+
+        foreach (TutorialVideo data in _tutorialVideoData.tutorialVideos)
         {
-            File.Delete(PATH);
+            builder.AppendLine(TAB + data.title + ",");
         }
 
-        const string TAB = "    ";
-        using (StreamWriter writer = new(PATH))
-        {
-            writer.WriteLine("public enum " + enumName);
-            writer.WriteLine("{");
-            writer.WriteLine(TAB + "None,");
-            
-            foreach (TutorialVideo data in enumValues)
-            {
-                writer.WriteLine(TAB + data.title + ",");
-            }
-            
-            writer.Write("}");
-        }
-        
+        builder.Append("}");
+
+        using TextWriter writer = new StreamWriter(PATH, false, Encoding.Unicode);
+        writer.Write(builder.ToString());
+        writer.Close();
         AssetDatabase.Refresh();
-        
+
         Debug.Log($"Successfully generated enum file at {PATH}");
     }
 }

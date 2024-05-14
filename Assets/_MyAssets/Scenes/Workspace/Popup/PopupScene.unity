@@ -323,6 +323,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TutorialTriggerZone
       objectReference: {fileID: 0}
+    - target: {fileID: 7856696220742618712, guid: a1937a03378b8e84b9392625e53959da,
+        type: 3}
+      propertyPath: tutorialVideoIndex
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

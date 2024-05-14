@@ -15,3 +15,7 @@ MonoBehaviour:
   tutorialVideos:
   - title: Basic
     videoClip: {fileID: 32900000, guid: b71b9aa71d576dd43967ea992281f422, type: 3}
+  - title: aaa
+    videoClip: {fileID: 32900000, guid: b71b9aa71d576dd43967ea992281f422, type: 3}
+  - title: bbb
+    videoClip: {fileID: 32900000, guid: b71b9aa71d576dd43967ea992281f422, type: 3}
