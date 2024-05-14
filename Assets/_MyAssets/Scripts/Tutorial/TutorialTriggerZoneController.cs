@@ -16,8 +16,9 @@ public class TutorialTriggerZoneController : MonoBehaviour
         {
             return;
         }
-        
-        PopupHandler.Instance.DisplayTutorialPopup(HandleTutorialPopupButtonAction, "Tutorial", "Tutorial Message", "OK");
+
+        PopupHandler.Instance.DisplayTutorialPopup(HandleTutorialPopupButtonAction, "Tutorial", "Tutorial Message",
+            "OK", ETutorialVideoIndex.Basic);
     }
 
 
