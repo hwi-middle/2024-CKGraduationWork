@@ -14,6 +14,9 @@ public class AudioDataEnumGenerator : Editor
 
     private const string BGM_ENUM_PATH = "Assets/_MyAssets/Data/EBgmAudioClipIndex.cs";
     private const string SFX_ENUM_PATH = "Assets/_MyAssets/Data/ESfxAudioClipIndex.cs";
+    
+    private const string BGM_ENUM_NAME = "EBgmAudioClipIndex";
+    private const string SFX_ENUM_NAME = "ESfxAudioClipIndex";
 
     private void OnEnable()
     {
@@ -23,32 +26,33 @@ public class AudioDataEnumGenerator : Editor
     
     public override void OnInspectorGUI()
     {
-        GUIStyle style = EditorStyles.helpBox;
-        GUILayout.BeginVertical(style);
-        
+        EditorGUILayout.PrefixLabel("BGM Clip List");
         EditorGUILayout.PropertyField(_bgmClipList, true);
         if (GUILayout.Button("Generate BGM enum List"))
         {
             GenerateBgmEnumList();
         }
 
+        EditorGUILayout.Space(50.0f);
+        
+        EditorGUILayout.PrefixLabel("SFX Clip List");
         EditorGUILayout.PropertyField(_sfxClipList, true);
         if(GUILayout.Button("Generate SFX enum List"))
         {
             GenerateSfxEnumList();
         }
-        GUILayout.EndVertical();
+        
         serializedObject.ApplyModifiedProperties();
     }
 
     private void GenerateBgmEnumList()
     {
-        GenerateEnumFile(_bgmClipList, BGM_ENUM_PATH, "EBgmAudioClipIndex");
+        GenerateEnumFile(_bgmClipList, BGM_ENUM_PATH, BGM_ENUM_NAME);
     }
 
     private void GenerateSfxEnumList()
     {
-        GenerateEnumFile(_sfxClipList, SFX_ENUM_PATH, "ESfxAudioClipIndex");
+        GenerateEnumFile(_sfxClipList, SFX_ENUM_PATH, SFX_ENUM_NAME);
     }
 
     private void GenerateEnumFile(SerializedProperty clipList, string path, string enumName)
