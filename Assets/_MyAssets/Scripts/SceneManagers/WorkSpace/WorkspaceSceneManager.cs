@@ -19,17 +19,17 @@ public class WorkspaceSceneManager : SceneManagerBase
         {
             if (Input.GetKeyDown(KeyCode.F1))
             {
-                AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.TestSE);
+                AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.Sfx_1);
             }
 
             if (Input.GetKeyDown(KeyCode.F2))
             {
-                _loopSfxSoundObjectID = AudioPlayManager.Instance.PlayLoopSfxAudio(ESfxAudioClipIndex.TestSE);
+                _loopSfxSoundObjectID = AudioPlayManager.Instance.PlayLoopSfxAudio(ESfxAudioClipIndex.Sfx_1);
             }
 
             if (Input.GetKeyDown(KeyCode.F3))
             {
-                AudioPlayManager.Instance.PlayBgmAudio(EBgmAudioClipIndex.TestBGM);
+                AudioPlayManager.Instance.PlayBgmAudio(EBgmAudioClipIndex.Bgm_1);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha0))

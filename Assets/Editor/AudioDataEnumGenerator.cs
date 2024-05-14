@@ -9,6 +9,9 @@ using UnityEditor;
 [CustomEditor(typeof(AudioClipData))]
 public class AudioDataEnumGenerator : Editor
 {
+    private AudioClipData _audioClipData;
+        
+    private SerializedProperty _maxAudioObjectCount;
     private SerializedProperty _bgmClipList;
     private SerializedProperty _sfxClipList;
 
@@ -20,22 +23,31 @@ public class AudioDataEnumGenerator : Editor
 
     private void OnEnable()
     {
+        _audioClipData = (AudioClipData)target;
+        _maxAudioObjectCount = serializedObject.FindProperty("maxAudioObjectCount");
         _bgmClipList = serializedObject.FindProperty("bgmClipList");
         _sfxClipList = serializedObject.FindProperty("sfxClipList");
     }
     
     public override void OnInspectorGUI()
     {
-        EditorGUILayout.PrefixLabel("BGM Clip List");
+        EditorGUIUtility.labelWidth = 300;
+        EditorGUILayout.PrefixLabel("Max Audio Object Count (BGM Excluded)");
+        int sliderValue = EditorGUILayout.IntSlider(_maxAudioObjectCount.intValue, 10, 100);
+        _maxAudioObjectCount.intValue = sliderValue;
+        
+        EditorGUILayout.Separator();
+        
+        EditorGUILayout.PrefixLabel("배경음악 목록");
         EditorGUILayout.PropertyField(_bgmClipList, true);
         if (GUILayout.Button("Generate BGM enum List"))
         {
             GenerateBgmEnumList();
         }
 
-        EditorGUILayout.Space(50.0f);
-        
-        EditorGUILayout.PrefixLabel("SFX Clip List");
+        EditorGUILayout.Separator();
+
+        EditorGUILayout.PrefixLabel("효과음 목록");
         EditorGUILayout.PropertyField(_sfxClipList, true);
         if(GUILayout.Button("Generate SFX enum List"))
         {
@@ -47,50 +59,34 @@ public class AudioDataEnumGenerator : Editor
 
     private void GenerateBgmEnumList()
     {
-        GenerateEnumFile(_bgmClipList, BGM_ENUM_PATH, BGM_ENUM_NAME);
+        GenerateEnumFile(EAudioType.Bgm, BGM_ENUM_PATH, BGM_ENUM_NAME);
     }
 
     private void GenerateSfxEnumList()
     {
-        GenerateEnumFile(_sfxClipList, SFX_ENUM_PATH, SFX_ENUM_NAME);
+        GenerateEnumFile(EAudioType.Sfx, SFX_ENUM_PATH, SFX_ENUM_NAME);
     }
 
-    private void GenerateEnumFile(SerializedProperty clipList, string path, string enumName)
+    private void GenerateEnumFile(EAudioType type, string path, string enumName)
     {
         StringBuilder builder = new();
-        string startString = $"public enum {enumName}\n{{\n    ";
-        const string NONE = "None";
-        const string END = ",\n    ";
+        const string TAB = "    ";
 
-        builder.Append(startString);
-        builder.Append(NONE);
-        builder.Append(END);
+        builder.AppendLine($"public enum {enumName}");
+        builder.AppendLine("{");
+        builder.AppendLine(TAB + "None,");
         
-        for (int i = 0; i < clipList.arraySize; i++)
+        List<AudioClipInfo> clipInfoList = type is EAudioType.Bgm ? _audioClipData.bgmClipList : _audioClipData.sfxClipList;
+
+        foreach (AudioClipInfo clipInfo in clipInfoList)
         {
-            SerializedProperty clip = clipList.GetArrayElementAtIndex(i);
-
-            if (clip.objectReferenceValue == null)
-            {
-                continue;
-            }
-            
-            string clipName = clip.objectReferenceValue.name;
-            builder.Append(clipName);
-
-            if (i == clipList.arraySize - 1)
-            {
-                break;
-            }
-            
-            builder.Append(END);
+            builder.AppendLine(TAB + clipInfo.clipName + ",");
         }
-        
-        builder.Append("\n}");
+        builder.Append("}");
 
         using TextWriter writer = new StreamWriter(path, false, Encoding.Unicode);
         writer.Write(builder.ToString());
         writer.Close();
+        AssetDatabase.Refresh();
     }
-
 }

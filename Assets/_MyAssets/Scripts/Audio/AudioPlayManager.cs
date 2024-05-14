@@ -84,8 +84,17 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
     
     private AudioClip GetClip(EAudioType audioType, string clipName)
     {
-        List<AudioClip> clipList = audioType == EAudioType.Bgm ? _audioClipData.bgmClipList : _audioClipData.sfxClipList;
-        return clipList.Find(clip => clip.name == clipName);
+        List<AudioClipInfo> clipInfoList = audioType == EAudioType.Bgm ? _audioClipData.bgmClipList : _audioClipData.sfxClipList;
+        foreach(AudioClipInfo clipInfo in clipInfoList)
+        {
+            if (clipName.Equals(clipInfo.clipName))
+            {
+                return clipInfo.clip;
+            }
+        }
+
+        Debug.Assert(false, "Invalid Situation : Clip is not found.");
+        return null;
     }
 
     public void PlayOnceSfxAudio(ESfxAudioClipIndex clip)
