@@ -118,6 +118,7 @@ public class PopupHandler : Singleton<PopupHandler>
     public void DisplayTutorialPopup(Action<bool> action, string title, string description, string positive)
     {
         SceneManagerBase.Instance.TogglePause();
+        buttonAction += HandleTutorialOkButtonAction;
         buttonAction += action;
         _currentType = EPopupType.Tutorial;
         SetPopupTextAndDisplayPopup(title, description, positive);
@@ -160,6 +161,11 @@ public class PopupHandler : Singleton<PopupHandler>
     {
         buttonAction?.Invoke(isPositive);
         ClosePopup();
+    }
+
+    private void HandleTutorialOkButtonAction(bool isPositive)
+    {
+        SceneManagerBase.Instance.TogglePause();
     }
 
     public void ClosePopup()
