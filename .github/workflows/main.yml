@@ -98,7 +98,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: FreeupDisk
-          if: failure()
           run: |
             sudo swapoff -a
             sudo rm -f /swapfile
