@@ -24,7 +24,7 @@ public class AudioDataEnumGenerator : Editor
     private void OnEnable()
     {
         _audioClipData = (AudioClipData)target;
-        _maxAudioObjectCount = serializedObject.FindProperty("maxAudioObjectCount");
+        _maxAudioObjectCount = serializedObject.FindProperty("audioObjectMaxCapacity");
         _bgmClipList = serializedObject.FindProperty("bgmClipList");
         _sfxClipList = serializedObject.FindProperty("sfxClipList");
     }
@@ -70,21 +70,36 @@ public class AudioDataEnumGenerator : Editor
     private void GenerateEnumFile(EAudioType type, string path, string enumName)
     {
         StringBuilder builder = new();
-        const string TAB = "    ";
+        const string INDENT = "    ";
 
         builder.AppendLine($"public enum {enumName}");
         builder.AppendLine("{");
-        builder.AppendLine(TAB + "None,");
+        builder.AppendLine(INDENT + "None,");
+
+        List<AudioClipInfo> clipInfoList = null;
         
-        List<AudioClipInfo> clipInfoList = type is EAudioType.Bgm ? _audioClipData.bgmClipList : _audioClipData.sfxClipList;
+        switch (type)
+        {
+            case EAudioType.Bgm:
+                clipInfoList = _audioClipData.bgmClipList;
+                break;
+            case EAudioType.Sfx:
+                clipInfoList = _audioClipData.sfxClipList;
+                break;
+            default:
+                Debug.Assert(false);
+                break;
+        }
+        
+        Debug.Assert(clipInfoList != null, "clipInfoList != null");
 
         foreach (AudioClipInfo clipInfo in clipInfoList)
         {
-            builder.AppendLine(TAB + clipInfo.clipName + ",");
+            builder.AppendLine(INDENT + clipInfo.clipName + ",");
         }
         builder.Append("}");
 
-        using TextWriter writer = new StreamWriter(path, false, Encoding.Unicode);
+        using TextWriter writer = new StreamWriter(path, false, Encoding.UTF8);
         writer.Write(builder.ToString());
         writer.Close();
         AssetDatabase.Refresh();

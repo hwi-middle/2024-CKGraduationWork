@@ -12,7 +12,9 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     public bool IsDebugMode => _isDebugMode;
     
     [SerializeField] private PlayerInputData _inputData;
+    [SerializeField] GameObject _audioManager;
     [SerializeField] private bool _cursorLock;
+    
     private SceneFadeManager _fadeManager;
     private GameObject _settingCanvas;
 
@@ -24,26 +26,16 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     protected Player _player;
     private IEnumerator _playerDeadSequence;
 
-    private GameObject _audioManager;
-
     protected virtual void Awake()
     {
 #if !UNITY_EDITOR
         _isDebugMode = false;
 #endif
         
+        Debug.Assert(_audioManager != null, "Require Audio Manager");
         GetSettingsValueAndApply();
-        AllocateSoundManager();
     }
 
-    private void AllocateSoundManager()
-    {
-        if (_audioManager == null)
-        {
-            _audioManager = Instantiate(Resources.Load<GameObject>("Audio/AudioManager"));
-        }
-    }
-    
     protected virtual void OnEnable()
     {
         _inputData.pauseEvent += HandlePauseAction;

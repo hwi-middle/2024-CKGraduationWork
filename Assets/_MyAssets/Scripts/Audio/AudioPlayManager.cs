@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
-using UnityEngine.Serialization;
 
 public enum EAudioType
 {
@@ -11,7 +9,7 @@ public enum EAudioType
     Sfx
 }
 
-public enum EPlayType
+public enum ESfxPlayType
 {
     PlayOnce,
     Loop
@@ -21,57 +19,56 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
 {
     [SerializeField] AudioClipData _audioClipData;
     
-    // 효과음 오브젝트 프리팹
-    private GameObject _audioObjectPrefab;
-    
     // 배경음 오브젝트 풀
-    private AudioObject _bgmAudioObject;
+    private BgmAudioObject _bgmAudioObject;
     // 효과음 오브젝트 풀
-    private List<AudioObject> _allocatedSfxAudioObjects = new();
+    private readonly List<SfxAudioObject> _allocatedSfxAudioObjects = new();
     
     // string 할당을 단 한번만 하기 위한 Dictionary
-    private Dictionary<int, AudioClip> _cachedSfxClips = new();
-    private Dictionary<int, AudioClip> _cachedBgmClips = new();
+    private readonly Dictionary<EBgmAudioClipIndex, AudioClip> _cachedBgmClips = new();
+    private readonly Dictionary<ESfxAudioClipIndex, AudioClip> _cachedSfxClips = new();
+    
+    // 루프 중인 효과음 오브젝트를 관리하기 위한 Dictionary
+    private readonly Dictionary<ESfxAudioClipIndex, int> _loopSfxAudioObjects = new();
     
     private void Awake()
     {
-        Init();
+        InstantiateBgmAudioObject();
+        InstantiateSfxAudioObject();
     }
 
-    private void Init()
+    private void InstantiateBgmAudioObject()
     {
-        if (_audioObjectPrefab == null)
-        {
-            _audioObjectPrefab = Resources.Load<GameObject>("Audio/AudioObject");
-        }
-
-        if (_allocatedSfxAudioObjects.Count != 0)
-        {
-            _allocatedSfxAudioObjects.Clear();
-
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                Destroy(transform.GetChild(i).gameObject);
-            }
-        }
-
-        GameObject bmgAudioObject = Instantiate(_audioObjectPrefab, transform);
-        bmgAudioObject.name = "BGMAudioObject";
-        _bgmAudioObject = bmgAudioObject.GetComponent<AudioObject>();
-        bmgAudioObject.SetActive(false);
-
-        for (int i = 0; i <= _audioClipData.maxAudioObjectCount; i++)
-        {
-            GameObject audioObject = Instantiate(_audioObjectPrefab, transform);
-            audioObject.name = "SfxAudioObject_" + i;
-            audioObject.SetActive(false);
-            _allocatedSfxAudioObjects.Add(audioObject.GetComponent<AudioObject>());
-        }
+        GameObject bgmObject = new();
+        bgmObject.AddComponent<AudioSource>();
+        bgmObject.AddComponent<BgmAudioObject>();
+        bgmObject.name = "BgmAudioObject";
+        bgmObject.transform.SetParent(transform);
+        bgmObject.SetActive(false);
+        
+        _bgmAudioObject = bgmObject.GetComponent<BgmAudioObject>();
     }
 
-    private AudioObject GetAvailableAudioObject()
+    private void InstantiateSfxAudioObject()
     {
-        foreach(AudioObject audioObject in _allocatedSfxAudioObjects)
+        GameObject sfxObject = new();
+        sfxObject.AddComponent<AudioSource>();
+        sfxObject.AddComponent<SfxAudioObject>();
+
+        for (int i = 0; i < _audioClipData.audioObjectMaxCapacity; i++)
+        {
+            GameObject sfxObjectClone = Instantiate(sfxObject, transform);
+            _allocatedSfxAudioObjects.Add(sfxObjectClone.GetComponent<SfxAudioObject>());
+            sfxObjectClone.name = "SfxAudioObject_" + i;
+            sfxObjectClone.SetActive(false);
+        }
+        
+        Destroy(sfxObject);
+    }
+
+    private SfxAudioObject GetAvailableAudioObject()
+    {
+        foreach(SfxAudioObject audioObject in _allocatedSfxAudioObjects)
         {
             if (!audioObject.gameObject.activeSelf)
             {
@@ -79,12 +76,27 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
             }
         }
 
+        Debug.Assert(false, "Invalid Situation : Audio Object Pool is full.");
         return null;
     }
     
     private AudioClip GetClip(EAudioType audioType, string clipName)
     {
-        List<AudioClipInfo> clipInfoList = audioType == EAudioType.Bgm ? _audioClipData.bgmClipList : _audioClipData.sfxClipList;
+        List<AudioClipInfo> clipInfoList = null;
+
+        switch (audioType)
+        {
+            case EAudioType.Bgm:
+                clipInfoList = _audioClipData.bgmClipList;
+                break;
+            case EAudioType.Sfx:
+                clipInfoList = _audioClipData.sfxClipList;
+                break;
+            default:
+                Debug.Assert(false);
+                break;
+        }
+        
         foreach(AudioClipInfo clipInfo in clipInfoList)
         {
             if (clipName.Equals(clipInfo.clipName))
@@ -99,77 +111,69 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
 
     public void PlayOnceSfxAudio(ESfxAudioClipIndex clip)
     {
-        if (!_cachedSfxClips.TryGetValue((int)clip, out AudioClip audioClip))
+        if (!_cachedSfxClips.TryGetValue(clip, out AudioClip audioClip))
         {
             audioClip = GetClip(EAudioType.Sfx, clip.ToString());
-            _cachedSfxClips.Add((int)clip, audioClip);
+            _cachedSfxClips.Add(clip, audioClip);
         }
 
-        AudioObject availableObject = GetAvailableAudioObject();
-        Debug.Assert(availableObject != null, "Out of Range Exception: Expand the size of the audio object pool.");
+        SfxAudioObject availableObject = GetAvailableAudioObject();
 
-        if (availableObject == null)
-        {
-            return;
-        }
-        
         availableObject.gameObject.SetActive(true);
-        availableObject.PlaySfxAudio(clip, audioClip, EPlayType.PlayOnce);
+        availableObject.Play(audioClip, ESfxPlayType.PlayOnce);
     }
 
-    public int PlayLoopSfxAudio(ESfxAudioClipIndex clip)
+    public void PlayLoopSfxAudio(ESfxAudioClipIndex clip)
     {
-        if(!_cachedSfxClips.TryGetValue((int)clip, out AudioClip audioClip))
+        if(!_cachedSfxClips.TryGetValue(clip, out AudioClip audioClip))
         {
             audioClip = GetClip(EAudioType.Sfx, clip.ToString());
-            _cachedSfxClips.Add((int)clip, audioClip);
+            _cachedSfxClips.Add(clip, audioClip);
         }
 
         Debug.Assert(audioClip.name != null);
 
+        // 중복 재생 방지
         int playingLoopSfxID = CheckIsPlayingLoopSfx(audioClip);
-        if (playingLoopSfxID != int.MaxValue)
+        if (playingLoopSfxID != 0)
         {
-            return playingLoopSfxID;
+            return;
         }
         
-        AudioObject availableObject = GetAvailableAudioObject();
-        Debug.Assert(availableObject != null, "Out of Range Exception: Expand the size of the audio object pool.");
-        
-        if(availableObject == null)
-        {
-            return int.MaxValue;
-        }
+        // 사용 가능한 오브젝트를 찾음
+        SfxAudioObject availableObject = GetAvailableAudioObject();
         
         availableObject.gameObject.SetActive(true);
-        availableObject.PlaySfxAudio(clip, audioClip, EPlayType.Loop);
-        return availableObject.LoopSfxAudioObjectID;
-    }
-
+        availableObject.Play(audioClip, ESfxPlayType.Loop);
+        
+        // 루프 중인 효과음 오브젝트를 관리하기 위한 Dictionary에 추가
+        _loopSfxAudioObjects.Add(clip, availableObject.GetInstanceID());
+    } 
+    
     private int CheckIsPlayingLoopSfx(AudioClip audioClip)
     {
-        foreach (AudioObject audioObject in _allocatedSfxAudioObjects)
+        foreach (SfxAudioObject audioObject in _allocatedSfxAudioObjects)
         {
-            if (!audioObject.gameObject.activeSelf || audioObject.LoopSfxAudioObjectID == int.MaxValue)
+            if (!audioObject.gameObject.activeSelf || !audioObject.IsLoop)
             {
                 continue;
             }
             
             if (audioObject.Clip.name == audioClip.name)
             {
-                return audioObject.LoopSfxAudioObjectID;
+                return audioObject.GetInstanceID();
             }
         }
 
-        return int.MaxValue;
+        return 0;
     }
 
     public void PlayBgmAudio(EBgmAudioClipIndex clip)
     {
-        if (!_cachedBgmClips.TryGetValue((int)clip, out AudioClip audioClip))
+        if (!_cachedBgmClips.TryGetValue(clip, out AudioClip audioClip))
         {
             audioClip = GetClip(EAudioType.Bgm, clip.ToString());
-            _cachedBgmClips.Add((int)clip, audioClip);
+            _cachedBgmClips.Add(clip, audioClip);
         }
 
         if (_bgmAudioObject.gameObject.activeSelf && _bgmAudioObject.Clip == audioClip)
@@ -178,20 +182,26 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
         }
         
         _bgmAudioObject.gameObject.SetActive(true);
-        _bgmAudioObject.PlayBgmAudio(clip, audioClip);
+        _bgmAudioObject.Play(audioClip);
     }
     
-    public void StopLoopSfxAudio(int audioObjectID)
+    public void StopLoopSfxAudio(ESfxAudioClipIndex clip)
     {
-        foreach (AudioObject currentAudioObject in _allocatedSfxAudioObjects)
+        if(_loopSfxAudioObjects.Count == 0 || !_loopSfxAudioObjects.TryGetValue(clip, out int id))
+        {
+            return;
+        }
+        
+        foreach (SfxAudioObject currentAudioObject in _allocatedSfxAudioObjects)
         {
             if (!currentAudioObject.gameObject.activeSelf
-                || currentAudioObject.LoopSfxAudioObjectID != audioObjectID)
+                || currentAudioObject.GetInstanceID() != id) 
             {
                 continue;
             }
 
-            currentAudioObject.StopAudio();
+            _loopSfxAudioObjects.Remove(clip);
+            currentAudioObject.Stop();
             break;
         }
     }
@@ -200,37 +210,37 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
     {
         if (_bgmAudioObject.gameObject.activeSelf)
         {
-            _bgmAudioObject.StopAudio();
+            _bgmAudioObject.Stop();
         }
     }
 
     public void PauseAllAudio()
     {
-        foreach (AudioObject audioObject in _allocatedSfxAudioObjects)
+        foreach (SfxAudioObject audioObject in _allocatedSfxAudioObjects)
         {
             if (!audioObject.gameObject.activeSelf)
             {
                 continue;
             }
             
-            audioObject.PauseAudio();
+            audioObject.Pause();
         }
         
-        _bgmAudioObject.PauseAudio();
+        _bgmAudioObject.Pause();
     }
 
     public void UnPauseAllAudio()
     {
-        foreach (AudioObject audioObject in _allocatedSfxAudioObjects)
+        foreach (SfxAudioObject audioObject in _allocatedSfxAudioObjects)
         {
             if (!audioObject.gameObject.activeSelf)
             {
                 continue;
             }
             
-            audioObject.UnPauseAudio();
+            audioObject.UnPause();
         }
         
-        _bgmAudioObject.UnPauseAudio();
+        _bgmAudioObject.UnPause();
     }
 }

@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3194459181278124116}
-  - component: {fileID: 5420755472658511588}
+  - component: {fileID: 749294117104166245}
   m_Layer: 0
-  m_Name: AudioManager
+  m_Name: SfxAudioManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5420755472658511588
+--- !u!114 &749294117104166245
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5271991813906624514}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a6680fb94e8ec64992fe82a14379c07, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f7403f48519d40459ed5e17f4de5aad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _audioClipData: {fileID: 11400000, guid: 2f52638ffe8c8ed42bae6fb42cc53749, type: 2}

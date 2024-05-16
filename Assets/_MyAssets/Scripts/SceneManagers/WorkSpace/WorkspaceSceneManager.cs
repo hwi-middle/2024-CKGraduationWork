@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class WorkspaceSceneManager : SceneManagerBase
 {
-    private int _loopSfxSoundObjectID;
-        
     protected override void Start()
     {
         base.Start();
@@ -24,7 +22,7 @@ public class WorkspaceSceneManager : SceneManagerBase
 
             if (Input.GetKeyDown(KeyCode.F2))
             {
-                _loopSfxSoundObjectID = AudioPlayManager.Instance.PlayLoopSfxAudio(ESfxAudioClipIndex.Sfx_1);
+                AudioPlayManager.Instance.PlayLoopSfxAudio(ESfxAudioClipIndex.Sfx_1);
             }
 
             if (Input.GetKeyDown(KeyCode.F3))
@@ -39,7 +37,7 @@ public class WorkspaceSceneManager : SceneManagerBase
 
             if (Input.GetKeyDown(KeyCode.Alpha9))
             {
-                AudioPlayManager.Instance.StopLoopSfxAudio(_loopSfxSoundObjectID);
+                AudioPlayManager.Instance.StopLoopSfxAudio(ESfxAudioClipIndex.Sfx_1);
             }
         }
     }

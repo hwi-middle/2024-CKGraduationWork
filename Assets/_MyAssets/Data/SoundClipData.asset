@@ -12,10 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad81da00fc528544d8385e84dfd233fd, type: 3}
   m_Name: SoundClipData
   m_EditorClassIdentifier: 
-  maxSoundObjectCount: 10
+  maxAudioObjectCount: 20
   bgmClipList:
-  - {fileID: 8300000, guid: c5b031af451f0064dbc02af3a3cb262a, type: 3}
-  - {fileID: 8300000, guid: 9d66019d844335f43bddf621b4eb5550, type: 3}
+  - clipName: Bgm_1
+    clip: {fileID: 8300000, guid: c5b031af451f0064dbc02af3a3cb262a, type: 3}
+  - clipName: BGM_2
+    clip: {fileID: 8300000, guid: 9d66019d844335f43bddf621b4eb5550, type: 3}
   sfxClipList:
-  - {fileID: 8300000, guid: 9d66019d844335f43bddf621b4eb5550, type: 3}
-  - {fileID: 8300000, guid: c5b031af451f0064dbc02af3a3cb262a, type: 3}
+  - clipName: Sfx_1
+    clip: {fileID: 8300000, guid: 9d66019d844335f43bddf621b4eb5550, type: 3}
+  - clipName: Sfx_2
+    clip: {fileID: 8300000, guid: c5b031af451f0064dbc02af3a3cb262a, type: 3}

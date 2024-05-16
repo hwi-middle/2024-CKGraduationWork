@@ -14,7 +14,7 @@ public class AudioClipInfo
 [CreateAssetMenu(fileName = "New AudioClip Data", menuName = "Scriptable Object Asset/Audio Clip Data")]
 public class AudioClipData : ScriptableObject
 {
-    public int maxAudioObjectCount = 20;
+    public int audioObjectMaxCapacity = 20;
     public List<AudioClipInfo> bgmClipList = new();
     public List<AudioClipInfo> sfxClipList = new();
 }
