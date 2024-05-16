@@ -47,7 +47,7 @@ public class TutorialVideoEnumGenerator : Editor
 
         builder.Append("}");
 
-        using TextWriter writer = new StreamWriter(PATH, false, Encoding.Unicode);
+        using TextWriter writer = new StreamWriter(PATH, false, Encoding.UTF8);
         writer.Write(builder.ToString());
         writer.Close();
         AssetDatabase.Refresh();
