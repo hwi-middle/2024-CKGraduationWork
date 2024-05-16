@@ -33,16 +33,16 @@ public class TutorialVideoEnumGenerator : Editor
 
     private void GenerateEnumFile()
     {
-        const string TAB = "    ";
+        const string INDENT = "    ";
 
         StringBuilder builder = new();
         builder.AppendLine("public enum " + NAME);
         builder.AppendLine("{");
-        builder.AppendLine(TAB + "None,");
+        builder.AppendLine(INDENT + "None,");
 
         foreach (TutorialVideo data in _tutorialVideoData.tutorialVideos)
         {
-            builder.AppendLine(TAB + data.title + ",");
+            builder.AppendLine(INDENT + data.title + ",");
         }
 
         builder.Append("}");
