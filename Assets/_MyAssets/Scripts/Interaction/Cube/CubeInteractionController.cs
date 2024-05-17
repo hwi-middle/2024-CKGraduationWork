@@ -3,6 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ECubeSelectDirection
+{
+    Down = -1,
+    None = 0,
+    Up = 1
+}
+
 public class CubeInteractionController : Singleton<CubeInteractionController>
 {
     [SerializeField] private PlayerInputData _inputData;
@@ -28,24 +35,25 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
 
     private void HandleSelectEvent(float value)
     {
+        ECubeSelectDirection direction = (ECubeSelectDirection)value;
         if(_currentCubeRoot.IsRotateRoutineRunning)
         {
             return;
         }
-        
-        switch (value)
+
+        switch (direction)
         {
-            case 0:
+            case ECubeSelectDirection.None:
                 return;
             // W key Input
-            case 1:
+            case ECubeSelectDirection.Up:
                 _currentCubeRoot.SelectNextCube();
                 return;
-            
+
             // S key Input
-            case -1:
+            case ECubeSelectDirection.Down:
                 _currentCubeRoot.SelectPrevCube();
-                break;
+                return;
             default:
                 Debug.Assert(false);
                 break;
@@ -59,6 +67,7 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
             return;
         }
 
+        // Value is 1 -> Right, Value is -1 -> Left
         _currentCubeRoot.CubeRotateDirection = value;
         _currentCubeRoot.RotateCube();
     }
