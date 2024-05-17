@@ -366,6 +366,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CubeExit",
+                    "type": "Button",
+                    "id": "06acc249-f510-43cb-bc01-ddcc80deb594",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -434,6 +443,17 @@
                     "action": "Rotate",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "e49a03ce-63f9-4059-afc2-a765c21a3b7b",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "CubeExit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

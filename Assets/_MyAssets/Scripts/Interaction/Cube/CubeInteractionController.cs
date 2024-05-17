@@ -16,12 +16,14 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
     {
         _inputData.selectEvent += HandleSelectEvent;
         _inputData.rotateEvent += HandleRotateEvent;
+        _inputData.cubeExitEvent += HandleCubeExitEvent;
     }
 
     private void OnDisable()
     {
         _inputData.selectEvent -= HandleSelectEvent;
         _inputData.rotateEvent -= HandleRotateEvent;
+        _inputData.cubeExitEvent -= HandleCubeExitEvent;
     }
 
     private void HandleSelectEvent(float value)
@@ -61,10 +63,23 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
         _currentCubeRoot.RotateCube();
     }
 
-    public void SetInteractionCube(GameObject cubeRoot)
+    public void SetInteractionCube(Transform cubeFollow, GameObject cubeRoot)
     {
         Debug.Assert(cubeRoot.transform.childCount != 0, "Invalid Cube Object");
         _currentCubeRoot = cubeRoot.GetComponent<CubeRootHandler>();
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.CubeAction);
+        CameraController.Instance.ChangeCameraToCube(cubeFollow, cubeRoot.transform);
+    }
+
+    private void HandleCubeExitEvent()
+    {
+        if(_currentCubeRoot.IsRotateRoutineRunning)
+        {
+            return;
+        }
+        
+        _currentCubeRoot = null;
+        PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.PlayerAction);
+        CameraController.Instance.ChangeCameraFromCubeToFreeLook();
     }
 }

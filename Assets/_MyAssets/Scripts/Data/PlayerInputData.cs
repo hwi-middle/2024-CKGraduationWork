@@ -40,6 +40,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
     // Cube Action
     public Action<float> selectEvent;
     public Action<float> rotateEvent;
+    public Action cubeExitEvent;
 
     private void OnEnable()
     {
@@ -218,6 +219,16 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
 
         float value = context.ReadValue<float>();
         rotateEvent?.Invoke(value);
+    }
+
+    public void OnCubeExit(InputAction.CallbackContext context)
+    {
+        if (!context.started)
+        {
+            return;
+        }
+        
+        cubeExitEvent?.Invoke();
     }
 
     public static void ChangeInputMap(EInputMap map)

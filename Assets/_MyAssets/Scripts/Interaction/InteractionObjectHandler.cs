@@ -48,7 +48,7 @@ public class InteractionObjectHandler : MonoBehaviour
                 return;
             
             case EInteractionType.Cube:
-                CubeInteractionController.Instance.SetInteractionCube(_connectedCubeRoot);
+                CubeInteractionController.Instance.SetInteractionCube(transform.parent, _connectedCubeRoot);
                 return;
             
             default:

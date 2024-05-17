@@ -388,6 +388,15 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CubeExit"",
+                    ""type"": ""Button"",
+                    ""id"": ""06acc249-f510-43cb-bc01-ddcc80deb594"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -456,6 +465,17 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""action"": ""Rotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e49a03ce-63f9-4059-afc2-a765c21a3b7b"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""CubeExit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -510,6 +530,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_CubeAction = asset.FindActionMap("CubeAction", throwIfNotFound: true);
         m_CubeAction_Select = m_CubeAction.FindAction("Select", throwIfNotFound: true);
         m_CubeAction_Rotate = m_CubeAction.FindAction("Rotate", throwIfNotFound: true);
+        m_CubeAction_CubeExit = m_CubeAction.FindAction("CubeExit", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -745,12 +766,14 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private List<ICubeActionActions> m_CubeActionActionsCallbackInterfaces = new List<ICubeActionActions>();
     private readonly InputAction m_CubeAction_Select;
     private readonly InputAction m_CubeAction_Rotate;
+    private readonly InputAction m_CubeAction_CubeExit;
     public struct CubeActionActions
     {
         private @IA_Player m_Wrapper;
         public CubeActionActions(@IA_Player wrapper) { m_Wrapper = wrapper; }
         public InputAction @Select => m_Wrapper.m_CubeAction_Select;
         public InputAction @Rotate => m_Wrapper.m_CubeAction_Rotate;
+        public InputAction @CubeExit => m_Wrapper.m_CubeAction_CubeExit;
         public InputActionMap Get() { return m_Wrapper.m_CubeAction; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -766,6 +789,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Rotate.started += instance.OnRotate;
             @Rotate.performed += instance.OnRotate;
             @Rotate.canceled += instance.OnRotate;
+            @CubeExit.started += instance.OnCubeExit;
+            @CubeExit.performed += instance.OnCubeExit;
+            @CubeExit.canceled += instance.OnCubeExit;
         }
 
         private void UnregisterCallbacks(ICubeActionActions instance)
@@ -776,6 +802,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Rotate.started -= instance.OnRotate;
             @Rotate.performed -= instance.OnRotate;
             @Rotate.canceled -= instance.OnRotate;
+            @CubeExit.started -= instance.OnCubeExit;
+            @CubeExit.performed -= instance.OnCubeExit;
+            @CubeExit.canceled -= instance.OnCubeExit;
         }
 
         public void RemoveCallbacks(ICubeActionActions instance)
@@ -833,5 +862,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     {
         void OnSelect(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
+        void OnCubeExit(InputAction.CallbackContext context);
     }
 }
