@@ -7,20 +7,10 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
 {
     [SerializeField] private PlayerInputData _inputData;
 
-    private bool _isRotatingCube;
-
-    private SceneManagerBase _sceneManagerBase;
-
     private CubeRootHandler _currentCubeRoot;
+    public bool HasInteractionCube => _currentCubeRoot != null;
 
-    private void Start()
-    {
-        _sceneManagerBase = SceneManagerBase.Instance;
-    }
-
-    private void Update()
-    {
-    } 
+    private bool _isRotatingCube;
     
     private void OnEnable()
     {

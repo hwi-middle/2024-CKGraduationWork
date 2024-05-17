@@ -166,9 +166,7 @@ public class InteractionController : Singleton<InteractionController>
                 return false;
             case EInteractionType.Overstep when PlayerMove.Instance.CheckPlayerState(EPlayerState.Crouch):
                 return false;
-            
-            // Invalid Situation
-            case EInteractionType.Cube when false:
+            case EInteractionType.Cube when CubeInteractionController.Instance.HasInteractionCube:
                 return false;
             default:
                 return true;
