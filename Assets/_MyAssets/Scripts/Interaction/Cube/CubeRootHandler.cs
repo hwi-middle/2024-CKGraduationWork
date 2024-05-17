@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class CubeRootHandler : MonoBehaviour
 {
+    [Header("큐브가 돌아가는 시간(초)")]
     [SerializeField] private float _rotateDuration = 2.0f;
     private const float ROTATE_DEGREE = 90.0f;
+    
     public float CubeRotateDirection { get; set; }
     private float _currentRotationY;
 
@@ -28,7 +30,8 @@ public class CubeRootHandler : MonoBehaviour
             _cubeList.Add(transform.GetChild(i));
         }
 
-        _currentCubeTransform = _cubeList[0];
+        _currentCubeTransform = _cubeList[_childCount - 1];
+        _currentCubeIndex = _childCount - 1;
         _currentRotationY = _currentCubeTransform.transform.localRotation.eulerAngles.y;
     }
     
@@ -55,12 +58,15 @@ public class CubeRootHandler : MonoBehaviour
         while (t <= _rotateDuration)
         {
             float alpha = t / _rotateDuration;
+
+            float duration = EasingFunctions.EaseInOutBounce(alpha);
+
             _currentCubeTransform.transform.localRotation =
-                Quaternion.Slerp(currentRotation, targetRotation, alpha * alpha * alpha);
+                Quaternion.Slerp(currentRotation, targetRotation, duration);
             yield return null;
             t += Time.deltaTime;
         }
-        
+
         _currentCubeTransform.transform.localRotation = targetRotation;
         _rotateCubeRoutine = null;
     }

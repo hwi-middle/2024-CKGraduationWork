@@ -267,10 +267,10 @@ public class CameraController : Singleton<CameraController>
         PeekCamera.MoveToTopOfPrioritySubqueue();
     }
 
-    public void ChangeCameraToCube(Transform interaction, Transform cubeRoot)
+    public void ChangeCameraToCube(Transform follow, Transform lookAt)
     {
-        CubeCamera.Follow = interaction;
-        CubeCamera.LookAt = cubeRoot;
+        CubeCamera.Follow = follow;
+        CubeCamera.LookAt = lookAt;
         CubeCamera.MoveToTopOfPrioritySubqueue();
     }
     
