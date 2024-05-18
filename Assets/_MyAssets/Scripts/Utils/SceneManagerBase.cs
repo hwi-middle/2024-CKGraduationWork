@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Image = UnityEngine.UI.Image;
 
@@ -18,6 +19,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     public bool IsNeedCursorLock => _isNeedCursorLock;
     public bool IsDebugMode => _isDebugMode;
     
+    [SerializeField] GameObject _audioManager;
     private SceneFadeManager _fadeManager;
     
     private GameObject _settingsCanvas;
@@ -39,10 +41,11 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 #if !UNITY_EDITOR
         _isDebugMode = false;
 #endif
-
+        
+        Debug.Assert(_audioManager != null, "Require Audio Manager");
         GetSettingsValueAndApply();
     }
-    
+
     protected virtual void OnEnable()
     {
         _inputData.pauseEvent += HandlePauseAction;
@@ -64,6 +67,8 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
         _pauseCanvas = Instantiate(Resources.Load<GameObject>("PauseCanvas"));
         _pauseCanvas.SetActive(false);
+
+        Instantiate(Resources.Load<GameObject>("EventSystem"));
         
         _isPaused = false;
     }
@@ -123,13 +128,20 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     private void TogglePauseCanvas()
     {
-        TogglePause();
-        _pauseCanvas.SetActive(_isPaused);
-    }
-
-    public void TogglePause()
-    {
         _isPaused = !_isPaused;
+
+        if (_isPaused)
+        {
+            AudioPlayManager.Instance.PauseAllAudio();
+        }
+        else
+        {
+            AudioPlayManager.Instance.UnPauseAllAudio();   
+        }
+        _pauseCanvas.SetActive(_isPaused);
+        ToggleCursorVisible();
+        
+
         Time.timeScale = _isPaused ? 0.0f : 1.0f;
     }
 

@@ -10,6 +10,7 @@ public class Blackboard
     // public Vector3 moveToPosition;
     public GameObject target;
     public float lastTimePlayerDetected;
+    public float lastTimeNoiseDetected;
     // public readonly List<Vector3> patrolPoints = new List<Vector3>();
     // public Vector3 nextPatrolPos;
 }

@@ -12,6 +12,9 @@ public static class CheckPointPlayerPrefsNames
 
 public class CheckPointRootHandler : Singleton<CheckPointRootHandler>
 {
+    [SerializeField] private List<GameObject> _checkPointList = new();
+    public List<GameObject> CheckPointList => _checkPointList;
+    
     private readonly string _lastCheckPoint = CheckPointPlayerPrefsNames.LAST_CHECK_POINT;
     private readonly string _lastSceneName = CheckPointPlayerPrefsNames.LAST_SCENE_NAME;
     private int _currentIndex;
