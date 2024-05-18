@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using Image = UnityEngine.UI.Image;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(PopupHandler))]
 [RequireComponent(typeof(CursorLockModeUpdater))]
@@ -128,20 +125,24 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     private void TogglePauseCanvas()
     {
-        _isPaused = !_isPaused;
+        TogglePause();
+        _pauseCanvas.SetActive(_isPaused);
+    }
 
+    public void TogglePause()
+    {
+        _isPaused = !_isPaused;
+        
         if (_isPaused)
         {
             AudioPlayManager.Instance.PauseAllAudio();
         }
         else
         {
-            AudioPlayManager.Instance.UnPauseAllAudio();   
+            AudioPlayManager.Instance.UnPauseAllAudio();
         }
-        _pauseCanvas.SetActive(_isPaused);
-        ToggleCursorVisible();
         
-
+        _pauseCanvas.SetActive(_isPaused);
         Time.timeScale = _isPaused ? 0.0f : 1.0f;
     }
 

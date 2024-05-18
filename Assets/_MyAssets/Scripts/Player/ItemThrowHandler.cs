@@ -299,7 +299,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         GameObject itemPrefab =
             Instantiate(_itemPrefab, playerPosTop, cameraTransform.localRotation);
         Rigidbody itemRigidbody = itemPrefab.GetComponent<Rigidbody>();
-        itemPrefab.GetComponent<ItemFlyHandler>().Init(_playerData.itemGaugeAmount, _playerData.itemImpactRadius);
+        itemPrefab.GetComponent<ItemObjectFlyHandler>().Init(_playerData.itemGaugeAmount, _playerData.itemImpactRadius);
         itemRigidbody.AddForce(_shootPoint.forward * _playerData.throwPower, ForceMode.VelocityChange);
 
         IsItemOnHand = false;

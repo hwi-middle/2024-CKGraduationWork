@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemFlyHandler : MonoBehaviour
+public class ItemObjectFlyHandler : MonoBehaviour
 {
     private float _gaugeIncreaseAmount;
     private float _impactRadius;

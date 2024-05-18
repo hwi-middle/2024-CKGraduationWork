@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 703431383227750637}
   - component: {fileID: 4741148960248945201}
   - component: {fileID: 266658544493596067}
-  - component: {fileID: 1298805763117027542}
   - component: {fileID: 6276965202118897101}
+  - component: {fileID: 4434342844591521636}
   m_Layer: 0
   m_Name: SoundBomb
   m_TagString: Untagged
@@ -107,18 +107,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1298805763117027542
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2634350771689161555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d88b54708f3d92648847fff655b2aaa3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &6276965202118897101
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -146,3 +134,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &4434342844591521636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2634350771689161555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d88b54708f3d92648847fff655b2aaa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
