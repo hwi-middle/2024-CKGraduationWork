@@ -113,7 +113,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
         if (PopupHandler.Instance.IsPopupActive)
         {
-            PopupHandler.Instance.ClosePopup();
+            PopupHandler.Instance.ExecuteActionOnButtonClick(false);
             return;
         }
 

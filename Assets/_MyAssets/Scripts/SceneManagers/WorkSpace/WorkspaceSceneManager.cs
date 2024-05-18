@@ -41,4 +41,9 @@ public class WorkspaceSceneManager : SceneManagerBase
             }
         }
     }
+
+    private void HandleTutorialPopupButtonAction(bool isPositive)
+    {
+        TogglePause();
+    }
 }
