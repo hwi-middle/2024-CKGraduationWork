@@ -58,10 +58,10 @@ public class CubeRootHandler : MonoBehaviour
         {
             float alpha = t / _rotateDuration;
 
-            float duration = EasingFunctions.EaseInOutBounce(alpha);
+            float easedAlpha = EasingFunctions.EaseInOutBounce(alpha);
 
             _currentCubeTransform.transform.localRotation =
-                Quaternion.Slerp(currentRotation, targetRotation, duration);
+                Quaternion.Slerp(currentRotation, targetRotation, easedAlpha);
             yield return null;
             t += Time.deltaTime;
         }
