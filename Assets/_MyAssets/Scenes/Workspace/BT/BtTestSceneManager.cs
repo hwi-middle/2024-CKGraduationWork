@@ -8,6 +8,7 @@ public class BtTestSceneManager : SceneManagerBase
     {
         base.Start();
         FadeIn(0.5f);
+        Player.Instance.GetComponent<ItemThrowHandler>().GetItem();
     }
 
     protected override void Update()
