@@ -47,12 +47,12 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
                 return;
             // W key Input
             case ECubeSelectDirection.Up:
-                _currentCubeRoot.SelectNextCube();
+                _currentCubeRoot.SelectUpperCube();
                 return;
 
             // S key Input
             case ECubeSelectDirection.Down:
-                _currentCubeRoot.SelectPrevCube();
+                _currentCubeRoot.SelectLowerCube();
                 return;
             default:
                 Debug.Assert(false);

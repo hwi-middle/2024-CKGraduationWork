@@ -15,23 +15,22 @@ public class CubeRootHandler : MonoBehaviour
     private int _currentCubeIndex;
     private Transform _currentCubeTransform;
     
-    private List<Transform> _cubeList = new();
-    private int _childCount;
+    private readonly List<Transform> _cubeList = new();
 
     private IEnumerator _rotateCubeRoutine;
     public bool IsRotateRoutineRunning => _rotateCubeRoutine != null;
     
     private void Start()
     {
-        _childCount = transform.childCount;
+        int childCount = transform.childCount;
 
-        for (int i = 0; i < _childCount; i++)
+        for (int i = 0; i < childCount; i++)
         {
             _cubeList.Add(transform.GetChild(i));
         }
 
-        _currentCubeTransform = _cubeList[_childCount - 1];
-        _currentCubeIndex = _childCount - 1;
+        _currentCubeTransform = _cubeList[childCount - 1];
+        _currentCubeIndex = childCount - 1;
         _currentRotationY = _currentCubeTransform.transform.localRotation.eulerAngles.y;
     }
     
@@ -71,16 +70,16 @@ public class CubeRootHandler : MonoBehaviour
         _rotateCubeRoutine = null;
     }
 
-    public void SelectNextCube()
+    public void SelectUpperCube()
     {
-        _currentCubeIndex = Mathf.Clamp(_currentCubeIndex + 1, 0, _childCount - 1);
+        _currentCubeIndex = Mathf.Clamp(_currentCubeIndex + 1, 0, transform.childCount - 1);
         _currentCubeTransform = _cubeList[_currentCubeIndex];
         _currentRotationY = _currentCubeTransform.transform.localRotation.eulerAngles.y;
     }
 
-    public void SelectPrevCube()
+    public void SelectLowerCube()
     {
-        _currentCubeIndex = Mathf.Clamp(_currentCubeIndex - 1, 0, _childCount - 1);
+        _currentCubeIndex = Mathf.Clamp(_currentCubeIndex - 1, 0, transform.childCount - 1);
         _currentCubeTransform = _cubeList[_currentCubeIndex];
         _currentRotationY = _currentCubeTransform.transform.localRotation.eulerAngles.y;
     }
