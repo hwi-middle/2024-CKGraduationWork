@@ -8,7 +8,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
     [SerializeField] private PlayerInputData _inputData;
     
     private GameObject _itemPrefab;
-    private GameObject _itemShowPrefabInstance;
+    private GameObject _itemShowPrefab;
 
     public bool IsItemOnHand { get; private set; }
     
@@ -28,6 +28,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
     {
         _shootPoint = transform.Find("ShootPoint").GetComponent<Transform>();
         _itemPrefab = Resources.Load<GameObject>("Items/SoundBomb");
+        _itemShowPrefab = Instantiate(Resources.Load<GameObject>("Items/TargetPointItemShow"));
     }
 
     private void OnEnable()
@@ -181,23 +182,12 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
 
     private void ShowTargetPoint()
     {
-        if (_itemShowPrefabInstance == null)
-        {
-            _itemShowPrefabInstance = Instantiate(_itemPrefab);
-            _itemShowPrefabInstance.GetComponent<Collider>().enabled = false;
-            _itemShowPrefabInstance.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-        }
+        _itemShowPrefab.SetActive(true);
     }
 
     private void RemoveTargetPoint()
     {
-        if (_itemShowPrefabInstance == null)
-        {
-            return;
-        }
-
-        Destroy(_itemShowPrefabInstance);
-        _itemShowPrefabInstance = null;
+        _itemShowPrefab.SetActive(false);
     }
 
     private void DrawParabola(bool greaterAngle = false)
@@ -255,7 +245,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         }
         
         LineDrawHelper.Instance.SetPositionCount(count);
-        _itemShowPrefabInstance.transform.position = list[count - 1];
+        _itemShowPrefab.transform.position = list[count - 1];
         LineDrawHelper.Instance.DrawParabola(list);
     }
 
