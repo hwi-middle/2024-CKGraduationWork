@@ -2,14 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
+[RequireComponent(typeof(SphereCollider))]
 public class InteractionObjectHandler : MonoBehaviour
 {
     [SerializeField] private InteractionData _data;
+    [SerializeField] private GameObject _connectedCubeRoot;
     private readonly Vector3 COLLIDER_ADDITIVE_CENTER = new (0, 0.5f, 0);
 
     private void Awake()
     {
+        if (_data.type == EInteractionType.Cube)
+        {
+            Debug.Assert(_connectedCubeRoot != null, "Connected cube object is null");
+        }
+        
         SphereCollider coll = GetComponent<SphereCollider>();
         coll.radius = _data.detectRadius;
         if (_data.type is EInteractionType.Overstep)
@@ -38,6 +46,11 @@ public class InteractionObjectHandler : MonoBehaviour
                 Transform childTransform = transform.GetChild(0);
                 OverstepActionController.Instance.OverstepAction(childTransform, _data.detectRadius);
                 return;
+            
+            case EInteractionType.Cube:
+                CubeInteractionController.Instance.SetCurrentCube(transform.parent, _connectedCubeRoot);
+                return;
+            
             default:
                 Debug.Assert(false);
                 return;
