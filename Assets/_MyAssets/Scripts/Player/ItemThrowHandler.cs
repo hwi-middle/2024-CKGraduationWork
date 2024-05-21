@@ -9,6 +9,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
     
     private GameObject _itemPrefab;
     private GameObject _itemShowPrefab;
+    private Vector3 _itemShowPrefabRotation;
 
     public bool IsItemOnHand { get; private set; }
     
@@ -246,6 +247,9 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         
         LineDrawHelper.Instance.SetPositionCount(count);
         _itemShowPrefab.transform.position = list[count - 1];
+        _itemShowPrefabRotation = transform.rotation.eulerAngles;
+        _itemShowPrefabRotation.x = _itemShowPrefab.transform.rotation.eulerAngles.x;
+        _itemShowPrefab.transform.rotation = Quaternion.Euler(_itemShowPrefabRotation);
         LineDrawHelper.Instance.DrawParabola(list);
     }
 
