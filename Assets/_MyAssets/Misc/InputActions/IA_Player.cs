@@ -46,15 +46,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Wire"",
-                    ""type"": ""Button"",
-                    ""id"": ""a8213568-675a-4e6f-9131-535bee700080"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Assassinate"",
                     ""type"": ""Button"",
                     ""id"": ""c806ddfd-84d4-4e85-a89f-bef7e0450b60"",
@@ -173,17 +164,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6bb6b0dd-0548-42cb-bbbd-ed203beb2a2a"",
-                    ""path"": ""<Mouse>/middleButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PC"",
-                    ""action"": ""Wire"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
@@ -386,6 +366,118 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""CubeAction"",
+            ""id"": ""ae8ce4fd-c285-4d97-8a46-1aaf639c592b"",
+            ""actions"": [
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""0770cbbb-00ee-4326-9fa5-e80adf277880"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Button"",
+                    ""id"": ""41e506db-93f8-49a9-8d76-0680c04c7ef5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CubeExit"",
+                    ""type"": ""Button"",
+                    ""id"": ""06acc249-f510-43cb-bc01-ddcc80deb594"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""5bec95ae-b20b-4b2b-9dfa-54d268ed8e28"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""19ab9808-3989-438b-95a3-145fe72036f7"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""8cca217f-ef7b-42e3-84ee-d5b826cd6211"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""697ca72b-4df4-4462-b1af-7350cdc16697"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""d9a52996-3483-4445-81e7-814a1847b794"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""7420db0e-3eb9-4e6d-bf19-1d4290f84eaa"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e49a03ce-63f9-4059-afc2-a765c21a3b7b"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""CubeExit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -422,7 +514,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_PlayerAction = asset.FindActionMap("PlayerAction", throwIfNotFound: true);
         m_PlayerAction_Move = m_PlayerAction.FindAction("Move", throwIfNotFound: true);
         m_PlayerAction_Run = m_PlayerAction.FindAction("Run", throwIfNotFound: true);
-        m_PlayerAction_Wire = m_PlayerAction.FindAction("Wire", throwIfNotFound: true);
         m_PlayerAction_Assassinate = m_PlayerAction.FindAction("Assassinate", throwIfNotFound: true);
         m_PlayerAction_Crouch = m_PlayerAction.FindAction("Crouch", throwIfNotFound: true);
         m_PlayerAction_Pause = m_PlayerAction.FindAction("Pause", throwIfNotFound: true);
@@ -435,6 +526,11 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_HideAction_Peek = m_HideAction.FindAction("Peek", throwIfNotFound: true);
         m_HideAction_Exit = m_HideAction.FindAction("Exit", throwIfNotFound: true);
         m_HideAction_MouseAxis = m_HideAction.FindAction("MouseAxis", throwIfNotFound: true);
+        // CubeAction
+        m_CubeAction = asset.FindActionMap("CubeAction", throwIfNotFound: true);
+        m_CubeAction_Select = m_CubeAction.FindAction("Select", throwIfNotFound: true);
+        m_CubeAction_Rotate = m_CubeAction.FindAction("Rotate", throwIfNotFound: true);
+        m_CubeAction_CubeExit = m_CubeAction.FindAction("CubeExit", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -498,7 +594,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private List<IPlayerActionActions> m_PlayerActionActionsCallbackInterfaces = new List<IPlayerActionActions>();
     private readonly InputAction m_PlayerAction_Move;
     private readonly InputAction m_PlayerAction_Run;
-    private readonly InputAction m_PlayerAction_Wire;
     private readonly InputAction m_PlayerAction_Assassinate;
     private readonly InputAction m_PlayerAction_Crouch;
     private readonly InputAction m_PlayerAction_Pause;
@@ -512,7 +607,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         public PlayerActionActions(@IA_Player wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_PlayerAction_Move;
         public InputAction @Run => m_Wrapper.m_PlayerAction_Run;
-        public InputAction @Wire => m_Wrapper.m_PlayerAction_Wire;
         public InputAction @Assassinate => m_Wrapper.m_PlayerAction_Assassinate;
         public InputAction @Crouch => m_Wrapper.m_PlayerAction_Crouch;
         public InputAction @Pause => m_Wrapper.m_PlayerAction_Pause;
@@ -535,9 +629,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Run.started += instance.OnRun;
             @Run.performed += instance.OnRun;
             @Run.canceled += instance.OnRun;
-            @Wire.started += instance.OnWire;
-            @Wire.performed += instance.OnWire;
-            @Wire.canceled += instance.OnWire;
             @Assassinate.started += instance.OnAssassinate;
             @Assassinate.performed += instance.OnAssassinate;
             @Assassinate.canceled += instance.OnAssassinate;
@@ -569,9 +660,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Run.started -= instance.OnRun;
             @Run.performed -= instance.OnRun;
             @Run.canceled -= instance.OnRun;
-            @Wire.started -= instance.OnWire;
-            @Wire.performed -= instance.OnWire;
-            @Wire.canceled -= instance.OnWire;
             @Assassinate.started -= instance.OnAssassinate;
             @Assassinate.performed -= instance.OnAssassinate;
             @Assassinate.canceled -= instance.OnAssassinate;
@@ -672,6 +760,68 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         }
     }
     public HideActionActions @HideAction => new HideActionActions(this);
+
+    // CubeAction
+    private readonly InputActionMap m_CubeAction;
+    private List<ICubeActionActions> m_CubeActionActionsCallbackInterfaces = new List<ICubeActionActions>();
+    private readonly InputAction m_CubeAction_Select;
+    private readonly InputAction m_CubeAction_Rotate;
+    private readonly InputAction m_CubeAction_CubeExit;
+    public struct CubeActionActions
+    {
+        private @IA_Player m_Wrapper;
+        public CubeActionActions(@IA_Player wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Select => m_Wrapper.m_CubeAction_Select;
+        public InputAction @Rotate => m_Wrapper.m_CubeAction_Rotate;
+        public InputAction @CubeExit => m_Wrapper.m_CubeAction_CubeExit;
+        public InputActionMap Get() { return m_Wrapper.m_CubeAction; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CubeActionActions set) { return set.Get(); }
+        public void AddCallbacks(ICubeActionActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CubeActionActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CubeActionActionsCallbackInterfaces.Add(instance);
+            @Select.started += instance.OnSelect;
+            @Select.performed += instance.OnSelect;
+            @Select.canceled += instance.OnSelect;
+            @Rotate.started += instance.OnRotate;
+            @Rotate.performed += instance.OnRotate;
+            @Rotate.canceled += instance.OnRotate;
+            @CubeExit.started += instance.OnCubeExit;
+            @CubeExit.performed += instance.OnCubeExit;
+            @CubeExit.canceled += instance.OnCubeExit;
+        }
+
+        private void UnregisterCallbacks(ICubeActionActions instance)
+        {
+            @Select.started -= instance.OnSelect;
+            @Select.performed -= instance.OnSelect;
+            @Select.canceled -= instance.OnSelect;
+            @Rotate.started -= instance.OnRotate;
+            @Rotate.performed -= instance.OnRotate;
+            @Rotate.canceled -= instance.OnRotate;
+            @CubeExit.started -= instance.OnCubeExit;
+            @CubeExit.performed -= instance.OnCubeExit;
+            @CubeExit.canceled -= instance.OnCubeExit;
+        }
+
+        public void RemoveCallbacks(ICubeActionActions instance)
+        {
+            if (m_Wrapper.m_CubeActionActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ICubeActionActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CubeActionActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CubeActionActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public CubeActionActions @CubeAction => new CubeActionActions(this);
     private int m_PCSchemeIndex = -1;
     public InputControlScheme PCScheme
     {
@@ -694,7 +844,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
-        void OnWire(InputAction.CallbackContext context);
         void OnAssassinate(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
@@ -708,5 +857,11 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         void OnPeek(InputAction.CallbackContext context);
         void OnExit(InputAction.CallbackContext context);
         void OnMouseAxis(InputAction.CallbackContext context);
+    }
+    public interface ICubeActionActions
+    {
+        void OnSelect(InputAction.CallbackContext context);
+        void OnRotate(InputAction.CallbackContext context);
+        void OnCubeExit(InputAction.CallbackContext context);
     }
 }

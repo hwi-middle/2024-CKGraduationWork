@@ -8,11 +8,14 @@ using UnityEngine.Serialization;
 public class CameraController : Singleton<CameraController>
 {
     [SerializeField] private PlayerInputData _inputData;
+    [SerializeField] private float _blendingDuration = 0.5f;
     public CinemachineBrain BrainCamera { get; private set; }
     public CinemachineFreeLook FreeLookCamera { get; private set; }
     public CinemachineFreeLook AimingCamera { get; private set; }
     public CinemachineVirtualCamera InCabinetCamera { get; private set; }
     public CinemachineVirtualCamera PeekCamera { get; private set; }
+    
+    public CinemachineVirtualCamera CubeCamera { get; private set; }
 
     private CinemachineComposer _peekCameraComposer;
 
@@ -25,7 +28,8 @@ public class CameraController : Singleton<CameraController>
 
     private IEnumerator _changeCameraFromPeekToInCabinet;
 
-    private Transform _peekPoint;
+    [Header("Peek Point Transform")]
+    [SerializeField] private Transform _peekPoint;
     
     [Header("Peek Camera 이동 속도")]
     [SerializeField] private float _aimSpeed = 1.0f;
@@ -51,21 +55,22 @@ public class CameraController : Singleton<CameraController>
     {
         Debug.Assert(_mainCamera != null, "_mainCamera != null");
         
-        GameObject cameras = Instantiate(Resources.Load<GameObject>("Camera/Cameras"));
+        GameObject virtualCameras = Instantiate(Resources.Load<GameObject>("Camera/VirtualCameras"));
         
-        Debug.Assert(cameras != null, "cameras != null");
+        Debug.Assert(virtualCameras != null, "virtualCameras != null");
 
         // Camera Component Setting
         BrainCamera = _mainCamera.GetComponent<CinemachineBrain>();
-        FreeLookCamera = cameras.transform.Find("FreeLook Camera").GetComponent<CinemachineFreeLook>();
-        AimingCamera = cameras.transform.Find("Aiming Camera").GetComponent<CinemachineFreeLook>();
-        InCabinetCamera = cameras.transform.Find("InCabinet Camera").GetComponent<CinemachineVirtualCamera>();
-        PeekCamera = cameras.transform.Find("Peek Camera").GetComponent<CinemachineVirtualCamera>();
+        FreeLookCamera = virtualCameras.transform.GetChild(0).GetComponent<CinemachineFreeLook>();
+        AimingCamera = virtualCameras.transform.GetChild(1).GetComponent<CinemachineFreeLook>();
+        InCabinetCamera = virtualCameras.transform.GetChild(2).GetComponent<CinemachineVirtualCamera>();
+        PeekCamera = virtualCameras.transform.GetChild(3).GetComponent<CinemachineVirtualCamera>();
+        CubeCamera = virtualCameras.transform.GetChild(4).GetComponent<CinemachineVirtualCamera>();
+        
+        // Brain Camera Blending Duration Setting
+        BrainCamera.m_DefaultBlend.m_Time = _blendingDuration;
         
         Transform playerTransform = transform;
-        
-        // Peek Point Transform
-        _peekPoint = playerTransform.Find("PeekPoint");
 
         // Cameras Follow & LookAt Setting
         FreeLookCamera.Follow = playerTransform;
@@ -84,6 +89,10 @@ public class CameraController : Singleton<CameraController>
         
         // Live 카메라를 FreeLook으로 설정
         FreeLookCamera.MoveToTopOfPrioritySubqueue();
+
+        // 상호작용 시 설정
+        CubeCamera.Follow = null;
+        CubeCamera.LookAt = null;
     }
     
     private void HandleMouseAxisEvent(float value)
@@ -256,5 +265,19 @@ public class CameraController : Singleton<CameraController>
         // PeekCamera.m_XAxis.Value = 0;
         PeekCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x = 0;
         PeekCamera.MoveToTopOfPrioritySubqueue();
+    }
+
+    public void ChangeCameraToCube(Transform follow, Transform lookAt)
+    {
+        CubeCamera.Follow = follow;
+        CubeCamera.LookAt = lookAt;
+        CubeCamera.MoveToTopOfPrioritySubqueue();
+    }
+    
+    public void ChangeCameraFromCubeToFreeLook()
+    {
+        FreeLookCamera.MoveToTopOfPrioritySubqueue();
+        CubeCamera.Follow = null;
+        CubeCamera.LookAt = null;
     }
 }

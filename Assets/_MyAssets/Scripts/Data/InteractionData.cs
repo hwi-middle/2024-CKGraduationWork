@@ -10,4 +10,7 @@ public class InteractionData : ScriptableObject
 
     [Header("오브젝트 유형")]
     [Tooltip("아이템인지 숨기 가능한 오브젝트 인지")] public EInteractionType type;
+    
+    [Header("큐브 오브젝트")] 
+    [Tooltip("큐브 오브젝트 회전 속도")] public float cubeRotateSpeed;
 }

@@ -57,7 +57,7 @@ public class MainMenuSceneManager : SceneManagerBase
             return;
         }
 
-        LoadSceneWithLoadingUI(SceneNames.WORKSPACE_POPUP_SCENE);
+        LoadSceneWithLoadingUI(SceneNames.DEMO_PLAY);
     }
 
     public void OnContinueButton()
