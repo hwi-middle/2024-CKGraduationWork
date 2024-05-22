@@ -8,7 +8,8 @@ public enum EInteractionType
 {
     Item,
     HideableObject,
-    Overstep
+    Overstep,
+    Cube
 }
 
 public class InteractionObject
@@ -164,6 +165,8 @@ public class InteractionController : Singleton<InteractionController>
             case EInteractionType.HideableObject when !HideActionController.Instance.IsInFrontOfHideableObject(hit.transform):
                 return false;
             case EInteractionType.Overstep when PlayerMove.Instance.CheckPlayerState(EPlayerState.Crouch):
+                return false;
+            case EInteractionType.Cube when CubeInteractionController.Instance.HasInteractionCube:
                 return false;
             default:
                 return true;
