@@ -16,6 +16,15 @@ public class LineDrawHelper : Singleton<LineDrawHelper>
     {
         _line.startWidth = _line.endWidth = 0.1f;
         _line.positionCount = 1;
+        
+        // 그라데이션 설정
+        Gradient gradient = new();
+        gradient.SetKeys(
+            new[] { new GradientColorKey(Color.white, 0.0f), new GradientColorKey(Color.red, 1.0f) },
+            new[] { new GradientAlphaKey(0.0f, 0.0f), new GradientAlphaKey(1.0f, 1.0f) }
+        );
+        
+        _line.colorGradient = gradient;
     }
 
     public void EnableLine()

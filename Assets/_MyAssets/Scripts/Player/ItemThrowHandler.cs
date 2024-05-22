@@ -1,6 +1,7 @@
 using System.Collections;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class ItemThrowHandler : Singleton<ItemThrowHandler>
 {
@@ -8,8 +9,8 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
     [SerializeField] private PlayerInputData _inputData;
     
     private GameObject _itemPrefab;
-    private GameObject _itemShowPrefab;
-    private Vector3 _itemShowPrefabRotation;
+    private GameObject _itemShowObject;
+    private Vector3 _itemShowObjectRotation;
 
     public bool IsItemOnHand { get; private set; }
     
@@ -29,7 +30,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
     {
         _shootPoint = transform.Find("ShootPoint").GetComponent<Transform>();
         _itemPrefab = Resources.Load<GameObject>("Items/SoundBomb");
-        _itemShowPrefab = Instantiate(Resources.Load<GameObject>("Items/TargetPointItemShow"));
+        _itemShowObject = Instantiate(Resources.Load<GameObject>("Items/TargetPointItemShow"));
     }
 
     private void OnEnable()
@@ -183,12 +184,12 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
 
     private void ShowTargetPoint()
     {
-        _itemShowPrefab.SetActive(true);
+        _itemShowObject.SetActive(true);
     }
 
     private void RemoveTargetPoint()
     {
-        _itemShowPrefab.SetActive(false);
+        _itemShowObject.SetActive(false);
     }
 
     private void DrawParabola(bool greaterAngle = false)
@@ -246,13 +247,23 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         }
         
         LineDrawHelper.Instance.SetPositionCount(count);
-        _itemShowPrefab.transform.position = list[count - 1];
-        _itemShowPrefabRotation = transform.rotation.eulerAngles;
-        _itemShowPrefabRotation.x = _itemShowPrefab.transform.rotation.eulerAngles.x;
-        _itemShowPrefab.transform.rotation = Quaternion.Euler(_itemShowPrefabRotation);
+        _itemShowObject.transform.position = list[count - 1];
+        
+        RotateItemShowPrefab();
+        
         LineDrawHelper.Instance.DrawParabola(list);
     }
 
+    private void RotateItemShowPrefab()
+    {
+        // Decal의 자연스러운 출력을 위해 타겟 오브젝트 회전
+        _itemShowObjectRotation.y = transform.rotation.eulerAngles.y;
+        _itemShowObjectRotation.x = _itemShowObject.transform.rotation.eulerAngles.x;
+        _itemShowObjectRotation.z = _itemShowObject.transform.rotation.eulerAngles.z;
+        
+        _itemShowObject.transform.rotation = Quaternion.Euler(_itemShowObjectRotation);
+    }
+    
     private float GetParabolaShootingAngleInRadian(bool greaterAngle)
     {
         float gravity = Mathf.Abs(Physics.gravity.y);
