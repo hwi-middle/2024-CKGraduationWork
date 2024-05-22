@@ -249,14 +249,14 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         LineDrawHelper.Instance.SetPositionCount(count);
         _itemShowObject.transform.position = list[count - 1];
         
-        RotateItemShowPrefab();
+        RotateItemShowObject();
         
         LineDrawHelper.Instance.DrawParabola(list);
     }
 
-    private void RotateItemShowPrefab()
+    private void RotateItemShowObject()
     {
-        // Decal의 자연스러운 출력을 위해 타겟 오브젝트 회전
+        // Decal의 자연스러운 출력을 위해 TargetShow(_itemShowObject) 오브젝트 회전
         _itemShowObjectRotation.y = transform.rotation.eulerAngles.y;
         _itemShowObjectRotation.x = _itemShowObject.transform.rotation.eulerAngles.x;
         _itemShowObjectRotation.z = _itemShowObject.transform.rotation.eulerAngles.z;

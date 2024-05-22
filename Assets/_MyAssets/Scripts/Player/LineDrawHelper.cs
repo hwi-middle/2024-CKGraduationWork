@@ -37,14 +37,6 @@ public class LineDrawHelper : Singleton<LineDrawHelper>
         _line.enabled = false;
     }
 
-    public void DrawWire(Vector3 startPosition, Vector3 targetPosition)
-    {
-        _line.positionCount = 2;
-        startPosition.y += 0.5f;
-        _line.SetPosition(0, startPosition);
-        _line.SetPosition(1, targetPosition);
-    }
-
     public void SetPositionCount(int count)
     {
         _line.positionCount = count;
