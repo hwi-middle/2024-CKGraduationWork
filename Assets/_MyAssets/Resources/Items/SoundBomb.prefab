@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4741148960248945201}
   - component: {fileID: 266658544493596067}
   - component: {fileID: 6276965202118897101}
-  - component: {fileID: 4434342844591521636}
+  - component: {fileID: 2302502310650187371}
   m_Layer: 0
   m_Name: SoundBomb
   m_TagString: Untagged
@@ -134,7 +134,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &4434342844591521636
+--- !u!114 &2302502310650187371
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,6 +143,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2634350771689161555}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d88b54708f3d92648847fff655b2aaa3, type: 3}
+  m_Script: {fileID: 11500000, guid: 83644643d92139f4a9ed08a5b7c7ee5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

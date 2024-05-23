@@ -30,6 +30,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
     {
         _shootPoint = transform.Find("ShootPoint").GetComponent<Transform>();
         _itemPrefab = Resources.Load<GameObject>("Items/SoundBomb");
+        Debug.Assert(_itemPrefab is not null);
         _itemShowObject = Instantiate(Resources.Load<GameObject>("Items/TargetPointItemShow"));
     }
 
