@@ -6,12 +6,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "New Player Input", menuName = "Scriptable Object Asset/Player Input")]
-public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions, IA_Player.IHideActionActions
+public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions, IA_Player.IHideActionActions, IA_Player.ICubeActionActions
 {
     public enum EInputMap
     {
         PlayerAction,
-        HideAction
+        HideAction,
+        CubeAction
     }
     
     private static IA_Player _input;
@@ -35,14 +36,21 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
     public Action peekEvent;
     public Action peekExitEvent;
     public Action<float> mouseAxisEvent;
+    
+    // Cube Action
+    public Action<float> selectEvent;
+    public Action<float> rotateEvent;
+    public Action cubeExitEvent;
 
     private void OnEnable()
     {
         if (_input == null)
         {
             _input = new IA_Player();
+            
             _input.PlayerAction.SetCallbacks(this);
             _input.HideAction.SetCallbacks(this);
+            _input.CubeAction.SetCallbacks(this);
         }
 
         _input.PlayerAction.Enable();
@@ -52,6 +60,7 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
     {
         _input?.PlayerAction.Disable();
         _input?.HideAction.Disable();
+        _input?.CubeAction.Disable();
     }
 
     // Player Action Map
@@ -188,6 +197,39 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
         
         mouseAxisEvent?.Invoke(xAxis);
     }
+    
+    // Cube Action Map
+    public void OnSelect(InputAction.CallbackContext context)
+    {
+        if (!context.started)
+        {
+            return;
+        }
+        
+        float value = context.ReadValue<float>();
+        selectEvent?.Invoke(value);
+    }
+    
+    public void OnRotate(InputAction.CallbackContext context)
+    {
+        if (!context.started)
+        {
+            return;
+        }
+
+        float value = context.ReadValue<float>();
+        rotateEvent?.Invoke(value);
+    }
+
+    public void OnCubeExit(InputAction.CallbackContext context)
+    {
+        if (!context.started)
+        {
+            return;
+        }
+        
+        cubeExitEvent?.Invoke();
+    }
 
     public static void ChangeInputMap(EInputMap map)
     {
@@ -196,10 +238,17 @@ public class PlayerInputData : ScriptableObject, IA_Player.IPlayerActionActions,
             case EInputMap.PlayerAction:
                 _input.HideAction.Disable();
                 _input.PlayerAction.Enable();
+                _input.CubeAction.Disable();
                 break;
             case EInputMap.HideAction:
                 _input.PlayerAction.Disable();
                 _input.HideAction.Enable();
+                _input.CubeAction.Disable();
+                break;
+            case EInputMap.CubeAction:
+                _input.PlayerAction.Disable();
+                _input.HideAction.Disable();
+                _input.CubeAction.Enable();
                 break;
             default:
                 Debug.Assert(false);

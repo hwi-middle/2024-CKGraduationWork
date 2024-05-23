@@ -158,12 +158,6 @@ public class PlayerMove : Singleton<PlayerMove>
     private void RotatePlayer()
     {
         Debug.Assert(_camera != null, "_camera != null");
-
-        if (_inputDirection.sqrMagnitude == 0)
-        {
-            return;
-        }
-
         ApplyRotate();
     }
 
