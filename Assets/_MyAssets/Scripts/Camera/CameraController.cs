@@ -89,13 +89,14 @@ public class CameraController : Singleton<CameraController>
         _peekCameraComposer = PeekCamera.GetCinemachineComponent<CinemachineComposer>();
         
         // Live 카메라를 FreeLook으로 설정
-        FreeLookCamera.MoveToTopOfPrioritySubqueue();
 
         // 상호작용 시 설정
         CubeCamera.Follow = null;
         CubeCamera.LookAt = null;
         AssassinateCamera.Follow = null;
         AssassinateCamera.LookAt = null;
+        
+        FreeLookCamera.MoveToTopOfPrioritySubqueue();
     }
     
     private void HandleMouseAxisEvent(float value)

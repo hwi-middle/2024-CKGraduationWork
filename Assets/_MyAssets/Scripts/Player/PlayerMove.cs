@@ -17,6 +17,7 @@ public enum EPlayerState
     Alive = 1 << 7,
     Dead = 1 << 8,
     Overstep = 1 << 9,
+    Assassinate = 1 << 10,
 }
 
 public class PlayerMove : Singleton<PlayerMove>
@@ -62,6 +63,9 @@ public class PlayerMove : Singleton<PlayerMove>
     private Vector3 _hitNormal;
     private bool _isSliding;
     private Vector3 _slideVelocity;
+
+    private IEnumerator _assassinateRoutine;
+    public bool IsAssassinating => _assassinateRoutine != null;
 
     private bool CanActing => !CheckPlayerState(EPlayerState.Dead) && !CheckPlayerState(EPlayerState.Overstep);
 
@@ -172,6 +176,11 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void MovePlayer()
     {
+        if (IsAssassinating)
+        {
+            return;
+        }
+        
         _velocity = transform.TransformDirection(_inputDirection);
 
         ApplyGravity();
@@ -212,6 +221,54 @@ public class PlayerMove : Singleton<PlayerMove>
         }
 
         _velocity.y = _yVelocity;
+    }
+
+    public void AssassinateEnemy(Transform enemy)
+    {
+        if (IsAssassinating)
+        {
+            return;
+        }
+
+        Vector3 offsetPosition = enemy.position;
+        offsetPosition.y = transform.position.y;
+        Vector3 targetRotation = enemy.rotation.eulerAngles;
+
+        _assassinateRoutine = AdjustPlayerToEnemyBackRoutine(offsetPosition, targetRotation);
+        StartCoroutine(_assassinateRoutine);
+    }
+
+    private IEnumerator AdjustPlayerToEnemyBackRoutine(Vector3 targetPosition, Vector3 targetEulerRotation)
+    {
+        const float ADJUST_DURATION = 0.1f;
+        float t = 0;
+
+        Vector3 startPosition = transform.position;
+        Quaternion startRotation = transform.rotation;
+        Quaternion targetRotation = Quaternion.Euler(targetEulerRotation);
+        while (t <= ADJUST_DURATION)
+        {
+            transform.position = Vector3.Lerp(startPosition, targetPosition, t / ADJUST_DURATION);
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t / ADJUST_DURATION);
+            yield return null;
+            t += Time.deltaTime;
+        }
+        
+        _assassinateRoutine = AssassinateRoutine();
+        StartCoroutine(_assassinateRoutine);
+    }
+
+    private IEnumerator AssassinateRoutine()
+    {
+        const float ASSASSIN_ANIMATION_DURATION = 5.0f;
+        float t = 0;
+        while (t < ASSASSIN_ANIMATION_DURATION)
+        {
+            yield return null;
+            t += Time.deltaTime;
+        }
+
+        _assassinateRoutine = null;
     }
 
     // Animation 관리를 위해 Public
@@ -255,7 +312,7 @@ public class PlayerMove : Singleton<PlayerMove>
     {
         _inputDirection = new Vector3(pos.x, 0, pos.y);
 
-        if (_inputDirection.sqrMagnitude == 0)
+        if (_inputDirection.sqrMagnitude == 0 || IsAssassinating)
         {
             RemovePlayerState(EPlayerState.Walk);
             return;

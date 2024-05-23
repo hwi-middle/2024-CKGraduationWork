@@ -9,8 +9,10 @@ public class AssassinateZone : MonoBehaviour
     [SerializeField] private EnemyBase _targetEnemy;
     [SerializeField] private GameObject _assassinateUI;
     [SerializeField] private Transform _cameraPoint;
+    [SerializeField] private Transform _assassinateOffset;
     private bool _isInZone;
 
+    private EnemyBase _parent;
 
 
     private void OnEnable()
@@ -25,14 +27,26 @@ public class AssassinateZone : MonoBehaviour
 
     private void HandleAssassinateAction()
     {
-        if (!_isInZone)
+        if (!_isInZone || PlayerMove.Instance.IsAssassinating)
         {
             return;
         }
         
         // Todo : 암살 애니메이션 출력, 카메라 전환, 암살 액션 종료 시 오브젝트 파괴
-        CameraController.Instance.ChangeCameraToAssassinate(_cameraPoint, transform);
-        Destroy(_targetEnemy.gameObject);
+        CameraController.Instance.ChangeCameraToAssassinate(_cameraPoint, transform.parent);
+        PlayerMove.Instance.AssassinateEnemy(_assassinateOffset);
+        StartCoroutine(AwaitAssassinateEndRoutine());
+        //Destroy(transform.parent.gameObject);
+    }
+    
+    private IEnumerator AwaitAssassinateEndRoutine()
+    {
+        while (PlayerMove.Instance.IsAssassinating)
+        {
+            yield return null;
+        }
+        
+        Destroy(transform.parent.gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
