@@ -43,8 +43,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public float PerceptionGauge => _perceptionGauge;
     public bool IsPerceptionGaugeFull => _perceptionGauge >= 100f;
-    
-    private PlayerMove _playerMove;
+
+    public PlayerMove PlayerMoveInstance { get; private set; }
+    public NavMeshAgent NavMeshAgent => _navMeshAgent;
 
     private void Awake()
     {
@@ -61,17 +62,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
         _navMeshAgent.speed = _aiData.walkSpeed;
         _tree = _tree.Clone();
         _tree.Bind(this);
-        _playerMove = PlayerMove.Instance;
+        PlayerMoveInstance = PlayerMove.Instance;
     }
 
     void Update()
     {
-        if (_playerMove.IsAssassinating)
-        {
-            _navMeshAgent.isStopped = true;
-            return;
-        }
-        
         _tree.Update();
         _animator.SetFloat(AK_Speed, _navMeshAgent.velocity.magnitude);
         if (_perceptionGauge > 0)

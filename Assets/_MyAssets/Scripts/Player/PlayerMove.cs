@@ -66,6 +66,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private IEnumerator _assassinateRoutine;
     public bool IsAssassinating => _assassinateRoutine != null;
+    public int CurrentTargetInstanceID { get; private set; } 
 
     private bool CanActing => !CheckPlayerState(EPlayerState.Dead) && !CheckPlayerState(EPlayerState.Overstep);
 
@@ -162,6 +163,11 @@ public class PlayerMove : Singleton<PlayerMove>
     private void RotatePlayer()
     {
         Debug.Assert(_camera != null, "_camera != null");
+        if (IsAssassinating)
+        {
+            return;
+        }
+        
         ApplyRotate();
     }
 
@@ -223,29 +229,30 @@ public class PlayerMove : Singleton<PlayerMove>
         _velocity.y = _yVelocity;
     }
 
-    public void AssassinateEnemy(Transform enemy)
+    public void AssassinateEnemy(Transform enemyBackOffset)
     {
         if (IsAssassinating)
         {
             return;
         }
 
-        Vector3 offsetPosition = enemy.position;
-        offsetPosition.y = transform.position.y;
-        Vector3 targetRotation = enemy.rotation.eulerAngles;
-
-        _assassinateRoutine = AdjustPlayerToEnemyBackRoutine(offsetPosition, targetRotation);
+        CurrentTargetInstanceID = enemyBackOffset.parent.GetInstanceID();
+        _assassinateRoutine = AdjustPlayerToEnemyBackRoutine(enemyBackOffset.parent, enemyBackOffset);
         StartCoroutine(_assassinateRoutine);
     }
 
-    private IEnumerator AdjustPlayerToEnemyBackRoutine(Vector3 targetPosition, Vector3 targetEulerRotation)
+    private IEnumerator AdjustPlayerToEnemyBackRoutine(Transform enemy, Transform enemyBackOffset)
     {
-        const float ADJUST_DURATION = 0.1f;
-        float t = 0;
-
         Vector3 startPosition = transform.position;
         Quaternion startRotation = transform.rotation;
-        Quaternion targetRotation = Quaternion.Euler(targetEulerRotation);
+
+        Vector3 targetPosition = enemyBackOffset.position;
+        targetPosition.y = startPosition.y;
+        Quaternion targetRotation = enemy.rotation;
+        
+        const float ADJUST_DURATION = 0.1f;
+        float t = 0;
+        
         while (t <= ADJUST_DURATION)
         {
             transform.position = Vector3.Lerp(startPosition, targetPosition, t / ADJUST_DURATION);
@@ -253,6 +260,9 @@ public class PlayerMove : Singleton<PlayerMove>
             yield return null;
             t += Time.deltaTime;
         }
+
+        transform.position = targetPosition;
+        transform.rotation = targetRotation;
         
         _assassinateRoutine = AssassinateRoutine();
         StartCoroutine(_assassinateRoutine);
@@ -268,6 +278,7 @@ public class PlayerMove : Singleton<PlayerMove>
             t += Time.deltaTime;
         }
 
+        CameraController.Instance.ChangeCameraFromAssassinateToFreeLook();
         _assassinateRoutine = null;
     }
 

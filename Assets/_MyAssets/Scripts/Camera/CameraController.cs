@@ -326,7 +326,7 @@ public class CameraController : Singleton<CameraController>
     /// <summary>
     /// 암살 상호작용 종료 시 자유 카메라로 변경합니다.
     /// </summary>
-    public void ChangeCameraFromAssassinateFromFreeLook()
+    public void ChangeCameraFromAssassinateToFreeLook()
     {
         AssassinateCamera.Follow = null;
         AssassinateCamera.LookAt = null;
