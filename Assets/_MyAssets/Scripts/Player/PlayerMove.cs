@@ -236,6 +236,11 @@ public class PlayerMove : Singleton<PlayerMove>
             return;
         }
 
+        RemovePlayerState(EPlayerState.Walk);
+        RemovePlayerState(EPlayerState.Run);
+        RemovePlayerState(EPlayerState.Crouch);
+        
+        AddPlayerState(EPlayerState.Assassinate);
         CurrentTargetInstanceID = enemyBackOffset.parent.GetInstanceID();
         _assassinateRoutine = AdjustPlayerToEnemyBackRoutine(enemyBackOffset.parent, enemyBackOffset);
         StartCoroutine(_assassinateRoutine);
@@ -264,21 +269,22 @@ public class PlayerMove : Singleton<PlayerMove>
         transform.position = targetPosition;
         transform.rotation = targetRotation;
         
-        _assassinateRoutine = AssassinateRoutine();
+        _assassinateRoutine = AssassinateRoutine(ADJUST_DURATION);
         StartCoroutine(_assassinateRoutine);
     }
 
-    private IEnumerator AssassinateRoutine()
+    private IEnumerator AssassinateRoutine(float adjustDuration)
     {
-        const float ASSASSIN_ANIMATION_DURATION = 5.0f;
+        float assassinateDuration = 8.0f - adjustDuration;
         float t = 0;
-        while (t < ASSASSIN_ANIMATION_DURATION)
+        while (t < assassinateDuration)
         {
             yield return null;
             t += Time.deltaTime;
         }
 
         CameraController.Instance.ChangeCameraFromAssassinateToFreeLook();
+        RemovePlayerState(EPlayerState.Assassinate);
         _assassinateRoutine = null;
     }
 

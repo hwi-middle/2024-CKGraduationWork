@@ -69,7 +69,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         _tree.Update();
         _animator.SetFloat(AK_Speed, _navMeshAgent.velocity.magnitude);
-        if (_perceptionGauge > 0)
+        if (_perceptionGauge > 0 && !PlayerMoveInstance.IsAssassinating)
         {
             SSPerceptionGaugeUiHandler.Instance.RegisterEnemy(this);
             SSPerceptionGaugeUiHandler.Instance.UpdateEnemyPerceptionGauge(this);
