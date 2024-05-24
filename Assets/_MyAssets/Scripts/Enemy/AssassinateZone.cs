@@ -32,15 +32,15 @@ public class AssassinateZone : MonoBehaviour
             return;
         }
         
-        // Todo : 암살 애니메이션 출력, 카메라 전환, 암살 액션 종료 시 오브젝트 파괴
+        // 카메라 전환 후 애니메이션이 끝날 때 까지 대기
         CameraController.Instance.ChangeCameraToAssassinate(_cameraPoint, transform.parent);
         PlayerMove.Instance.AssassinateEnemy(_assassinateOffset);
         StartCoroutine(AwaitAssassinateEndRoutine());
-        //Destroy(transform.parent.gameObject);
     }
     
     private IEnumerator AwaitAssassinateEndRoutine()
     {
+        // 애니메이션이 끝날 때 까지 대기
         while (PlayerMove.Instance.IsAssassinating)
         {
             yield return null;

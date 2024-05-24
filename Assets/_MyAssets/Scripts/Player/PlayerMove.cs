@@ -277,13 +277,20 @@ public class PlayerMove : Singleton<PlayerMove>
     {
         float assassinateDuration = 8.0f - adjustDuration;
         float t = 0;
+        bool isCameraChanged = false;
         while (t < assassinateDuration)
         {
             yield return null;
+            
+            if (assassinateDuration - t < 1.0f && !isCameraChanged)
+            {
+                CameraController.Instance.ChangeCameraFromAssassinateToFreeLook();
+                isCameraChanged = true;
+            }
+            
             t += Time.deltaTime;
         }
 
-        CameraController.Instance.ChangeCameraFromAssassinateToFreeLook();
         RemovePlayerState(EPlayerState.Assassinate);
         _assassinateRoutine = null;
     }
