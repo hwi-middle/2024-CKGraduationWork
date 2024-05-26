@@ -46,8 +46,6 @@ public class PlayerMove : Singleton<PlayerMove>
 
     [SerializeField] private PlayerAssassinationData _assassinationData;
 
-    private bool _isAssassinating = false;
-
     [Header("Gravity Scale")] [SerializeField]
     private float _gravityMultiplier;
 
@@ -70,9 +68,9 @@ public class PlayerMove : Singleton<PlayerMove>
     protected virtual void Awake()
     {
         _controller = GetComponent<CharacterController>();
-        _playerCanvas = Instantiate(_playerData.playerCanvas);
+        _playerCanvas = Instantiate(Resources.Load<GameObject>("PlayerCanvas"));
 
-        Instantiate(_playerData.lineRendererPrefab);
+        Instantiate(Resources.Load<GameObject>("LineRenderer"));
         LineDrawHelper.Instance.DisableLine();
 
         _makeNoiseHandler = GetComponent<MakeNoiseHandler>();

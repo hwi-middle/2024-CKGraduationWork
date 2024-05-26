@@ -89,6 +89,6 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
         
         _currentCubeRoot = null;
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.PlayerAction);
-        CameraController.Instance.ChangeCameraFromCubeToFreeLook();
+        CameraController.Instance.ChangeCameraFromCubeToFollow();
     }
 }

@@ -3,19 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class CameraController : Singleton<CameraController>
 {
     [SerializeField] private PlayerInputData _inputData;
     [SerializeField] private float _blendingDuration = 0.5f;
     public CinemachineBrain BrainCamera { get; private set; }
-    public CinemachineFreeLook FreeLookCamera { get; private set; }
-    public CinemachineFreeLook AimingCamera { get; private set; }
-    public CinemachineVirtualCamera InCabinetCamera { get; private set; }
-    public CinemachineVirtualCamera PeekCamera { get; private set; }
-    
-    public CinemachineVirtualCamera CubeCamera { get; private set; }
+    private CinemachineFreeLook FollowCamera { get; set; }
+    public CinemachineFreeLook AimingCamera { get; set; }
+    private CinemachineVirtualCamera InCabinetCamera { get; set; }
+    private CinemachineVirtualCamera PeekCamera { get; set; }
+    private CinemachineVirtualCamera CubeCamera { get; set; }
 
     private CinemachineComposer _peekCameraComposer;
 
@@ -41,11 +39,6 @@ public class CameraController : Singleton<CameraController>
     [SerializeField] private float _heightOffset = 0.5f;
     [SerializeField] private float _routineDuration = 0.25f;
 
-    public void Awake()
-    {
-        _mainCamera = Camera.main;
-    }
-
     public void OnEnable()
     {
         _inputData.mouseAxisEvent += HandleMouseAxisEvent;
@@ -53,6 +46,7 @@ public class CameraController : Singleton<CameraController>
 
     public void Start()
     {
+        _mainCamera = Camera.main;
         Debug.Assert(_mainCamera != null, "_mainCamera != null");
         
         GameObject virtualCameras = Instantiate(Resources.Load<GameObject>("Camera/VirtualCameras"));
@@ -60,12 +54,19 @@ public class CameraController : Singleton<CameraController>
         Debug.Assert(virtualCameras != null, "virtualCameras != null");
 
         // Camera Component Setting
+        // Main Camera
         BrainCamera = _mainCamera.GetComponent<CinemachineBrain>();
-        FreeLookCamera = virtualCameras.transform.GetChild(0).GetComponent<CinemachineFreeLook>();
-        AimingCamera = virtualCameras.transform.GetChild(1).GetComponent<CinemachineFreeLook>();
-        InCabinetCamera = virtualCameras.transform.GetChild(2).GetComponent<CinemachineVirtualCamera>();
-        PeekCamera = virtualCameras.transform.GetChild(3).GetComponent<CinemachineVirtualCamera>();
-        CubeCamera = virtualCameras.transform.GetChild(4).GetComponent<CinemachineVirtualCamera>();
+        
+        // Follow Camera
+        FollowCamera = virtualCameras.transform.Find("Follow Camera").GetComponent<CinemachineFreeLook>();
+        
+        // Aiming Camera
+        AimingCamera = virtualCameras.transform.Find("Aiming Camera").GetComponent<CinemachineFreeLook>();
+        
+        // Interaction Camera
+        InCabinetCamera = virtualCameras.transform.Find("InCabinet Camera").GetComponent<CinemachineVirtualCamera>();
+        PeekCamera = virtualCameras.transform.Find("Peek Camera").GetComponent<CinemachineVirtualCamera>();
+        CubeCamera = virtualCameras.transform.Find("Cube Camera").GetComponent<CinemachineVirtualCamera>();
         
         // Brain Camera Blending Duration Setting
         BrainCamera.m_DefaultBlend.m_Time = _blendingDuration;
@@ -73,8 +74,8 @@ public class CameraController : Singleton<CameraController>
         Transform playerTransform = transform;
 
         // Cameras Follow & LookAt Setting
-        FreeLookCamera.Follow = playerTransform;
-        FreeLookCamera.LookAt = playerTransform;
+        FollowCamera.Follow = playerTransform;
+        FollowCamera.LookAt = playerTransform;
 
         AimingCamera.Follow = playerTransform;
         AimingCamera.LookAt = playerTransform;
@@ -87,8 +88,8 @@ public class CameraController : Singleton<CameraController>
         PeekCamera.LookAt = _peekPoint;
         _peekCameraComposer = PeekCamera.GetCinemachineComponent<CinemachineComposer>();
         
-        // Live 카메라를 FreeLook으로 설정
-        FreeLookCamera.MoveToTopOfPrioritySubqueue();
+        // Live 카메라를 Follow로 설정
+        FollowCamera.MoveToTopOfPrioritySubqueue();
 
         // 상호작용 시 설정
         CubeCamera.Follow = null;
@@ -112,7 +113,6 @@ public class CameraController : Singleton<CameraController>
         offsetX += isLeftAxis ? -speed : speed;
         
         // 계산 된 Offset이 최대 범위를 벗어나는지 확인
-
         bool isOverRange = Mathf.Abs(offsetX) > _maxPeekRange;
 
         if (isOverRange)
@@ -140,17 +140,17 @@ public class CameraController : Singleton<CameraController>
 
     private IEnumerator ToggleCrouchCameraHeightRoutine(bool isCrouch)
     {
-        // Camera Orbit Length (FreeLook Length로 Aiming과 공유)
-        float orbitLength = FreeLookCamera.m_Orbits.Length;
+        // Camera Orbit Length (Follow Length로 Aiming과 공유)
+        float orbitLength = FollowCamera.m_Orbits.Length;
         
         // 앉기 상태에 따라 Offset의 증감 결정
         float offsetDelta = isCrouch ? _heightOffset : -_heightOffset;
         
-        // FreeLook Camera values 
-        List<float> freeLookStartHeights = new();
-        List<float> freeLookTargetHeights = new();
-        List<float> freeLookStartYOffsets = new();
-        List<float> freeLookTargetYOffsets = new();
+        // Follow Camera values 
+        List<float> followStartHeights = new();
+        List<float> followTargetHeights = new();
+        List<float> followStartYOffsets = new();
+        List<float> followTargetYOffsets = new();
         
         // Aiming Camera Values
         List<float> aimingStartHeights = new();
@@ -160,13 +160,13 @@ public class CameraController : Singleton<CameraController>
 
         for (int i = 0; i < orbitLength; i++)
         {
-            // Free Look Camera Init
-            CinemachineComposer freeLookComposer = FreeLookCamera.GetRig(i).GetCinemachineComponent<CinemachineComposer>();
-            freeLookStartHeights.Add(FreeLookCamera.m_Orbits[i].m_Height);
-            freeLookTargetHeights.Add(FreeLookCamera.m_Orbits[i].m_Height - offsetDelta); 
+            // Follow Camera Init
+            CinemachineComposer followComposer = FollowCamera.GetRig(i).GetCinemachineComponent<CinemachineComposer>();
+            followStartHeights.Add(FollowCamera.m_Orbits[i].m_Height);
+            followTargetHeights.Add(FollowCamera.m_Orbits[i].m_Height - offsetDelta); 
             
-            freeLookStartYOffsets.Add(freeLookComposer.m_TrackedObjectOffset.y);
-            freeLookTargetYOffsets.Add(freeLookComposer.m_TrackedObjectOffset.y - offsetDelta);
+            followStartYOffsets.Add(followComposer.m_TrackedObjectOffset.y);
+            followTargetYOffsets.Add(followComposer.m_TrackedObjectOffset.y - offsetDelta);
             
             // Aiming Camera Init
             CinemachineComposer aimingComposer = AimingCamera.GetRig(i).GetCinemachineComponent<CinemachineComposer>();
@@ -184,10 +184,10 @@ public class CameraController : Singleton<CameraController>
 
             for (int i = 0; i < orbitLength; i++)
             {
-                // FreeLook Camera Lerp Value
-                CinemachineComposer freeLookComposer = FreeLookCamera.GetRig(i).GetCinemachineComponent<CinemachineComposer>();
-                FreeLookCamera.m_Orbits[i].m_Height = Mathf.Lerp(freeLookStartHeights[i], freeLookTargetHeights[i], alpha);
-                freeLookComposer.m_TrackedObjectOffset.y = Mathf.Lerp(freeLookStartYOffsets[i], freeLookTargetYOffsets[i], alpha);
+                // Follow Camera Lerp Value
+                CinemachineComposer followComposer = FollowCamera.GetRig(i).GetCinemachineComponent<CinemachineComposer>();
+                FollowCamera.m_Orbits[i].m_Height = Mathf.Lerp(followStartHeights[i], followTargetHeights[i], alpha);
+                followComposer.m_TrackedObjectOffset.y = Mathf.Lerp(followStartYOffsets[i], followTargetYOffsets[i], alpha);
 
                 // Aiming Camera Lerp value
                 CinemachineComposer aimingComposer =
@@ -203,10 +203,10 @@ public class CameraController : Singleton<CameraController>
 
         for (int i = 0; i < orbitLength; i++)
         {
-            // FreeLook Camera Last Set
-            CinemachineComposer freeLookComposer = FreeLookCamera.GetRig(i).GetCinemachineComponent<CinemachineComposer>();
-            FreeLookCamera.m_Orbits[i].m_Height = freeLookTargetHeights[i];
-            freeLookComposer.m_TrackedObjectOffset.y = freeLookTargetYOffsets[i];
+            // Follow Camera Last Set
+            CinemachineComposer followCameraComposer = FollowCamera.GetRig(i).GetCinemachineComponent<CinemachineComposer>();
+            FollowCamera.m_Orbits[i].m_Height = followTargetHeights[i];
+            followCameraComposer.m_TrackedObjectOffset.y = followTargetYOffsets[i];
             
             // Aiming Camera Last Set
             CinemachineComposer aimingComposer = AimingCamera.GetRig(i).GetCinemachineComponent<CinemachineComposer>();
@@ -217,23 +217,23 @@ public class CameraController : Singleton<CameraController>
         _changeHeightRoutine = null;
     }
 
-    public void ChangeCameraFromAimingToFreeLook()
+    public void ChangeCameraFromAimingToFollow()
     {
-        FreeLookCamera.MoveToTopOfPrioritySubqueue();
+        FollowCamera.MoveToTopOfPrioritySubqueue();
 
-        FreeLookCamera.m_XAxis.Value = AimingCamera.m_XAxis.Value;
-        FreeLookCamera.m_YAxis.Value = 0.5f;
+        FollowCamera.m_XAxis.Value = AimingCamera.m_XAxis.Value;
+        FollowCamera.m_YAxis.Value = 0.5f;
     }
 
-    public void ChangeCameraFromFreeLookToAiming()
+    public void ChangeCameraFromFollowToAiming()
     {
         AimingCamera.MoveToTopOfPrioritySubqueue();
 
-        AimingCamera.m_XAxis.Value = FreeLookCamera.m_XAxis.Value;
+        AimingCamera.m_XAxis.Value = FollowCamera.m_XAxis.Value;
         AimingCamera.m_YAxis.Value = 0.5f;
     }
 
-    public void ChangeCameraFromFreeLookToInCabinet()
+    public void ChangeCameraFromFollowToInCabinet()
     {
         InCabinetCamera.MoveToTopOfPrioritySubqueue();
         BrainCamera.m_DefaultBlend.m_Time = 0.5f;
@@ -249,10 +249,10 @@ public class CameraController : Singleton<CameraController>
         InCabinetCamera.MoveToTopOfPrioritySubqueue();
     }
 
-    public void ChangeCameraFromCabinetToFreeLook()
+    public void ChangeCameraFromCabinetToFollow()
     {
-        FreeLookCamera.MoveToTopOfPrioritySubqueue();
-        FreeLookCamera.m_YAxis.Value = 0.5f;
+        FollowCamera.MoveToTopOfPrioritySubqueue();
+        FollowCamera.m_YAxis.Value = 0.5f;
     }
 
     public void ChangeCameraToPeek()
@@ -274,9 +274,9 @@ public class CameraController : Singleton<CameraController>
         CubeCamera.MoveToTopOfPrioritySubqueue();
     }
     
-    public void ChangeCameraFromCubeToFreeLook()
+    public void ChangeCameraFromCubeToFollow()
     {
-        FreeLookCamera.MoveToTopOfPrioritySubqueue();
+        FollowCamera.MoveToTopOfPrioritySubqueue();
         CubeCamera.Follow = null;
         CubeCamera.LookAt = null;
     }

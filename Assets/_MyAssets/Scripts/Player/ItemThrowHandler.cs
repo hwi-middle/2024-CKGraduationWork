@@ -75,7 +75,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
             return;
         }
         
-        CameraController.Instance.ChangeCameraFromFreeLookToAiming();
+        CameraController.Instance.ChangeCameraFromFollowToAiming();
         PlayerMove.Instance.AlignPlayerToCameraForward();
         if (_cameraBlendingRoutine != null)
         {
@@ -105,7 +105,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
             return;
         }
         _isOnAiming = false;
-        CameraController.Instance.ChangeCameraFromAimingToFreeLook();
+        CameraController.Instance.ChangeCameraFromAimingToFollow();
         LineDrawHelper.Instance.DisableLine();
         RemoveTargetPoint();
 
