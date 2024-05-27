@@ -38,6 +38,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public Vector3 MoveRangeCenterPos => _moveRangeCenterPos;
     private Transform _foundPlayer;
     private NavMeshAgent _navMeshAgent;
+    public NavMeshAgent NavMeshAgent => _navMeshAgent;
     private IEnumerator _patrolRoutine;
     private PerceptionNote _perceptionNote;
 
