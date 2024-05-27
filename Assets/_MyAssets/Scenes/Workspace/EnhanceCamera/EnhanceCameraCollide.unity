@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -480,7 +480,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 1, z: 1.5}
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &505337165
 MeshRenderer:
@@ -1398,32 +1398,32 @@ PrefabInstance:
     - target: {fileID: 2493201452579550644, guid: b87d6d6a5b321f44aa0c567b25311842,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2493201452579550644, guid: b87d6d6a5b321f44aa0c567b25311842,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 2.2204462e-19
       objectReference: {fileID: 0}
     - target: {fileID: 2493201452579550644, guid: b87d6d6a5b321f44aa0c567b25311842,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.96730936
       objectReference: {fileID: 0}
     - target: {fileID: 2493201452579550644, guid: b87d6d6a5b321f44aa0c567b25311842,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: -0.22222485
       objectReference: {fileID: 0}
     - target: {fileID: 2493201452579550644, guid: b87d6d6a5b321f44aa0c567b25311842,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.11908124
       objectReference: {fileID: 0}
     - target: {fileID: 2493201452579550644, guid: b87d6d6a5b321f44aa0c567b25311842,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.027357128
       objectReference: {fileID: 0}
     - target: {fileID: 5267869289409431557, guid: b87d6d6a5b321f44aa0c567b25311842,
         type: 3}
@@ -1478,7 +1478,7 @@ PrefabInstance:
     - target: {fileID: 6317672674625162709, guid: b87d6d6a5b321f44aa0c567b25311842,
         type: 3}
       propertyPath: field of view
-      value: 40
+      value: 55
       objectReference: {fileID: 0}
     - target: {fileID: 8693924370335410108, guid: b87d6d6a5b321f44aa0c567b25311842,
         type: 3}
