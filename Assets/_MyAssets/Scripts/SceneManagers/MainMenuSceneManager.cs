@@ -46,8 +46,8 @@ public class MainMenuSceneManager : SceneManagerBase
     public void OnNewGameButtonClick()
     {
         // First Game Scene Start
-        PopupHandler.Instance.DisplayWarningPopup(HandleNewGameButtonAction, "새 게임",
-            "새 게임을 시작하시겠습니까?\n저장된 데이터는 모두 사라집니다.", "예", "아니오");
+        PopupHandler.Instance.DisplayWarningPopup(HandleNewGameButtonAction, "게임을 새로 시작하시겠습니까?",
+            "(세이브한 파일이 초기화 됩니다.)", "확인", "취소");
     }
 
     private void HandleNewGameButtonAction(bool isPositive)
@@ -72,7 +72,7 @@ public class MainMenuSceneManager : SceneManagerBase
 
     public void OnExitButtonClick()
     {
-        PopupHandler.Instance.DisplayConfirmPopup(HandleExitPopupButtonAction, "게임 종료", "게임을 종료하시겠습니까?", "예", "아니오");
+        PopupHandler.Instance.DisplayConfirmPopup(HandleExitPopupButtonAction, "게임을 종료하시겠습니까?", "", "예", "아니오");
     }
     
     private void HandleErrorPopupButtonAction(bool isPositive)
