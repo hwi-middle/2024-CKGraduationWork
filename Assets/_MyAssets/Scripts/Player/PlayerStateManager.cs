@@ -16,34 +16,37 @@ public enum EPlayerState
     Alive = 1 << 7,
     Dead = 1 << 8,
     Overstep = 1 << 9,
+    ItemReady = 1 << 10,
+    ItemHold = 1 << 11,
+    ItemThrow = 1 << 12,
 }
 
 public class PlayerStateManager : Singleton<PlayerStateManager>
 {
-    public int CurrentState { get; private set; } = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
+    private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
 
     public bool CheckPlayerState(EPlayerState state)
     {
-        return (CurrentState & (int)state) != 0;
+        return (_currentState & (int)state) != 0;
     }
 
     public void SetInitState()
     {
-        CurrentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
+        _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
     }
 
     public void SetDeadState()
     {
-        CurrentState = (int)EPlayerState.Dead;
+        _currentState = (int)EPlayerState.Dead;
     }
 
     public void AddPlayerState(EPlayerState state)
     {
-        CurrentState |= (int)state;
+        _currentState |= (int)state;
     }
 
     public void RemovePlayerState(EPlayerState state)
     {
-        CurrentState &= ~(int)state;
+        _currentState &= ~(int)state;
     }
 }

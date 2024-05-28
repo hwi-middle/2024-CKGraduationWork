@@ -214,6 +214,7 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void HandleMoveAction(Vector2 pos)
     {
+        // TODO : 대각 이동 제한 (대각 입력 시 우선순위 -> W, S)
         _inputDirection = new Vector3(pos.x, 0, pos.y);
 
         if (_inputDirection.sqrMagnitude == 0)
@@ -250,7 +251,7 @@ public class PlayerMove : Singleton<PlayerMove>
     private void HandleCrouchAction()
     {
         if (!IsGrounded || _playerState.CheckPlayerState(EPlayerState.Run) || CameraController.Instance.IsOnChangeHeightRoutine
-            || !CanActing)
+            || !CanActing || _playerState.CheckPlayerState(EPlayerState.ItemReady))
         {
             return;
         }

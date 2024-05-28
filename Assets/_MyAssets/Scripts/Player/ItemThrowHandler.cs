@@ -16,7 +16,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
     
     private Camera _mainCamera;
 
-    private bool _isOnAiming;
+    public bool IsOnAiming { get; set; }
     private bool _isOverItemRange;
 
     private Transform _shootPoint;
@@ -25,27 +25,32 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
     private Vector3 _prevPosition;
 
     private IEnumerator _cameraBlendingRoutine;
+    private IEnumerator _itemReadyRoutine;
+    private IEnumerator _itemThrowRoutine;
 
+    private Animator _animator;
+    
     private void Awake()
     {
         _shootPoint = transform.Find("ShootPoint").GetComponent<Transform>();
         _itemPrefab = Resources.Load<GameObject>("Items/SoundBomb");
         Debug.Assert(_itemPrefab is not null);
         _itemShowObject = Instantiate(Resources.Load<GameObject>("Items/TargetPointItemShow"));
+        _animator = GetComponentInChildren<Animator>();
     }
 
     private void OnEnable()
     {
         _inputData.aimingEvent += HandleAiming;
         _inputData.aimingCancelEvent += HandleAimingCancel;
-        _inputData.shootEvent += HandleShoot;
+        _inputData.shootEvent += HandleThrow;
     }
 
     private void OnDisable()
     {
         _inputData.aimingEvent -= HandleAiming;
         _inputData.aimingCancelEvent -= HandleAimingCancel;
-        _inputData.shootEvent -= HandleShoot;
+        _inputData.shootEvent -= HandleThrow;
     }
 
     private void Start()
@@ -55,7 +60,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
 
     private void Update()
     {
-        if (_isOnAiming)
+        if (IsOnAiming)
         {
             SetThrowTargetPosition();
             LineDrawHelper.Instance.EnableLine();
@@ -74,28 +79,8 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         {
             return;
         }
-        
-        CameraController.Instance.ChangeCameraFromFreeLookToAiming();
-        PlayerMove.Instance.AlignPlayerToCameraForward();
-        if (_cameraBlendingRoutine != null)
-        {
-            return;
-        }
 
-        _cameraBlendingRoutine = CameraBlendingRoutine();
-        StartCoroutine(_cameraBlendingRoutine);
-    }
-
-    private IEnumerator CameraBlendingRoutine()
-    {
-        yield return new WaitForEndOfFrame();
-        
-        while (CameraController.Instance.IsBlending)
-        {
-            yield return null;
-        }
-
-        _isOnAiming = true;
+        PlayerStateManager.Instance.AddPlayerState(EPlayerState.ItemReady);
     }
 
     private void HandleAimingCancel()
@@ -104,7 +89,9 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         {
             return;
         }
-        _isOnAiming = false;
+        
+        IsOnAiming = false;
+        PlayerStateManager.Instance.RemovePlayerState(EPlayerState.ItemHold);
         CameraController.Instance.ChangeCameraFromAimingToFreeLook();
         LineDrawHelper.Instance.DisableLine();
         RemoveTargetPoint();
@@ -289,7 +276,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         return angle;
     }
 
-    private void HandleShoot()
+    private void HandleThrow()
     {
         if (!IsItemOnHand 
             || CameraController.Instance.BrainCamera.ActiveVirtualCamera as CinemachineFreeLook !=
@@ -297,11 +284,16 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         {
             return;
         }
+        
+        PlayerStateManager.Instance.AddPlayerState(EPlayerState.ItemThrow);
+    }
 
-        Debug.Assert(_mainCamera != null, "_mainCamera != null");
+    public void ThrowItem()
+    {
+        Debug.Assert(_mainCamera is not null, "_mainCamera is not null");
         Transform cameraTransform = _mainCamera.transform;
         Vector3 playerPosTop = _shootPoint.position;
-        
+
         GameObject itemPrefab =
             Instantiate(_itemPrefab, playerPosTop, cameraTransform.localRotation);
         Rigidbody itemRigidbody = itemPrefab.GetComponent<Rigidbody>();
