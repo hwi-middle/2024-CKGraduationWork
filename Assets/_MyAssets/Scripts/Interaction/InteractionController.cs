@@ -69,7 +69,7 @@ public class InteractionController : Singleton<InteractionController>
         _nearestObjectDistance = Mathf.Infinity;
         _nearestObject = null;
         
-        if (_interactableObjects.Count == 0 || PlayerMove.Instance.CheckPlayerState(EPlayerState.Hide))
+        if (_interactableObjects.Count == 0 || PlayerStateManager.Instance.CheckPlayerState(EPlayerState.Hide))
         {
             return;
         }
@@ -164,7 +164,7 @@ public class InteractionController : Singleton<InteractionController>
                 return false;   
             case EInteractionType.HideableObject when !HideActionController.Instance.IsInFrontOfHideableObject(hit.transform):
                 return false;
-            case EInteractionType.Overstep when PlayerMove.Instance.CheckPlayerState(EPlayerState.Crouch):
+            case EInteractionType.Overstep when PlayerStateManager.Instance.CheckPlayerState(EPlayerState.Crouch):
                 return false;
             case EInteractionType.Cube when CubeInteractionController.Instance.HasInteractionCube:
                 return false;
