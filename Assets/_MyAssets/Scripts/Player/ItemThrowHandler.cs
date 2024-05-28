@@ -7,12 +7,14 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
 {
     [SerializeField] private PlayerData _playerData;
     [SerializeField] private PlayerInputData _inputData;
+    [SerializeField] private Transform _rightHand;
     
     private GameObject _itemPrefab;
     private GameObject _itemShowObject;
     private Vector3 _itemShowObjectRotation;
 
     public bool IsItemOnHand { get; private set; }
+    private GameObject _itemOnHand;
     
     private Camera _mainCamera;
 
@@ -62,6 +64,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
     {
         if (IsOnAiming)
         {
+            _shootPoint.position = _rightHand.position;
             SetThrowTargetPosition();
             LineDrawHelper.Instance.EnableLine();
             PlayerMove.Instance.AlignPlayerToCameraForward();
@@ -71,6 +74,10 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
     public void GetItem()
     {
         IsItemOnHand = true;
+        _itemOnHand = Instantiate(_itemPrefab, _rightHand);
+        _itemOnHand.GetComponent<ItemObjectFlyHandler>().enabled = false;
+        _itemOnHand.GetComponentInChildren<MeshCollider>().enabled = false;
+        _itemOnHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
     }
 
     private void HandleAiming()
@@ -284,12 +291,14 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         {
             return;
         }
-        
+
+        IsItemOnHand = false;
         PlayerStateManager.Instance.AddPlayerState(EPlayerState.ItemThrow);
     }
 
     public void ThrowItem()
     {
+        Destroy(_itemOnHand);
         Debug.Assert(_mainCamera is not null, "_mainCamera is not null");
         Transform cameraTransform = _mainCamera.transform;
         Vector3 playerPosTop = _shootPoint.position;
@@ -300,7 +309,6 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         itemPrefab.GetComponent<ItemObjectFlyHandler>().Init(_playerData.itemGaugeAmount, _playerData.itemImpactRadius);
         itemRigidbody.AddForce(_shootPoint.forward * _playerData.throwPower, ForceMode.VelocityChange);
 
-        IsItemOnHand = false;
         HandleAimingCancel();
     }
 }

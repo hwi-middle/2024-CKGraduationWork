@@ -48,7 +48,10 @@ public class PlayerMove : Singleton<PlayerMove>
     private bool _isSliding;
     private Vector3 _slideVelocity;
 
-    private bool CanActing => !_playerState.CheckPlayerState(EPlayerState.Dead) && !_playerState.CheckPlayerState(EPlayerState.Overstep);
+    private bool CanActing => !_playerState.CheckPlayerState(EPlayerState.Dead) &&
+                              !_playerState.CheckPlayerState(EPlayerState.Overstep) &&
+                              !_playerState.CheckPlayerState(EPlayerState.ItemReady) &&
+                              !_playerState.CheckPlayerState(EPlayerState.ItemThrow);
 
     private bool IsGrounded => _controller.isGrounded;
 
@@ -217,8 +220,10 @@ public class PlayerMove : Singleton<PlayerMove>
         // TODO : 대각 이동 제한 (대각 입력 시 우선순위 -> W, S)
         _inputDirection = new Vector3(pos.x, 0, pos.y);
 
-        if (_inputDirection.sqrMagnitude == 0)
+        if (_inputDirection.sqrMagnitude == 0 || _playerState.CheckPlayerState(EPlayerState.ItemReady) ||
+            _playerState.CheckPlayerState(EPlayerState.ItemThrow))
         {
+            _inputDirection = Vector3.zero;
             _playerState.RemovePlayerState(EPlayerState.Walk);
             return;
         }
@@ -250,8 +255,9 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void HandleCrouchAction()
     {
-        if (!IsGrounded || _playerState.CheckPlayerState(EPlayerState.Run) || CameraController.Instance.IsOnChangeHeightRoutine
-            || !CanActing || _playerState.CheckPlayerState(EPlayerState.ItemReady))
+        if (!IsGrounded || _playerState.CheckPlayerState(EPlayerState.Run) ||
+            CameraController.Instance.IsOnChangeHeightRoutine
+            || !CanActing)
         {
             return;
         }
