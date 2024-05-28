@@ -25,6 +25,7 @@ public class MoveToPatrolPointNode : TaskNode
     protected override void OnStart()
     {
         agent.NavMeshAgent.isStopped = false;
+        Debug.Log("start move to patrol point");
         agent.SetSpeed(agent.AiData.walkSpeed);
         GetNextPatrolPos();
         agent.SetDestination(_nextPatrolPos);

@@ -11,6 +11,7 @@ public class CheckPerceptionGaugeZero : DecoratorNode
 
     protected override void OnStart()
     {
+        Debug.Log("CheckPerceptionGaugeZero OnStart");
     }
 
     protected override void OnStop()
@@ -23,8 +24,11 @@ public class CheckPerceptionGaugeZero : DecoratorNode
 
     protected override ENodeState OnUpdate()
     {
+        Debug.Log("CheckPerceptionGaugeZero OnUpdate");
+
         if (agent.PerceptionGauge > 0.0f)
         {
+            Debug.Log("CheckPerceptionGaugeZero Failure");
             return ENodeState.Failure;
         }
         
@@ -33,12 +37,16 @@ public class CheckPerceptionGaugeZero : DecoratorNode
         switch (child.Update())
         {
             case ENodeState.InProgress:
+                Debug.Log("CheckPerceptionGaugeZero InProgress");
                 return ENodeState.InProgress;
             case ENodeState.Failure:
+                Debug.Log("CheckPerceptionGaugeZero Failure"); 
                 return ENodeState.Failure;
             case ENodeState.Success:
+                Debug.Log("CheckPerceptionGaugeZero Success"); 
                 return ENodeState.Success;
             case ENodeState.Aborted:
+                Debug.Log("CheckPerceptionGaugeZero Aborted"); 
                 return ENodeState.Aborted;
             default:
                 Debug.Assert(false);

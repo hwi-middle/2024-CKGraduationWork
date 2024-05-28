@@ -290,6 +290,7 @@ MonoBehaviour:
   description: "\uC790\uC2E0\uC758 \uC790\uC2DD\uB4E4\uC744 \uBAA8\uB450 \uC21C\uCC28
     \uC2E4\uD589\uD569\uB2C8\uB2E4."
   children:
+  - {fileID: 7599351743312662407}
   - {fileID: -8837909033043748179}
   - {fileID: 4305519358515743911}
 --- !u!114 &-2492612781893175548
@@ -375,6 +376,7 @@ MonoBehaviour:
   - {fileID: -5209551216361242170}
   - {fileID: -4937219523719637607}
   - {fileID: -5708360502079769403}
+  - {fileID: 7599351743312662407}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -442,7 +444,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: f373526600f85ca48b875b83fe107ae6
-  position: {x: -247.45, y: 1091.0002}
+  position: {x: -247, y: 1091}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -640,6 +642,28 @@ MonoBehaviour:
     lastTimeNoiseDetected: 0
   agent: {fileID: 0}
   description: "\uD50C\uB808\uC774\uC5B4\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uB97C \uC785\uD799\uB2C8\uB2E4."
+--- !u!114 &7599351743312662407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6c26f09d1144f69cc4212b02b35620, type: 3}
+  m_Name: StopMovingNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 878cb99fbb1ddce4fab4df8e67488dcb
+  position: {x: -743.65, y: 766}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+    lastTimeNoiseDetected: 0
+  agent: {fileID: 0}
+  description: "\uAE38 \uCC3E\uAE30\uB97C \uC911\uC9C0\uD558\uACE0 \uBA48\uCDA5\uB2C8\uB2E4."
 --- !u!114 &8810219330751051124
 MonoBehaviour:
   m_ObjectHideFlags: 0
