@@ -310,4 +310,19 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
 
         HandleAimingCancel();
     }
+
+    public void AdjustShootPoint()
+    {
+        Vector3 shootPointPosition = _shootPoint.position;
+        if (PlayerStateManager.Instance.CheckPlayerState(EPlayerState.Crouch))
+        {
+            shootPointPosition.y -= 0.5f;
+        }
+        else
+        {
+            shootPointPosition.y += 0.5f;
+        }
+
+        _shootPoint.position = shootPointPosition;
+    }
 }
