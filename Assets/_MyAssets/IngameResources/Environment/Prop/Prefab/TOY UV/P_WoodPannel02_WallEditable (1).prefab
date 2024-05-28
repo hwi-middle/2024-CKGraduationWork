@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1230055612452633528
 Transform:
@@ -90,10 +90,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4370919278416195727, guid: e549176aaab9e4a49ad2a329041fd22d,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e549176aaab9e4a49ad2a329041fd22d,
         type: 3}
       propertyPath: m_Name
       value: SM_WoodPannel02_WallEditable (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e549176aaab9e4a49ad2a329041fd22d,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1366817868882053758, guid: e549176aaab9e4a49ad2a329041fd22d,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7444208800858645013, guid: e549176aaab9e4a49ad2a329041fd22d,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

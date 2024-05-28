@@ -58,10 +58,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7677568846591702332, guid: 6640f60fcac9b11449be60473121dda0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -3074861869362937311, guid: 6640f60fcac9b11449be60473121dda0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6640f60fcac9b11449be60473121dda0,
         type: 3}
       propertyPath: m_Name
       value: P_ClockWallFurnitureA
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6640f60fcac9b11449be60473121dda0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 2786756941888836946, guid: 6640f60fcac9b11449be60473121dda0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

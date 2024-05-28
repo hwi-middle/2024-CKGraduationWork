@@ -63,6 +63,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_SquareCushionFurnitureA2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a8922f8883254bb4da3795028bbbc069,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
