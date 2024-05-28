@@ -64,7 +64,6 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
     {
         if (IsOnAiming)
         {
-            _shootPoint.position = _rightHand.position;
             SetThrowTargetPosition();
             LineDrawHelper.Instance.EnableLine();
             PlayerMove.Instance.AlignPlayerToCameraForward();
