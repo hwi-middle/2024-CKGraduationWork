@@ -61,7 +61,12 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 5ecbf7167e4cf474cb2c6991c8c6f041,
         type: 3}
       propertyPath: m_Name
-      value: SM_ToyCartToyA1
+      value: P_ToyCartToyA1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5ecbf7167e4cf474cb2c6991c8c6f041,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -63,6 +63,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_CarpetSquareWrinkledFurnitureA2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8163a9daec7f3b44885b1103b59ec8de,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

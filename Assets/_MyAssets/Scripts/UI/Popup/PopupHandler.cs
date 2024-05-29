@@ -21,10 +21,10 @@ public class PopupHandler : Singleton<PopupHandler>
 
     private GameObject _popupPrefab;
     private GameObject _tutorialVideoRawImage;
+    private GameObject _buttonsImage;
 
     private EPopupType _currentType = EPopupType.None;
     
-    private TMP_Text _typeText;
     private TMP_Text _title;
     private TMP_Text _description;
     private TMP_Text _positiveText;
@@ -42,8 +42,7 @@ public class PopupHandler : Singleton<PopupHandler>
     {
         _popupPrefab = Instantiate(Resources.Load<GameObject>("PopupCanvas"));
         Transform popupImage = _popupPrefab.transform.GetChild(0);
-        _typeText = popupImage.GetChild(0).GetComponentInParent<TMP_Text>();
-
+        
         // --- Canvas Child ---
         
         // Video Player for Tutorial
@@ -52,19 +51,24 @@ public class PopupHandler : Singleton<PopupHandler>
         // --- Popup Image Child ---
         
         // Title Object
-        _title = popupImage.GetChild(1).GetComponent<TMP_Text>();
+        _title = popupImage.GetChild(0).GetComponent<TMP_Text>();
         
         // Description Object
-        _description = popupImage.GetChild(2).GetComponent<TMP_Text>();
+        _description = popupImage.GetChild(1).GetComponent<TMP_Text>();
         
         // Index 3 is Video Player Raw Image
-        _tutorialVideoRawImage = popupImage.GetChild(3).gameObject;
+        _tutorialVideoRawImage = popupImage.GetChild(2).gameObject;
+        
+        // --- Buttons ---
+        
+        // Buttons Background
+        _buttonsImage = popupImage.GetChild(3).gameObject;
         
         // Positive Object
-        _positiveText = popupImage.GetChild(4).GetComponentInChildren<TMP_Text>();
+        _positiveText = _buttonsImage.transform.GetChild(0).GetComponentInChildren<TMP_Text>();
 
         // Negative Object
-        _negativeText = popupImage.GetChild(5).GetComponentInChildren<TMP_Text>();
+        _negativeText = _buttonsImage.transform.GetChild(1).GetComponentInChildren<TMP_Text>();
         
         _popupPrefab.SetActive(false);
     }
@@ -140,32 +144,12 @@ public class PopupHandler : Singleton<PopupHandler>
 
     private void SetPopupTextAndDisplayPopup(string title, string description, string positive, string negative = "")
     {
-        switch (_currentType)
-        {
-            case EPopupType.Info:
-                _typeText.text = "알림";
-                break;
-            case EPopupType.Confirm:
-                _typeText.text = "확인";
-                break;
-            case EPopupType.Warning:
-                _typeText.text = "경고";
-                break;
-            case EPopupType.Error:
-                _typeText.text = "오류";
-                break;
-            case EPopupType.None:
-            case EPopupType.Tutorial:
-            default:
-                Debug.Assert(false, $"Type Error : {_currentType} in SetTextAndDisplayPopup()");
-                break;
-        }
-
         _title.text = title;
         _description.text = description;
         _positiveText.text = positive;
         _negativeText.text = negative;
 
+        _description.gameObject.SetActive(!description.Equals(string.Empty));
         _negativeText.transform.parent.gameObject.SetActive(!negative.Equals(string.Empty));
         
         _tutorialVideoRawImage.SetActive(false);
@@ -174,7 +158,6 @@ public class PopupHandler : Singleton<PopupHandler>
     
     private void SetTextAndDisplayTutorialPopup(string title, string description, string positive, ETutorialVideoIndex index)
     {
-        _typeText.text = "튜토리얼";
         _title.text = title;
         _description.text = description;
         _positiveText.text = positive;
