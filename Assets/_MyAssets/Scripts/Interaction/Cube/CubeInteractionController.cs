@@ -13,6 +13,8 @@ public enum ECubeSelectDirection
 public class CubeInteractionController : Singleton<CubeInteractionController>
 {
     [SerializeField] private PlayerInputData _inputData;
+    
+    public bool IsOnCube => _currentCubeRoot is not null;
 
     private CubeRootHandler _currentCubeRoot;
 

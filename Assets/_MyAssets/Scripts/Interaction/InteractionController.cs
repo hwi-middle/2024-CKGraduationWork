@@ -194,7 +194,7 @@ public class InteractionController : Singleton<InteractionController>
 
     private void ShowInteractionUI()
     {
-        _interactionUI.SetActive(NearestObject.obj != null);
+        _interactionUI.SetActive(NearestObject.obj is not null && !CubeInteractionController.Instance.IsOnCube);
 
         if (!_interactionUI.activeSelf)
         {
