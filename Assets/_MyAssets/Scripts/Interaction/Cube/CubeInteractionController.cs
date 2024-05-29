@@ -15,7 +15,6 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
     [SerializeField] private PlayerInputData _inputData;
 
     private CubeRootHandler _currentCubeRoot;
-    public bool HasInteractionCube => _currentCubeRoot != null;
 
     private bool _isRotatingCube;
     
@@ -36,7 +35,7 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
     private void HandleSelectEvent(float value)
     {
         ECubeSelectDirection direction = (ECubeSelectDirection)value;
-        if(_currentCubeRoot.IsRotateRoutineRunning)
+        if(_currentCubeRoot.IsRotateRoutineRunning || _currentCubeRoot.IsResetRoutineRunning)
         {
             return;
         }
@@ -62,7 +61,7 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
 
     private void HandleRotateEvent(float value)
     {
-        if (_currentCubeRoot.IsRotateRoutineRunning)
+        if (_currentCubeRoot.IsRotateRoutineRunning || _currentCubeRoot.IsResetRoutineRunning)
         {
             return;
         }
@@ -96,7 +95,7 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
             return;
         }
 
-        if (!_currentCubeRoot.IsCorrect)
+        if (!_currentCubeRoot.IsCorrect && !_currentCubeRoot.IsResetRoutineRunning)
         {
             _currentCubeRoot.ResetCube();
         }

@@ -100,7 +100,7 @@ public class InteractionController : Singleton<InteractionController>
                 return;
             }
 
-            if (!IsValidInteraction(data.Value.type, hit))
+            if (!IsValidInteraction(data, hit))
             {
                 return;
             }
@@ -131,7 +131,7 @@ public class InteractionController : Singleton<InteractionController>
             return;
         }
 
-        if (!IsValidInteraction(data.Value.type, hit))
+        if (!IsValidInteraction(data, hit))
         {
             return;
         }
@@ -156,9 +156,9 @@ public class InteractionController : Singleton<InteractionController>
         return false;
     }
     
-    private bool IsValidInteraction(EInteractionType type, RaycastHit hit)
+    private bool IsValidInteraction(KeyValuePair<int, InteractionObject> data, RaycastHit hit)
     {
-        switch (type)
+        switch (data.Value.type)
         {
             case EInteractionType.Item when ItemThrowHandler.Instance.IsItemOnHand:
                 return false;   
@@ -166,8 +166,7 @@ public class InteractionController : Singleton<InteractionController>
                 return false;
             case EInteractionType.Overstep when PlayerStateManager.Instance.CheckPlayerState(EPlayerState.Crouch):
                 return false;
-            case EInteractionType.Cube when CubeInteractionController.Instance.HasInteractionCube:
-                return false;
+            case EInteractionType.Cube:
             default:
                 return true;
         }

@@ -24,7 +24,7 @@ public class CubeRootHandler : MonoBehaviour
     private Color _originColor;
     private Transform _prevCubeTransform;
 
-    private List<int> _currentCubeRotations = new();
+    private readonly List<int> _currentCubeRotations = new();
     
     public float CubeRotateDirection { get; set; }
     private float _currentRotationY;
@@ -35,7 +35,12 @@ public class CubeRootHandler : MonoBehaviour
     private readonly List<Transform> _cubeList = new();
 
     private IEnumerator _rotateCubeRoutine;
+    
+    private int _resetCubeRotationRoutineCount = 0;
+    
     public bool IsRotateRoutineRunning => _rotateCubeRoutine != null;
+    public bool IsResetRoutineRunning => _resetCubeRotationRoutineCount is not 0;
+    
     private bool _isCheckingCubeCorrect;
     
     private void Start()
@@ -70,11 +75,13 @@ public class CubeRootHandler : MonoBehaviour
 
     public void ResetCube()
     {
+        // Todo : 마지막 상관 없이 무조건 필드에 저장 후 종료시키기
         for (int i = 0; i < _cubeList.Count; i++)
         {
             if (_currentCubeRotations[i] != _cubeInitialRotations[i])
             {
                 StartCoroutine(ResetCubeRoutine(_cubeList[i], i));
+                _resetCubeRotationRoutineCount++;
             }
         }
     }
@@ -96,6 +103,7 @@ public class CubeRootHandler : MonoBehaviour
         
         cube.transform.localRotation = targetRotation;
         _currentCubeRotations[index] = _cubeInitialRotations[index];
+        _resetCubeRotationRoutineCount--;
     }
 
     public void HighlightCurrentCube()
@@ -120,7 +128,7 @@ public class CubeRootHandler : MonoBehaviour
 
     public void RotateCube()
     {
-        if (_rotateCubeRoutine != null || _isCheckingCubeCorrect)
+        if (IsRotateRoutineRunning || _isCheckingCubeCorrect)
         {
             return;
         }
@@ -201,7 +209,8 @@ public class CubeRootHandler : MonoBehaviour
 
     public void SelectUpperCube()
     {
-        _currentCubeIndex = Mathf.Clamp(_currentCubeIndex - 1, 0, transform.childCount - 1);
+        int listCount = _cubeList.Count;
+        _currentCubeIndex = (_currentCubeIndex - 1 + listCount) % listCount;
         _currentCubeTransform = _cubeList[_currentCubeIndex];
         _currentRotationY = _currentCubeTransform.transform.localRotation.eulerAngles.y;
         HighlightCurrentCube();
@@ -209,7 +218,8 @@ public class CubeRootHandler : MonoBehaviour
 
     public void SelectLowerCube()
     {
-        _currentCubeIndex = Mathf.Clamp(_currentCubeIndex + 1, 0, transform.childCount - 1);
+        int listCount = _cubeList.Count;
+        _currentCubeIndex = (_currentCubeIndex + 1) % listCount;
         _currentCubeTransform = _cubeList[_currentCubeIndex];
         _currentRotationY = _currentCubeTransform.transform.localRotation.eulerAngles.y;
         HighlightCurrentCube();
