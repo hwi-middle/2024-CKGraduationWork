@@ -795,6 +795,7 @@ MonoBehaviour:
   _rotateDuration: 3
   _cubeInitialRotations: 020000000000000001000000
   _cubeCorrectRotations: 010000000200000000000000
+  _highlightColor: {r: 1, g: 0.5518868, b: 0.5518868, a: 0}
 --- !u!1 &818870124
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,13 +7,22 @@ public class CubeRootHandler : MonoBehaviour
 {
     [Header("큐브가 돌아가는 시간(초)")]
     [SerializeField] private float _rotateDuration = 2.0f;
+
     private const float ROTATE_DEGREE = 90.0f;
 
     [Header("큐브 초기값")] [Range(0, 3)]
     [SerializeField] private List<int> _cubeInitialRotations;
-    
-    [Header("큐브 정답")] [Range(0, 3)] 
+
+    [Header("큐브 정답")] [Range(0, 3)]
     [SerializeField] private List<int> _cubeCorrectRotations;
+
+    [Header("현재 큐브 하이라이트 색상")]
+    [SerializeField] private Color _highlightColor;
+
+    public bool IsCorrect { get; private set; } = false;
+
+    private Color _originColor;
+    private Transform _prevCubeTransform;
 
     private List<int> _currentCubeRotations = new();
     
@@ -31,18 +40,13 @@ public class CubeRootHandler : MonoBehaviour
     
     private void Start()
     {
-        int childCount = transform.childCount;
-
-        for (int i = 0; i < childCount; i++)
+        for (int i = transform.childCount - 1; i >= 0; i--)
         {
             _cubeList.Add(transform.GetChild(i));
         }
 
         InitCubeRotation();
-        
-        _currentCubeTransform = _cubeList[childCount - 1];
-        _currentCubeIndex = childCount - 1;
-        _currentRotationY = _currentCubeTransform.transform.localRotation.eulerAngles.y;
+        InitCubeIndex();
     }
 
     private void InitCubeRotation()
@@ -50,12 +54,68 @@ public class CubeRootHandler : MonoBehaviour
         Debug.Assert(_cubeCorrectRotations.Count == _cubeInitialRotations.Count, "Cube Rotations Count Mismatch");
         Debug.Assert(_cubeList.Count == _cubeInitialRotations.Count, "CubeList Count Mismatch");
 
-        int rotationsListIndex = 0;
-        for (int i = _cubeList.Count - 1; i >= 0; i--, rotationsListIndex++)
+        for (int i = 0; i < _cubeList.Count; i++)
         {
-            _cubeList[i].transform.localRotation = Quaternion.Euler(0, _cubeInitialRotations[rotationsListIndex] * -ROTATE_DEGREE, 0);
+            _cubeList[i].transform.localRotation = Quaternion.Euler(0, _cubeInitialRotations[i] * -ROTATE_DEGREE, 0);
             _currentCubeRotations.Add(_cubeInitialRotations[i]);
         }
+    }
+
+    public void InitCubeIndex()
+    {
+        _currentCubeTransform = _cubeList[0];
+        _currentCubeIndex = 0;
+        _currentRotationY = _currentCubeTransform.transform.localRotation.eulerAngles.y;
+    }
+
+    public void ResetCube()
+    {
+        for (int i = 0; i < _cubeList.Count; i++)
+        {
+            if (_currentCubeRotations[i] != _cubeInitialRotations[i])
+            {
+                StartCoroutine(ResetCubeRoutine(_cubeList[i], i));
+            }
+        }
+    }
+
+    private IEnumerator ResetCubeRoutine(Transform cube, int index)
+    {
+        const float DURATION = 1.0f;
+        float t = 0;
+        
+        Quaternion currentRotation = cube.transform.localRotation;
+        Quaternion targetRotation = Quaternion.Euler(0, _cubeInitialRotations[index] * -ROTATE_DEGREE, 0);
+        
+        while (t <= DURATION)
+        {
+            cube.transform.localRotation = Quaternion.Slerp(currentRotation, targetRotation, t / DURATION);
+            yield return null;
+            t += Time.deltaTime;
+        }
+        
+        cube.transform.localRotation = targetRotation;
+        _currentCubeRotations[index] = _cubeInitialRotations[index];
+    }
+
+    public void HighlightCurrentCube()
+    {
+        ReturnCubeColorToOrigin();
+        
+        Material currentCubeMaterial = _currentCubeTransform.GetComponent<Renderer>().material;
+        _originColor = currentCubeMaterial.color;
+        currentCubeMaterial.color = _highlightColor;
+        _prevCubeTransform = _currentCubeTransform;
+    }
+
+    public void ReturnCubeColorToOrigin()
+    {
+        if (_prevCubeTransform is null)
+        {
+            return;
+        }
+        
+        _prevCubeTransform.GetComponent<Renderer>().material.color = _originColor;
     }
 
     public void RotateCube()
@@ -124,29 +184,34 @@ public class CubeRootHandler : MonoBehaviour
 
     private bool CheckCubeCorrect()
     {
-        int currentCubeIndex = _currentCubeRotations.Count - 1;
-        for (int i = 0; i < _cubeCorrectRotations.Count; i++, currentCubeIndex--)
+        for (int i = 0; i < _cubeCorrectRotations.Count; i++)
         {
-            if (_cubeCorrectRotations[i] != _currentCubeRotations[currentCubeIndex])
+            if (_cubeCorrectRotations[i] == _currentCubeRotations[i])
             {
-                return false;
+                continue;
             }
-        }
 
+            IsCorrect = false;
+            return false;
+        }
+        
+        IsCorrect = true;
         return true;
     }
 
     public void SelectUpperCube()
     {
-        _currentCubeIndex = Mathf.Clamp(_currentCubeIndex + 1, 0, transform.childCount - 1);
+        _currentCubeIndex = Mathf.Clamp(_currentCubeIndex - 1, 0, transform.childCount - 1);
         _currentCubeTransform = _cubeList[_currentCubeIndex];
         _currentRotationY = _currentCubeTransform.transform.localRotation.eulerAngles.y;
+        HighlightCurrentCube();
     }
 
     public void SelectLowerCube()
     {
-        _currentCubeIndex = Mathf.Clamp(_currentCubeIndex - 1, 0, transform.childCount - 1);
+        _currentCubeIndex = Mathf.Clamp(_currentCubeIndex + 1, 0, transform.childCount - 1);
         _currentCubeTransform = _cubeList[_currentCubeIndex];
         _currentRotationY = _currentCubeTransform.transform.localRotation.eulerAngles.y;
+        HighlightCurrentCube();
     }
 }

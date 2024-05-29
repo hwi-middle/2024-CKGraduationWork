@@ -78,11 +78,15 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
         _currentCubeRoot = cubeRoot.GetComponent<CubeRootHandler>();
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.CubeAction);
         CameraController.Instance.ChangeCameraToCube(cubeFollowForCamera, cubeRoot.transform);
+        _currentCubeRoot.InitCubeIndex();
+        _currentCubeRoot.HighlightCurrentCube();
     }
 
     public void ExecuteCorrectCubeSequence()
     {
         HandleCubeExitEvent();
+        
+        // TODO : 큐브 정답 이후 처리
     }
 
     private void HandleCubeExitEvent()
@@ -91,7 +95,13 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
         {
             return;
         }
+
+        if (!_currentCubeRoot.IsCorrect)
+        {
+            _currentCubeRoot.ResetCube();
+        }
         
+        _currentCubeRoot.ReturnCubeColorToOrigin();
         _currentCubeRoot = null;
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.PlayerAction);
         CameraController.Instance.ChangeCameraFromCubeToFreeLook();
