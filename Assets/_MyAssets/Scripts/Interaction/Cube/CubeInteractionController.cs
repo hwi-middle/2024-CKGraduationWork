@@ -80,6 +80,11 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
         CameraController.Instance.ChangeCameraToCube(cubeFollowForCamera, cubeRoot.transform);
     }
 
+    public void ExecuteCorrectCubeSequence()
+    {
+        HandleCubeExitEvent();
+    }
+
     private void HandleCubeExitEvent()
     {
         if(_currentCubeRoot.IsRotateRoutineRunning)
