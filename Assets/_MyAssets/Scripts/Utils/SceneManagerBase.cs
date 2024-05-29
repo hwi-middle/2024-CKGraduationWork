@@ -87,7 +87,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     private IEnumerator PlayerDeadRoutine()
     {
-        PlayerMove.Instance.SetDeadState();
+        PlayerStateManager.Instance.SetDeadState();
         const float DEAD_ANIMATION_TIME = 2.0f;
         yield return new WaitForSeconds(DEAD_ANIMATION_TIME);
         RestartScene();   

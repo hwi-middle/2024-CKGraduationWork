@@ -51,7 +51,7 @@ public class OverstepActionController : Singleton<OverstepActionController>
         float t = 0;
         float halfDuration = _data.overstepActionDuration * 0.5f;
         _startPosition = transform.position;
-        PlayerMove.Instance.AddPlayerState(EPlayerState.Overstep);
+        PlayerStateManager.Instance.AddPlayerState(EPlayerState.Overstep);
         
         // 최고점으로 이동
         while (t <= halfDuration)
@@ -75,7 +75,7 @@ public class OverstepActionController : Singleton<OverstepActionController>
             t += Time.deltaTime;
         }
         
-        PlayerMove.Instance.RemovePlayerState(EPlayerState.Overstep);
+        PlayerStateManager.Instance.RemovePlayerState(EPlayerState.Overstep);
         _overstepActionRoutine = null;
     }
 }
