@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerBaseData
   m_EditorClassIdentifier: 
   playerHp: 100
-  walkSpeed: 1.8
+  walkSpeed: 1.6
   runSpeed: 3.8
   crouchSpeed: 1
   rotateSpeed: 5
