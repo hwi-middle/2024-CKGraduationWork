@@ -13,9 +13,10 @@ public enum ECubeSelectDirection
 public class CubeInteractionController : Singleton<CubeInteractionController>
 {
     [SerializeField] private PlayerInputData _inputData;
+    
+    public bool IsOnCube => _currentCubeRoot is not null;
 
     private CubeRootHandler _currentCubeRoot;
-    public bool HasInteractionCube => _currentCubeRoot != null;
 
     private bool _isRotatingCube;
     
@@ -36,7 +37,7 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
     private void HandleSelectEvent(float value)
     {
         ECubeSelectDirection direction = (ECubeSelectDirection)value;
-        if(_currentCubeRoot.IsRotateRoutineRunning)
+        if(_currentCubeRoot.IsRotateRoutineRunning || _currentCubeRoot.IsResetRoutineRunning)
         {
             return;
         }
@@ -62,7 +63,7 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
 
     private void HandleRotateEvent(float value)
     {
-        if (_currentCubeRoot.IsRotateRoutineRunning)
+        if (_currentCubeRoot.IsRotateRoutineRunning || _currentCubeRoot.IsResetRoutineRunning)
         {
             return;
         }
@@ -78,6 +79,15 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
         _currentCubeRoot = cubeRoot.GetComponent<CubeRootHandler>();
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.CubeAction);
         CameraController.Instance.ChangeCameraToCube(cubeFollowForCamera, cubeRoot.transform);
+        _currentCubeRoot.InitCubeIndex();
+        _currentCubeRoot.HighlightCurrentCube();
+    }
+
+    public void ExecuteCorrectCubeSequence()
+    {
+        HandleCubeExitEvent();
+        
+        // TODO : 큐브 정답 이후 처리
     }
 
     private void HandleCubeExitEvent()
@@ -86,7 +96,13 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
         {
             return;
         }
+
+        if (!_currentCubeRoot.IsCorrect && !_currentCubeRoot.IsResetRoutineRunning)
+        {
+            _currentCubeRoot.ResetCube();
+        }
         
+        _currentCubeRoot.ReturnCubeColorToOrigin();
         _currentCubeRoot = null;
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.PlayerAction);
         CameraController.Instance.ChangeCameraFromCubeToFreeLook();
