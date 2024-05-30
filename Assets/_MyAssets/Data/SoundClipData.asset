@@ -12,14 +12,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad81da00fc528544d8385e84dfd233fd, type: 3}
   m_Name: SoundClipData
   m_EditorClassIdentifier: 
-  maxAudioObjectCount: 20
+  audioObjectMaxCapacity: 20
   bgmClipList:
   - clipName: Bgm_1
     clip: {fileID: 8300000, guid: c5b031af451f0064dbc02af3a3cb262a, type: 3}
   - clipName: BGM_2
     clip: {fileID: 8300000, guid: 9d66019d844335f43bddf621b4eb5550, type: 3}
   sfxClipList:
-  - clipName: Sfx_1
-    clip: {fileID: 8300000, guid: 9d66019d844335f43bddf621b4eb5550, type: 3}
-  - clipName: Sfx_2
-    clip: {fileID: 8300000, guid: c5b031af451f0064dbc02af3a3cb262a, type: 3}
+  - clipName: Player_Walk1
+    clip: {fileID: 8300000, guid: 6653bc77f6eb2eb439ce2855a62c50a8, type: 3}
+  - clipName: Player_Walk2
+    clip: {fileID: 8300000, guid: ac530b269dc822c439de9ea3d3bd54ee, type: 3}
+  - clipName: Player_Walk3
+    clip: {fileID: 8300000, guid: 4a50a94fe1016a1418acb251b2632c13, type: 3}
+  - clipName: Player_Running1
+    clip: {fileID: 8300000, guid: 8638baf115431be43ae806726145ce7e, type: 3}
+  - clipName: Player_Running2
+    clip: {fileID: 8300000, guid: 2efc64cb776e67b47a372d773788e61a, type: 3}
+  - clipName: Player_Running3
+    clip: {fileID: 8300000, guid: b7c702a58e014ce43bded595a4c0b43c, type: 3}
+  - clipName: Player_Running_Breath1
+    clip: {fileID: 8300000, guid: d7d24fd36c7112c42942220de5d1219c, type: 3}
+  - clipName: Player_Running_Breath2
+    clip: {fileID: 8300000, guid: fb8c3c320815ed04c812699a80bdc275, type: 3}
+  - clipName: Player_Crouch
+    clip: {fileID: 8300000, guid: 0ebcad4a24f42824daad48539f4d415f, type: 3}
+  - clipName: Player_Breath1
+    clip: {fileID: 8300000, guid: 719a9cc875d86c6458c4629fa8fc3a92, type: 3}
+  - clipName: Player_Breath2
+    clip: {fileID: 8300000, guid: 8eaa2e86dafa1cf4ea7cf85a3a9b12dd, type: 3}
+  - clipName: Player_Looking_On
+    clip: {fileID: 8300000, guid: df0c9b3264a24aa4da6d34694045407a, type: 3}
+  - clipName: Player_Looking_Off
+    clip: {fileID: 8300000, guid: a1a27772f806f3443a57d8c0a23e0e42, type: 3}
+  - clipName: Player_Item_Pickup
+    clip: {fileID: 8300000, guid: 3f61604ee1548e34b9fb5bfe0c75cbf3, type: 3}
+  - clipName: Player_Hit1
+    clip: {fileID: 8300000, guid: 5624f7be3a9f96144a33dd82eb0561f0, type: 3}
+  - clipName: Player_Hit2
+    clip: {fileID: 8300000, guid: 1833b003461d6f7479d35b541565d4d1, type: 3}
+  - clipName: Player_Hit3
+    clip: {fileID: 8300000, guid: 7d7cfd12829000445b2469341bbb60e6, type: 3}
+  - clipName: Player_Standup
+    clip: {fileID: 8300000, guid: 823c601540d27264db4472dced869f69, type: 3}
+  - clipName: Player_Landing
+    clip: {fileID: 8300000, guid: 7344554f9a9c59a4794c060694e450fd, type: 3}
+  - clipName: Player_Parkour
+    clip: {fileID: 8300000, guid: 25cf817b2d492af48ab429f18b5e5b1c, type: 3}
+  - clipName: Player_Dead
+    clip: {fileID: 8300000, guid: 8a87dcd21ec0f3640b18e37d3a854af3, type: 3}
