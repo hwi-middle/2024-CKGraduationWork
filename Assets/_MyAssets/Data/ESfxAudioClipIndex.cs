@@ -28,4 +28,9 @@
     UI_Select,
     Noise_Item1,
     Noise_Item2,
+    OB_CubeOK,
+    OB_CubeTurn1,
+    OB_CubeTurn2,
+    OB_CubeTurn3,
+    OB_CubeTurn4,
 }

@@ -71,3 +71,13 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 85b228e6956b15f48b73ce59c0b9cee8, type: 3}
   - clipName: Noise_Item2
     clip: {fileID: 8300000, guid: 74f2941b75289fe409eaa421ba7f42c3, type: 3}
+  - clipName: OB_CubeOK
+    clip: {fileID: 8300000, guid: 98b37344797ad964292446691f918cb7, type: 3}
+  - clipName: OB_CubeTurn1
+    clip: {fileID: 8300000, guid: cc1fb35e8049f5f4f843971b0b801667, type: 3}
+  - clipName: OB_CubeTurn2
+    clip: {fileID: 8300000, guid: 1cd329d0b04efb6408e36af65014d430, type: 3}
+  - clipName: OB_CubeTurn3
+    clip: {fileID: 8300000, guid: 02b577ee7ee1d664dbc13eb72750cd0a, type: 3}
+  - clipName: OB_CubeTurn4
+    clip: {fileID: 8300000, guid: 2997fc85fed05c34cb09bb75c2f53712, type: 3}
