@@ -26,4 +26,6 @@
     UI_Click,
     UI_Close,
     UI_Select,
+    Noise_Item1,
+    Noise_Item2,
 }

@@ -67,3 +67,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 2d9cef128b6b82a4cb8f46c34fd6d497, type: 3}
   - clipName: UI_Select
     clip: {fileID: 8300000, guid: ded8d34b6bc80c54e810e8e1b1ef8786, type: 3}
+  - clipName: Noise_Item1
+    clip: {fileID: 8300000, guid: 85b228e6956b15f48b73ce59c0b9cee8, type: 3}
+  - clipName: Noise_Item2
+    clip: {fileID: 8300000, guid: 74f2941b75289fe409eaa421ba7f42c3, type: 3}

@@ -5,13 +5,18 @@ using Random = UnityEngine.Random;
 
 public class PlayerSoundEvents : MonoBehaviour
 {
-    private List<ESfxAudioClipIndex> _playerWalkSounds = new();
-    private List<ESfxAudioClipIndex> _playerRunningSounds = new();
+    private readonly List<ESfxAudioClipIndex> _playerWalkSounds = new();
+    private readonly List<ESfxAudioClipIndex> _playerRunningSounds = new();
+    private readonly List<ESfxAudioClipIndex> _playerRunningBreathSounds = new();
+
+    private const int BREATH_CYCLE_COUNT = 2;
+    private int _cycleCount = BREATH_CYCLE_COUNT;
 
     private void Awake()
     {
         InitPlayerWalkSound();
         InitPlayerRunningSound();
+        InitPlayerRunningBreathSound();
     }
 
     private void InitPlayerWalkSound()
@@ -27,6 +32,12 @@ public class PlayerSoundEvents : MonoBehaviour
         _playerRunningSounds.Add(ESfxAudioClipIndex.Player_Running2);
         _playerRunningSounds.Add(ESfxAudioClipIndex.Player_Running3);
     }
+
+    private void InitPlayerRunningBreathSound()
+    {
+        _playerRunningBreathSounds.Add(ESfxAudioClipIndex.Player_Running_Breath1);
+        _playerRunningBreathSounds.Add(ESfxAudioClipIndex.Player_Running_Breath2);
+    }
     
     public void PlayFootStepSound()
     {
@@ -36,5 +47,17 @@ public class PlayerSoundEvents : MonoBehaviour
     public void PlayRunningSound()
     {
         AudioPlayManager.Instance.PlayOnceSfxAudio(_playerRunningSounds[Random.Range(0, _playerRunningSounds.Count)]);
+    }
+    
+    public void PlayRunningBreathSound()
+    {
+        if (_cycleCount < BREATH_CYCLE_COUNT)
+        {
+            _cycleCount++;
+            return;
+        }
+
+        _cycleCount = 0;
+        AudioPlayManager.Instance.PlayOnceSfxAudio(_playerRunningBreathSounds[Random.Range(0, _playerRunningBreathSounds.Count)]);
     }
 }

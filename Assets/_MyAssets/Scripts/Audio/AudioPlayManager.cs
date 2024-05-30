@@ -138,7 +138,7 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
         availableObject.Play(audioClip, ESfxPlayType.PlayOnce);
     }
 
-    public void PlayLoopSfxAudio(ESfxAudioClipIndex clip)
+    public void PlayLoopSfxAudio(ESfxAudioClipIndex clip, Transform parent = null)
     {
         if(!_cachedSfxClips.TryGetValue(clip, out AudioClip audioClip))
         {
@@ -163,6 +163,12 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
         
         // 루프 중인 효과음 오브젝트를 관리하기 위한 Dictionary에 추가
         _loopSfxAudioObjects.Add(clip, availableObject.GetInstanceID());
+        if (parent is null)
+        {
+            return;
+        }
+        
+        availableObject.transform.SetParent(parent);
     } 
     
     private int CheckIsPlayingLoopSfx(AudioClip audioClip)
@@ -217,6 +223,11 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
 
             _loopSfxAudioObjects.Remove(clip);
             currentAudioObject.Stop();
+            if (currentAudioObject.transform.parent != transform)
+            {
+                currentAudioObject.transform.SetParent(transform);
+            }
+            
             break;
         }
     }

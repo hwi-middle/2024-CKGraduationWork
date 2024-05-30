@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : Singleton<Player>, IDamageable
 {
     [SerializeField] private PlayerData _playerData;
+    private readonly List<ESfxAudioClipIndex> _playerHitSounds = new();
     
     public PlayerData PlayerData => _playerData;
     
@@ -13,6 +15,14 @@ public class Player : Singleton<Player>, IDamageable
     private void Awake()
     {
         _hp = _playerData.playerHp;
+        InitHitSounds();
+    }
+
+    private void InitHitSounds()
+    {
+        _playerHitSounds.Add(ESfxAudioClipIndex.Player_Hit1);
+        _playerHitSounds.Add(ESfxAudioClipIndex.Player_Hit2);
+        _playerHitSounds.Add(ESfxAudioClipIndex.Player_Hit3);
     }
 
     private void Start()
@@ -40,6 +50,7 @@ public class Player : Singleton<Player>, IDamageable
     {
         Debug.Log("Player TakeDamage()");
         _hp -= damageAmount;
+        AudioPlayManager.Instance.PlayOnceSfxAudio(_playerHitSounds[Random.Range(0, _playerHitSounds.Count)]);
         return damageAmount;
     }
 }
