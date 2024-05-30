@@ -172,17 +172,19 @@ public class PopupHandler : Singleton<PopupHandler>
 
     public void ExecuteActionOnButtonClick(bool isPositive)
     {
+        AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.UI_Click);
         buttonAction?.Invoke(isPositive);
         ClosePopup();
     }
 
-    public void ClosePopup()
+    private void ClosePopup()
     {
         if (IsTutorialPopup)
         {
             SceneManagerBase.Instance.TogglePause();
         }
         
+        AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.UI_Close);
         buttonAction = null;
         _popupPrefab.SetActive(false);
     }

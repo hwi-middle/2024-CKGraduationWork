@@ -22,4 +22,8 @@
     Player_Landing,
     Player_Parkour,
     Player_Dead,
+    ZoneA_AMB_Loop,
+    UI_Click,
+    UI_Close,
+    UI_Select,
 }

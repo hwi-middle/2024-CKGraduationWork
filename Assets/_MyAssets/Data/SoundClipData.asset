@@ -14,10 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioObjectMaxCapacity: 20
   bgmClipList:
-  - clipName: Bgm_1
-    clip: {fileID: 8300000, guid: c5b031af451f0064dbc02af3a3cb262a, type: 3}
-  - clipName: BGM_2
-    clip: {fileID: 8300000, guid: 9d66019d844335f43bddf621b4eb5550, type: 3}
+  - clipName: MainMenu_BGM
+    clip: {fileID: 8300000, guid: 7c042649c55d3354ebd015c37af6012d, type: 3}
   sfxClipList:
   - clipName: Player_Walk1
     clip: {fileID: 8300000, guid: 6653bc77f6eb2eb439ce2855a62c50a8, type: 3}
@@ -61,3 +59,11 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 25cf817b2d492af48ab429f18b5e5b1c, type: 3}
   - clipName: Player_Dead
     clip: {fileID: 8300000, guid: 8a87dcd21ec0f3640b18e37d3a854af3, type: 3}
+  - clipName: ZoneA_AMB_Loop
+    clip: {fileID: 8300000, guid: 38dee61123a75384984b82f17fcbf8bd, type: 3}
+  - clipName: UI_Click
+    clip: {fileID: 8300000, guid: 0bc223f6a4063324db058c173c824c14, type: 3}
+  - clipName: UI_Close
+    clip: {fileID: 8300000, guid: 2d9cef128b6b82a4cb8f46c34fd6d497, type: 3}
+  - clipName: UI_Select
+    clip: {fileID: 8300000, guid: ded8d34b6bc80c54e810e8e1b1ef8786, type: 3}

@@ -16,6 +16,7 @@ public class ButtonTextColorChanger : MonoBehaviour
     {
         _text = button.transform.GetComponentInChildren<TMP_Text>();
         _text.color = changeColor;
+        AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.UI_Select);
     }
 
     public void ChangeButtonTextColorToDefault(Button button)

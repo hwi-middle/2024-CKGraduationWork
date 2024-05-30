@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Serialization;
 
 public enum EAudioType
 {
@@ -17,7 +19,11 @@ public enum ESfxPlayType
 
 public class AudioPlayManager : Singleton<AudioPlayManager>
 {
-    [SerializeField] AudioClipData _audioClipData;
+    [SerializeField] private AudioMixer _mainMixer;
+    [SerializeField] private AudioClipData _audioClipData;
+
+    private AudioMixerGroup _bgmMixerGroup;
+    private AudioMixerGroup _sfxMixerGroup;
     
     // 배경음 오브젝트 풀
     private BgmAudioObject _bgmAudioObject;
@@ -33,8 +39,15 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
     
     private void Awake()
     {
+        InitMixerGroup();
         InstantiateBgmAudioObject();
         InstantiateSfxAudioObject();
+    }
+
+    private void InitMixerGroup()
+    {
+        _bgmMixerGroup = _mainMixer.FindMatchingGroups("Master")[1];
+        _sfxMixerGroup = _mainMixer.FindMatchingGroups("Master")[2];
     }
 
     private void InstantiateBgmAudioObject()
@@ -44,6 +57,7 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
         bgmObject.AddComponent<BgmAudioObject>();
         bgmObject.name = "BgmAudioObject";
         bgmObject.transform.SetParent(transform);
+        bgmObject.GetComponent<AudioSource>().outputAudioMixerGroup = _bgmMixerGroup;
         bgmObject.SetActive(false);
         
         _bgmAudioObject = bgmObject.GetComponent<BgmAudioObject>();
@@ -60,6 +74,7 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
             GameObject sfxObjectClone = Instantiate(sfxObject, transform);
             _allocatedSfxAudioObjects.Add(sfxObjectClone.GetComponent<SfxAudioObject>());
             sfxObjectClone.name = "SfxAudioObject_" + i;
+            sfxObjectClone.GetComponent<AudioSource>().outputAudioMixerGroup = _sfxMixerGroup;
             sfxObjectClone.SetActive(false);
         }
         

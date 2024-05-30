@@ -28,6 +28,7 @@ public class MainMenuSceneManager : SceneManagerBase
         FadeIn(0.5f);
 
         _continueButton.interactable = CheckPointRootHandler.Instance.HasSavedCheckPointData;
+        AudioPlayManager.Instance.PlayBgmAudio(EBgmAudioClipIndex.MainMenu_BGM);
     }
 
     protected override void Update()

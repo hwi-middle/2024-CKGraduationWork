@@ -8,6 +8,7 @@ public class WorkspaceSceneManager : SceneManagerBase
     {
         base.Start();
         FadeIn(0.5f);
+        AudioPlayManager.Instance.PlayLoopSfxAudio(ESfxAudioClipIndex.ZoneA_AMB_Loop);
     }
 
     protected override void Update()
