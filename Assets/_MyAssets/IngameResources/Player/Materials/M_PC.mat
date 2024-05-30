@@ -31,10 +31,10 @@ Material:
     m_Floats:
     - _Fresnel_Power: 5
     - _Lambert_Power: 0.15
-    - _Normal_Strength: 2
-    - _Smoothness: 0
+    - _Normal_Strength: 2.5
+    - _Smoothness: 0.073
     m_Colors:
-    - _Emission_Color: {r: 2.9960785, g: 1.8177931, b: 0.69248986, a: 0}
+    - _Emission_Color: {r: 2.9960785, g: 1.817793, b: 0.6924898, a: 0}
     - _Specular: {r: 0, g: 0, b: 0, a: 0}
     - _Specular_Sub: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
