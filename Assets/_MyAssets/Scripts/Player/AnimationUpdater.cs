@@ -29,4 +29,9 @@ public class AnimationUpdater : MonoBehaviour
         _anim.SetBool(PlayerAnimationStates.OVERSTEP, _playerMove.CheckPlayerState(EPlayerState.Overstep));
         _anim.SetBool(PlayerAnimationStates.ASSASSINATE, _playerMove.CheckPlayerState(EPlayerState.Assassinate));
     }
+
+    public void OnAttackAnimationStart()
+    {
+        _playerMove.UpdateEnemyDeadState();
+    }
 }

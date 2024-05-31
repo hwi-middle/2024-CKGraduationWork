@@ -67,6 +67,7 @@ public class PlayerMove : Singleton<PlayerMove>
     private IEnumerator _assassinateRoutine;
     public bool IsAssassinating => _assassinateRoutine != null;
     public int CurrentTargetInstanceID { get; private set; } 
+    private EnemyBase _currentTargetEnemy;
 
     private bool CanActing => !CheckPlayerState(EPlayerState.Dead) && !CheckPlayerState(EPlayerState.Overstep);
 
@@ -242,8 +243,15 @@ public class PlayerMove : Singleton<PlayerMove>
         
         AddPlayerState(EPlayerState.Assassinate);
         CurrentTargetInstanceID = enemyBackOffset.parent.GetInstanceID();
+        _currentTargetEnemy = enemyBackOffset.parent.GetComponent<EnemyBase>();
         _assassinateRoutine = AdjustPlayerToEnemyBackRoutine(enemyBackOffset.parent, enemyBackOffset);
         StartCoroutine(_assassinateRoutine);
+    }
+
+    // 암살 애니메이션 시작 시 호출
+    public void UpdateEnemyDeadState()
+    {
+        _currentTargetEnemy.IsDead = true;
     }
 
     private IEnumerator AdjustPlayerToEnemyBackRoutine(Transform enemy, Transform enemyBackOffset)

@@ -26,12 +26,17 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private CenterSightBound _centerSight;
     public SightBound CenterSight => _centerSight;
     [SerializeField] private SideSightBound _sideSight;
-    public SightBound SideSight => _sideSight;
 
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
+    public SightBound SideSight => _sideSight;
+    
+    public bool IsDead { get; set; }
+
+    //private Animator _animator;
 
     // "AK" stands for Animator Key
     private static readonly int AK_Speed = Animator.StringToHash("Speed");
+    private static readonly int AK_IsDead = Animator.StringToHash("IsDead");
 
     private float _perceptionGauge = 0f;
     private Vector3 _moveRangeCenterPos;
@@ -53,7 +58,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         _perceptionNote = Instantiate(Resources.Load("PerceptionNote/PerceptionNote"), _canvas.transform).GetComponent<PerceptionNote>();
         _perceptionNote.owner = this;
         _moveRangeCenterPos = transform.position;
-        _animator = GetComponent<Animator>();
+        //_animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -69,6 +74,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         _tree.Update();
         _animator.SetFloat(AK_Speed, _navMeshAgent.velocity.magnitude);
+        _animator.SetBool(AK_IsDead, IsDead);
         if (_perceptionGauge > 0 && !PlayerMoveInstance.IsAssassinating)
         {
             SSPerceptionGaugeUiHandler.Instance.RegisterEnemy(this);
