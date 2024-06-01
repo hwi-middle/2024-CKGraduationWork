@@ -9,7 +9,7 @@ public class CheckPointHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.transform.CompareTag("Player") || PlayerMove.Instance.CheckPlayerState(EPlayerState.Dead))
+        if (!other.transform.CompareTag("Player") || PlayerStateManager.Instance.CheckPlayerState(EPlayerState.Dead))
         {
             return;
         }

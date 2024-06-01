@@ -24,6 +24,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _DissolveMask_Texture:
+        m_Texture: {fileID: 2800000, guid: 9ad5a6bb0befc3e4684d48f4689fa92d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Dissolve_Texture:
         m_Texture: {fileID: 2800000, guid: 825d6298e9dd6d54dacd6f31d224002a, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -50,8 +54,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _DF_Distence: 1
+    - _DF_Hardness: 1.05
+    - _DF_UseAsColor: 0
     - _DIssolve_Multiply: 0.69
-    - _DIssolve_Style: 0
+    - _DIssolve_Style: 0.245
     - _DissolveMask_Divide: 1
     - _DissolveMask_DoubleSided: 0
     - _DissolveMask_Inverse: 0
@@ -59,14 +66,16 @@ Material:
     - _DissolveMask_Power: 1
     - _DissolveMask_SphereMask: 0
     - _DissolveMask_U: 0
+    - _DissolveMask_UseTexture: 1
     - _Dissolve_Control: 0
     - _Dissolve_Divide: 1
     - _Dissolve_EdgeSize: 0
-    - _Dissolve_Hardness: 0.115
+    - _Dissolve_Hardness: 0.226
     - _Dissolve_PanCustomData_UV2BA: 1
     - _Dissolve_PanCustomData_UV2XY: 1
     - _Dissolve_Power: 0.2
     - _Dissolve_UseCustomData_Z: 1
+    - _Dissolve_UseUV0_Z: 1
     - _Distence: 5.9
     - _Hardness: 0.2
     - _MainDistort_Amount: 0
@@ -78,6 +87,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
+    - _DF_Color: {r: 1, g: 1, b: 1, a: 0}
     - _Disslove_Scale: {r: 0.2, g: 0.2, b: 0, a: 0}
     - _Dissolve_EdgeColor: {r: 1, g: 0, b: 0, a: 0}
     - _Dissolve_Pan: {r: 2.11, g: 0, b: 0, a: 0}

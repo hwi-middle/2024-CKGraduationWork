@@ -58,10 +58,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6869807643532610196, guid: ce7ffa703f718224b9b9050cc9193ef4,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ce7ffa703f718224b9b9050cc9193ef4,
         type: 3}
       propertyPath: m_Name
       value: P_RoundFrameFurnitureA
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ce7ffa703f718224b9b9050cc9193ef4,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

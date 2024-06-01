@@ -8,6 +8,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8960114505858619707, guid: 9f5f53840a7ef4e4d9471bc0b007ebc6,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9f5f53840a7ef4e4d9471bc0b007ebc6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -58,10 +63,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1356828484497864434, guid: 9f5f53840a7ef4e4d9471bc0b007ebc6,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9f5f53840a7ef4e4d9471bc0b007ebc6,
         type: 3}
       propertyPath: m_Name
       value: P_DrawerDifferentDoorFurniturA
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9f5f53840a7ef4e4d9471bc0b007ebc6,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1256238958876209569, guid: 9f5f53840a7ef4e4d9471bc0b007ebc6,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5464243523135264233, guid: 9f5f53840a7ef4e4d9471bc0b007ebc6,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7363219961400020216, guid: 9f5f53840a7ef4e4d9471bc0b007ebc6,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

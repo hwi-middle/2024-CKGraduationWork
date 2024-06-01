@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: FX_ItemSpark001@Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 64ad71a23fe4d6e4eacbf295521e6956,
+  m_Shader: {fileID: -6465566751694194690, guid: 95b20f80bd43f984187370a48c7a29f9,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -44,7 +44,19 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DissolveMask_Texture:
+        m_Texture: {fileID: 2800000, guid: 0532a94b37c6ec848a0f8ec0d0ecaca4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Dissolve_Texture:
+        m_Texture: {fileID: 2800000, guid: 9ad5a6bb0befc3e4684d48f4689fa92d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainDistort_Texture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -53,7 +65,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Main_Texture:
-        m_Texture: {fileID: 2800000, guid: e2299dd89a1ee1f46b1acc8cd4eb5ee9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 99ba7ad1a24acb045a8fa072381eb8fc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -95,16 +107,39 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
+    - _DF_Distence: 1
+    - _DF_Hardness: 0
+    - _DF_UseAsColor: 0
+    - _DIssolve_Multiply: 1
+    - _DIssolve_Style: 0.444
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
+    - _DissolveMask_Divide: 1.37
+    - _DissolveMask_DoubleSided: 0
+    - _DissolveMask_Inverse: 1
+    - _DissolveMask_Multiply: 1
+    - _DissolveMask_Power: 1.41
+    - _DissolveMask_SphereMask: 0
+    - _DissolveMask_U: 0
+    - _DissolveMask_UseTexture: 1
+    - _Dissolve_Control: 0
+    - _Dissolve_Divide: 1
+    - _Dissolve_EdgeSize: 0.05
+    - _Dissolve_Hardness: 0
+    - _Dissolve_PanCustomData_UV2XY: 0
+    - _Dissolve_Power: 1
+    - _Dissolve_UseUV0_Z: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _MainDistort_Amount: 0
+    - _MainDistort_UsePolarCoordinate: 0
     - _Main_Divide: 1
-    - _Main_Intensity: 7
+    - _Main_Intensity: 5
+    - _Main_Multiply: 1
     - _Main_Power: 1
     - _Metallic: 0
     - _OcclusionStrength: 1
@@ -123,7 +158,18 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DF_Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Disslove_Scale: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _Dissolve_EdgeColor: {r: 1, g: 0, b: 0, a: 0}
+    - _Dissolve_Pan: {r: 0, g: 0, b: 0, a: 0}
+    - _Dissolve_Scroll: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _MainDistort_Pan: {r: 0, g: 0, b: 0, a: 0}
+    - _MainDistort_Scale: {r: 1, g: 1, b: 0, a: 0}
+    - _MainDistortr_Scroll: {r: 0, g: 0, b: 0, a: 0}
+    - _Main_Pan: {r: 0, g: 0, b: 0, a: 0}
+    - _Main_Scale: {r: 1, g: 1, b: 0, a: 0}
+    - _Main_Scroll: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &6267313217831665118

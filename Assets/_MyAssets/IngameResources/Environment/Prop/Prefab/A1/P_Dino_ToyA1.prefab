@@ -58,10 +58,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7027150103730562208, guid: bd38d488f9e63454798a1f4875d1c180,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -2321176175781960049, guid: bd38d488f9e63454798a1f4875d1c180,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 270427237938754969, guid: bd38d488f9e63454798a1f4875d1c180,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bd38d488f9e63454798a1f4875d1c180,
         type: 3}
       propertyPath: m_Name
       value: P_Dino_ToyA1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bd38d488f9e63454798a1f4875d1c180,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1501872778776823467, guid: bd38d488f9e63454798a1f4875d1c180,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

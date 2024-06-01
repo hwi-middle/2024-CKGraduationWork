@@ -98,7 +98,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_76ba0a5ead1d4c91bb1eeac077c1be83_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: a6b46b8e5fc39184aaed123a24d9ec69, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_82295dce6c1f460fa8e586636235c866_Texture_1_Texture2D:
@@ -171,7 +171,7 @@ Material:
     - _GlossyReflections: 0
     - _MainColorEmissiveInten: 0.7
     - _MainInten: 3.08
-    - _MainOpacity: -0.166
+    - _MainOpacity: -0.371
     - _MainScale: 0.18
     - _Metallic: 0
     - _Multiply: 1

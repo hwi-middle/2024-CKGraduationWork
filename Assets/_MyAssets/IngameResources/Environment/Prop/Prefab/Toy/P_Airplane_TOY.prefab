@@ -63,6 +63,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_Airplane_TOY
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c5d68c92764cf7440b3a85a1d3f073a4,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

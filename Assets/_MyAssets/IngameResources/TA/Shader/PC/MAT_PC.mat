@@ -74,6 +74,7 @@ Material:
     - _Float: 0
     - _Fresnel_Power: 9
     - _Lambert_Power: 0.052
+    - _Normal_Strength: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Smoothness: 0.186

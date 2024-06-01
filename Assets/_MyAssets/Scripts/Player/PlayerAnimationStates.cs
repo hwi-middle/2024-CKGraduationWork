@@ -12,5 +12,8 @@ public class PlayerAnimationStates : MonoBehaviour
     public static readonly int SLIDING = Animator.StringToHash("IsSliding");
     public static readonly int DEAD = Animator.StringToHash("IsDead");
     public static readonly int OVERSTEP = Animator.StringToHash("IsOverstep");
+    public static readonly int ITEM_READY = Animator.StringToHash("IsItemReady");
+    public static readonly int ITEM_HOLD = Animator.StringToHash("IsItemHold");
+    public static readonly int ITEM_THROW = Animator.StringToHash("IsItemThrow");
     public static readonly int ASSASSINATE = Animator.StringToHash("IsAssassinate");
 }

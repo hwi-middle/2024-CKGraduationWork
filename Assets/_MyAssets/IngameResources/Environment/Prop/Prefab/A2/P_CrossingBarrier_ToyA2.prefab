@@ -58,10 +58,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6980099748977930245, guid: 8d21c0dd05f0c834090ea0dfe649aff5,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -6087152361996757924, guid: 8d21c0dd05f0c834090ea0dfe649aff5,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8d21c0dd05f0c834090ea0dfe649aff5,
         type: 3}
       propertyPath: m_Name
       value: P_CrossingBarrier_ToyA2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8d21c0dd05f0c834090ea0dfe649aff5,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1972325590732688254, guid: 8d21c0dd05f0c834090ea0dfe649aff5,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

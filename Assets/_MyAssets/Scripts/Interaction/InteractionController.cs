@@ -69,7 +69,7 @@ public class InteractionController : Singleton<InteractionController>
         _nearestObjectDistance = Mathf.Infinity;
         _nearestObject = null;
         
-        if (_interactableObjects.Count == 0 || PlayerMove.Instance.CheckPlayerState(EPlayerState.Hide))
+        if (_interactableObjects.Count == 0 || PlayerStateManager.Instance.CheckPlayerState(EPlayerState.Hide))
         {
             return;
         }
@@ -100,7 +100,7 @@ public class InteractionController : Singleton<InteractionController>
                 return;
             }
 
-            if (!IsValidInteraction(data.Value.type, hit))
+            if (!IsValidInteraction(data, hit))
             {
                 return;
             }
@@ -131,7 +131,7 @@ public class InteractionController : Singleton<InteractionController>
             return;
         }
 
-        if (!IsValidInteraction(data.Value.type, hit))
+        if (!IsValidInteraction(data, hit))
         {
             return;
         }
@@ -156,18 +156,17 @@ public class InteractionController : Singleton<InteractionController>
         return false;
     }
     
-    private bool IsValidInteraction(EInteractionType type, RaycastHit hit)
+    private bool IsValidInteraction(KeyValuePair<int, InteractionObject> data, RaycastHit hit)
     {
-        switch (type)
+        switch (data.Value.type)
         {
             case EInteractionType.Item when ItemThrowHandler.Instance.IsItemOnHand:
                 return false;   
             case EInteractionType.HideableObject when !HideActionController.Instance.IsInFrontOfHideableObject(hit.transform):
                 return false;
-            case EInteractionType.Overstep when PlayerMove.Instance.CheckPlayerState(EPlayerState.Crouch):
+            case EInteractionType.Overstep when PlayerStateManager.Instance.CheckPlayerState(EPlayerState.Crouch):
                 return false;
-            case EInteractionType.Cube when CubeInteractionController.Instance.HasInteractionCube:
-                return false;
+            case EInteractionType.Cube:
             default:
                 return true;
         }
@@ -195,7 +194,7 @@ public class InteractionController : Singleton<InteractionController>
 
     private void ShowInteractionUI()
     {
-        _interactionUI.SetActive(NearestObject.obj != null);
+        _interactionUI.SetActive(NearestObject.obj is not null && !CubeInteractionController.Instance.IsOnCube);
 
         if (!_interactionUI.activeSelf)
         {
