@@ -83,11 +83,9 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
         _currentCubeRoot.HighlightCurrentCube();
     }
 
-    public void ExecuteCorrectCubeSequence()
+    public void CubeExitWhenCorrect()
     {
         HandleCubeExitEvent();
-        
-        // TODO : 큐브 정답 이후 처리
     }
 
     private void HandleCubeExitEvent()

@@ -150,7 +150,7 @@ public class InteractionController : Singleton<InteractionController>
         if (!Physics.Raycast(ray, out hit, Mathf.Infinity)
             || hit.transform.gameObject.GetInstanceID() != data.Key)
         {
-            return true;
+            return data.Value.type != EInteractionType.Cube;
         }
 
         return false;

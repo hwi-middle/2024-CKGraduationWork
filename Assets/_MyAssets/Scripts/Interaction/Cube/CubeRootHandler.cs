@@ -19,6 +19,10 @@ public class CubeRootHandler : MonoBehaviour
     [Header("현재 큐브 하이라이트 색상")]
     [SerializeField] private Color _highlightColor;
 
+    private const string AK_CORRECT = "IsCorrect";
+    private static readonly int Correct = Animator.StringToHash(AK_CORRECT);
+
+    [SerializeField] private Animator _nextObjectAnimator;
     public bool IsCorrect { get; private set; } = false;
 
     private Color _originColor;
@@ -42,7 +46,7 @@ public class CubeRootHandler : MonoBehaviour
     public bool IsResetRoutineRunning => _resetCubeRotationRoutineCount is not 0;
     
     private bool _isCheckingCubeCorrect;
-    
+
     private void Start()
     {
         for (int i = transform.childCount - 1; i >= 0; i--)
@@ -167,7 +171,8 @@ public class CubeRootHandler : MonoBehaviour
         
         if (CheckCubeCorrect())
         {
-            CubeInteractionController.Instance.ExecuteCorrectCubeSequence();
+            ExecuteCorrectCubeSequence();
+            CubeInteractionController.Instance.CubeExitWhenCorrect();
         }
 
         _isCheckingCubeCorrect = false;
@@ -205,6 +210,11 @@ public class CubeRootHandler : MonoBehaviour
         
         IsCorrect = true;
         return true;
+    }
+    
+    private void ExecuteCorrectCubeSequence()
+    {
+        _nextObjectAnimator.SetBool(Correct, true);
     }
 
     public void SelectUpperCube()
