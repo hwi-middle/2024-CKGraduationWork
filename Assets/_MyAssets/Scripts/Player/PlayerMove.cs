@@ -48,6 +48,11 @@ public class PlayerMove : Singleton<PlayerMove>
     private bool _isSliding;
     private Vector3 _slideVelocity;
 
+    private IEnumerator _assassinateRoutine;
+    public bool IsAssassinating => _assassinateRoutine != null;
+    public int CurrentTargetInstanceID { get; private set; } 
+    private EnemyBase _currentTargetEnemy;
+
     private bool CanActing => !_playerState.CheckPlayerState(EPlayerState.Dead) &&
                               !_playerState.CheckPlayerState(EPlayerState.Overstep) &&
                               !_playerState.CheckPlayerState(EPlayerState.ItemReady) &&
@@ -147,6 +152,11 @@ public class PlayerMove : Singleton<PlayerMove>
     private void RotatePlayer()
     {
         Debug.Assert(_camera != null, "_camera != null");
+        if (IsAssassinating)
+        {
+            return;
+        }
+        
         ApplyRotate();
     }
 
@@ -161,6 +171,11 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void MovePlayer()
     {
+        if (IsAssassinating)
+        {
+            return;
+        }
+        
         _velocity = transform.TransformDirection(_inputDirection);
 
         ApplyGravity();
@@ -203,6 +218,78 @@ public class PlayerMove : Singleton<PlayerMove>
         _velocity.y = _yVelocity;
     }
 
+    public void AssassinateEnemy(Transform enemyBackOffset)
+    {
+        if (IsAssassinating)
+        {
+            return;
+        }
+
+        _playerState.RemovePlayerState(EPlayerState.Walk);
+        _playerState.RemovePlayerState(EPlayerState.Run);
+        _playerState.RemovePlayerState(EPlayerState.Crouch);
+
+        _playerState.AddPlayerState(EPlayerState.Assassinate);
+        CurrentTargetInstanceID = enemyBackOffset.parent.GetInstanceID();
+        _currentTargetEnemy = enemyBackOffset.parent.GetComponent<EnemyBase>();
+        _assassinateRoutine = AdjustPlayerToEnemyBackRoutine(enemyBackOffset.parent, enemyBackOffset);
+        StartCoroutine(_assassinateRoutine);
+    }
+
+    // 암살 애니메이션 시작 시 호출
+    public void UpdateEnemyDeadState()
+    {
+        _currentTargetEnemy.IsDead = true;
+    }
+
+    private IEnumerator AdjustPlayerToEnemyBackRoutine(Transform enemy, Transform enemyBackOffset)
+    {
+        Vector3 startPosition = transform.position;
+        Quaternion startRotation = transform.rotation;
+
+        Vector3 targetPosition = enemyBackOffset.position;
+        targetPosition.y = startPosition.y;
+        Quaternion targetRotation = enemy.rotation;
+        
+        const float ADJUST_DURATION = 0.1f;
+        float t = 0;
+        
+        while (t <= ADJUST_DURATION)
+        {
+            transform.position = Vector3.Lerp(startPosition, targetPosition, t / ADJUST_DURATION);
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t / ADJUST_DURATION);
+            yield return null;
+            t += Time.deltaTime;
+        }
+
+        transform.position = targetPosition;
+        transform.rotation = targetRotation;
+        
+        _assassinateRoutine = AssassinateRoutine(ADJUST_DURATION);
+        StartCoroutine(_assassinateRoutine);
+    }
+
+    private IEnumerator AssassinateRoutine(float adjustDuration)
+    {
+        float assassinateDuration = 8.0f - adjustDuration;
+        float t = 0;
+        bool isCameraChanged = false;
+        while (t < assassinateDuration)
+        {
+            yield return null;
+            
+            if (assassinateDuration - t < 1.0f && !isCameraChanged)
+            {
+                CameraController.Instance.ChangeCameraFromAssassinateToFreeLook();
+                isCameraChanged = true;
+            }
+            
+            t += Time.deltaTime;
+        }
+
+        _playerState.RemovePlayerState(EPlayerState.Assassinate);
+        _assassinateRoutine = null;
+    }
 
     public void ExitHideState(bool isCrouch)
     {
@@ -221,7 +308,7 @@ public class PlayerMove : Singleton<PlayerMove>
         _inputDirection = new Vector3(pos.x, 0, pos.y);
 
         if (_inputDirection.sqrMagnitude == 0 || _playerState.CheckPlayerState(EPlayerState.ItemReady) ||
-            _playerState.CheckPlayerState(EPlayerState.ItemThrow))
+            _playerState.CheckPlayerState(EPlayerState.ItemThrow) || IsAssassinating)
         {
             _inputDirection = Vector3.zero;
             _playerState.RemovePlayerState(EPlayerState.Walk);
