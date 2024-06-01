@@ -17,7 +17,7 @@ public class PopupButtonHandler : MonoBehaviour
 
     private void OnPositiveButtonClick()
     {
-         PopupHandler.Instance.ExecuteActionOnButtonClick(true);  
+        PopupHandler.Instance.ExecuteActionOnButtonClick(true);
     }
     
     private void OnNegativeButtonClick()
