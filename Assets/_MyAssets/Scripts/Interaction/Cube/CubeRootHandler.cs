@@ -249,6 +249,7 @@ public class CubeRootHandler : MonoBehaviour
         
         //TODO : 카메라 블렌딩
         CameraController.Instance.ChangeCameraToCubeCorrect(_correctCameraFollow, _correctCameraLookAt);
+        AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.OB_Train_Horn);
     }
 
     public void SelectUpperCube()

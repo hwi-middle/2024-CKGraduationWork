@@ -81,3 +81,5 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 02b577ee7ee1d664dbc13eb72750cd0a, type: 3}
   - clipName: OB_CubeTurn4
     clip: {fileID: 8300000, guid: 2997fc85fed05c34cb09bb75c2f53712, type: 3}
+  - clipName: OB_Train_Horn
+    clip: {fileID: 8300000, guid: 29c96012acd432542a664e77572744ef, type: 3}

@@ -33,4 +33,5 @@
     OB_CubeTurn2,
     OB_CubeTurn3,
     OB_CubeTurn4,
+    OB_Train_Horn,
 }
