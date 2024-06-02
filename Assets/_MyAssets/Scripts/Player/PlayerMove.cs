@@ -4,21 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-[Flags]
-public enum EPlayerState
-{
-    None = 0,
-    Idle = 1 << 1,
-    Walk = 1 << 2,
-    Run = 1 << 3,
-    Crouch = 1 << 4,
-    Hide = 1 << 5,
-    Peek = 1 << 6,
-    Alive = 1 << 7,
-    Dead = 1 << 8,
-    Overstep = 1 << 9,
-}
-
 public class PlayerMove : Singleton<PlayerMove>
 {
     private bool _isInitialized = false;
@@ -26,7 +11,7 @@ public class PlayerMove : Singleton<PlayerMove>
     private Camera _camera;
 
     [SerializeField] private PlayerInputData _inputData;
-    private int _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
+    private PlayerStateManager _playerState;
 
     [Header("Player Data")] [SerializeField]
     private PlayerData _playerData;
@@ -61,7 +46,15 @@ public class PlayerMove : Singleton<PlayerMove>
     private bool _isSliding;
     private Vector3 _slideVelocity;
 
-    private bool CanActing => !CheckPlayerState(EPlayerState.Dead) && !CheckPlayerState(EPlayerState.Overstep);
+    private IEnumerator _assassinateRoutine;
+    public bool IsAssassinating => _assassinateRoutine != null;
+    public int CurrentTargetInstanceID { get; private set; } 
+    private EnemyBase _currentTargetEnemy;
+
+    private bool CanActing => !_playerState.CheckPlayerState(EPlayerState.Dead) &&
+                              !_playerState.CheckPlayerState(EPlayerState.Overstep) &&
+                              !_playerState.CheckPlayerState(EPlayerState.ItemReady) &&
+                              !_playerState.CheckPlayerState(EPlayerState.ItemThrow);
 
     private bool IsGrounded => _controller.isGrounded;
 
@@ -96,6 +89,7 @@ public class PlayerMove : Singleton<PlayerMove>
     {
         Debug.Assert(_controller != null, "_controller !=null");
 
+        _playerState = PlayerStateManager.Instance;
         _camera = Camera.main;
     }
 
@@ -128,15 +122,15 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void MakeNoiseByCurrentState()
     {
-        if (CheckPlayerState(EPlayerState.Run))
+        if (_playerState.CheckPlayerState(EPlayerState.Run))
         {
             float noiseRadius = _playerData.sprintNoiseRadius;
             float noiseIncrement = _playerData.sprintNoiseIncrementPerSecond;
             _makeNoiseHandler.OnMakeNoise(noiseRadius, noiseIncrement * Time.deltaTime);
         }
-        else if (CheckPlayerState(EPlayerState.Walk))
+        else if (_playerState.CheckPlayerState(EPlayerState.Walk))
         {
-            bool isCrouch = CheckPlayerState(EPlayerState.Crouch);
+            bool isCrouch = _playerState.CheckPlayerState(EPlayerState.Crouch);
             float noiseRadius = isCrouch ? _playerData.crouchWalkNoiseRadius : _playerData.walkNoiseRadius;
             float noiseIncrement = isCrouch ? _playerData.crouchWalkNoiseIncrementPerSecond : _playerData.walkNoiseIncrementPerSecond;
             _makeNoiseHandler.OnMakeNoise(noiseRadius, noiseIncrement * Time.deltaTime);
@@ -156,6 +150,11 @@ public class PlayerMove : Singleton<PlayerMove>
     private void RotatePlayer()
     {
         Debug.Assert(_camera != null, "_camera != null");
+        if (IsAssassinating)
+        {
+            return;
+        }
+        
         ApplyRotate();
     }
 
@@ -170,6 +169,11 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void MovePlayer()
     {
+        if (IsAssassinating)
+        {
+            return;
+        }
+        
         _velocity = transform.TransformDirection(_inputDirection);
 
         ApplyGravity();
@@ -180,11 +184,11 @@ public class PlayerMove : Singleton<PlayerMove>
 
     private void ApplyPlayerMoveSpeed()
     {
-        if (CheckPlayerState(EPlayerState.Run))
+        if (_playerState.CheckPlayerState(EPlayerState.Run))
         {
             _playerApplySpeed = _playerData.runSpeed;
         }
-        else if (CheckPlayerState(EPlayerState.Crouch))
+        else if (_playerState.CheckPlayerState(EPlayerState.Crouch))
         {
             _playerApplySpeed = _playerData.crouchSpeed;
         }
@@ -212,94 +216,147 @@ public class PlayerMove : Singleton<PlayerMove>
         _velocity.y = _yVelocity;
     }
 
-    // Animation 관리를 위해 Public
-    public bool CheckPlayerState(EPlayerState state)
+    public void AssassinateEnemy(Transform enemyBackOffset)
     {
-        return (_currentState & (int)state) != 0;
+        if (IsAssassinating)
+        {
+            return;
+        }
+
+        _playerState.RemovePlayerState(EPlayerState.Walk);
+        _playerState.RemovePlayerState(EPlayerState.Run);
+        _playerState.RemovePlayerState(EPlayerState.Crouch);
+
+        _playerState.AddPlayerState(EPlayerState.Assassinate);
+        CurrentTargetInstanceID = enemyBackOffset.parent.GetInstanceID();
+        _currentTargetEnemy = enemyBackOffset.parent.GetComponent<EnemyBase>();
+        _assassinateRoutine = AdjustPlayerToEnemyBackRoutine(enemyBackOffset.parent, enemyBackOffset);
+        StartCoroutine(_assassinateRoutine);
     }
 
-    public void SetInitState()
+    // 암살 애니메이션 시작 시 호출
+    public void UpdateEnemyDeadState()
     {
-        _currentState = (int)EPlayerState.Idle | (int)EPlayerState.Alive;
+        _currentTargetEnemy.IsDead = true;
     }
 
-    public void SetDeadState()
+    private IEnumerator AdjustPlayerToEnemyBackRoutine(Transform enemy, Transform enemyBackOffset)
     {
-        _currentState = (int)EPlayerState.Dead;
+        Vector3 startPosition = transform.position;
+        Quaternion startRotation = transform.rotation;
+
+        Vector3 targetPosition = enemyBackOffset.position;
+        targetPosition.y = startPosition.y;
+        Quaternion targetRotation = enemy.rotation;
+        
+        const float ADJUST_DURATION = 0.1f;
+        float t = 0;
+        
+        while (t <= ADJUST_DURATION)
+        {
+            transform.position = Vector3.Lerp(startPosition, targetPosition, t / ADJUST_DURATION);
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t / ADJUST_DURATION);
+            yield return null;
+            t += Time.deltaTime;
+        }
+
+        transform.position = targetPosition;
+        transform.rotation = targetRotation;
+        
+        _assassinateRoutine = AssassinateRoutine(ADJUST_DURATION);
+        StartCoroutine(_assassinateRoutine);
+    }
+
+    private IEnumerator AssassinateRoutine(float adjustDuration)
+    {
+        float assassinateDuration = 8.0f - adjustDuration;
+        float t = 0;
+        bool isCameraChanged = false;
+        while (t < assassinateDuration)
+        {
+            yield return null;
+            
+            if (assassinateDuration - t < 1.0f && !isCameraChanged)
+            {
+                CameraController.Instance.ChangeCameraFromAssassinateToFollow();
+                isCameraChanged = true;
+            }
+            
+            t += Time.deltaTime;
+        }
+
+        _playerState.RemovePlayerState(EPlayerState.Assassinate);
+        _assassinateRoutine = null;
     }
 
     public void ExitHideState(bool isCrouch)
     {
-        RemovePlayerState(EPlayerState.Hide);
+        _playerState.RemovePlayerState(EPlayerState.Hide);
         if (!isCrouch)
         {
             return;
         }
 
-        AddPlayerState(EPlayerState.Crouch);
-    }
-
-    public void AddPlayerState(EPlayerState state)
-    {
-        _currentState |= (int)state;
-    }
-
-    public void RemovePlayerState(EPlayerState state)
-    {
-        _currentState &= ~(int)state;
+        _playerState.AddPlayerState(EPlayerState.Crouch);
     }
 
     private void HandleMoveAction(Vector2 pos)
     {
+        // TODO : 대각 이동 제한 (대각 입력 시 우선순위 -> W, S)
         _inputDirection = new Vector3(pos.x, 0, pos.y);
 
-        if (_inputDirection.sqrMagnitude == 0)
+        if (_inputDirection.sqrMagnitude == 0 || _playerState.CheckPlayerState(EPlayerState.ItemReady) ||
+            _playerState.CheckPlayerState(EPlayerState.ItemThrow) || IsAssassinating)
         {
-            RemovePlayerState(EPlayerState.Walk);
+            _inputDirection = Vector3.zero;
+            _playerState.RemovePlayerState(EPlayerState.Walk);
             return;
         }
 
-        AddPlayerState(EPlayerState.Walk);
+        _playerState.AddPlayerState(EPlayerState.Walk);
     }
 
     private void HandleRunAction()
     {
-        if (CameraController.Instance.IsOnChangeHeightRoutine || !CheckPlayerState(EPlayerState.Walk))
+        if (CameraController.Instance.IsOnChangeHeightRoutine || !_playerState.CheckPlayerState(EPlayerState.Walk))
         {
             return;
         }
 
         // Run과 Crouch 상태 중 우선 순위는 Run
-        if (CheckPlayerState(EPlayerState.Crouch))
+        if (_playerState.CheckPlayerState(EPlayerState.Crouch))
         {
-            RemovePlayerState(EPlayerState.Crouch);
+            _playerState.RemovePlayerState(EPlayerState.Crouch);
             CameraController.Instance.ToggleCrouchCameraHeight(false);
         }
 
-        AddPlayerState(EPlayerState.Run);
+        _playerState.AddPlayerState(EPlayerState.Run);
     }
 
     private void HandleQuitRunAction()
     {
-        RemovePlayerState(EPlayerState.Run);
+        _playerState.RemovePlayerState(EPlayerState.Run);
     }
 
     private void HandleCrouchAction()
     {
-        if (!IsGrounded || CheckPlayerState(EPlayerState.Run) || CameraController.Instance.IsOnChangeHeightRoutine
+        if (!IsGrounded || _playerState.CheckPlayerState(EPlayerState.Run) ||
+            CameraController.Instance.IsOnChangeHeightRoutine
             || !CanActing)
         {
             return;
         }
 
-        if (CheckPlayerState(EPlayerState.Crouch))
+        if (_playerState.CheckPlayerState(EPlayerState.Crouch))
         {
             CameraController.Instance.ToggleCrouchCameraHeight(false);
-            RemovePlayerState(EPlayerState.Crouch);
+            _playerState.RemovePlayerState(EPlayerState.Crouch);
+            ItemThrowHandler.Instance.AdjustShootPoint();    
             return;
         }
 
         CameraController.Instance.ToggleCrouchCameraHeight(true);
-        AddPlayerState(EPlayerState.Crouch);
+        _playerState.AddPlayerState(EPlayerState.Crouch);
+        ItemThrowHandler.Instance.AdjustShootPoint();    
     }
 }

@@ -57,32 +57,32 @@ public class HideActionController : Singleton<HideActionController>
             return;
         }
 
-        if (!PlayerMove.Instance.CheckPlayerState(EPlayerState.Crouch))
+        if (!PlayerStateManager.Instance.CheckPlayerState(EPlayerState.Crouch))
         {
             Debug.Assert(!_isInHideableObject, "_isInHideableObject Is Not True");
             
-            PlayerMove.Instance.RemovePlayerState(EPlayerState.Hide);
+            PlayerStateManager.Instance.RemovePlayerState(EPlayerState.Hide);
             return;
         }
         
-        PlayerMove.Instance.AddPlayerState(EPlayerState.Hide);
+        PlayerStateManager.Instance.AddPlayerState(EPlayerState.Hide);
     }
 
     private void HandlePeekAction()
     {
         CameraController.Instance.ChangeCameraToPeek();
-        PlayerMove.Instance.AddPlayerState(EPlayerState.Peek);
+        PlayerStateManager.Instance.AddPlayerState(EPlayerState.Peek);
     }
 
     private void HandlePeekExitAction()
     {
         CameraController.Instance.ChangeCameraFromPeekToInCabinet();
-        PlayerMove.Instance.RemovePlayerState(EPlayerState.Peek);
+        PlayerStateManager.Instance.RemovePlayerState(EPlayerState.Peek);
     }
 
     private void HandleHideExitAction()
     {
-        if (PlayerMove.Instance.CheckPlayerState(EPlayerState.Peek) || IsOnRoutine)
+        if (PlayerStateManager.Instance.CheckPlayerState(EPlayerState.Peek) || IsOnRoutine)
         {
             return;
         }
@@ -138,10 +138,10 @@ public class HideActionController : Singleton<HideActionController>
             return;
         }
         
-        _isCrouch = PlayerMove.Instance.CheckPlayerState(EPlayerState.Crouch);
-        PlayerMove.Instance.SetInitState();
+        _isCrouch = PlayerStateManager.Instance.CheckPlayerState(EPlayerState.Crouch);
+        PlayerStateManager.Instance.SetInitState();
         _isInHideableObject = true;
-        PlayerMove.Instance.AddPlayerState(EPlayerState.Hide);
+        PlayerStateManager.Instance.AddPlayerState(EPlayerState.Hide);
         
         Vector3 playerOnPlane = Vector3.ProjectOnPlane(_playerTransform.position, Vector3.up);
         Vector3 hideableObjectOnPlane = Vector3.ProjectOnPlane(objectTransform.position, Vector3.up);

@@ -6,11 +6,11 @@ using UnityEngine;
 public class AnimationUpdater : MonoBehaviour
 {
     private Animator _anim;
-    private PlayerMove _playerMove;
+    private PlayerStateManager _playerState;
 
     private void Awake()
     {
-        _playerMove = PlayerMove.Instance;
+        _playerState = PlayerStateManager.Instance;
         _anim = GetComponent<Animator>();
     }
 
@@ -21,11 +21,20 @@ public class AnimationUpdater : MonoBehaviour
 
     private void UpdateAnimationState()
     {
-        _anim.SetBool(PlayerAnimationStates.DEAD, _playerMove.CheckPlayerState(EPlayerState.Dead));
-        _anim.SetBool(PlayerAnimationStates.IDLE, _playerMove.CheckPlayerState(EPlayerState.Idle));
-        _anim.SetBool(PlayerAnimationStates.WALK, _playerMove.CheckPlayerState(EPlayerState.Walk));
-        _anim.SetBool(PlayerAnimationStates.RUN, _playerMove.CheckPlayerState(EPlayerState.Run));
-        _anim.SetBool(PlayerAnimationStates.CROUCH, _playerMove.CheckPlayerState(EPlayerState.Crouch));
-        _anim.SetBool(PlayerAnimationStates.OVERSTEP, _playerMove.CheckPlayerState(EPlayerState.Overstep));
+        _anim.SetBool(PlayerAnimationStates.DEAD, _playerState.CheckPlayerState(EPlayerState.Dead));
+        _anim.SetBool(PlayerAnimationStates.IDLE, _playerState.CheckPlayerState(EPlayerState.Idle));
+        _anim.SetBool(PlayerAnimationStates.WALK, _playerState.CheckPlayerState(EPlayerState.Walk));
+        _anim.SetBool(PlayerAnimationStates.RUN, _playerState.CheckPlayerState(EPlayerState.Run));
+        _anim.SetBool(PlayerAnimationStates.CROUCH, _playerState.CheckPlayerState(EPlayerState.Crouch));
+        _anim.SetBool(PlayerAnimationStates.OVERSTEP, _playerState.CheckPlayerState(EPlayerState.Overstep));
+		_anim.SetBool(PlayerAnimationStates.ITEM_READY, _playerState.CheckPlayerState(EPlayerState.ItemReady));
+        _anim.SetBool(PlayerAnimationStates.ITEM_HOLD, _playerState.CheckPlayerState(EPlayerState.ItemHold));
+        _anim.SetBool(PlayerAnimationStates.ITEM_THROW, _playerState.CheckPlayerState(EPlayerState.ItemThrow));
+        _anim.SetBool(PlayerAnimationStates.ASSASSINATE, _playerState.CheckPlayerState(EPlayerState.Assassinate));
+    }
+
+    public void OnAttackAnimationStart()
+    {
+        PlayerMove.Instance.UpdateEnemyDeadState();
     }
 }

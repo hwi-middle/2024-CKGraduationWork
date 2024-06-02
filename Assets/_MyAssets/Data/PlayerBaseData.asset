@@ -13,15 +13,12 @@ MonoBehaviour:
   m_Name: PlayerBaseData
   m_EditorClassIdentifier: 
   playerHp: 100
-  walkSpeed: 2.9
-  runSpeed: 6
-  crouchSpeed: 1.8
+  walkSpeed: 1.6
+  runSpeed: 3.8
+  crouchSpeed: 1
   rotateSpeed: 5
   jumpHeight: 4.5
   yMultiplier: 4
-  minWireDistance: 7
-  maxWireDistance: 12
-  wireActionDuration: 2
   overstepActionDuration: 2
   overstepTargetDistance: 0.5
   assassinateDuration: 1.2
@@ -37,7 +34,6 @@ MonoBehaviour:
   sprintNoiseIncrementPerSecond: 20
   crouchWalkNoiseRadius: 1
   crouchWalkNoiseIncrementPerSecond: 5
-  slopeSlideSpeed: 4
   playerCanvas: {fileID: 6670551468554774952, guid: d145af9e61baa8f4b86278040d640948,
     type: 3}
   lineRendererPrefab: {fileID: 1510557977768077414, guid: c13d442cd5a65094faf7ebefc78ec6dd,

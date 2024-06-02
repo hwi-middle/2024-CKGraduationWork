@@ -63,6 +63,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_StandLightFurnitureA2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a6cbe174e373cdb4eac7fa1bf39aff8b,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

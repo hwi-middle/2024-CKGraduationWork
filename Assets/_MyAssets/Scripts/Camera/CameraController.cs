@@ -10,10 +10,11 @@ public class CameraController : Singleton<CameraController>
     [SerializeField] private float _blendingDuration = 0.5f;
     public CinemachineBrain BrainCamera { get; private set; }
     private CinemachineFreeLook FollowCamera { get; set; }
-    public CinemachineFreeLook AimingCamera { get; set; }
+    public CinemachineFreeLook AimingCamera { get; private set; }
     private CinemachineVirtualCamera InCabinetCamera { get; set; }
     private CinemachineVirtualCamera PeekCamera { get; set; }
     private CinemachineVirtualCamera CubeCamera { get; set; }
+    private CinemachineVirtualCamera AssassinateCamera { get; set; }
 
     private CinemachineComposer _peekCameraComposer;
 
@@ -68,6 +69,9 @@ public class CameraController : Singleton<CameraController>
         PeekCamera = virtualCameras.transform.Find("Peek Camera").GetComponent<CinemachineVirtualCamera>();
         CubeCamera = virtualCameras.transform.Find("Cube Camera").GetComponent<CinemachineVirtualCamera>();
         
+        // Assassinate Camera
+        AssassinateCamera = virtualCameras.transform.Find("Assassinate Camera").GetComponent<CinemachineVirtualCamera>();
+        
         // Brain Camera Blending Duration Setting
         BrainCamera.m_DefaultBlend.m_Time = _blendingDuration;
         
@@ -94,6 +98,8 @@ public class CameraController : Singleton<CameraController>
         // 상호작용 시 설정
         CubeCamera.Follow = null;
         CubeCamera.LookAt = null;
+        AssassinateCamera.Follow = null;
+        AssassinateCamera.LookAt = null;
     }
     
     private void HandleMouseAxisEvent(float value)
@@ -217,6 +223,9 @@ public class CameraController : Singleton<CameraController>
         _changeHeightRoutine = null;
     }
 
+    /// <summary>
+    /// 아이템(에임) 카메라 에서 자유 카메라로 변경합니다.
+    /// </summary>
     public void ChangeCameraFromAimingToFollow()
     {
         FollowCamera.MoveToTopOfPrioritySubqueue();
@@ -225,6 +234,9 @@ public class CameraController : Singleton<CameraController>
         FollowCamera.m_YAxis.Value = 0.5f;
     }
 
+    /// <summary>
+    /// 자유 카메라에서 아이템(에임) 카메라로 변경합니다.
+    /// </summary>
     public void ChangeCameraFromFollowToAiming()
     {
         AimingCamera.MoveToTopOfPrioritySubqueue();
@@ -233,12 +245,18 @@ public class CameraController : Singleton<CameraController>
         AimingCamera.m_YAxis.Value = 0.5f;
     }
 
+    /// <summary>
+    /// 숨기 상호작용 시 카메라를 Cabinet 카메라로 변경합니다.
+    /// </summary>
     public void ChangeCameraFromFollowToInCabinet()
     {
         InCabinetCamera.MoveToTopOfPrioritySubqueue();
         BrainCamera.m_DefaultBlend.m_Time = 0.5f;
     }
 
+    /// <summary>
+    /// 숨기 상호작용 중 Peek 카메라에서 Cabinet 카메라로 변경합니다.
+    /// </summary>
     public void ChangeCameraFromPeekToInCabinet()
     {
         if (_changeCameraFromPeekToInCabinet != null)
@@ -249,12 +267,18 @@ public class CameraController : Singleton<CameraController>
         InCabinetCamera.MoveToTopOfPrioritySubqueue();
     }
 
+    /// <summary>
+    /// 숨기 상호작용 종료 시 자유 카메라로 변경합니다.
+    /// </summary>
     public void ChangeCameraFromCabinetToFollow()
     {
         FollowCamera.MoveToTopOfPrioritySubqueue();
         FollowCamera.m_YAxis.Value = 0.5f;
     }
 
+    /// <summary>
+    /// 숨기 상호작용 중 Peek 카메라로 변경합니다.
+    /// </summary>
     public void ChangeCameraToPeek()
     {
         if (_changeCameraFromPeekToInCabinet != null)
@@ -267,6 +291,11 @@ public class CameraController : Singleton<CameraController>
         PeekCamera.MoveToTopOfPrioritySubqueue();
     }
 
+    /// <summary>
+    /// 큐브 상호작용 시 큐브 카메라로 변경합니다.
+    /// </summary>
+    /// <param name="follow">큐브 연출 지점의 Transform</param>
+    /// <param name="lookAt">큐브 Transform</param>
     public void ChangeCameraToCube(Transform follow, Transform lookAt)
     {
         CubeCamera.Follow = follow;
@@ -274,10 +303,35 @@ public class CameraController : Singleton<CameraController>
         CubeCamera.MoveToTopOfPrioritySubqueue();
     }
     
+    /// <summary>
+    /// 큐브 상호작용 종료 시 자유 카메라로 변경합니다.
+    /// </summary>
     public void ChangeCameraFromCubeToFollow()
     {
         FollowCamera.MoveToTopOfPrioritySubqueue();
         CubeCamera.Follow = null;
         CubeCamera.LookAt = null;
+    }
+
+    /// <summary>
+    /// 암살 상호작용 시 암살 카메라로 변경합니다.
+    /// </summary>
+    /// <param name="follow">암살 대상 연출 지점의 Transform</param>
+    /// <param name="lookAt">암살 대상 Transform</param>
+    public void ChangeCameraToAssassinate(Transform follow, Transform lookAt)
+    {
+        AssassinateCamera.Follow = follow;
+        AssassinateCamera.LookAt = lookAt;
+        AssassinateCamera.MoveToTopOfPrioritySubqueue();
+    }
+
+    /// <summary>
+    /// 암살 상호작용 종료 시 자유 카메라로 변경합니다.
+    /// </summary>
+    public void ChangeCameraFromAssassinateToFollow()
+    {
+        AssassinateCamera.Follow = null;
+        AssassinateCamera.LookAt = null;
+        FollowCamera.MoveToTopOfPrioritySubqueue();
     }
 }

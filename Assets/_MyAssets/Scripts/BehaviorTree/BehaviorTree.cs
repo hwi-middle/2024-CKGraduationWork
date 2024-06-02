@@ -13,6 +13,13 @@ public class  BehaviorTree : ScriptableObject
     
     public Node.ENodeState Update()
     {
+        if (rootNode.agent.PlayerMoveInstance.IsAssassinating &&
+            rootNode.agent.PlayerMoveInstance.CurrentTargetInstanceID == rootNode.agent.transform.GetInstanceID())
+        {
+            rootNode.agent.NavMeshAgent.isStopped = true;
+            return Node.ENodeState.Aborted;
+        }
+
         if (rootNode.state == Node.ENodeState.InProgress)
         {
             treeState = rootNode.Update();

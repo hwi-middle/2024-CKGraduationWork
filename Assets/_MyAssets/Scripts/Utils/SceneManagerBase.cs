@@ -87,7 +87,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     private IEnumerator PlayerDeadRoutine()
     {
-        PlayerMove.Instance.SetDeadState();
+        PlayerStateManager.Instance.SetDeadState();
         const float DEAD_ANIMATION_TIME = 2.0f;
         yield return new WaitForSeconds(DEAD_ANIMATION_TIME);
         RestartScene();   
@@ -158,7 +158,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     public void OnQuitButtonClick()
     {
-        PopupHandler.Instance.DisplayConfirmPopup(HandlePopupButtonAction, "메인으로", "메인 메뉴로 돌아가시겠습니까?", "예", "아니오");
+        PopupHandler.Instance.DisplayConfirmPopup(HandlePopupButtonAction, "메인 메뉴로 돌아가시겠습니까?", "마지막 저장 이후 플레이한 내용이 사라집니다.", "확인", "취소");
     }
 
     private void HandlePopupButtonAction(bool isPositive)

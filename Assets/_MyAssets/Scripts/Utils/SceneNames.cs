@@ -7,7 +7,7 @@ public static class SceneNames
 {
     // Add Build SceneName Here
     public const string MAIN_MENU = "MainMenu";
-    public const string DEMO_PLAY = "11WeekDemoPlay";
+    public const string DEMO_PLAY = "Ingame";
     
     // Add Workspace SceneName Here
     public const string WORKSPACE_POPUP_SCENE = "PopupScene";

@@ -261,11 +261,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 7293942845636934222, guid: 9ba41a872af3ef74a9319cd62f270f33,
-        type: 3}
-      propertyPath: m_RenderingLayerMask
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -675,7 +670,7 @@ PrefabInstance:
     - target: {fileID: 8818991901237154033, guid: 73ebc07e45dadaa4ba8cec9857731391,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.01
+      value: 0.246
       objectReference: {fileID: 0}
     - target: {fileID: 8818991901237154033, guid: 73ebc07e45dadaa4ba8cec9857731391,
         type: 3}

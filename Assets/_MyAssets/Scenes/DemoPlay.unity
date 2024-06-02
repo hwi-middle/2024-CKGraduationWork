@@ -449,6 +449,7 @@ MonoBehaviour:
   _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
   _isDebugMode: 0
   _isNeedCursorLock: 1
+  _audioManager: {fileID: 0}
 --- !u!114 &1601088100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -473,6 +474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36b21dc0b9fbc45b897dafb04e2bbfc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tutorialVideoData: {fileID: 0}
 --- !u!4 &1601088102
 Transform:
   m_ObjectHideFlags: 0

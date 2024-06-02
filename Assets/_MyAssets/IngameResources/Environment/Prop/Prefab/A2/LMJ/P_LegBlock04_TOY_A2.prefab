@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7679063965286289645
 Transform:
@@ -94,6 +94,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SM_LegBlock04_TOY_A2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0b460da7dcc16ed41ab3fd525f39f4d3,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
