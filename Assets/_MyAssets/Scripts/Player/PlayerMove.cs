@@ -136,15 +136,6 @@ public class PlayerMove : Singleton<PlayerMove>
         }
     }
 
-    public void AlignPlayerToCameraForward()
-    {
-        if (CameraController.Instance.IsBlending)
-        {
-            return;
-        }
-        ApplyRotate();
-    }
-
     private void RotatePlayer()
     {
         Debug.Assert(_camera != null, "_camera != null");
