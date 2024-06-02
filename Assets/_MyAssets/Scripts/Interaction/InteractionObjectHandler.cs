@@ -34,7 +34,7 @@ public class InteractionObjectHandler : MonoBehaviour
         switch (_data.type)
         {
             case EInteractionType.Item:
-                InteractionController.Instance.RemoveInteractionObject(parentTransform.gameObject);
+                InteractionController.Instance.RemoveInteractionObject(gameObject);
                 Destroy(parentTransform.gameObject);
                 ItemThrowHandler.Instance.GetItem();
                 return;
