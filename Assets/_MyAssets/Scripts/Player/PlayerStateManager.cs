@@ -19,6 +19,7 @@ public enum EPlayerState
     ItemReady = 1 << 10,
     ItemHold = 1 << 11,
     ItemThrow = 1 << 12,
+    Assassinate = 1 << 13,
 }
 
 public class PlayerStateManager : Singleton<PlayerStateManager>

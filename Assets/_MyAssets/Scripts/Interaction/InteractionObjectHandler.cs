@@ -19,6 +19,7 @@ public class InteractionObjectHandler : MonoBehaviour
         }
         
         SphereCollider coll = GetComponent<SphereCollider>();
+        coll.isTrigger = true;
         coll.radius = _data.detectRadius;
         if (_data.type is EInteractionType.Overstep)
         {
@@ -33,7 +34,7 @@ public class InteractionObjectHandler : MonoBehaviour
         switch (_data.type)
         {
             case EInteractionType.Item:
-                InteractionController.Instance.RemoveInteractionObject(parentTransform.gameObject);
+                InteractionController.Instance.RemoveInteractionObject(gameObject);
                 Destroy(parentTransform.gameObject);
                 ItemThrowHandler.Instance.GetItem();
                 AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.Player_Item_Pickup);
@@ -49,7 +50,7 @@ public class InteractionObjectHandler : MonoBehaviour
                 return;
             
             case EInteractionType.Cube:
-                CubeInteractionController.Instance.SetCurrentCube(transform.parent, _connectedCubeRoot);
+                CubeInteractionController.Instance.SetCurrentCube(transform, _connectedCubeRoot);
                 return;
             
             default:
@@ -64,14 +65,8 @@ public class InteractionObjectHandler : MonoBehaviour
         {
             return;
         }
-
-        if (_data.type is EInteractionType.Overstep)
-        {
-            InteractionController.Instance.AddInteractionObject(_data.type, transform.GetChild(0).gameObject);
-            return;
-        }
-
-        InteractionController.Instance.AddInteractionObject(_data.type, transform.parent.gameObject);
+        
+        InteractionController.Instance.AddInteractionObject(_data.type, transform.gameObject);
     }
 
     private void OnTriggerExit(Collider other)
@@ -81,12 +76,6 @@ public class InteractionObjectHandler : MonoBehaviour
             return;
         }
 
-        if (_data.type is EInteractionType.Overstep)
-        {
-            InteractionController.Instance.RemoveInteractionObject(transform.GetChild(0).gameObject);
-            return;
-        }
-        
-        InteractionController.Instance.RemoveInteractionObject(transform.parent.gameObject);
+        InteractionController.Instance.RemoveInteractionObject(transform.gameObject);
     }
 }

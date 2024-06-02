@@ -100,7 +100,7 @@ public class InteractionController : Singleton<InteractionController>
                 return;
             }
 
-            if (!IsValidInteraction(data.Value.type, hit))
+            if (!IsValidInteraction(data, hit))
             {
                 return;
             }
@@ -131,7 +131,7 @@ public class InteractionController : Singleton<InteractionController>
             return;
         }
 
-        if (!IsValidInteraction(data.Value.type, hit))
+        if (!IsValidInteraction(data, hit))
         {
             return;
         }
@@ -147,8 +147,7 @@ public class InteractionController : Singleton<InteractionController>
         Vector3 direction = (objPosition - playerPosition).normalized;
 
         Ray ray = new Ray(playerPosition, direction);
-        if (!Physics.Raycast(ray, out hit, Mathf.Infinity)
-            || hit.transform.gameObject.GetInstanceID() != data.Key)
+        if (!Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             return true;
         }
@@ -156,9 +155,9 @@ public class InteractionController : Singleton<InteractionController>
         return false;
     }
     
-    private bool IsValidInteraction(EInteractionType type, RaycastHit hit)
+    private bool IsValidInteraction(KeyValuePair<int, InteractionObject> data, RaycastHit hit)
     {
-        switch (type)
+        switch (data.Value.type)
         {
             case EInteractionType.Item when ItemThrowHandler.Instance.IsItemOnHand:
                 return false;   
@@ -166,8 +165,7 @@ public class InteractionController : Singleton<InteractionController>
                 return false;
             case EInteractionType.Overstep when PlayerStateManager.Instance.CheckPlayerState(EPlayerState.Crouch):
                 return false;
-            case EInteractionType.Cube when CubeInteractionController.Instance.HasInteractionCube:
-                return false;
+            case EInteractionType.Cube:
             default:
                 return true;
         }
@@ -195,7 +193,7 @@ public class InteractionController : Singleton<InteractionController>
 
     private void ShowInteractionUI()
     {
-        _interactionUI.SetActive(NearestObject.obj != null);
+        _interactionUI.SetActive(NearestObject.obj is not null && !CubeInteractionController.Instance.IsOnCube);
 
         if (!_interactionUI.activeSelf)
         {
