@@ -349,12 +349,14 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             CameraController.Instance.ToggleCrouchCameraHeight(false);
             _playerState.RemovePlayerState(EPlayerState.Crouch);
-            ItemThrowHandler.Instance.AdjustShootPoint();
+            ItemThrowHandler.Instance.AdjustShootPoint();    
+            AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.Player_Standup);
             return;
         }
 
         CameraController.Instance.ToggleCrouchCameraHeight(true);
         _playerState.AddPlayerState(EPlayerState.Crouch);
         ItemThrowHandler.Instance.AdjustShootPoint();
+        AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.Player_Crouch);
     }
 }

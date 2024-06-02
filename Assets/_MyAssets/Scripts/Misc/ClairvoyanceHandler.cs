@@ -44,6 +44,9 @@ public class ClairvoyanceHandler : MonoBehaviour
     private void ToggleClairvoyance(bool active)
     {
         _isClairvoyance = active;
+        AudioPlayManager.Instance.PlayOnceSfxAudio(active
+            ? ESfxAudioClipIndex.Player_Looking_On
+            : ESfxAudioClipIndex.Player_Looking_Off);
         _grayscaleMaterial.SetFloat(Alpha, _isClairvoyance ? 1 : 0);
         _clairvoyanceMaterial.SetFloat(Alpha, _isClairvoyance ? 1 : 0);
         _mainCamera.GetComponent<UniversalAdditionalCameraData>().cameraStack[0].enabled = _isClairvoyance;

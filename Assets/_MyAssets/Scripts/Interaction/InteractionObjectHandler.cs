@@ -37,6 +37,7 @@ public class InteractionObjectHandler : MonoBehaviour
                 InteractionController.Instance.RemoveInteractionObject(gameObject);
                 Destroy(parentTransform.gameObject);
                 ItemThrowHandler.Instance.GetItem();
+                AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.Player_Item_Pickup);
                 return;
             
             case EInteractionType.HideableObject:

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 using UnityEngine.Serialization;
 
 public class CubeRootHandler : MonoBehaviour
@@ -60,6 +61,14 @@ public class CubeRootHandler : MonoBehaviour
     public bool IsResetRoutineRunning => _resetCubeRotationRoutineCount is not 0;
     
     private bool _isCheckingCubeCorrect;
+    private List<ESfxAudioClipIndex> _cubeRotateSounds = new();
+
+    private void Awake()
+    {
+        _cubeRotateSounds.Add(ESfxAudioClipIndex.OB_CubeTurn1);
+        _cubeRotateSounds.Add(ESfxAudioClipIndex.OB_CubeTurn2);
+        _cubeRotateSounds.Add(ESfxAudioClipIndex.OB_CubeTurn3);
+    }
 
     private void Start()
     {
@@ -160,12 +169,23 @@ public class CubeRootHandler : MonoBehaviour
         _currentRotationY = currentRotation.eulerAngles.y;
         float rotationY = CubeRotateDirection * ROTATE_DEGREE + _currentRotationY;
         Quaternion targetRotation = Quaternion.Euler(0, rotationY, 0);
+        
+        AudioPlayManager.Instance.PlayOnceSfxAudio(_cubeRotateSounds[Random.Range(0, _cubeRotateSounds.Count)]);
+
+        bool isSecondSoundPlayed = false;
+        float secondSoundTime = _rotateDuration * 0.35f;
 
         while (t <= _rotateDuration)
         {
             float alpha = t / _rotateDuration;
 
-            float easedAlpha = EasingFunctions.EaseInOutBounce(alpha);
+            float easedAlpha = EasingFunctions.EaseOutBounce(alpha);
+
+            if (t >= secondSoundTime && !isSecondSoundPlayed)
+            {
+                isSecondSoundPlayed = true;
+                AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.OB_CubeTurn4);
+            }
 
             _currentCubeTransform.transform.localRotation =
                 Quaternion.Slerp(currentRotation, targetRotation, easedAlpha);

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public enum EAudioType
 {
@@ -17,7 +18,11 @@ public enum ESfxPlayType
 
 public class AudioPlayManager : Singleton<AudioPlayManager>
 {
-    [SerializeField] AudioClipData _audioClipData;
+    [SerializeField] private AudioMixer _mainMixer;
+    [SerializeField] private AudioClipData _audioClipData;
+
+    private AudioMixerGroup _bgmMixerGroup;
+    private AudioMixerGroup _sfxMixerGroup;
     
     // 배경음 오브젝트 풀
     private BgmAudioObject _bgmAudioObject;
@@ -33,8 +38,15 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
     
     private void Awake()
     {
+        InitMixerGroup();
         InstantiateBgmAudioObject();
         InstantiateSfxAudioObject();
+    }
+
+    private void InitMixerGroup()
+    {
+        _bgmMixerGroup = _mainMixer.FindMatchingGroups("Master")[1];
+        _sfxMixerGroup = _mainMixer.FindMatchingGroups("Master")[2];
     }
 
     private void InstantiateBgmAudioObject()
@@ -44,6 +56,7 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
         bgmObject.AddComponent<BgmAudioObject>();
         bgmObject.name = "BgmAudioObject";
         bgmObject.transform.SetParent(transform);
+        bgmObject.GetComponent<AudioSource>().outputAudioMixerGroup = _bgmMixerGroup;
         bgmObject.SetActive(false);
         
         _bgmAudioObject = bgmObject.GetComponent<BgmAudioObject>();
@@ -60,6 +73,7 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
             GameObject sfxObjectClone = Instantiate(sfxObject, transform);
             _allocatedSfxAudioObjects.Add(sfxObjectClone.GetComponent<SfxAudioObject>());
             sfxObjectClone.name = "SfxAudioObject_" + i;
+            sfxObjectClone.GetComponent<AudioSource>().outputAudioMixerGroup = _sfxMixerGroup;
             sfxObjectClone.SetActive(false);
         }
         
@@ -123,7 +137,7 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
         availableObject.Play(audioClip, ESfxPlayType.PlayOnce);
     }
 
-    public void PlayLoopSfxAudio(ESfxAudioClipIndex clip)
+    public void PlayLoopSfxAudio(ESfxAudioClipIndex clip, Transform parent = null)
     {
         if(!_cachedSfxClips.TryGetValue(clip, out AudioClip audioClip))
         {
@@ -148,6 +162,12 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
         
         // 루프 중인 효과음 오브젝트를 관리하기 위한 Dictionary에 추가
         _loopSfxAudioObjects.Add(clip, availableObject.GetInstanceID());
+        if (parent is null)
+        {
+            return;
+        }
+        
+        availableObject.transform.SetParent(parent);
     } 
     
     private int CheckIsPlayingLoopSfx(AudioClip audioClip)
@@ -202,6 +222,11 @@ public class AudioPlayManager : Singleton<AudioPlayManager>
 
             _loopSfxAudioObjects.Remove(clip);
             currentAudioObject.Stop();
+            if (currentAudioObject.transform.parent != transform)
+            {
+                currentAudioObject.transform.SetParent(transform);
+            }
+            
             break;
         }
     }

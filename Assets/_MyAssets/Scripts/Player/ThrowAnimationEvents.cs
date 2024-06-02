@@ -14,6 +14,11 @@ public class ThrowAnimationEvents : MonoBehaviour
         StartCoroutine(CameraBlendingRoutine());
     }
 
+    public void OnThrowReadyAnimationStart()
+    {
+        AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.Noise_Item1);
+    }
+
     public void OnThrowAnimationEnd()
     {
         PlayerStateManager.Instance.RemovePlayerState(EPlayerState.ItemThrow);
