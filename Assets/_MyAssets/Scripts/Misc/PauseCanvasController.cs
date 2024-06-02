@@ -3,29 +3,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PauseCanvasController : MonoBehaviour
 {
     [SerializeField] private Button _resumeButton;
     [SerializeField] private Button _optionsButton;
+    [SerializeField] private Button _menuButton;
     [SerializeField] private Button _quitButton;
 
     private void OnEnable()
     {
         _resumeButton.onClick.AddListener(HandleResumeButton);
         _optionsButton.onClick.AddListener(HandleSettingsButton);
+        _menuButton.onClick.AddListener(HandleMenuButton);
         _quitButton.onClick.AddListener(HandleQuitButton);
 
         bool isMainMenu = SceneManager.GetActiveScene().name.Equals(SceneNames.MAIN_MENU);
-        _quitButton.gameObject.SetActive(!isMainMenu);
+        _menuButton.gameObject.SetActive(!isMainMenu);
     }
     
     private void OnDisable()
     {
         _resumeButton.onClick.RemoveListener(HandleResumeButton);
         _optionsButton.onClick.RemoveListener(HandleSettingsButton);
-        _quitButton.onClick.RemoveListener(HandleQuitButton);
+        _menuButton.onClick.RemoveListener(HandleMenuButton);
     }
     
     private void HandleResumeButton()
@@ -38,6 +41,11 @@ public class PauseCanvasController : MonoBehaviour
         SceneManagerBase.Instance.OnSettingsButtonClick();
     }
     
+    private void HandleMenuButton()
+    {
+        SceneManagerBase.Instance.OnMenuButtonClick();
+    }
+
     private void HandleQuitButton()
     {
         SceneManagerBase.Instance.OnQuitButtonClick();
