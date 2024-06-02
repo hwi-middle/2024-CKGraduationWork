@@ -147,8 +147,7 @@ public class InteractionController : Singleton<InteractionController>
         Vector3 direction = (objPosition - playerPosition).normalized;
 
         Ray ray = new Ray(playerPosition, direction);
-        if (!Physics.Raycast(ray, out hit, Mathf.Infinity)
-            || hit.transform.gameObject.GetInstanceID() != data.Key)
+        if (!Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             return true;
         }

@@ -88,9 +88,8 @@ public class PlayerMove : Singleton<PlayerMove>
     private void Start()
     {
         Debug.Assert(_controller != null, "_controller !=null");
-
-        _playerState = PlayerStateManager.Instance;
         _camera = Camera.main;
+        _playerState = PlayerStateManager.Instance;
     }
 
     protected virtual void Update()

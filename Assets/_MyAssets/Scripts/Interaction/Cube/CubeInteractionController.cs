@@ -75,7 +75,6 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
 
     public void SetCurrentCube(Transform cubeFollowForCamera, GameObject cubeRoot)
     {
-        Debug.Assert(cubeRoot.transform.childCount != 0, "Invalid Cube Object");
         _currentCubeRoot = cubeRoot.GetComponent<CubeRootHandler>();
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.CubeAction);
         CameraController.Instance.ChangeCameraToCube(cubeFollowForCamera, cubeRoot.transform);
@@ -83,11 +82,9 @@ public class CubeInteractionController : Singleton<CubeInteractionController>
         _currentCubeRoot.HighlightCurrentCube();
     }
 
-    public void ExecuteCorrectCubeSequence()
+    public void ExecuteCubeExit()
     {
         HandleCubeExitEvent();
-        
-        // TODO : 큐브 정답 이후 처리
     }
 
     private void HandleCubeExitEvent()

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CubeRootHandler : MonoBehaviour
 {
@@ -9,6 +10,20 @@ public class CubeRootHandler : MonoBehaviour
     [SerializeField] private float _rotateDuration = 2.0f;
 
     private const float ROTATE_DEGREE = 90.0f;
+    
+    [Header("Train Root")]
+    [SerializeField] private GameObject _trainRoot;
+
+    [FormerlySerializedAs("_cameraPosition")]
+    [Header("Camera Position")]
+    [SerializeField] private Transform _correctCameraFollow;
+    
+    [FormerlySerializedAs("_cameraLookAtPosition")]
+    [Header("Camera Look At Position")]
+    [SerializeField] private Transform _correctCameraLookAt;
+
+    [Header("큐브 리스트")]
+    [SerializeField] private List<Transform> _cubeList = new();
 
     [Header("큐브 초기값")] [Range(0, 3)]
     [SerializeField] private List<int> _cubeInitialRotations;
@@ -19,6 +34,10 @@ public class CubeRootHandler : MonoBehaviour
     [Header("현재 큐브 하이라이트 색상")]
     [SerializeField] private Color _highlightColor;
 
+    private const string AK_CORRECT = "IsCorrect";
+    private static readonly int Correct = Animator.StringToHash(AK_CORRECT);
+
+    [SerializeField] private Animator _nextObjectAnimator;
     public bool IsCorrect { get; private set; } = false;
 
     private Color _originColor;
@@ -32,7 +51,6 @@ public class CubeRootHandler : MonoBehaviour
     private int _currentCubeIndex;
     private Transform _currentCubeTransform;
     
-    private readonly List<Transform> _cubeList = new();
 
     private IEnumerator _rotateCubeRoutine;
     
@@ -42,16 +60,13 @@ public class CubeRootHandler : MonoBehaviour
     public bool IsResetRoutineRunning => _resetCubeRotationRoutineCount is not 0;
     
     private bool _isCheckingCubeCorrect;
-    
+
     private void Start()
     {
-        for (int i = transform.childCount - 1; i >= 0; i--)
-        {
-            _cubeList.Add(transform.GetChild(i));
-        }
-
         InitCubeRotation();
         InitCubeIndex();
+        
+        _trainRoot.SetActive(false);
     }
 
     private void InitCubeRotation()
@@ -167,7 +182,7 @@ public class CubeRootHandler : MonoBehaviour
         
         if (CheckCubeCorrect())
         {
-            CubeInteractionController.Instance.ExecuteCorrectCubeSequence();
+            ExecuteCorrectCubeSequence();
         }
 
         _isCheckingCubeCorrect = false;
@@ -205,6 +220,15 @@ public class CubeRootHandler : MonoBehaviour
         
         IsCorrect = true;
         return true;
+    }
+    
+    private void ExecuteCorrectCubeSequence()
+    {
+        _trainRoot.SetActive(true);
+        _nextObjectAnimator.SetBool(Correct, true);
+        
+        //TODO : 카메라 블렌딩
+        CameraController.Instance.ChangeCameraToCubeCorrect(_correctCameraFollow, _correctCameraLookAt);
     }
 
     public void SelectUpperCube()

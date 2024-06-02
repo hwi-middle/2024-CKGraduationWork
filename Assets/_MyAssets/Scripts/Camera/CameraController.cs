@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraController : Singleton<CameraController>
@@ -15,6 +16,7 @@ public class CameraController : Singleton<CameraController>
     private CinemachineVirtualCamera PeekCamera { get; set; }
     private CinemachineVirtualCamera CubeCamera { get; set; }
     private CinemachineVirtualCamera AssassinateCamera { get; set; }
+    private CinemachineVirtualCamera CubeCorrectCamera { get; set; }
 
     private CinemachineComposer _peekCameraComposer;
 
@@ -72,9 +74,18 @@ public class CameraController : Singleton<CameraController>
         // Assassinate Camera
         AssassinateCamera = virtualCameras.transform.Find("Assassinate Camera").GetComponent<CinemachineVirtualCamera>();
         
+        // Cube Correct Camera
+        CubeCorrectCamera = virtualCameras.transform.Find("Cube Correct Camera").GetComponent<CinemachineVirtualCamera>();
+        
+        InitCameraFollowAndLookAtTransform();
+        
         // Brain Camera Blending Duration Setting
         BrainCamera.m_DefaultBlend.m_Time = _blendingDuration;
         
+    }
+
+    private void InitCameraFollowAndLookAtTransform()
+    {
         Transform playerTransform = transform;
 
         // Cameras Follow & LookAt Setting
@@ -83,7 +94,7 @@ public class CameraController : Singleton<CameraController>
 
         AimingCamera.Follow = playerTransform;
         AimingCamera.LookAt = playerTransform;
-    
+
         Transform hideableObjectAimTransform = playerTransform.Find("InHideableObjectAim").transform;
         InCabinetCamera.Follow = playerTransform;
         InCabinetCamera.LookAt = hideableObjectAimTransform;
@@ -91,17 +102,20 @@ public class CameraController : Singleton<CameraController>
         PeekCamera.Follow = playerTransform;
         PeekCamera.LookAt = _peekPoint;
         _peekCameraComposer = PeekCamera.GetCinemachineComponent<CinemachineComposer>();
-        
-        // Live 카메라를 Follow로 설정
-        FollowCamera.MoveToTopOfPrioritySubqueue();
+
 
         // 상호작용 시 설정
         CubeCamera.Follow = null;
         CubeCamera.LookAt = null;
         AssassinateCamera.Follow = null;
         AssassinateCamera.LookAt = null;
+        CubeCorrectCamera.Follow = null;
+        CubeCorrectCamera.LookAt = null;
+        
+        // Live 카메라를 Follow로 설정
+        FollowCamera.MoveToTopOfPrioritySubqueue();
     }
-    
+
     private void HandleMouseAxisEvent(float value)
     {
         if (BrainCamera.ActiveVirtualCamera.Name != PeekCamera.name)
@@ -333,5 +347,15 @@ public class CameraController : Singleton<CameraController>
         AssassinateCamera.Follow = null;
         AssassinateCamera.LookAt = null;
         FollowCamera.MoveToTopOfPrioritySubqueue();
+    }
+
+    /// <summary>
+    /// 큐브 정답 시 큐브 정답 카메라로 변경합니다.
+    /// </summary>
+    public void ChangeCameraToCubeCorrect(Transform follow, Transform lookAt)
+    {
+        CubeCorrectCamera.Follow = follow;
+        CubeCorrectCamera.LookAt = lookAt;
+        CubeCorrectCamera.MoveToTopOfPrioritySubqueue();
     }
 }
