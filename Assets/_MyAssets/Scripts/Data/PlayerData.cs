@@ -17,7 +17,6 @@ public class PlayerData : ScriptableObject
     
     [Tooltip("플레이어 회전 속도")] public float rotateSpeed;
 
-    [Tooltip("점프 높이")] public float jumpHeight;
     [Tooltip("y 이동 속도 (일반 이동 속도와 분리하기 위함)")] public float yMultiplier;
 
     [Header("장애물 극복 액션")]
@@ -48,11 +47,5 @@ public class PlayerData : ScriptableObject
     [Tooltip("앉은 상태로 걷기 시 초당 인지게이지 증가량")] public float crouchWalkNoiseIncrementPerSecond;
     
     [Header("-----변경 시 주의-----")]
-    [Header("와이어 및 플레이어 Canvas")]
-    [Tooltip("Player Canvas Prefab")] public GameObject playerCanvas;
-
     [Tooltip("Line Renderer")] public GameObject lineRendererPrefab;
-
-    [Header("카메라 오브젝트")]
-    [Tooltip("플레이어를 따라다니는 카메라 프리팹")] public GameObject camerasPrefab;
 }
