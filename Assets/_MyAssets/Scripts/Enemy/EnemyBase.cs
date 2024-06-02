@@ -142,16 +142,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         _perceptionGauge = Mathf.Clamp(_perceptionGauge + increment, 0f, _aiData.maxPerceptionGaugeByHearing);
     }
 
-    private void PauseBtUpdate()
-    {
-        IsBtPaused = true;
-    }
-
-    private void ResumeUpdate()
-    {
-        IsBtPaused = false;
-    }
-
     public void SetDestination(Vector3 destination)
     {
         _navMeshAgent.SetDestination(destination);
