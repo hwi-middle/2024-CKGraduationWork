@@ -142,7 +142,6 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             return;
         }
-
         ApplyRotate();
     }
 
@@ -350,12 +349,12 @@ public class PlayerMove : Singleton<PlayerMove>
         {
             CameraController.Instance.ToggleCrouchCameraHeight(false);
             _playerState.RemovePlayerState(EPlayerState.Crouch);
-            ItemThrowHandler.Instance.AdjustShootPoint();    
+            ItemThrowHandler.Instance.AdjustShootPoint();
             return;
         }
 
         CameraController.Instance.ToggleCrouchCameraHeight(true);
         _playerState.AddPlayerState(EPlayerState.Crouch);
-        ItemThrowHandler.Instance.AdjustShootPoint();    
+        ItemThrowHandler.Instance.AdjustShootPoint();
     }
 }
