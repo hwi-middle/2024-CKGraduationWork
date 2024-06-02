@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class TabHeader : MonoBehaviour
 {
-
     private static readonly Color DefaultButtonColor = Color.white;
     private static readonly Color SelectedButtonColor = Color.black;
     private static readonly Color DefaultTextColor = new Color(0.1960784f, 0.1960784f, 0.1960784f);
@@ -50,7 +49,7 @@ public class TabHeader : MonoBehaviour
 
     public void MarkAsSelected()
     {
-        _buttonBg.color = SelectedButtonColor;
+        //_buttonBg.color = SelectedButtonColor;
         _buttonText.color = SelectedTextColor;
     }
 

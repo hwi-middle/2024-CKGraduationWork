@@ -29,7 +29,8 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _Fresnel_Power: 5
+    - _Float: 500
+    - _Fresnel_Power: 50
     - _Lambert_Power: 0.15
     - _Normal_Strength: 2.5
     - _Smoothness: 0.073

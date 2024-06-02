@@ -94,7 +94,7 @@ public class HideActionController : Singleton<HideActionController>
 
     private IEnumerator HideExitRoutine()
     {
-        CameraController.Instance.ChangeCameraFromCabinetToFreeLook();
+        CameraController.Instance.ChangeCameraFromCabinetToFollow();
         Vector3 startPosition = _playerTransform.position;
         Vector3 exitPoint = _playerTransform.forward.normalized * _exitDistance + startPosition;
 
@@ -168,7 +168,7 @@ public class HideActionController : Singleton<HideActionController>
 
     private IEnumerator HideActionRoutine()
     {
-        CameraController.Instance.ChangeCameraFromFreeLookToInCabinet();
+        CameraController.Instance.ChangeCameraFromFollowToInCabinet();
         PlayerInputData.ChangeInputMap(PlayerInputData.EInputMap.HideAction);
 
         Vector3 startPosition = _playerTransform.position;

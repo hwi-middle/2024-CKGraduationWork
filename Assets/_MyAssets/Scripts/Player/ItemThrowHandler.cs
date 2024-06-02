@@ -85,6 +85,13 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         {
             return;
         }
+        
+        CameraController.Instance.ChangeCameraFromFollowToAiming();
+        PlayerMove.Instance.AlignPlayerToCameraForward();
+        if (_cameraBlendingRoutine != null)
+        {
+            return;
+        }
 
         PlayerStateManager.Instance.AddPlayerState(EPlayerState.ItemReady);
     }
@@ -98,7 +105,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         
         IsOnAiming = false;
         PlayerStateManager.Instance.RemovePlayerState(EPlayerState.ItemHold);
-        CameraController.Instance.ChangeCameraFromAimingToFreeLook();
+        CameraController.Instance.ChangeCameraFromAimingToFollow();
         LineDrawHelper.Instance.DisableLine();
         RemoveTargetPoint();
 
