@@ -49,6 +49,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public float PerceptionGauge => _perceptionGauge;
     public bool IsPerceptionGaugeFull => _perceptionGauge >= 100f;
 
+    private bool IsBtPaused = false;
     public PlayerMove PlayerMoveInstance { get; private set; }
     public NavMeshAgent NavMeshAgent => _navMeshAgent;
 
@@ -72,7 +73,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     void Update()
     {
-        _tree.Update();
+        if (!IsBtPaused)
+        {
+            _tree.Update();
+        }
+
         _animator.SetFloat(AK_Speed, _navMeshAgent.velocity.magnitude);
         _animator.SetBool(AK_IsDead, IsDead);
         if (_perceptionGauge > 0 && !PlayerMoveInstance.IsAssassinating)
@@ -109,6 +114,20 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         _tree.blackboard.lastTimeNoiseDetected = Time.time;
         _perceptionGauge = Mathf.Clamp(_perceptionGauge, _aiData.alertThreshold, 100f);
+
+        StartCoroutine(FollowItemSoundRoutine(origin));
+    }
+
+    private IEnumerator FollowItemSoundRoutine(Vector3 target)
+    {
+        IsBtPaused = true;
+        SetDestination(target);
+        while (!IsArrivedToTarget(target))
+        {
+            yield return null;
+        }
+
+        IsBtPaused = false;
     }
 
     public void OnListenNoiseSound(Vector3 origin, float increment)
@@ -121,6 +140,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
             return;
         }
         _perceptionGauge = Mathf.Clamp(_perceptionGauge + increment, 0f, _aiData.maxPerceptionGaugeByHearing);
+    }
+
+    private void PauseBtUpdate()
+    {
+        IsBtPaused = true;
+    }
+
+    private void ResumeUpdate()
+    {
+        IsBtPaused = false;
     }
 
     public void SetDestination(Vector3 destination)
