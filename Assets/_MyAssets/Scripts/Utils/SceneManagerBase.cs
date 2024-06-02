@@ -156,12 +156,17 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         ToggleSettingsCanvas();
     }
 
-    public void OnQuitButtonClick()
+    public void OnMenuButtonClick()
     {
-        PopupHandler.Instance.DisplayConfirmPopup(HandlePopupButtonAction, "메인 메뉴로 돌아가시겠습니까?", "마지막 저장 이후 플레이한 내용이 사라집니다.", "확인", "취소");
+        PopupHandler.Instance.DisplayConfirmPopup(HandleMenuPopupAction, "메인 메뉴로 돌아가시겠습니까?", "마지막 저장 이후 플레이한 내용이 사라집니다.", "확인", "취소");
     }
 
-    private void HandlePopupButtonAction(bool isPositive)
+    public void OnQuitButtonClick()
+    {
+        PopupHandler.Instance.DisplayConfirmPopup(HandleQuitPopupAction, "게임을 종료하시겠습니까?", "", "확인", "취소");
+    }
+
+    private void HandleMenuPopupAction(bool isPositive)
     {
         if (!isPositive)
         {
@@ -170,6 +175,20 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
         TogglePauseCanvas();
         LoadSceneWithLoadingUI(SceneNames.MAIN_MENU);
+    }
+
+    private void HandleQuitPopupAction(bool isPositive)
+    {
+        if (!isPositive)
+        {
+            return;
+        }
+        
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit(0);
+#endif
     }
 
     private void ToggleSettingsCanvas()

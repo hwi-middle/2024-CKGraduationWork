@@ -43,15 +43,11 @@ public class PauseCanvasController : MonoBehaviour
     
     private void HandleMenuButton()
     {
-        SceneManagerBase.Instance.OnQuitButtonClick();
+        SceneManagerBase.Instance.OnMenuButtonClick();
     }
 
     private void HandleQuitButton()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit(0);       
-#endif
+        SceneManagerBase.Instance.OnQuitButtonClick();
     }
 }
