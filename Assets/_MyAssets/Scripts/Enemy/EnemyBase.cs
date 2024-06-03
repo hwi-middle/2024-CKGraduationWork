@@ -152,6 +152,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
             return;
         }
         _perceptionGauge = Mathf.Clamp(_perceptionGauge + increment, 0f, _aiData.maxPerceptionGaugeByHearing);
+        Debug.Log($"gague: {_perceptionGauge}");
     }
 
     public void SetDestination(Vector3 destination)
