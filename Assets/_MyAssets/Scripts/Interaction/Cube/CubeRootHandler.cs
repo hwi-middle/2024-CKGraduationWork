@@ -304,7 +304,7 @@ public class CubeRootHandler : MonoBehaviour
     private void ExecuteCorrectCubeSequence()
     {
         _nextObjectAnimator.SetBool(Correct, true);
-        //_trainRoot.GetComponent<TrainAnimationController>().PlayTrainAnimation();
+        _trainRoot.GetComponent<TrainAnimationController>().PlayTrainAnimation();
         
         CameraController.Instance.ChangeCameraToCubeCorrect(_correctCameraFollow, _correctCameraLookAt);
         AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.OB_Train_Horn);
