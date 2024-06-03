@@ -10,7 +10,7 @@ public class ThrowAnimationEvents : MonoBehaviour
         PlayerStateManager.Instance.RemovePlayerState(EPlayerState.ItemReady);
         
         CameraController.Instance.ChangeCameraFromFollowToAiming();
-        PlayerMove.Instance.AlignPlayerToCameraForward();
+        ItemThrowHandler.Instance.ShowItemOnHand();
         StartCoroutine(CameraBlendingRoutine());
     }
 

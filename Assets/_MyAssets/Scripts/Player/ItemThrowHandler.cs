@@ -35,7 +35,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
     private void Awake()
     {
         _shootPoint = transform.Find("ShootPoint").GetComponent<Transform>();
-        _itemPrefab = Resources.Load<GameObject>("Items/SoundBomb");
+        _itemPrefab = Resources.Load<GameObject>("Items/SoundItem");
         Debug.Assert(_itemPrefab is not null);
         _itemShowObject = Instantiate(Resources.Load<GameObject>("Items/TargetPointItemShow"));
         _animator = GetComponentInChildren<Animator>();
@@ -66,7 +66,11 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         {
             SetThrowTargetPosition();
             LineDrawHelper.Instance.EnableLine();
-            PlayerMove.Instance.AlignPlayerToCameraForward();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha0) && !IsItemOnHand)
+        {
+            GetItem();
         }
     }
 
@@ -77,6 +81,17 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         _itemOnHand.GetComponent<ItemObjectFlyHandler>().enabled = false;
         _itemOnHand.GetComponentInChildren<MeshCollider>().enabled = false;
         _itemOnHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        _itemOnHand.SetActive(false);
+    }
+
+    public void ShowItemOnHand()
+    {
+        _itemOnHand.SetActive(true);
+    }
+
+    private void DisableItemShow()
+    {
+        _itemOnHand.SetActive(false);
     }
 
     private void HandleAiming()
@@ -86,8 +101,6 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
             return;
         }
         
-        CameraController.Instance.ChangeCameraFromFollowToAiming();
-        PlayerMove.Instance.AlignPlayerToCameraForward();
         if (_cameraBlendingRoutine != null)
         {
             return;
@@ -107,6 +120,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
         PlayerStateManager.Instance.RemovePlayerState(EPlayerState.ItemHold);
         CameraController.Instance.ChangeCameraFromAimingToFollow();
         LineDrawHelper.Instance.DisableLine();
+        DisableItemShow();
         RemoveTargetPoint();
 
         if (_cameraBlendingRoutine == null)

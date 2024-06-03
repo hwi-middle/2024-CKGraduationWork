@@ -58,6 +58,11 @@ public class InteractionObjectHandler : MonoBehaviour
                 return;
         }
     }
+
+    public bool IsCubeCorrect()
+    {
+        return _connectedCubeRoot.GetComponent<CubeRootHandler>().IsCorrect;
+    }
     
     private void OnTriggerEnter(Collider other)
     {
