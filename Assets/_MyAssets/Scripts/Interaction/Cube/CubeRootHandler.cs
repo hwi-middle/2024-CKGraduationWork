@@ -76,6 +76,52 @@ public class CubeRootHandler : MonoBehaviour
         InitCubeIndex();
     }
 
+    private void Update()
+    {
+        ExecuteCheat();
+    }
+
+    private void ExecuteCheat()
+    {
+        if (Input.GetKeyDown(KeyCode.F12) && _resetCubeRotationRoutineCount is 0)
+        {
+            ForceCorrectCube();
+            StartCoroutine(AwaitCubeForceCorrectRoutine());
+        }
+    }
+
+    private void ForceCorrectCube()
+    {
+        for (int i = 0; i < _cubeList.Count; i++)
+        {
+            if (_currentCubeRotations[i] != _cubeCorrectRotations[i])
+            {
+                StartCoroutine(ForceCorrectCubeRoutine(_cubeList[i], i));
+                _resetCubeRotationRoutineCount++;
+            }
+        }
+    }
+
+    private IEnumerator ForceCorrectCubeRoutine(Transform cube, int index)
+    {
+        const float DURATION = 1.0f;
+        float t = 0;
+
+        Quaternion currentRotation = cube.transform.localRotation;
+        Quaternion targetRotation = Quaternion.Euler(0, _cubeCorrectRotations[index] * -ROTATE_DEGREE, 0);
+
+        while (t <= DURATION)
+        {
+            cube.transform.localRotation = Quaternion.Slerp(currentRotation, targetRotation, t / DURATION);
+            yield return null;
+            t += Time.deltaTime;
+        }
+
+        cube.transform.localRotation = targetRotation;
+        _currentCubeRotations[index] = _cubeCorrectRotations[index];
+        _resetCubeRotationRoutineCount--;
+    }
+
     private void InitCubeRotation()
     {
         Debug.Assert(_cubeCorrectRotations.Count == _cubeInitialRotations.Count, "Cube Rotations Count Mismatch");
@@ -97,7 +143,6 @@ public class CubeRootHandler : MonoBehaviour
 
     public void ResetCube()
     {
-        // Todo : 마지막 상관 없이 무조건 필드에 저장 후 종료시키기
         for (int i = 0; i < _cubeList.Count; i++)
         {
             if (_currentCubeRotations[i] != _cubeInitialRotations[i])
@@ -126,6 +171,19 @@ public class CubeRootHandler : MonoBehaviour
         cube.transform.localRotation = targetRotation;
         _currentCubeRotations[index] = _cubeInitialRotations[index];
         _resetCubeRotationRoutineCount--;
+    }
+
+    private IEnumerator AwaitCubeForceCorrectRoutine()
+    {
+        yield return new WaitForEndOfFrame();
+
+        while (_resetCubeRotationRoutineCount is not 0)
+        {
+            yield return null;
+        }
+
+        IsCorrect = true;
+        ExecuteCorrectCubeSequence();
     }
 
     public void HighlightCurrentCube()
@@ -243,7 +301,7 @@ public class CubeRootHandler : MonoBehaviour
     private void ExecuteCorrectCubeSequence()
     {
         _nextObjectAnimator.SetBool(Correct, true);
-        _trainRoot.GetComponent<TrainAnimationController>().PlayTrainAnimation();
+        //_trainRoot.GetComponent<TrainAnimationController>().PlayTrainAnimation();
         
         CameraController.Instance.ChangeCameraToCubeCorrect(_correctCameraFollow, _correctCameraLookAt);
         AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.OB_Train_Horn);
