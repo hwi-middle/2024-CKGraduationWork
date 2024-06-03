@@ -83,7 +83,7 @@ public class CubeRootHandler : MonoBehaviour
 
     private void ExecuteCheat()
     {
-        if (Input.GetKeyDown(KeyCode.F12) && _resetCubeRotationRoutineCount is 0)
+        if (Input.GetKeyDown(KeyCode.F2) && _resetCubeRotationRoutineCount is 0)
         {
             ForceCorrectCube();
             StartCoroutine(AwaitCubeForceCorrectRoutine());

@@ -68,7 +68,7 @@ public class ItemThrowHandler : Singleton<ItemThrowHandler>
             LineDrawHelper.Instance.EnableLine();
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha0) && !IsItemOnHand)
+        if (Input.GetKeyDown(KeyCode.F1) && !IsItemOnHand)
         {
             GetItem();
         }
