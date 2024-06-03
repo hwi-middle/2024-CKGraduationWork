@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4693006204599276656}
-  - component: {fileID: -6084483606715053275}
   m_Layer: 0
   m_Name: P_A2Door_A2
   m_TagString: Untagged
@@ -33,27 +32,6 @@ Transform:
   - {fileID: 1310737002135404727}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &-6084483606715053275
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4185729496273981773}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1565587076110395228
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -140,7 +118,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f1a3806e87d1f294381017a6ec739429,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8795895478530729220}
   m_SourcePrefab: {fileID: 100100000, guid: f1a3806e87d1f294381017a6ec739429, type: 3}
 --- !u!4 &1310737002135404727 stripped
 Transform:
@@ -148,3 +130,31 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1565587076110395228}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1836198674532506125 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f1a3806e87d1f294381017a6ec739429,
+    type: 3}
+  m_PrefabInstance: {fileID: 1565587076110395228}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &8795895478530729220
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1836198674532506125}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}

@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4977462836916536018}
-  - component: {fileID: 1828902631526341833}
   m_Layer: 0
   m_Name: P_WoodBookShelf
   m_TagString: Untagged
@@ -33,27 +32,6 @@ Transform:
   - {fileID: 2132904082712820269}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 13.018, y: 0, z: 0}
---- !u!65 &1828902631526341833
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8906593689611686781}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1878882350707678662
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -314,10 +292,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7fdb1d573c93da4459d5219acc15c248,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8531464422794370925}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7fdb1d573c93da4459d5219acc15c248,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 5740135704558761141}
     - targetCorrespondingSourceObject: {fileID: 7363999104562336559, guid: 7fdb1d573c93da4459d5219acc15c248,
         type: 3}
@@ -338,28 +312,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1878882350707678662}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &8531464422794370925
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1644456369432273047}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 7773038842299429623, guid: 7fdb1d573c93da4459d5219acc15c248, type: 3}
 --- !u!65 &5740135704558761141
 BoxCollider:
   m_ObjectHideFlags: 0

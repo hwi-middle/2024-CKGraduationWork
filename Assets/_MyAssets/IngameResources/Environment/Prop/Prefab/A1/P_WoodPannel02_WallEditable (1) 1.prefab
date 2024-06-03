@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2546146869332675584}
-  - component: {fileID: -5767075253405542980}
   m_Layer: 0
   m_Name: P_WoodPannel02_WallEditable (1) 1
   m_TagString: Untagged
@@ -33,27 +32,6 @@ Transform:
   - {fileID: 428524422921057447}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -42.501, z: 0}
---- !u!65 &-5767075253405542980
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 923408314604862724}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &178127258697110348
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -180,7 +158,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e549176aaab9e4a49ad2a329041fd22d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4482496451914557819}
   m_SourcePrefab: {fileID: 100100000, guid: e549176aaab9e4a49ad2a329041fd22d, type: 3}
 --- !u!4 &428524422921057447 stripped
 Transform:
@@ -188,3 +170,31 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 178127258697110348}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1061086022906523165 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e549176aaab9e4a49ad2a329041fd22d,
+    type: 3}
+  m_PrefabInstance: {fileID: 178127258697110348}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &4482496451914557819
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061086022906523165}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
