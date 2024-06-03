@@ -21206,7 +21206,7 @@ MonoBehaviour:
   _isDebugMode: 0
   _isNeedCursorLock: 0
   _audioManager: {fileID: 1545022238}
-  _targetYPos: 1958.7
+  _targetYPos: 2226.9
   _scrollDuration: 72
   _creditText: {fileID: 1847185620}
 --- !u!114 &565084062
@@ -22068,8 +22068,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 581757903}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.039161917, y: 0.41603178, z: -0.017880984, w: 0.9083305}
-  m_LocalPosition: {x: 2.2470746, y: 1.3955568, z: -0.738184}
+  m_LocalRotation: {x: 0, y: -0.103712656, z: 0, w: -0.9946073}
+  m_LocalPosition: {x: 3.0560863, y: 1.2369602, z: 15.6709175}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -27101,6 +27101,81 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 696073828}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &696282029
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 696282030}
+  - component: {fileID: 696282032}
+  - component: {fileID: 696282031}
+  m_Layer: 5
+  m_Name: TeamLogo (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &696282030
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696282029}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5325992}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1847185620}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 287.1026, y: -4155}
+  m_SizeDelta: {x: 357.9347, y: 51.0337}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &696282031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696282029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: a74d86d2cdc9edd47ad4ed28a2457be8, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &696282032
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696282029}
+  m_CullTransparentMesh: 1
 --- !u!1001 &697024161
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -75634,6 +75709,81 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1841143944}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1841270451
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1841270452}
+  - component: {fileID: 1841270454}
+  - component: {fileID: 1841270453}
+  m_Layer: 5
+  m_Name: TeamLogo (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1841270452
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841270451}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5325992}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1847185620}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 313.56, y: -4305}
+  m_SizeDelta: {x: 305.0129, y: 71.9654}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1841270453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841270451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 93b118e6f6166bf47898681d37a25eeb, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1841270454
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841270451}
+  m_CullTransparentMesh: 1
 --- !u!1 &1843642374 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 623717951855355372, guid: d50651ce698ab5d448c79a1062e2c50d,
@@ -75820,12 +75970,14 @@ RectTransform:
   m_Children:
   - {fileID: 1181307377}
   - {fileID: 280636141}
+  - {fileID: 696282030}
+  - {fileID: 1841270452}
   m_Father: {fileID: 317736991}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -515.7, y: -3038.7}
-  m_SizeDelta: {x: 1031.4, y: 3917.4}
+  m_AnchoredPosition: {x: -515.7, y: -3306.9}
+  m_SizeDelta: {x: 1031.4, y: 4453.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1847378562 stripped
 GameObject:
