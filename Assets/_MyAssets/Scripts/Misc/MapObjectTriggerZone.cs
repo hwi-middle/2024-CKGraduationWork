@@ -21,4 +21,9 @@ public class MapObjectTriggerZone : MonoBehaviour
 
         _animator.enabled = true;
     }
+
+    public void StartSignalAnimation()
+    {
+        _animator.enabled = true;
+    }
 }
