@@ -23,16 +23,18 @@ public class PopupHandler : Singleton<PopupHandler>
     [SerializeField] private Sprite _smallPopupBackgrounds;
     [SerializeField] private Sprite _bigPopupBackgrounds;
 
+    [Header("팝업 기본 Padding")]
+    [SerializeField] private int _defaultPopupLeftPadding;
+    [SerializeField] private int _defaultPopupRightPadding;
+    [SerializeField] private int _defaultPopupTopPadding;
+    [SerializeField] private int _defaultPopupBottomPadding;
+
     [Header("팝업 변경 Padding")]
     [SerializeField] private int _videoPopupLeftPadding;
     [SerializeField] private int _videoPopupRightPadding;
     [SerializeField] private int _videoPopupTopPadding;
     [SerializeField] private int _videoPopupBottomPadding;
     
-    private int _defaultPopupLeftPadding;
-    private int _defaultPopupRightPadding;
-    private int _defaultPopupTopPadding;
-    private int _defaultPopupBottomPadding;
     
     private VerticalLayoutGroup _popupLayoutGroup;
     private HorizontalLayoutGroup _buttonLayoutGroup;
