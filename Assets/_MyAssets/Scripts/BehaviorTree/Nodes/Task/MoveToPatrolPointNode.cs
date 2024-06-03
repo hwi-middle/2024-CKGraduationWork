@@ -24,6 +24,7 @@ public class MoveToPatrolPointNode : TaskNode
 
     protected override void OnStart()
     {
+        agent.NavMeshAgent.isStopped = false;
         agent.SetSpeed(agent.AiData.walkSpeed);
         GetNextPatrolPos();
         agent.SetDestination(_nextPatrolPos);

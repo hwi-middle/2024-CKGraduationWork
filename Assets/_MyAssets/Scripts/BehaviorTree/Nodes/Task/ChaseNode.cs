@@ -24,6 +24,7 @@ public class ChaseNode : TaskNode
 
     protected override ENodeState OnUpdate()
     {
+        agent.NavMeshAgent.isStopped = false;
         if (blackboard.target == null)
         {
             return ENodeState.Failure;

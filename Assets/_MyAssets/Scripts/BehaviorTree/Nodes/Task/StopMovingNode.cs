@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveToOriginPointNode : TaskNode
+public class StopMovingNode : TaskNode
 {
     public override void OnCreate()
     {
-        description = "원점으로 돌아갑니다.";
+        description = "길 찾기를 중지하고 멈춥니다.";
     }
 
     protected override void OnStart()
@@ -23,9 +23,8 @@ public class MoveToOriginPointNode : TaskNode
 
     protected override ENodeState OnUpdate()
     {
-        agent.NavMeshAgent.isStopped = false;
-        agent.SetSpeed(agent.AiData.walkSpeed);
-        agent.SetDestination(agent.MoveRangeCenterPos);
+        agent.NavMeshAgent.isStopped = true;
+        
         return ENodeState.Success;
     }
 }

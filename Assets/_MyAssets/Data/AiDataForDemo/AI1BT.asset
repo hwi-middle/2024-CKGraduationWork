@@ -47,6 +47,28 @@ MonoBehaviour:
   children:
   - {fileID: -4942686072581443854}
   - {fileID: 1457199189913668340}
+--- !u!114 &-6931798367229381924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 056fa99d2e4c4784b74748192ffcd354, type: 3}
+  m_Name: StopMovingNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 32cf78a960f0ecd43b9a5d4f38b54a5e
+  position: {x: 0, y: 0}
+  blackboard:
+    target: {fileID: 0}
+    lastTimePlayerDetected: 0
+    lastTimeNoiseDetected: 0
+  agent: {fileID: 0}
+  description: "\uAE38 \uCC3E\uAE30\uB97C \uC911\uC9C0\uD558\uACE0 \uBA48\uCDA5\uB2C8\uB2E4."
 --- !u!114 &-6303492509818837393
 MonoBehaviour:
   m_ObjectHideFlags: 0

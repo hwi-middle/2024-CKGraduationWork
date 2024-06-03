@@ -10940,6 +10940,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7744596455074630859, guid: 3b6afe36a9f663a4bbb78900a372b083,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744596455074630859, guid: 3b6afe36a9f663a4bbb78900a372b083,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.32
+      objectReference: {fileID: 0}
     - target: {fileID: 9219317410509712847, guid: 3b6afe36a9f663a4bbb78900a372b083,
         type: 3}
       propertyPath: _canvas
@@ -25441,7 +25451,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 681596093}
-  - component: {fileID: 681596094}
   m_Layer: 0
   m_Name: Enemies
   m_TagString: Untagged
@@ -25468,18 +25477,6 @@ Transform:
   - {fileID: 767490627}
   m_Father: {fileID: 228635737}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &681596094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 681596092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62e9216a14d6aa24cb48976a7882ab02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &681902658
 GameObject:
   m_ObjectHideFlags: 0
