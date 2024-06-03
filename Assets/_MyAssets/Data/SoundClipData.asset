@@ -16,8 +16,6 @@ MonoBehaviour:
   bgmClipList:
   - clipName: MainMenu_BGM
     clip: {fileID: 8300000, guid: 7c042649c55d3354ebd015c37af6012d, type: 3}
-  - clipName: Credit_BGM
-    clip: {fileID: 8300000, guid: 1daef8bcc17f85d47b5f08979eda4d8e, type: 3}
   sfxClipList:
   - clipName: Player_Walk1
     clip: {fileID: 8300000, guid: 6653bc77f6eb2eb439ce2855a62c50a8, type: 3}
@@ -85,3 +83,5 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 2997fc85fed05c34cb09bb75c2f53712, type: 3}
   - clipName: OB_Train_Horn
     clip: {fileID: 8300000, guid: 29c96012acd432542a664e77572744ef, type: 3}
+  - clipName: Credit_BGM
+    clip: {fileID: 8300000, guid: 1daef8bcc17f85d47b5f08979eda4d8e, type: 3}
