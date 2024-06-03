@@ -20,6 +20,7 @@ public class CreditSceneManager : SceneManagerBase
     {
         base.Start();
         FadeIn(0.5f);
+        AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.Credit_BGM);
     }
 
     protected override void Update()
