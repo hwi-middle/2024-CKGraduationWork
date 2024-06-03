@@ -74,8 +74,6 @@ public class CubeRootHandler : MonoBehaviour
     {
         InitCubeRotation();
         InitCubeIndex();
-        
-        _trainRoot.SetActive(false);
     }
 
     private void InitCubeRotation()
@@ -244,8 +242,8 @@ public class CubeRootHandler : MonoBehaviour
     
     private void ExecuteCorrectCubeSequence()
     {
-        _trainRoot.SetActive(true);
         _nextObjectAnimator.SetBool(Correct, true);
+        _trainRoot.GetComponent<TrainAnimationController>().PlayTrainAnimation();
         
         //TODO : 카메라 블렌딩
         CameraController.Instance.ChangeCameraToCubeCorrect(_correctCameraFollow, _correctCameraLookAt);
