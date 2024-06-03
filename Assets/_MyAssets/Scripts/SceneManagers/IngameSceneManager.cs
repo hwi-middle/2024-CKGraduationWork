@@ -14,4 +14,9 @@ public class IngameSceneManager : SceneManagerBase
     {
         base.Update();
     }
+    
+    public void LoadCreditScene()
+    {
+        LoadSceneWithLoadingUI(SceneNames.CREDIT);
+    }
 }
