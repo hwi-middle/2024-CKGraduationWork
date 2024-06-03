@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
@@ -21,7 +22,20 @@ public class PopupHandler : Singleton<PopupHandler>
     [SerializeField] private TutorialVideoData _tutorialVideoData;
     [SerializeField] private Sprite _smallPopupBackgrounds;
     [SerializeField] private Sprite _bigPopupBackgrounds;
+
+    [Header("팝업 변경 Padding")]
+    [SerializeField] private int _videoPopupLeftPadding;
+    [SerializeField] private int _videoPopupRightPadding;
+    [SerializeField] private int _videoPopupTopPadding;
+    [SerializeField] private int _videoPopupBottomPadding;
     
+    private int _defaultPopupLeftPadding;
+    private int _defaultPopupRightPadding;
+    private int _defaultPopupTopPadding;
+    private int _defaultPopupBottomPadding;
+    
+    private VerticalLayoutGroup _popupLayoutGroup;
+    private HorizontalLayoutGroup _buttonLayoutGroup;
     private Image _popupBackground;
 
     private GameObject _popupPrefab;
@@ -49,6 +63,12 @@ public class PopupHandler : Singleton<PopupHandler>
     {
         _popupPrefab = Instantiate(Resources.Load<GameObject>("PopupCanvas"));
         Transform popupImage = _popupPrefab.transform.GetChild(0);
+        _popupLayoutGroup = popupImage.GetComponent<VerticalLayoutGroup>();
+        _defaultPopupLeftPadding = _popupLayoutGroup.padding.left;
+        _defaultPopupRightPadding = _popupLayoutGroup.padding.right;
+        _defaultPopupTopPadding = _popupLayoutGroup.padding.top;
+        _defaultPopupBottomPadding = _popupLayoutGroup.padding.bottom;
+        
         _popupBackground = popupImage.GetComponent<Image>();
         
         // --- Canvas Child ---
@@ -71,6 +91,7 @@ public class PopupHandler : Singleton<PopupHandler>
         
         // Buttons Background
         _buttonsImage = popupImage.GetChild(3).gameObject;
+        _buttonLayoutGroup = _buttonsImage.GetComponent<HorizontalLayoutGroup>();
         
         // Positive Object
         _positiveText = _buttonsImage.transform.GetChild(0).GetComponentInChildren<TMP_Text>();
@@ -171,6 +192,7 @@ public class PopupHandler : Singleton<PopupHandler>
 
         _popupBackground.sprite = _smallPopupBackgrounds;
         _tutorialVideoRawImage.SetActive(false);
+        SetPopupPadding();
         _popupPrefab.SetActive(true);
     }
 
@@ -187,7 +209,18 @@ public class PopupHandler : Singleton<PopupHandler>
         _negativeText.transform.parent.gameObject.SetActive(false);
         _popupBackground.sprite = _bigPopupBackgrounds;
         _tutorialVideoRawImage.SetActive(true);
+        SetPopupPadding(false);
         _popupPrefab.SetActive(true);
+    }
+
+    private void SetPopupPadding(bool isDefault = true)
+    {
+        _popupLayoutGroup.padding.left = isDefault ? _defaultPopupLeftPadding : _videoPopupLeftPadding;
+        _popupLayoutGroup.padding.right = isDefault ? _defaultPopupRightPadding : _videoPopupRightPadding;
+        _popupLayoutGroup.padding.top = isDefault ? _defaultPopupTopPadding : _videoPopupTopPadding;
+        _popupLayoutGroup.padding.bottom = isDefault ? _defaultPopupBottomPadding : _videoPopupBottomPadding;
+
+        _buttonLayoutGroup.spacing = isDefault ? -300 : 0;
     }
 
     public void ExecuteActionOnButtonClick(bool isPositive)
