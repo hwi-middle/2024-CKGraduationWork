@@ -26,6 +26,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     public bool IsPauseCanvasActive => _pauseCanvas.activeSelf;
 
     private bool _isPaused;
+    public bool IsPaused => _isPaused;
 
     public const float DEFAULT_FADE_DURATION = 0.5f;
     public bool IsFading { get; private set; }
@@ -129,7 +130,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
         _pauseCanvas.SetActive(_isPaused);
     }
 
-    public void TogglePause()
+    public void TogglePause(bool isTutorial = false)
     {
         _isPaused = !_isPaused;
         
@@ -142,7 +143,7 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
             AudioPlayManager.Instance.UnPauseAllAudio();
         }
         
-        _pauseCanvas.SetActive(_isPaused);
+        _pauseCanvas.SetActive(_isPaused && !isTutorial);
         Time.timeScale = _isPaused ? 0.0f : 1.0f;
     }
 

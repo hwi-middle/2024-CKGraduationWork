@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMove : Singleton<PlayerMove>
 {
@@ -57,6 +58,8 @@ public class PlayerMove : Singleton<PlayerMove>
                               !_playerState.CheckPlayerState(EPlayerState.ItemThrow);
 
     private bool IsGrounded => _controller.isGrounded;
+
+    private IEnumerator _tutorialFadeInOutRoutine;
 
     protected virtual void Awake()
     {
