@@ -21182,6 +21182,7 @@ GameObject:
   - component: {fileID: 565084062}
   - component: {fileID: 565084061}
   - component: {fileID: 565084065}
+  - component: {fileID: 565084066}
   m_Layer: 0
   m_Name: '@Manager'
   m_TagString: Untagged
@@ -21299,8 +21300,60 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: 4510649967301415932, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
     value: {fileID: 0}
+  - key: {fileID: 8938074471228836176, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -7273188547867428522, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -4208952112173537982, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3877339981150178095, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -2735874377893105209, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 571717354541477724, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -1436924790065038959, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 3951536333120641022, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -8948907062886947953, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 7683103037267782671, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -2611033393943280879, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &565084066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 565084060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 24ad393154cb92a42bb6871a6c6a3988, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 565084061}
+          m_TargetAssemblyTypeName: CreditSceneManager, Assembly-CSharp
+          m_MethodName: ExecuteCreditEndSequence
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &570755766
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35529,6 +35582,8 @@ PlayableDirector:
     value: {fileID: 656265863}
   - key: {fileID: 8938074471228836176, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
     value: {fileID: 1446704959}
+  - key: {fileID: -4208952112173537982, guid: fd9c3dae3360af14ab32b2593fdd22a1, type: 2}
+    value: {fileID: 565084066}
   m_ExposedReferences:
     m_References:
     - 62b2bf5446be2c542ba26011b8da3575: {fileID: 2091611863}

@@ -34,6 +34,8 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     protected Player _player;
     private IEnumerator _playerDeadSequence;
 
+    private IEnumerator _loadSceneRoutine;
+
     protected virtual void Awake()
     {
 #if !UNITY_EDITOR
@@ -101,6 +103,12 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     private void HandlePauseAction()
     {
+        if (SceneManager.GetActiveScene().name == SceneNames.CREDIT)
+        {
+            LoadSceneWithLoadingUI(SceneNames.MAIN_MENU);
+            return;
+        }
+        
         Debug.Assert(_settingsCanvas != null, "_settingsCanvas != null");
         Debug.Assert(_pauseCanvas != null, "_popupCanvas != null");
         
@@ -270,7 +278,13 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
     protected void LoadSceneWithLoadingUI(string sceneName)
     {
-        StartCoroutine(LoadSceneWithLoadingUiRoutine(sceneName));
+        if (_loadSceneRoutine != null)
+        {
+            return;
+        }
+        
+        _loadSceneRoutine = LoadSceneWithLoadingUiRoutine(sceneName);
+        StartCoroutine(_loadSceneRoutine);
     }
     
     private IEnumerator LoadSceneWithLoadingUiRoutine(string sceneName)

@@ -32,4 +32,9 @@ public class CreditSceneManager : SceneManagerBase
         _creditText.anchoredPosition = textPos;
         _elapsedTime += Time.deltaTime;
     }
+
+    public void ExecuteCreditEndSequence()
+    {
+        LoadSceneWithLoadingUI(SceneNames.MAIN_MENU);
+    }
 }
