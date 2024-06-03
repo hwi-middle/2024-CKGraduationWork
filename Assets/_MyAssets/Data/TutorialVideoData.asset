@@ -13,9 +13,7 @@ MonoBehaviour:
   m_Name: TutorialVideoData
   m_EditorClassIdentifier: 
   tutorialVideos:
-  - title: Basic
-    videoClip: {fileID: 32900000, guid: b71b9aa71d576dd43967ea992281f422, type: 3}
-  - title: aaa
-    videoClip: {fileID: 32900000, guid: b71b9aa71d576dd43967ea992281f422, type: 3}
-  - title: bbb
-    videoClip: {fileID: 32900000, guid: b71b9aa71d576dd43967ea992281f422, type: 3}
+  - title: Tutorial_Cube_Select
+    videoClip: {fileID: 32900000, guid: e6e4c0cdd14143f4daa6ae442ce72659, type: 3}
+  - title: Tutorial_Cube_Rotation
+    videoClip: {fileID: 32900000, guid: cd668912eb9cd0149bfc144af7c23cd0, type: 3}

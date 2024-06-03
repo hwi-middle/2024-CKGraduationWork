@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class PopupHandler : Singleton<PopupHandler>
@@ -18,6 +19,10 @@ public class PopupHandler : Singleton<PopupHandler>
     }
 
     [SerializeField] private TutorialVideoData _tutorialVideoData;
+    [SerializeField] private Sprite _smallPopupBackgrounds;
+    [SerializeField] private Sprite _bigPopupBackgrounds;
+    
+    private Image _popupBackground;
 
     private GameObject _popupPrefab;
     private GameObject _tutorialVideoRawImage;
@@ -32,16 +37,19 @@ public class PopupHandler : Singleton<PopupHandler>
 
     private VideoPlayer _videoPlayer;
 
-    private Action<bool> buttonAction;
+    private Action<bool> _buttonAction;
     
     public bool IsPopupActive => _popupPrefab.activeSelf;
 
     private bool IsTutorialPopup => _currentType == EPopupType.Tutorial;
-        
+    
+    private bool IsDoubleStackTutorialExist { get; set; }
+    
     private void Awake()
     {
         _popupPrefab = Instantiate(Resources.Load<GameObject>("PopupCanvas"));
         Transform popupImage = _popupPrefab.transform.GetChild(0);
+        _popupBackground = popupImage.GetComponent<Image>();
         
         // --- Canvas Child ---
         
@@ -82,7 +90,7 @@ public class PopupHandler : Singleton<PopupHandler>
     /// <param name="positive">확인 버튼</param>
     public void DisplayInfoPopup(Action<bool> action, string title, string description, string positive)
     {
-        buttonAction += action;
+        _buttonAction += action;
         _currentType = EPopupType.Info;
         SetPopupTextAndDisplayPopup(title, description, positive);
     }
@@ -98,7 +106,7 @@ public class PopupHandler : Singleton<PopupHandler>
     public void DisplayConfirmPopup(Action<bool> action, string title, string description, string positive,
         string negative)
     {
-        buttonAction += action;
+        _buttonAction += action;
         _currentType = EPopupType.Confirm;
         SetPopupTextAndDisplayPopup(title, description, positive, negative);
     }
@@ -114,7 +122,7 @@ public class PopupHandler : Singleton<PopupHandler>
     public void DisplayWarningPopup(Action<bool> action, string title, string description, string positive,
         string negative="")
     {
-        buttonAction += action;
+        _buttonAction += action;
         _currentType = EPopupType.Warning;
         SetPopupTextAndDisplayPopup(title, description, positive, negative);
     }
@@ -128,16 +136,25 @@ public class PopupHandler : Singleton<PopupHandler>
     /// <param name="positive">확인 버튼</param>
     public void DisplayErrorPopup(Action<bool> action, string title, string description, string positive)
     {
-        buttonAction += action;
+        _buttonAction += action;
         _currentType = EPopupType.Error;
         SetPopupTextAndDisplayPopup(title, description, positive);
     }
     
     public void DisplayTutorialPopup(string title, string description, string positive, ETutorialVideoIndex index,
-        Action<bool> action = null)
+        Action<bool> action = null, bool isDoubleStack = false)
     {
-        SceneManagerBase.Instance.TogglePause();
-        buttonAction += action;
+        if (!SceneManagerBase.Instance.IsPaused)
+        {
+            SceneManagerBase.Instance.TogglePause(true);
+        }
+
+        if (!IsDoubleStackTutorialExist)
+        {
+            IsDoubleStackTutorialExist = isDoubleStack;
+        }
+        
+        _buttonAction += action;
         _currentType = EPopupType.Tutorial;
         SetTextAndDisplayTutorialPopup(title, description, positive, index);
     }
@@ -151,12 +168,14 @@ public class PopupHandler : Singleton<PopupHandler>
 
         _description.gameObject.SetActive(!description.Equals(string.Empty));
         _negativeText.transform.parent.gameObject.SetActive(!negative.Equals(string.Empty));
-        
+
+        _popupBackground.sprite = _smallPopupBackgrounds;
         _tutorialVideoRawImage.SetActive(false);
         _popupPrefab.SetActive(true);
     }
-    
-    private void SetTextAndDisplayTutorialPopup(string title, string description, string positive, ETutorialVideoIndex index)
+
+    private void SetTextAndDisplayTutorialPopup(string title, string description, string positive,
+        ETutorialVideoIndex index)
     {
         _title.text = title;
         _description.text = description;
@@ -164,8 +183,9 @@ public class PopupHandler : Singleton<PopupHandler>
 
         // Index 0 is None -> index - 1 is the correct index
         _videoPlayer.clip = _tutorialVideoData.tutorialVideos[(int)index - 1].videoClip;
-        
+
         _negativeText.transform.parent.gameObject.SetActive(false);
+        _popupBackground.sprite = _bigPopupBackgrounds;
         _tutorialVideoRawImage.SetActive(true);
         _popupPrefab.SetActive(true);
     }
@@ -173,19 +193,23 @@ public class PopupHandler : Singleton<PopupHandler>
     public void ExecuteActionOnButtonClick(bool isPositive)
     {
         AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.UI_Click);
-        buttonAction?.Invoke(isPositive);
+
+        if (IsTutorialPopup && IsDoubleStackTutorialExist)
+        {
+            _buttonAction?.Invoke(isPositive);
+            IsDoubleStackTutorialExist = false;
+            return;
+        }
+        
+        _buttonAction?.Invoke(isPositive);
         ClosePopup();
     }
 
     private void ClosePopup()
     {
-        if (IsTutorialPopup)
-        {
-            SceneManagerBase.Instance.TogglePause();
-        }
-        
+        SceneManagerBase.Instance.TogglePause(IsTutorialPopup);
         AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.UI_Close);
-        buttonAction = null;
+        _buttonAction = null;
         _popupPrefab.SetActive(false);
     }
 }
