@@ -41,7 +41,7 @@ MonoBehaviour:
   alertThreshold: 60
   maxPerceptionGaugeByHearing: 70
   walkSpeed: 2
-  sprintSpeed: 7
+  sprintSpeed: 5
   moveRange: 19
   stoppingDistance: 0.1
   attackDamage: 10

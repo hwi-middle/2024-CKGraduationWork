@@ -87,7 +87,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 9c13faa4505ebb448b87a7bb8ba56ffe
-  position: {x: 414, y: 590}
+  position: {x: 399.46313, y: 590.53876}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -95,7 +95,7 @@ MonoBehaviour:
   agent: {fileID: 0}
   description: "\uC2DC\uC57C\uC5D0\uC11C \uC0AC\uB77C\uC9C4 \uD6C4 \uC77C\uC815 \uC2DC\uAC04\uC774
     \uC9C0\uB0AC\uB294\uC9C0 \uD655\uC778\uD569\uB2C8\uB2E4."
-  child: {fileID: -5708360502079769403}
+  child: {fileID: -2492612781893175548}
   threshold: 1
 --- !u!114 &-5708360502079769403
 MonoBehaviour:
@@ -112,7 +112,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: ebcb7f247c7aada4e860ca82a389cbde
-  position: {x: 414, y: 713}
+  position: {x: 647, y: 677}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
@@ -120,7 +120,7 @@ MonoBehaviour:
   agent: {fileID: 0}
   description: "\uC18C\uB9AC\uB97C \uB4E4\uC740 \uD6C4 \uC77C\uC815 \uC2DC\uAC04\uC774
     \uC9C0\uB0AC\uB294\uC9C0 \uD655\uC778\uD569\uB2C8\uB2E4."
-  child: {fileID: -2492612781893175548}
+  child: {fileID: 0}
   thresholdOnSuspicion: 3
   thresholdOnAlert: 6
 --- !u!114 &-5209551216361242170
@@ -307,7 +307,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: ae70e625a3047574789c74b7545283a4
-  position: {x: 404, y: 840}
+  position: {x: 391.1456, y: 838}
   blackboard:
     target: {fileID: 0}
     lastTimePlayerDetected: 0
