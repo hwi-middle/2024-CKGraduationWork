@@ -21233,6 +21233,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tutorialVideoData: {fileID: 0}
+  _smallPopupBackgrounds: {fileID: 0}
+  _bigPopupBackgrounds: {fileID: 0}
+  _defaultPopupLeftPadding: 0
+  _defaultPopupRightPadding: 0
+  _defaultPopupTopPadding: 0
+  _defaultPopupBottomPadding: 0
+  _videoPopupLeftPadding: 0
+  _videoPopupRightPadding: 0
+  _videoPopupTopPadding: 0
+  _videoPopupBottomPadding: 0
 --- !u!4 &565084064
 Transform:
   m_ObjectHideFlags: 0
@@ -22005,8 +22015,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 581757903}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.07419439, y: -0.20245326, z: 0.014283489, w: -0.97637284}
-  m_LocalPosition: {x: 0.72307515, y: 4.106557, z: -0.53818417}
+  m_LocalRotation: {x: 0, y: -0.103712656, z: 0, w: -0.9946073}
+  m_LocalPosition: {x: 3.0560863, y: 1.2369602, z: 15.6709175}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -25895,6 +25905,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _trainRailSparkEffect: {fileID: 714870816}
+  _enemy: {fileID: 0}
 --- !u!114 &656265863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29196,7 +29207,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: c11ae99d285e76d4a982d7dabbb2e56e, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 06e5eba81ed406e499dc9c3b3a06f8ef, type: 2}
 --- !u!95 &740718026
 Animator:
   serializedVersion: 5
@@ -42525,6 +42536,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tutorialVideoData: {fileID: 11400000, guid: 79ca0d7040107e64bb0326cf70238232, type: 2}
+  _smallPopupBackgrounds: {fileID: 0}
+  _bigPopupBackgrounds: {fileID: 0}
+  _defaultPopupLeftPadding: 0
+  _defaultPopupRightPadding: 0
+  _defaultPopupTopPadding: 0
+  _defaultPopupBottomPadding: 0
+  _videoPopupLeftPadding: 0
+  _videoPopupRightPadding: 0
+  _videoPopupTopPadding: 0
+  _videoPopupBottomPadding: 0
 --- !u!114 &1081087298
 MonoBehaviour:
   m_ObjectHideFlags: 0
