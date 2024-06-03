@@ -15,13 +15,14 @@ public class CubeRootHandler : MonoBehaviour
     [Header("Train Root")]
     [SerializeField] private GameObject _trainRoot;
 
-    [FormerlySerializedAs("_cameraPosition")]
     [Header("Camera Position")]
     [SerializeField] private Transform _correctCameraFollow;
     
-    [FormerlySerializedAs("_cameraLookAtPosition")]
     [Header("Camera Look At Position")]
     [SerializeField] private Transform _correctCameraLookAt;
+    
+    [Header("아이템 오브젝트")]
+    [SerializeField] private GameObject _connectedItemObject;
 
     [Header("큐브 리스트")]
     [SerializeField] private List<Transform> _cubeList = new();
@@ -74,6 +75,8 @@ public class CubeRootHandler : MonoBehaviour
     {
         InitCubeRotation();
         InitCubeIndex();
+        
+        _connectedItemObject.SetActive(false);
     }
 
     private void InitCubeRotation()
@@ -247,6 +250,7 @@ public class CubeRootHandler : MonoBehaviour
         
         CameraController.Instance.ChangeCameraToCubeCorrect(_correctCameraFollow, _correctCameraLookAt);
         AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.OB_Train_Horn);
+        _connectedItemObject.SetActive(true);
     }
 
     public void SelectUpperCube()
