@@ -2402,6 +2402,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tutorialVideoData: {fileID: 11400000, guid: 79ca0d7040107e64bb0326cf70238232, type: 2}
+  _smallPopupBackgrounds: {fileID: 21300000, guid: 3394852dd8e78964bba88957122e331c,
+    type: 3}
+  _bigPopupBackgrounds: {fileID: 21300000, guid: 99c182e27e0922f41acb6c991f6ed16d,
+    type: 3}
+  _defaultPopupLeftPadding: 100
+  _defaultPopupRightPadding: 100
+  _defaultPopupTopPadding: 250
+  _defaultPopupBottomPadding: 100
+  _videoPopupLeftPadding: 500
+  _videoPopupRightPadding: 500
+  _videoPopupTopPadding: 150
+  _videoPopupBottomPadding: 100
 --- !u!114 &2012537155
 MonoBehaviour:
   m_ObjectHideFlags: 0

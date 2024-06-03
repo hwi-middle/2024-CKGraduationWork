@@ -23,7 +23,7 @@ public class MainMenuSceneManager : SceneManagerBase
         base.Awake();
         
         _newGameButton.onClick.AddListener(OnNewGameButtonClick);
-        _continueButton.onClick.AddListener(OnContinueButton);
+        _continueButton.onClick.AddListener(OnCreditButtonClick);
         _exitButton.onClick.AddListener(OnExitButtonClick);
         
         Debug.Assert(_backgroundImages.Length >= 2);
@@ -35,7 +35,7 @@ public class MainMenuSceneManager : SceneManagerBase
         base.Start();
         FadeIn(0.5f);
 
-        _continueButton.interactable = CheckPointRootHandler.Instance.HasSavedCheckPointData;
+        //_continueButton.interactable = CheckPointRootHandler.Instance.HasSavedCheckPointData;
         AudioPlayManager.Instance.PlayBgmAudio(EBgmAudioClipIndex.MainMenu_BGM);
     }
 
@@ -87,14 +87,19 @@ public class MainMenuSceneManager : SceneManagerBase
         LoadSceneWithLoadingUI(SceneNames.DEMO_PLAY);
     }
 
-    public void OnContinueButton()
+    private void OnCreditButtonClick()
     {
-        // Saved Game Scene Start
-        PopupHandler.Instance.DisplayInfoPopup(HandleContinueButtonAction, "이어 하기 (준비 중)", "해당 기능은 구현 중 입니다.", "확인");
+        PopupHandler.Instance.DisplayConfirmPopup(HandleCreditButtonAction, "크레딧을 보시겠습니까?", "", "예", "아니오");
     }
-
-    private void HandleContinueButtonAction(bool isPositive)
+    
+    private void HandleCreditButtonAction(bool isPositive)
     {
+        if (!isPositive)
+        {
+            return;
+        }
+
+        LoadSceneWithLoadingUI(SceneNames.CREDIT);
     }
 
     public void OnExitButtonClick()
