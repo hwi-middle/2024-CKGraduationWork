@@ -58,6 +58,11 @@ public class InteractionController : Singleton<InteractionController>
         _inputData.interactionEvent += HandleInteraction;
     }
 
+    private void OnDisable()
+    {
+        _inputData.interactionEvent -= HandleInteraction;
+    }
+
     private void Update()
     {
         SelectCloserInteractionObject();
@@ -165,7 +170,8 @@ public class InteractionController : Singleton<InteractionController>
                 return false;
             case EInteractionType.Overstep when PlayerStateManager.Instance.CheckPlayerState(EPlayerState.Crouch):
                 return false;
-            case EInteractionType.Cube:
+            case EInteractionType.Cube when data.Value.obj.GetComponent<InteractionObjectHandler>().IsCubeCorrect():
+                return false;
             default:
                 return true;
         }

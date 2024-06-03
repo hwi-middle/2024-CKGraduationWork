@@ -152,14 +152,14 @@ Material:
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DissolveBSize: 0
-    - _DissolveControl: 0.789
+    - _DissolveControl: 1
     - _DissolveEdge: 0.02
     - _DissolveEdgeBSize: 0.0634
     - _DissolveEdgeInten: 1
     - _DissolveEdgeOpacity: 0.184
     - _DissolveEdgeSharpness: 0
     - _DissolveEdgeSize: 0
-    - _DissolveTextureStyle: 0.859
+    - _DissolveTextureStyle: 0.631
     - _DistortAmount: 0.1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
@@ -171,7 +171,7 @@ Material:
     - _GlossyReflections: 0
     - _MainColorEmissiveInten: 0.7
     - _MainInten: 3.08
-    - _MainOpacity: -0.371
+    - _MainOpacity: -0.23
     - _MainScale: 0.18
     - _Metallic: 0
     - _Multiply: 1
@@ -182,7 +182,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _ScreenColorLerp: 1
+    - _ScreenColorLerp: 0.926
     - _ScreenDistortionInten: 0.0266
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0

@@ -242,10 +242,9 @@ public class CameraController : Singleton<CameraController>
     /// </summary>
     public void ChangeCameraFromAimingToFollow()
     {
-        FollowCamera.MoveToTopOfPrioritySubqueue();
-
         FollowCamera.m_XAxis.Value = AimingCamera.m_XAxis.Value;
-        FollowCamera.m_YAxis.Value = 0.5f;
+        FollowCamera.m_YAxis.Value = AimingCamera.m_YAxis.Value;
+        FollowCamera.MoveToTopOfPrioritySubqueue();
     }
 
     /// <summary>
@@ -253,10 +252,10 @@ public class CameraController : Singleton<CameraController>
     /// </summary>
     public void ChangeCameraFromFollowToAiming()
     {
-        AimingCamera.MoveToTopOfPrioritySubqueue();
-
         AimingCamera.m_XAxis.Value = FollowCamera.m_XAxis.Value;
-        AimingCamera.m_YAxis.Value = 0.5f;
+        AimingCamera.m_YAxis.Value = FollowCamera.m_YAxis.Value;
+        
+        AimingCamera.MoveToTopOfPrioritySubqueue();
     }
 
     /// <summary>

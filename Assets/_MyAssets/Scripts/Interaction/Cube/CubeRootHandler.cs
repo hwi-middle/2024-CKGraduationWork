@@ -150,7 +150,7 @@ public class CubeRootHandler : MonoBehaviour
 
     public void RotateCube()
     {
-        if (IsRotateRoutineRunning || _isCheckingCubeCorrect)
+        if (IsRotateRoutineRunning || _isCheckingCubeCorrect || IsCorrect)
         {
             return;
         }
@@ -245,7 +245,6 @@ public class CubeRootHandler : MonoBehaviour
         _nextObjectAnimator.SetBool(Correct, true);
         _trainRoot.GetComponent<TrainAnimationController>().PlayTrainAnimation();
         
-        //TODO : 카메라 블렌딩
         CameraController.Instance.ChangeCameraToCubeCorrect(_correctCameraFollow, _correctCameraLookAt);
         AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.OB_Train_Horn);
     }

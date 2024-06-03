@@ -8,7 +8,7 @@ public class SceneLoader : Singleton<SceneLoader>
 {
     public bool IsLoaded { get; private set; } = false;
 
-    [SerializeField] private Image _progressBar;
+    [SerializeField] private SlicedFilledImage _progressBar;
     [SerializeField] private TMP_Text _progressText;
     private string _loadSceneName;
 
@@ -35,7 +35,7 @@ public class SceneLoader : Singleton<SceneLoader>
         }
 
         _progressBar.fillAmount = 1.0f;
-        _progressText.text = "로드 완료!";
+        _progressText.text = "100%";
 
         SceneManagerBase sceneManager = SceneManagerBase.Instance;
         sceneManager.FadeOut(SceneManagerBase.DEFAULT_FADE_DURATION);
