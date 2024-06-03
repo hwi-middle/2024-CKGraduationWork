@@ -266,24 +266,38 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
     {
         StartCoroutine(LoadSceneWithLoadingUiRoutine(sceneName));
     }
-
+    
     private IEnumerator LoadSceneWithLoadingUiRoutine(string sceneName)
     {
-        FadeOut(DEFAULT_FADE_DURATION, 0f, true);
-        while (IsFading)
-        {
-            yield return null;
-        }
+        // FadeOut(DEFAULT_FADE_DURATION, 0f, true);
+        // while (IsFading)
+        // {
+        //     yield return null;
+        // }
 
-        Instantiate(Resources.Load<GameObject>("LoadingCanvas"));
+        // Instantiate(Resources.Load<GameObject>("LoadingCanvas"));
+        // SceneLoader sceneLoader = SceneLoader.Instance;
+
+        // FadeIn(DEFAULT_FADE_DURATION, 0f, true);
+        // while (IsFading)
+        // {
+        //     yield return null;
+        // }
+        
+        CanvasGroup canvasGroup = Instantiate(Resources.Load<GameObject>("LoadingCanvas")).GetComponent<CanvasGroup>();
         SceneLoader sceneLoader = SceneLoader.Instance;
+        
+        canvasGroup.alpha = 0f;
+        float t = 0;
 
-        FadeIn(DEFAULT_FADE_DURATION, 0f, true);
-        while (IsFading)
+        while (t < DEFAULT_FADE_DURATION)
         {
+            canvasGroup.alpha = t / DEFAULT_FADE_DURATION;
             yield return null;
+            t += Time.deltaTime;
         }
 
+        canvasGroup.alpha = 1f;
         sceneLoader.LoadScene(sceneName);
     }
 }
