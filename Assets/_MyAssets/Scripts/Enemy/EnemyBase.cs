@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 public class EnemyBase : MonoBehaviour, IDamageable
 {
@@ -25,10 +26,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     [SerializeField] private CenterSightBound _centerSight;
     public SightBound CenterSight => _centerSight;
+    
     [SerializeField] private SideSightBound _sideSight;
+    public SightBound SideSight => _sideSight;
 
     [SerializeField] private Animator _animator;
-    public SightBound SideSight => _sideSight;
+
+    [FormerlySerializedAs("_isHearingDisabled")] [SerializeField] private bool _isHearingItemSoundDisabled;
     
     public bool IsDead { get; set; }
 
@@ -115,6 +119,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public void OnListenItemSound(Vector3 origin, float increment)
     {
+        if (_isHearingItemSoundDisabled)
+        {
+            return;
+        }
+        
         _tree.blackboard.lastTimeNoiseDetected = Time.time;
         _perceptionGauge = Mathf.Clamp(_perceptionGauge, _aiData.alertThreshold, 100f);
 
