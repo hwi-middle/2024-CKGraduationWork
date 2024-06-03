@@ -11,6 +11,10 @@ public class TrainAnimationEvent : MonoBehaviour
     public void OnTrainAnimationEnd()
     {
         _trainRailSparkEffect.SetActive(false);
-        _enemy.SetActive(true);
+
+        if (_enemy != null)
+        {
+            _enemy.SetActive(true);
+        }
     }
 }
