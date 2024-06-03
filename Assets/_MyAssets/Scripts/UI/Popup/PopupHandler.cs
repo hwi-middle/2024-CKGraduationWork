@@ -242,9 +242,9 @@ public class PopupHandler : Singleton<PopupHandler>
 
     private void ClosePopup()
     {
-        if (SceneManagerBase.Instance.IsPaused)
+        if (IsTutorialPopup)
         {
-            SceneManagerBase.Instance.TogglePause(IsTutorialPopup);
+            SceneManagerBase.Instance.TogglePause(true);
         }
 
         AudioPlayManager.Instance.PlayOnceSfxAudio(ESfxAudioClipIndex.UI_Close);
