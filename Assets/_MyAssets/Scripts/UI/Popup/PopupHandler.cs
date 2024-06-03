@@ -165,7 +165,7 @@ public class PopupHandler : Singleton<PopupHandler>
     }
     
     public void DisplayTutorialPopup(string title, string description, string positive, ETutorialVideoIndex index,
-        Action<bool> action = null, bool isDoubleStack = false)
+        Action<bool> action, bool isDoubleStack = false)
     {
         if (!SceneManagerBase.Instance.IsPaused)
         {
