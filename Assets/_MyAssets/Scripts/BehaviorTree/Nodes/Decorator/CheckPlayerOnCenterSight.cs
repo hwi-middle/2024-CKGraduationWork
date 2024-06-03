@@ -47,11 +47,14 @@ public class CheckPlayerOnCenterSight : DecoratorNode
         Player player = Player.Instance;
         Debug.Assert(player != null);
         Transform playerTransform = player.transform;
-        Vector3 rayDirection = (playerTransform.position - agent.transform.position).normalized;
-        var ray = new Ray(agent.transform.position, rayDirection);
+        Vector3 rayDirection = (playerTransform.position - agent.RayOrigin.position).normalized;
+        // var ray = new Ray(agent.transform.position, rayDirection);
+        var ray = new Ray(agent.RayOrigin.position, rayDirection);
 
         if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity) || !hit.transform.CompareTag("Player"))
         {
+            Debug.DrawRay(agent.RayOrigin.position, hit.transform.position, Color.red, 3f);
+            Debug.Log($"플레이어가 시야에 들어왔지만 장애물이 있어 시야에 들어오지 않음: {hit.transform.name}");
             blackboard.target = null;
             return false;
         }

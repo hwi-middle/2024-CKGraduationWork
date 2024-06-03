@@ -53,6 +53,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public PlayerMove PlayerMoveInstance { get; private set; }
     public NavMeshAgent NavMeshAgent => _navMeshAgent;
 
+    [SerializeField] private Transform _rayOrigin;
+    public Transform RayOrigin => _rayOrigin;
+
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();

@@ -48,8 +48,9 @@ public class CheckPlayerOnSideSight : DecoratorNode
         Player player = Player.Instance;
         Debug.Assert(player != null);
         Transform playerTransform = player.transform;
-        Vector3 rayDirection = (playerTransform.position - agent.transform.position).normalized;
-        var ray = new Ray(agent.transform.position, rayDirection);
+        Vector3 rayDirection = (playerTransform.position - agent.RayOrigin.position).normalized;
+        // var ray = new Ray(agent.transform.position, rayDirection);
+        var ray = new Ray(agent.RayOrigin.position, rayDirection);
 
         if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity) || !hit.transform.CompareTag("Player"))
         {
