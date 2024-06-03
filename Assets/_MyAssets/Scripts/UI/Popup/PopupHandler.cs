@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -57,7 +58,7 @@ public class PopupHandler : Singleton<PopupHandler>
     
     public bool IsPopupActive => _popupPrefab.activeSelf;
 
-    private bool IsTutorialPopup => _currentType == EPopupType.Tutorial;
+    public bool IsTutorialPopup => _currentType == EPopupType.Tutorial;
     
     private bool IsDoubleStackTutorialExist { get; set; }
     
@@ -178,6 +179,7 @@ public class PopupHandler : Singleton<PopupHandler>
         }
         
         _buttonAction += action;
+        
         _currentType = EPopupType.Tutorial;
         SetTextAndDisplayTutorialPopup(title, description, positive, index);
     }

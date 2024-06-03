@@ -38,6 +38,11 @@ public class ClairvoyanceHandler : MonoBehaviour
 
     private void HandleClairvoyanceAction()
     {
+        if (PopupHandler.Instance.IsTutorialPopup && PopupHandler.Instance.IsPopupActive)
+        {
+            return;
+        }
+        
         ToggleClairvoyance(!_isClairvoyance);
     }
     

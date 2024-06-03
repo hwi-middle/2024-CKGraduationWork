@@ -118,4 +118,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0090fb8f47e02b749937bfc8380f7f9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialVideo: 0
+  _inputData: {fileID: 11400000, guid: 8f3a732f52744aa419fd662ac62407c3, type: 2}
+  _tutorialVideo: 0

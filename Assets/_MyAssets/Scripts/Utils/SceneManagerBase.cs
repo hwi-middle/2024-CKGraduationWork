@@ -111,6 +111,11 @@ public abstract class SceneManagerBase : Singleton<SceneManagerBase>
 
         if (PopupHandler.Instance.IsPopupActive)
         {
+            if (PopupHandler.Instance.IsTutorialPopup)
+            {
+                return;
+            }
+
             PopupHandler.Instance.ExecuteActionOnButtonClick(false);
             return;
         }

@@ -32,6 +32,7 @@ public static class TutorialPopupList
 
 public class TutorialTriggerZoneController : MonoBehaviour
 {
+    [SerializeField] private PlayerInputData _inputData;
     [SerializeField] private ETutorialVideoIndex _tutorialVideo;
     
     private void Awake()
@@ -51,11 +52,13 @@ public class TutorialTriggerZoneController : MonoBehaviour
         {
             case ETutorialVideoIndex.Tutorial_Cube_Select:
                 TutorialPopupList.DisplayCubeSelectTutorialPopup(HandleCubeSelectTutorialButtonClick);
+                _inputData.clairvoyanceEvent += HandlePopupCloseAction;
                 break;
             case ETutorialVideoIndex.Tutorial_Cube_Rotation:
                 break;
             case ETutorialVideoIndex.Tutorial_Item_Aiming:
                 TutorialPopupList.DisplayItemAimingTutorialPopup(HandleItemAimingTutorialButtonClick);
+                _inputData.clairvoyanceEvent += HandlePopupCloseAction;
                 break;
             case ETutorialVideoIndex.Tutorial_Item_Throwing:
                 break;
@@ -65,24 +68,37 @@ public class TutorialTriggerZoneController : MonoBehaviour
                 break;
         }
     }
+
+    private void HandlePopupCloseAction()
+    {
+        PopupHandler.Instance.ExecuteActionOnButtonClick(true);
+    }
     
+    // Cube Tutorials
     private void HandleCubeSelectTutorialButtonClick(bool isPositive)
     {
-        TutorialPopupList.DisplayCubeRotateTutorialPopup(HandleCubeRotateTutorialButtonClick);   
+        _inputData.clairvoyanceEvent -= HandlePopupCloseAction;
+        TutorialPopupList.DisplayCubeRotateTutorialPopup(HandleCubeRotateTutorialButtonClick);
+        _inputData.clairvoyanceEvent += HandlePopupCloseAction;
     }
     
     private void HandleCubeRotateTutorialButtonClick(bool isPositive)
     {
+        _inputData.clairvoyanceEvent -= HandlePopupCloseAction;
         Destroy(gameObject);
     }
     
+    // Item Tutorials
     private void HandleItemAimingTutorialButtonClick(bool isPositive)
     {
+        _inputData.clairvoyanceEvent -= HandlePopupCloseAction;
         TutorialPopupList.DisplayItemThrowingTutorialPopup(HandleItemThrowingTutorialButtonClick);
+        _inputData.clairvoyanceEvent += HandlePopupCloseAction;
     }
     
     private void HandleItemThrowingTutorialButtonClick(bool isPositive)
     {
+        _inputData.clairvoyanceEvent -= HandlePopupCloseAction;
         Destroy(gameObject);
     }
 }
