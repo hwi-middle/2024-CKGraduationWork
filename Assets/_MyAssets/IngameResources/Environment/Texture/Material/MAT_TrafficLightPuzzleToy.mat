@@ -36,7 +36,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: 14d7b56d2d5f8214f8bf43fa65d9a84c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9ead70a3cc4ad6740826417bb320f76b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -52,7 +52,7 @@ Material:
     - _AlphaClip: 0
     - _AlphaToMask: 0
     m_Colors:
-    - _EmissionColor: {r: 5.9921565, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 5.992157, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &322910030296465100
 MonoBehaviour:
