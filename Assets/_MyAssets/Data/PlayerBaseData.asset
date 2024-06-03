@@ -17,7 +17,6 @@ MonoBehaviour:
   runSpeed: 3.8
   crouchSpeed: 1
   rotateSpeed: 5
-  jumpHeight: 4.5
   yMultiplier: 4
   overstepActionDuration: 2
   overstepTargetDistance: 0.5
@@ -28,15 +27,11 @@ MonoBehaviour:
   itemImpactRadius: 15
   itemGaugeAmount: 0
   maxDistanceHideableObject: 3
-  walkNoiseRadius: 2
+  walkNoiseRadius: 5
   walkNoiseIncrementPerSecond: 10
-  sprintNoiseRadius: 3
+  sprintNoiseRadius: 8
   sprintNoiseIncrementPerSecond: 20
-  crouchWalkNoiseRadius: 1
+  crouchWalkNoiseRadius: 3
   crouchWalkNoiseIncrementPerSecond: 5
-  playerCanvas: {fileID: 6670551468554774952, guid: d145af9e61baa8f4b86278040d640948,
-    type: 3}
   lineRendererPrefab: {fileID: 1510557977768077414, guid: c13d442cd5a65094faf7ebefc78ec6dd,
-    type: 3}
-  camerasPrefab: {fileID: 6376121465614477072, guid: 8e19267338431d941b626d4717bee39f,
     type: 3}
